@@ -1,27 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import {TodoList} from './todo-list';
-import {HttpClient} from '@angular/common/http';
+import {NavigationExtras, Router, RouterModule} from '@angular/router';
+import {StartPage} from './start/start.page';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+  templateUrl: 'app.component.html'
 })
+export class AppComponent {
 
-export class AppComponent implements OnInit {
-  todoList: TodoList = new TodoList(null, '');
-  todoLists: TodoList[] = [];
+  private text = 'First Text'
+
+
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private httpClient: HttpClient
-  ) {
+    private router: Router
+  )
+  {
     this.initializeApp();
   }
 
@@ -32,23 +33,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.httpClient.get('http://localhost:3000/todolist').subscribe((instances: any) => {
-      this.todoLists = instances.map((instance) => new TodoList(instance.id, instance.name));
-    });
+  changeText() {
+    this.text = 'New Text';
   }
 
-  onTodoListCreate() {
-    this.httpClient.post('http://localhost:3000/todolist', {
-      name: this.todoList.name
-    }).subscribe((instance: any) => {
-      this.todoList.id = instance.id;
-      this.todoLists.push(this.todoList);
-      this.todoList = new TodoList(null, '');
-    });
-  }
+  //TO-DO: Why can't I write the same method as on the website?
+  //What about return?
+  //goToLogIn() {
+ //   this.router.navigate(['/login'], null).then(r => true);
+ // }
 
-  onTodoListDestroy(todoList: TodoList) {
-    this.todoLists.splice(this.todoLists.indexOf(todoList), 1);
-  }
 }

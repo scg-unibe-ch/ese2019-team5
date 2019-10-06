@@ -1,0 +1,75 @@
+<!-- Sign-Up-Form -->
+<!-- Collects data from a new user and saves it in a user-object -->
+<!-- Does some verification (email-format, matching passwords) -->
+<!-- Passes the user-object/data to the database (to be implemented)-->
+<!-- To-Do: Styling-->
+
+<!-- Header contains... (f.l.t.r.) -->
+<!-- 1) Back button to return to StartPage  -->
+<!-- 2) Page title -->
+<!-- 3) Login-Button to change to LoginPage  -->
+<!-- 4) SignUp Button which doesn't change anything -->
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-button style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
+    <ion-title style="color: darkgreen; position: absolute; left: 80px; top: 15px"> Sign Up </ion-title>
+    <ion-button style="position: absolute; right: 5px; top: 6px;" href="/start/login"> Log in </ion-button>
+    <ion-button color="medium" style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Content contains a simple Signup-Form  -->
+<!-- User must enter a e-mail address and 2 identical passwords -->
+<!-- All information is required to sign up -->
+<ion-content style="position: center">
+  <form #userForm="ngForm">
+    <div class="form-group">
+      <!-- User must enter his/her e-mail address here -->
+      <!-- E-mail must match pattern to be valid -->
+      <!-- E-mail-address is stored in the email-propriety of a User-Object -->
+      <label> e-mail
+        <input type="text" name="mail" required pattern="(.)*@(.)*\.(.)*"
+               #mail="ngModel"  [(ngModel)]="user.email">
+      </label>
+      <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
+      <small [class.ion-hide]="mail.valid || mail.untouched" style="color: red"> invalid e-mail-address </small>
+    </div>
+
+    <!-- User must enter his/her password here -->
+    <!-- Password is stored in the email-propriety of a User-Object -->
+    <!-- To-Do: How can passwords be blurred? -->
+    <!-- To-Do: What are requirements for password-security?  -->
+    <div class="form-group">
+      <label> password
+        <input type="text" name="password" required
+        #password="ngModel" [(ngModel)]="user.password1">
+      </label>
+      <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
+      <small [class.ion-hide]="password.valid || password.untouched" style="color: red;"> password required </small>
+    </div>
+
+    <!-- User must confirm his password here -->
+    <!-- This password must match the first one to be valid -->
+    <!-- To-Do: How can passwords be blurred? -->
+    <div class="form-group">
+      <label> confirm password
+        <input type="text" name="confirmation" required [pattern]="user.password1"
+               #confirmation="ngModel" [(ngModel)]="user.password2">
+      </label>
+      <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
+      <small [class.ion-hide]="confirmation.valid || confirmation.untouched || password.invalid" style="color: red;">
+        passwords must be identical
+      </small>
+    </div>
+
+    <!-- When all information is valid, the sign up button is shown -->
+    <!-- To-Do: How can the user be saved? -->
+    <ion-button [class.ion-hide]="mail.invalid || password.invalid || confirmation.invalid"
+                (click)="saveUser()">
+      Sign Up
+    </ion-button>
+    <!-- If all information isn't valid this message is shown  -->
+    <small [class.ion-hide]="mail.valid && password.valid && confirmation.valid" style="color: red">
+      You can sign up as soon as all required information is valid. </small>
+  </form>
+</ion-content>
