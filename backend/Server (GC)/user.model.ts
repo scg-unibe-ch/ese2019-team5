@@ -1,6 +1,8 @@
 import {Table, Column, Model, HasMany, BelongsTo, ForeignKey} from 'sequelize-typescript';
 import {User} from './user';
 
+
+// TODO noch absprechen wie speichern
 @Table
 export class UserModel extends Model<User> {
 
@@ -31,5 +33,8 @@ export class UserModel extends Model<User> {
     this.email = simplification['email'];
     this.surname = simplification['surname'];
   }
+
+
+
 
 }

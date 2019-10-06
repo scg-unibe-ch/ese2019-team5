@@ -1,15 +1,21 @@
 import {Router, Request, Response} from 'express';
-import {User} from '../../Server (GC)/user';
+import {User} from './user';
 
 
 // just started here
 const router: Router = Router(); // part of express needed
 
+// when frontend signs up a new User is created which is saved (or at least should be)
 router.post('/signUp', async (req: Request, res: Response) => {
 
-  const instance = new User(); // hier null null null oder was?
-  instance.formSimplification(req.body);
-}
+  const user = new User(); // hier null null null oder was?
+  user.formSimplification(req.body);
+  await user.save();
+  // call E-Mail verification fehlt //TODO E-Mail hier?
+  res.statusCode = 201 ;
+  res.send(user.toSimplification());
+});
+
 
 
 
