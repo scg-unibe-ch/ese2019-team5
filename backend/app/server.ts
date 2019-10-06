@@ -34,9 +34,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+/*
 app.use('/todolist', TodoListController);
 app.use('/todoitem', TodoItemController);
 app.use('/welcome', WelcomeController);
+*/
 
 
 sequelize.sync().then(() => {

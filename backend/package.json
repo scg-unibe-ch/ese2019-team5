@@ -18,7 +18,8 @@
     "sequelize": "^4.44.3",
     "sequelize-typescript": "^0.6.11",
     "sqlite3": "^4.1.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "nodemailer": "latest"
   },
   "devDependencies": {
     "tslint": "^5.20.0"
