@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {LoginPage} from './login/login.page';
+import {LoginPage} from './start/login/login.page';
+import {StartPage} from './start/start.page';
 
 const routes: Routes = [
-  { path: '', redirectTo: '', pathMatch: 'full' },
-  { path: 'login', component: LoginPage },
-  { path: 'start', loadChildren: './start/start.module#StartPageModule' },
-];
+  { path: '', redirectTo: 'start', pathMatch: 'full' },
+  { path: 'start', children: [
+      {path: '', component: StartPage},
+      {path: ':login', component: LoginPage}
+    ] } ];
 
 @NgModule({
   imports: [

@@ -1,14 +1,16 @@
-<ion-app>
-  <ion-header>
-    <ion-toolbar color="success">
-      <ion-title style="color: darkgreen"> Welcome </ion-title>
-      <ion-button [routerLink]="['/login']" style="position: absolute; right: 5px; top: 6px;"> Log In </ion-button>
-      <ion-button style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
-    </ion-toolbar>
-  </ion-header>
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title style="color: darkgreen"> Welcome </ion-title>
+    <!-- This is another way to define the button -->
+    <!-- <ion-button (click)="goToLogIn()" -->
+    <!-- <ion-button <!.[routerLink]="['/login']"-->
+    <ion-button style="position: absolute; right: 5px; top: 6px"> <a href="./login/login.page.html"> Log in </a></ion-button>
+    <ion-button style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
-
+  <p> {{text}}</p>
+  <ion-button (click)="changeText()"> Change Text </ion-button>
+  <ion-button [routerLink]="['login']" > Log In </ion-button>
 </ion-content>
-
-</ion-app>
