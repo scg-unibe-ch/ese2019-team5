@@ -1,8 +1,9 @@
 <ion-header>
   <ion-toolbar color="success">
-    <ion-title style="color: darkgreen"> Log in </ion-title>
+    <ion-button style="position: absolute; left: 5px; top: 6px "> <ion-back-button defaultHref="/start" style="size: 20px"> </ion-back-button> </ion-button>
+    <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Log in </ion-title>
     <ion-button color="medium"  style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
-    <ion-button style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
+    <ion-button style="position: absolute; right: 95px; top: 6px" href="/start/signup"> Sign Up </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +14,7 @@
   </ion-item>
   <ion-item>
     <ion-label> password </ion-label>
-    <ion-input value="disabled" style="position: center"></ion-input>
+    <ion-input style="position: center"></ion-input>
   </ion-item>
   <ion-button style="position: center"> log in </ion-button>
 </ion-content>
