@@ -1,9 +1,21 @@
 import {Router, Request, Response} from 'express';
+import {User} from '../../Server (GC)/user';
 
-//just started here
-const router: Router = Router();
-router.get('/', async (req: Request, res: Response) => {
-  const todoListID = parseInt(req.query.todoListId);
+
+// just started here
+const router: Router = Router(); // part of express needed
+
+router.post('/signUp', async (req: Request, res: Response) => {
+
+  const instance = new User(); // hier null null null oder was?
+  instance.formSimplification(req.body);
+}
+
+
+
+
+// router.get('/', async (req: Request, res: Response) => {
+/*  const todoListID = parseInt(req.query.todoListId);
   let options = {};
   if (todoListId != null) {
     options = {
@@ -18,7 +30,9 @@ router.get('/', async (req: Request, res: Response) => {
   const instances = await TodoItem.findAll(options);
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
-});
+});*/
+/*
+
 router.post('/', async (req: Request, res: Response) => {
   const instance = new TodoItem();
   instance.fromSimplification(req.body);
@@ -69,5 +83,6 @@ router.delete('/:id', async (req: Request, res: Response) => {
   res.statusCode = 204;
   res.send();
 });
+*/
 
-export const TodoItemController: Router = router;
+export const UserController: Router = router;

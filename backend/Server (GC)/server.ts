@@ -3,7 +3,9 @@ import express from 'express';
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
 // import {TodoListController, TodoItemController} from './controllers';
-// import {Sequelize} from 'sequelize-typescript';
+ import {Sequelize} from 'sequelize-typescript';
+ import {User} from './user.model';
+import {UserController} from './controllers/user.controller';
 // import {TodoList} from './models/todolist.model';
 // import {TodoItem} from './models/todoitem.model';
 // import {WelcomeController} from './controllers/welcome.controller';
@@ -45,9 +47,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use('/todolist', TodoListController);
-app.use('/todoitem', TodoItemController);
-app.use('/welcome', WelcomeController);
+// app.use('/todolist', TodoListController);
+// app.use('/todoitem', TodoItemController);
+// app.use('/welcome', WelcomeController);
+app.use('/user', UserController)
 
 // Endpoint where Formdata is sent to
 app.post('/signUp', function (req, res) {
