@@ -1,15 +1,20 @@
 <ion-header>
   <ion-toolbar color="success">
     <ion-title style="color: darkgreen"> Log in </ion-title>
-    <ion-button color="secondary"  style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
+    <ion-button color="medium"  style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
     <ion-button style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-input style="position: center"> email-address </ion-input>
-  <ion-input style="position: center"> password </ion-input>
-  <ion-input style="position: center"> confirm password </ion-input>
+  <ion-item>
+  <ion-label> email-address </ion-label>
+  <ion-input style="position: center"> </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label> password </ion-label>
+    <ion-input value="disabled" style="position: center"></ion-input>
+  </ion-item>
   <ion-button style="position: center"> log in </ion-button>
 </ion-content>
 

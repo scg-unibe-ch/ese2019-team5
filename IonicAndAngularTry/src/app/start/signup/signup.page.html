@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title style="color: darkgreen"> Sign Up </ion-title>
+    <ion-button [routerDirection]="backward" [routerLink]="['start/login']"   style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
+    <ion-button color="medium" style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content style="position: center">
+  <form #userForm="ngForm">
+    <div class="form-group">
+      <label> e-mail
+        <input type="text" name="mail" required pattern="(.)*@(.)*\.(.)*"
+               #mail="ngModel"  [(ngModel)]="user.email">
+      </label>
+      <small [class.ion-hide]="mail.valid || mail.untouched"> invalid e-mail-address </small>
+    </div>
+
+    <!-- To-Do: How can passwords be blurred? -->
+    <div class="form-group">
+      <label> password
+        <input type="text" name="password" required
+        #password="ngModel" [(ngModel)]="user.password1">
+      </label>
+      <small [class.ion-hide]="password.valid || password.untouched"> password required </small>
+    </div>
+
+    <!-- To-Do: How can passwords be blurred? -->
+    <div class="form-group">
+      <label> confirm password
+        <input type="text" name="confirmation" required [pattern]="user.password1"
+               #confirmation="ngModel" [(ngModel)]="user.password2">
+      </label>
+      <small [class.ion-hide]="confirmation.valid || confirmation.untouched"> passwords must be identical </small>
+    </div>
+
+    <!-- To-Do: How can the user be saved? -->
+    <ion-button style="position: center (" (click)="saveUser()"> Sign Up </ion-button>
+  </form>
+</ion-content>
