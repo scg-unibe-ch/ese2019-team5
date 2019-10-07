@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
+import {log} from "util";
 
 @Component({
   selector: 'app-login',
@@ -13,9 +15,28 @@ import { Component, OnInit } from '@angular/core';
  */
 export class LoginPage implements OnInit {
 
-  constructor() { }
+
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  loginForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
+
 
   ngOnInit() {
   }
 
+  get email() {
+    return this.loginForm.get('email');
+  }
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  // To-Do: Implement verification etc.
+  logIn() {
+
+  }
 }

@@ -20,15 +20,36 @@
 
 
 <!-- To-Do: Adapt content so it works in a similar way as signup-page-->
-<ion-content>
-  <ion-item>
-  <ion-label> email-address </ion-label>
-  <ion-input style="position: center"> </ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label> password </ion-label>
-    <ion-input style="position: center"></ion-input>
-  </ion-item>
+<ion-infinite-scroll-content>
+  <form [formGroup]="logInForm">
+    <div class="form-group">
+      <ion-item>
+        <ion-label> e-mail address</ion-label>
+        <ion-input formControlName="email" type="email" class="form-control"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="form-group">
+      <ion-item>
+        <ion-label> password </ion-label>
+        <ion-input formControlName="password" type="password" class="form-control"> </ion-input>
+      </ion-item>
+    </div>
+  </form>
+
+  <!-- When all information is valid, the log in button is shown -->
+  <!-- To-Do: Why doesn't this work?-->
+  <ion-button [class.ion-hide]="email.invalid || password.invalid"
+              (click)="logIn()">
+    Log In
+  </ion-button>
+
+  <!-- If all information isn't valid this message is shown  -->
+  <!-- To-Do: Why doesn't this work?-->
+  <small [class.ion-hide]="email.valid && password.valid"
+         style="color: red">
+    You can log in as soon as all required information is valid. </small>
+
   <ion-button style="position: center"> log in </ion-button>
-</ion-content>
+</ion-infinite-scroll-content>
 

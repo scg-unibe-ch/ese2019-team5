@@ -21,16 +21,17 @@
 <!-- Content contains a simple SignUp-Form  -->
 <!-- User must enter a e-mail address and 2 identical passwords -->
 <!-- All information is required to sign up -->
-<ion-content style="position: center">
+<ion-content>
   <div class="container-fluid">
     <form [formGroup]="signUpForm">
 
       <!-- User must enter his/her e-mail address here -->
       <!-- E-mail-address is stored in the email-propriety of a User-Object -->
       <div class="form-group">
-        <label> e-mail address
-        <input formControlName="email" type="email" class="form-control">
-        </label>
+        <ion-item>
+          <ion-label> e-mail address  </ion-label>
+          <ion-input formControlName="email" type="email" class="form-control"></ion-input>
+        </ion-item>
         <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
         <small [class.ion-hide]="email.untouched || email.valid"
                style="color: red"> Invalid e-mail-address </small>
@@ -40,9 +41,10 @@
       <!-- Password is stored in the email-propriety of a User-Object -->
       <!-- To-Do: What are requirements for password-security?  -->
       <div class= "form-group">
-        <label> password
-        <input formControlName="password" type="password" class="form-control" [(ngModel)]="pw">
-        </label>
+        <ion-item>
+          <ion-label> password </ion-label>
+          <ion-input formControlName="password" type="password" class="form-control" [(ngModel)]="pw"></ion-input>
+        </ion-item>
         <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
         <small [class.ion-hide]="password.valid || password.untouched"
                style="color: red;"> password required </small>
@@ -51,9 +53,10 @@
       <!-- User must confirm his password here -->
       <!-- This password must match the first one to be valid -->
       <div class="form-group">
-        <label> confirm password
-          <input formControlName="confirmation" type="password" class="form-group" [pattern]="pw">
-        </label>
+        <ion-item>
+          <ion-label> confirm password </ion-label>
+          <ion-input formControlName="confirmation" type="password" class="form-group" [pattern]="pw"></ion-input>
+        </ion-item>
         <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
         <small [class.ion-hide]="confirmation.valid ||
                                   confirmation.untouched ||
