@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from "../../User class/user";
+import {User} from '../../User class/user';
+import {FormControl, FormBuilder, Validators} from '@angular/forms';
 
+// @ts-ignore
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
@@ -15,14 +17,41 @@ import {User} from "../../User class/user";
  */
 export class SignupPage implements OnInit {
 
-  constructor() { }
-  // A new User-object is instantiated when SignUp-Page is called
-  user = new User('', '', '', false);
+  constructor(private formBuilder: FormBuilder) { }
+
+  pw: string;
+
+  signUpForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    // To-Do: What are safety requirements for passwords? --> State more conditions
+    password: ['', [Validators.required]],
+    confirmation: ['', [Validators.required, Validators.pattern]]
+  });
+
+  /**
+   * Get-methods
+   * Used in html-file for displaying error-messages
+   */
+  get email() {
+    return this.signUpForm.get('email');
+  }
+  get password() {
+    return this.signUpForm.get('password');
+  }
+  get confirmation() {
+    return this.signUpForm.get('confirmation');
+  }
 
   // To-Do: Implement initialization
   ngOnInit() {
   }
 
   // To-Do: Implement how data is sent to the database
-  saveUser() {}
+  /**
+   * Creates a new User-object according to data entered in form
+   * "Valid" is false as User must first be verified
+   */
+  saveUser() {
+    user = new User(this.email(), this.password(), false);
+  }
 }

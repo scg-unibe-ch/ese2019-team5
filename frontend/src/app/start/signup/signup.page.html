@@ -18,58 +18,57 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Content contains a simple Signup-Form  -->
+<!-- Content contains a simple SignUp-Form  -->
 <!-- User must enter a e-mail address and 2 identical passwords -->
 <!-- All information is required to sign up -->
 <ion-content style="position: center">
-  <form #userForm="ngForm">
-    <div class="form-group">
+  <div class="container-fluid">
+    <form [formGroup]="signUpForm">
+
       <!-- User must enter his/her e-mail address here -->
-      <!-- E-mail must match pattern to be valid -->
       <!-- E-mail-address is stored in the email-propriety of a User-Object -->
-      <label> e-mail
-        <input type="text" name="mail" required pattern="(.)*@(.)*\.(.)*"
-               #mail="ngModel"  [(ngModel)]="user.email">
-      </label>
-      <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
-      <small [class.ion-hide]="mail.valid || mail.untouched" style="color: red"> invalid e-mail-address </small>
-    </div>
+      <div class="form-group">
+        <label> e-mail address
+        <input formControlName="email" type="email" class="form-control">
+        </label>
+        <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
+        <small [class.ion-hide]="email.untouched || email.valid"
+               style="color: red"> Invalid e-mail-address </small>
+      </div>
 
-    <!-- User must enter his/her password here -->
-    <!-- Password is stored in the email-propriety of a User-Object -->
-    <!-- To-Do: How can passwords be blurred? -->
-    <!-- To-Do: What are requirements for password-security?  -->
-    <div class="form-group">
-      <label> password
-        <input type="text" name="password" required
-        #password="ngModel" [(ngModel)]="user.password1">
-      </label>
-      <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
-      <small [class.ion-hide]="password.valid || password.untouched" style="color: red;"> password required </small>
-    </div>
+      <!-- User must enter his/her password here -->
+      <!-- Password is stored in the email-propriety of a User-Object -->
+      <!-- To-Do: What are requirements for password-security?  -->
+      <div class= "form-group">
+        <label> password
+        <input formControlName="password" type="password" class="form-control" [(ngModel)]="pw">
+        </label>
+        <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
+        <small [class.ion-hide]="password.valid || password.untouched"
+               style="color: red;"> password required </small>
+      </div>
 
-    <!-- User must confirm his password here -->
-    <!-- This password must match the first one to be valid -->
-    <!-- To-Do: How can passwords be blurred? -->
-    <div class="form-group">
-      <label> confirm password
-        <input type="text" name="confirmation" required [pattern]="user.password1"
-               #confirmation="ngModel" [(ngModel)]="user.password2">
-      </label>
-      <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
-      <small [class.ion-hide]="confirmation.valid || confirmation.untouched || password.invalid" style="color: red;">
-        passwords must be identical
-      </small>
-    </div>
+      <!-- User must confirm his password here -->
+      <!-- This password must match the first one to be valid -->
+      <div class="form-group">
+        <label> confirm password
+          <input formControlName="confirmation" type="password" class="form-group" [pattern]="pw">
+        </label>
+        <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
+        <small [class.ion-hide]="confirmation.valid ||
+                                  confirmation.untouched ||
+                                   password.invalid" style="color: red;"> Passwords must be equal! </small>
+      </div>
+    </form>
+  </div>
 
     <!-- When all information is valid, the sign up button is shown -->
-    <!-- To-Do: How can the user be saved? -->
-    <ion-button [class.ion-hide]="mail.invalid || password.invalid || confirmation.invalid"
+    <ion-button [class.ion-hide]="signUpForm.get('email').invalid || signUpForm.get('password').invalid || signUpForm.get('confirmation').invalid"
                 (click)="saveUser()">
       Sign Up
     </ion-button>
     <!-- If all information isn't valid this message is shown  -->
-    <small [class.ion-hide]="mail.valid && password.valid && confirmation.valid" style="color: red">
+    <small [class.ion-hide]="signUpForm.get('email').valid && signUpForm.get('password').valid && signUpForm.get('confirmation').valid"
+           style="color: red">
       You can sign up as soon as all required information is valid. </small>
-  </form>
 </ion-content>
