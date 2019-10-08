@@ -1,6 +1,8 @@
 import {Router, Request, Response} from 'express';
 import {User} from './user';
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
 
 // just started here
@@ -58,6 +60,7 @@ sendMailToNewUser().catch(console.error);
 
 
 // TODO noch mals so ne function die ich keine Ahnung hab wo sie überhaupt hingehört, was für models und dann wären da noch Secret, Secret_2
+// vom 2 Teil
 // if user that wants to login was not found = Invalid login, if User isn't verified user is being told to verify
 async function tryLogin(email, password, models) {
   const user = await models.User.findOne({where: {email}, raw: true}); // TODO denke das hängt schon mit DB zusammen oder?
@@ -71,7 +74,20 @@ async function tryLogin(email, password, models) {
   if (!valid) {
     throw new Error ('Invalid password');
   }
- const [token, refreshToken]= await createTokens(user, SECRET, SECRET_2 + user.password);
+ const [token, refreshToken] = await createTokens(user, SECRET, SECRET_2 + user.password);
+}
+
+async function makeToken (){
+  const emailToken= jwt.sign({
+    user: _.pick(user, 'id'),
+  }),EMAIL_SECRET,
+    {
+      expiresIn: '1d',
+    },
+
+    const url= `http://localhost:3000/confirmation/${emailToken}`;
+
+  await transporter.sendMail
 }
 
 
