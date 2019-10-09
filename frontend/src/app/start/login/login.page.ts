@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {log} from "util";
+import {FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +8,8 @@ import {log} from "util";
 })
 /**
  * LoginPage
- * Asks an (existing) user for his authentification data (e-mail, password)
- * Does entire Authentification-stuff...
+ * Asks an (existing) user for his authentication data (e-mail, password)
+ * Does entire Authentication-stuff...
  * To be implemented
  */
 export class LoginPage implements OnInit {
@@ -35,7 +34,7 @@ export class LoginPage implements OnInit {
     return this.loginForm.get('password');
   }
 
-  // To-Do: Implement verification etc.
+  // ToDo: Implement verification etc.
   logIn() {
 
   }

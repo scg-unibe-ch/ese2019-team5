@@ -20,10 +20,11 @@ export class SignupPage implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   pw: string;
+  user: User;
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    // To-Do: What are safety requirements for passwords? --> State more conditions
+    // ToDo: What are safety requirements for passwords? --> State more conditions
     password: ['', [Validators.required]],
     confirmation: ['', [Validators.required, Validators.pattern]]
   });
@@ -42,16 +43,16 @@ export class SignupPage implements OnInit {
     return this.signUpForm.get('confirmation');
   }
 
-  // To-Do: Implement initialization
+  // ToDo: Implement initialization
   ngOnInit() {
   }
 
-  // To-Do: Implement how data is sent to the database
+  // ToDo: Implement how data is sent to the database
   /**
    * Creates a new User-object according to data entered in form
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    user = new User(this.email(), this.password(), false);
+    this.user = new User(this.email(), this.password(), false);
   }
 }
