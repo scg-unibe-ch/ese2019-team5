@@ -48,6 +48,7 @@ export class SignupPage implements OnInit {
   }
 
   // ToDo: Implement how data is sent to the database
+  // ToDo: Hashing and encrypting password?
   /**
    * Creates a new User-object according to data entered in form
    * "Valid" is false as User must first be verified
