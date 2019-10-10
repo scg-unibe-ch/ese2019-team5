@@ -7,7 +7,7 @@ import jwt, {decode, verify} from 'jsonwebtoken';
 
 let payload: { data1: string };
 payload = {
-  data1: 'data 1';
+  data1: 'data 1',
 };
 
 const privateKEY = fs.readFileSync('./private.key', 'utf8');
@@ -43,7 +43,7 @@ const verifyOptions = {
 
 
 // und nun das ganze als Funktionen glaubs
-async function sign(payload,$Options)=> {
+async function sign(payload,$Options) => {
   // Signing Options  kann das const sein?? Wieso auch bei token wieder ein Problem!!auch wenn sich audience oder so ändern könnte?
   let signOptions = {
     issuer: $Options.issuer,
@@ -53,7 +53,7 @@ async function sign(payload,$Options)=> {
     algorithm: 'RS256'
   };
   return jwt.sign(payload, privateKEY, signOptions) ;
-} ,
+};
 
 verify(token, $Option) => {
   const verifyOptions = {
@@ -68,9 +68,9 @@ verify(token, $Option) => {
   } catch (error) {
     return false;
   }
-},
+};
 
 // will return null if token is invalid!!!
 decode(token)=>{
   return jwt.decode(token, {complete: true});
-}
+};

@@ -2,10 +2,7 @@
 import express from 'express';
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
-import {TodoListController, TodoItemController} from './controllers';
 import {Sequelize} from 'sequelize-typescript';
-import {TodoList} from './models/todolist.model';
-import {TodoItem} from './models/todoitem.model';
 import {WelcomeController} from './controllers/welcome.controller';
 
 const sequelize =  new Sequelize({
