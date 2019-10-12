@@ -26,7 +26,7 @@ To add a new endpoint that logically belongs to an existing controller, you simp
 If you need to define a new controller, there are a few things you need to do:
 1. create a new file `<mycontroller>.controller.ts` in the `controllers` folder. Check out our example controllers to see what to do within that file.
 1. go to the `controllers/index.ts` file and export your new controller, as described in that `index.ts` file
-1. in `server.ts`, mount the new controller analogous to the ones that are already in there (using `app.use(...)`)
+1. in `serverNO.ts`, mount the new controller analogous to the ones that are already in there (using `app.use(...)`)
 
 ## Streamline Your Development
 So far, you need to recompile your TypeScript code and restart your express application after every change. This can get annoying really quickly, but can streamline this process by doing two things:

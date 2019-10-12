@@ -20,9 +20,11 @@
     "sequelize": "^4.44.3",
     "sequelize-typescript": "^0.6.11",
     "sqlite3": "^4.1.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "express-handlebars": "latest"
   },
   "devDependencies": {
+    "@types/express-handlebars": "0.0.33",
     "tslint": "^5.20.0"
   },
   "repository": {
