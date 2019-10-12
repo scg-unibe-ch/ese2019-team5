@@ -11,7 +11,7 @@ import {EmailVerification} from '../Server (GC)/emailVerification';
 const router: Router = Router(); // part of express needed
 
 // when frontend signs up a new User is created which is saved (or at least should be)
-router.post('/signUp', async (req: Request, res: Response) => {
+router.post('/start/signUp', async (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(user.email);
@@ -20,6 +20,8 @@ router.post('/signUp', async (req: Request, res: Response) => {
   // await user.save();
   // call E-Mail verification fehlt //TODO E-Mail hier?
   res.statusCode = 201 ;
+  res.send('Welcome to Express');
+  console.log ('post method executed');
  // res.send(user.toSimplification());
 });
 
