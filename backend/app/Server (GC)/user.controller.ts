@@ -3,6 +3,7 @@ import {User} from './user';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
+import {emailVerification} form './emailVerification';
 
 
 // just started here
@@ -12,21 +13,22 @@ const router: Router = Router(); // part of express needed
 router.post('/signUp', async (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-
+  emailVerification.sendMailToNewUser(user.email);
   // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
   // await user.save();
   // call E-Mail verification fehlt //TODO E-Mail hier?
   res.statusCode = 201 ;
-  res.send(user.toSimplification());
+ // res.send(user.toSimplification());
 });
 
 // E-Mail verification Methode oder so ähnlich
 // create reusable transporter object using the default SMTP transport
 // credentials for our server
 // so far si able to send e-mails to one person and of a certain type // TODO gehört das überhaupt hierher?
-async function sendMailToNewUser() {
+/*
+async function sendMailToNewUser(email: string) {
 
-
+try{
   const transporter = nodemailer.createTransport({
     host: 'mail.gmx.net',
     port: 993,
@@ -39,11 +41,13 @@ async function sendMailToNewUser() {
       rejectUnauthorized: false
     }
   });
+  emailVerification.makeToken();
+
 
 // send mail with defined transport object
   const info = await transporter.sendMail({
     from: '"ESETeam5" <ESEteam5@gmx.de>', // sender address
-    to: 'will123459@gmail.com', // list of receivers
+    to: 'will123459@gmail.com', // email, // list of receivers
     subject: 'E-Mail Verification for your ESETeam5 Account',
     text: 'Hello world?', // plain text body
     html: '<b>Please verify your e-mail address</b>' // html body//TODO noch schön anpassen
@@ -55,15 +59,21 @@ async function sendMailToNewUser() {
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
 
-}
-sendMailToNewUser().catch(console.error);
+} catch (Error) { // ersetzt das unten dran
+  console.error();
+}}
+// sendMailToNewUser(user.email).catch(console.error);
+*/
 
 
 // TODO noch mals so ne function die ich keine Ahnung hab wo sie überhaupt hingehört, was für models und dann wären da noch Secret, Secret_2
 // vom 2 Teil
 // if user that wants to login was not found = Invalid login, if User isn't verified user is being told to verify
+
+// sollte helfer funktion zu db hat und  und hier nur token oder so machen
+/*
 async function tryLogin(email, password, models) {
-  const user = await models.User.findOne({where: {email}, raw: true}); // TODO denke das hängt schon mit DB zusammen oder?
+  /!*const user = await models.User.findOne({where: {email}, raw: true}); // TODO denke das hängt schon mit DB zusammen oder?
   if (!user) {
     throw new Error('Invalid login, please check your email address');
   }
@@ -73,8 +83,9 @@ async function tryLogin(email, password, models) {
   const valid = await brcypt.compare(password, user.password); // TODO auch wieder DP??
   if (!valid) {
     throw new Error ('Invalid password');
-  }
- const [token, refreshToken] = await createTokens(user, SECRET, SECRET_2 + user.password);
+  }*!/
+  // all das mit DB machen
+ const [token, refreshToken] = await makeTokens(user, SECRET, SECRET_2 + user.password);
 }
 
 async function makeToken (){
@@ -87,9 +98,10 @@ async function makeToken (){
 
     const url= `http://localhost:3000/confirmation/${emailToken}`;
 
-  await transporter.sendMail
+  await transporter.sendMail();
 }
 
+*/
 
 // router.get('/', async (req: Request, res: Response) => {
 /*  const todoListID = parseInt(req.query.todoListId);

@@ -2,7 +2,7 @@ import {Table, Column, Model, HasMany, BelongsTo, ForeignKey} from 'sequelize-ty
 import {User} from './user';
 
 
-// TODO noch absprechen wie speichern
+// TODO noch absprechen wie speichern // hier drin funktionen
 @Table
 export class UserModel extends Model<User> {
 
