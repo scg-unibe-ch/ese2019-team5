@@ -1,16 +1,17 @@
 // import everything from express and assign it to the express variable
-import express from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
 // import nodemailer from 'nodemailer';
 import path from 'path'; // unsure if used
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
- import {Sequelize} from 'sequelize-typescript';
+import {Sequelize} from 'sequelize-typescript';
  // import {UserModel} from './user.model'; //TODO wieder entkommentieren
 import {UserController} from './controllers/user.controller';
-import {WelcomeController} from "./controllers";
-
+import {WelcomeController} from './controllers';
+import {User} from './Server (GC)/user';
+import {EmailVerification} from './Server (GC)/emailVerification';
 
 
 
@@ -55,7 +56,11 @@ app.use(bodyParser.json())
 
 app.get ('/', (req, res) => {
   res.send('Hello');
-})
+});
+app.get('/signUp', (req: Request, res: Response) => {
+
+  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
+  EmailVerification.sendMailToNewUser(user.email); });
 
 // define the port the express app will listen on // the port we will use
 var port = 3000;
@@ -73,7 +78,8 @@ app.use(function (req, res, next) {
 // app.use('/todolist', TodoListController);
 // app.use('/todoitem', TodoItemController);
 app.use('/welcome', WelcomeController);
-app.use('/user', UserController)
+app.use('/user', UserController);
+
 
 
 

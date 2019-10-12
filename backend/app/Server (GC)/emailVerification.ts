@@ -6,11 +6,12 @@ import {Token} from 'nodemailer/lib/xoauth2';
 import jwt, {sign, verify, decode} from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
-const privateKey = fs.readFileSync('./private.key', 'utf8');
-const publicKey = fs.readFileSync('./public.key', 'utf8');
+// const privateKey = fs.readFileSync('./private.key', 'utf8');
+const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
+const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
  let token: string;
 
-function makeToken(email: string):string {
+function makeToken(email: string): string {
 
     const signOptions = {
       expiresIn: '24h',
