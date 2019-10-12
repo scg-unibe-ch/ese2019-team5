@@ -2,8 +2,9 @@
 // noch keine Ahnung aber das brauchts für E-Mail verifikation
 
 import * as fs from 'fs';
-import {Token} from 'nodemailer/lib/xoauth2';
-import jwt, {sign, verify, decode} from 'jsonwebtoken';
+
+// import jwt, {sign, verify, decode} from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 // const privateKey = fs.readFileSync('./private.key', 'utf8');
@@ -11,17 +12,17 @@ const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
 const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
  let token: string;
 
-function makeToken(email: string): string {
-
+function makeToken(email: any) {
+  console.log('in make token');
     const signOptions = {
       expiresIn: '24h',
       algorithm: 'RS256'};
-    let emailToken: any;
-    emailToken = jwt.sign(email, privateKey,
-      signOptions);
+    var emailToken = jwt.sign(email, privateKey, signOptions);
+    console.log('after signing token');
+    console.log(console.assert(emailToken != null));
     const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
     token = emailToken;
-
+    console.log('after token has been generated');
     return emailUrl;
   }
 
@@ -61,7 +62,6 @@ export class EmailVerification {
 
 
 static async sendMailToNewUser(email: string) {
-
   try {
     const transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
@@ -75,7 +75,9 @@ static async sendMailToNewUser(email: string) {
         rejectUnauthorized: false
       }
     });
+    console.log ('sendMail befor token');
    const emailURL = makeToken(email);
+
 
 
 // send mail with defined transport object

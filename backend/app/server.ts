@@ -57,7 +57,7 @@ app.use(bodyParser.json())
 app.get ('/', (req, res) => {
   res.send('Hello');
 });
-app.get('/signUp', (req: Request, res: Response) => {
+app.get('/signup', (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(user.email); });
@@ -78,7 +78,7 @@ app.use(function (req, res, next) {
 // app.use('/todolist', TodoListController);
 // app.use('/todoitem', TodoItemController);
 app.use('/welcome', WelcomeController);
-app.use('/user', UserController);
+app.use('/signup', UserController);
 
 
 
