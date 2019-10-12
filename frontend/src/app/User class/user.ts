@@ -5,6 +5,8 @@
  */
 
 export class User {
+  id: number;
+  token?: string;
 
   constructor(
     private email: string,
