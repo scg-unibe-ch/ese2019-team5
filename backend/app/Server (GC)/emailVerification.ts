@@ -6,20 +6,20 @@ import {Token} from 'nodemailer/lib/xoauth2';
 import jwt, {sign, verify, decode} from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
-
+const privateKey = fs.readFileSync('./private.key', 'utf8');
+const publicKey = fs.readFileSync('./public.key', 'utf8');
+public let token: string;
 
 export class EmailVerification {
 // gibt das wirklich boolean
 // let legitimate: boolean = jwt.verify(token, publicKEY, verifyOptions);
 
-  let payload: { data1: string } = {
+ /* let payload: { data1: string } = {
     data1: 'data 1',
-  };
-  const privateKey = fs.readFileSync('./private.key', 'utf8');
-  const publicKey = fs.readFileSync('./public.key', 'utf8');
+  };*/
 
 // und nun das ganze als Funktionen glaubs
-  sign(payload, $Options)=> {
+/*  sign(payload, $Options)=> {
   // Signing Options  kann das const sein?? Wieso auch bei token wieder ein Problem!!auch wenn sich audience oder so ändern könnte?
  let signOptions = {
     issuer: $Options.issuer,
@@ -29,39 +29,37 @@ export class EmailVerification {
     algorithm: 'RS256'
   };
   return
-  jwt.sign(payload, privateKey, signOptions) ;
-}
+  jwt.sign(payload, privateKey, { algorithm: ['RS256'] })  ;
+*/
 
-verify(token, ${Option}) => {
-  const verifyOptions = {
-    issuer: $Options.issuer,
-    subject: $Options.subject,
-    audience: $Options.audience,
-    expiresIn: '24h',
-    algorithm: ['RS256']
-  };
-  try {
-    return jwt.verify(token, publicKEY, verifyOptions);
-  } catch (error) {
-    return false;
-  }
-}
-let decode (token) = jwt.decode(token, {complete: true});
+verify(token, option) => {
+    return jwt.verify(token, publicKey, {algorithms: ['RS256']});}
+// no error catching here
+
+ decode (token)=> {
+    jwt.decode(token, {complete: true});
+
+
+};
 
 
 function makeToken(email: string): string {
-  const emailToken = jwt.sign({
+  let emailToken: any;
+  emailToken = jwt.sign({
       email,
     }, privateKey,
     {
       expiresIn: '1d',
-    }
-    const emailUrl = `http://localhost:3000/confirmation/${emailToken}`
+      algorithms: ['RS256']
+    });
+    const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
+    token = emailToken;
 
- return emailUrl; )
+ return emailUrl;
 }
 
-async function sendMailToNewUser(email: string) {
+
+static async function sendMailToNewUser(email: string) {
 
   try {
     const transporter = nodemailer.createTransport({
@@ -96,7 +94,9 @@ async function sendMailToNewUser(email: string) {
 
   } catch (Error) { // ersetzt das unten dran
     console.error();
-  }}
+  }
+}
+
 // sendMailToNewUser(user.email).catch(console.error);
 
 
