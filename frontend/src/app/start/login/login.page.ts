@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from "../../AuthService/auth.service";
+import {Router} from "@angular/router";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-login',
@@ -16,17 +18,21 @@ import {AuthService} from "../../AuthService/auth.service";
 export class LoginPage implements OnInit {
 
   authService: AuthService;
+  returnUrl: string;
+  error = '';
+
   mail: string;
   pw: string;
 
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router) {}
 
   loginForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
   });
-
 
   ngOnInit() {
   }
@@ -40,7 +46,8 @@ export class LoginPage implements OnInit {
 
   // ToDo: Implement verification etc.
   logIn() {
-    this.authService(mail, pw);
-
+    this.authService.login(this.mail, this.pw).pipe(first()).subscribe(
+      data => {this.router.navigate([this.returnUrl]).then(r => {}); },
+        error => { this.error = error; });
   }
 }
