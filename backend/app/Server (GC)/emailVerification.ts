@@ -14,96 +14,105 @@ const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
 
 function makeToken(email: any) {
   console.log('in make token');
-    const signOptions = {
-      expiresIn: '24h',
-      algorithm: 'RS256'};
-    var emailToken = jwt.sign(email, privateKey, signOptions);
-    console.log('after signing token');
-    console.log(console.assert(emailToken != null));
-    const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
-    token = emailToken;
-    console.log('after token has been generated');
-    return emailUrl;
-  }
+  var signOptions = {
+    issuer: 'Eventdoo',
+    subject: email,
+    audience: email,
+    expiresIn: '24h',
+    algorithm: 'RS256'};
+  var emailToken = jwt.sign(email, privateKey, signOptions);
+
+  const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
+  token = emailToken;
+
+  return emailUrl;
+}
 
 
 export class EmailVerification {
 // gibt das wirklich boolean
 // let legitimate: boolean = jwt.verify(token, publicKEY, verifyOptions);
 
- /* let payload: { data1: string } = {
-    data1: 'data 1',
-  };*/
+  /* let payload: { data1: string } = {
+     data1: 'data 1',
+   };*/
 
 // und nun das ganze als Funktionen glaubs
-/*  sign(payload, $Options)=> {
-  // Signing Options  kann das const sein?? Wieso auch bei token wieder ein Problem!!auch wenn sich audience oder so ändern könnte?
- let signOptions = {
-    issuer: $Options.issuer,
-    subject: $Options.subject,
-    audience: $Options.audience,
-    expiresIn: '24h',
-    algorithm: 'RS256'
-  };
-  return
-  jwt.sign(payload, privateKey, { algorithm: ['RS256'] })  ;
-*/
+  /*  sign(payload, $Options)=> {
+    // Signing Options  kann das const sein?? Wieso auch bei token wieder ein Problem!!auch wenn sich audience oder so ändern könnte?
+   let signOptions = {
+      issuer: $Options.issuer,
+      subject: $Options.subject,
+      audience: $Options.audience,
+      expiresIn: '24h',
+      algorithm: 'RS256'
+    };
+    return
+    jwt.sign(payload, privateKey, { algorithm: ['RS256'] })  ;
+  */
 
- verify(token: string){
-    return jwt.verify(token, publicKey, {algorithms: ['RS256']}); }
+  verify(token: string) {
+    return jwt.verify(token, publicKey, {algorithms: ['RS256']});
+  }
+
 // no error catching here
 
- decode (token: string) {
+  decode(token: string) {
     jwt.decode(token, {complete: true});
-}
+  }
 
 
-
-
-
-static async sendMailToNewUser(email: string) {
-  try {
-    const transporter = nodemailer.createTransport({
+  static async sendMailToNewUser(email: string) {
+    // try {
+    var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
-      port: 993,
-      secure: false,
+      port: 465,
+      secure: true,
       auth: {
         user: 'ESEteam5@gmx.de',
         pass: 'WecandoIt19'
       },
       tls: { // because we are not on that host currently.... just those 2 lines
-        rejectUnauthorized: false
-      }
+        ciphers: 'SSLv3',
+         rejectUnauthorized: false
+       }
     });
-    console.log ('sendMail befor token');
-   const emailURL = makeToken(email);
-
-
+    console.log('sendMail before token');
+    // const emailURL = makeToken(email);
 
 // send mail with defined transport object
-    const info = await transporter.sendMail({
+    // const info = await transporter.sendMail({ // new version below
+    var mailOptions = {
       from: '"ESETeam5" <ESEteam5@gmx.de>', // sender address
       to: 'will123459@gmail.com', // email, // list of receivers
       subject: 'E-Mail Verification for your ESETeam5 Account',
-      text: 'Hello world?' + emailURL, // plain text body
+      text: 'Hello world?', // + emailURL, // plain text body
       html: '<b>Please verify your e-mail address</b><p>emailURL</p>' // html body//TODO noch schön anpassen
+    };
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Email sent' + info.response);
+      }
     });
 
+  }
+}
 
-
-    console.log('Message sent: %s', info.messageId);
+/*    console.log('Message sent: %s', info.messageId);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
 
   } catch (Error) { // ersetzt das unten dran
     console.error();
   }
-}
+}*/
 
 // sendMailToNewUser(user.email).catch(console.error);
 
 
-}
+
 
 
 
@@ -133,6 +142,4 @@ const verifyOptions = {
   algorithm: ['RS256']
 };
 */
-
-
 
