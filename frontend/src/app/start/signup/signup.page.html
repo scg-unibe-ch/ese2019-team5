@@ -30,7 +30,7 @@
       <div class="form-group">
         <ion-item>
           <ion-label> e-mail address  </ion-label>
-          <ion-input formControlName="email" type="email" class="form-control"></ion-input>
+          <ion-input formControlName="email" type="email" class="form-control" [(ngModel)]="mail"></ion-input>
         </ion-item>
         <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
         <small [class.ion-hide]="email.untouched || email.valid"

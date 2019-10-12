@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
+import {AuthService} from "../../AuthService/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,9 @@ import {FormBuilder, Validators} from '@angular/forms';
  */
 export class LoginPage implements OnInit {
 
+  authService: AuthService;
+  mail: string;
+  pw: string;
 
 
   constructor(private formBuilder: FormBuilder) { }
@@ -36,6 +40,7 @@ export class LoginPage implements OnInit {
 
   // ToDo: Implement verification etc.
   logIn() {
+    this.authService(mail, pw);
 
   }
 }

@@ -20,6 +20,8 @@ export class SignupPage implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   pw: string;
+  mail: string;
+
   user: User;
 
   signUpForm = this.formBuilder.group({
@@ -54,6 +56,6 @@ export class SignupPage implements OnInit {
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    this.user = new User(this.email(), this.password(), false);
+    this.user = new User(this.mail, this.pw, false);
   }
 }
