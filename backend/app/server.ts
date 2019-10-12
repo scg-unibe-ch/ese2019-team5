@@ -1,3 +1,4 @@
+/*
 // import everything from express and assign it to the express variable
 import express from 'express';
 
@@ -31,11 +32,11 @@ app.use(function (req, res, next) {
   next();
 });
 
-/*
+/!*
 app.use('/todolist', TodoListController);
 app.use('/todoitem', TodoItemController);
 app.use('/welcome', WelcomeController);
-*/
+*!/
 
 
 sequelize.sync().then(() => {
@@ -45,3 +46,4 @@ sequelize.sync().then(() => {
     console.log(`Listening at http://localhost:${port}/`);
   });
 });
+*/

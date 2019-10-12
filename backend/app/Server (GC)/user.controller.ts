@@ -15,6 +15,7 @@ router.post('/signUp', async (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(user.email);
+
   // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
   // await user.save();
   // call E-Mail verification fehlt //TODO E-Mail hier?

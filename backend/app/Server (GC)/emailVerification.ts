@@ -8,7 +8,22 @@ import nodemailer from 'nodemailer';
 
 const privateKey = fs.readFileSync('./private.key', 'utf8');
 const publicKey = fs.readFileSync('./public.key', 'utf8');
-public let token: string;
+ let token: string;
+
+function makeToken(email: string):string {
+
+    const signOptions = {
+      expiresIn: '24h',
+      algorithm: 'RS256'};
+    let emailToken: any;
+    emailToken = jwt.sign(email, privateKey,
+      signOptions);
+    const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
+    token = emailToken;
+
+    return emailUrl;
+  }
+
 
 export class EmailVerification {
 // gibt das wirklich boolean
@@ -32,34 +47,19 @@ export class EmailVerification {
   jwt.sign(payload, privateKey, { algorithm: ['RS256'] })  ;
 */
 
-verify(token, option) => {
-    return jwt.verify(token, publicKey, {algorithms: ['RS256']});}
+ verify(token: string){
+    return jwt.verify(token, publicKey, {algorithms: ['RS256']}); }
 // no error catching here
 
- decode (token)=> {
+ decode (token: string) {
     jwt.decode(token, {complete: true});
-
-
-};
-
-
-function makeToken(email: string): string {
-  let emailToken: any;
-  emailToken = jwt.sign({
-      email,
-    }, privateKey,
-    {
-      expiresIn: '1d',
-      algorithms: ['RS256']
-    });
-    const emailUrl = `http://localhost:3000/confirmation/${emailToken}`;
-    token = emailToken;
-
- return emailUrl;
 }
 
 
-static async function sendMailToNewUser(email: string) {
+
+
+
+static async sendMailToNewUser(email: string) {
 
   try {
     const transporter = nodemailer.createTransport({

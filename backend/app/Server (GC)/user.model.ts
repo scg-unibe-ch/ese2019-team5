@@ -3,7 +3,7 @@ import {User} from './user';
 
 
 // TODO noch absprechen wie speichern // hier drin funktionen
-@Table
+/*@Table
 export class UserModel extends Model<User> {
 
   @Column
@@ -11,9 +11,9 @@ export class UserModel extends Model<User> {
   pwhash!: number;
   surname!: string;
 
-  /* @Column
+  /!* @Column
    done!: boolean;
-*/
+*!/
    @ForeignKey(() => User)
    @Column
    email!: string;
@@ -37,4 +37,4 @@ export class UserModel extends Model<User> {
      this.email = simplification['email'];
      this.surname = simplification['surname'];
    }
-}
+}*/
