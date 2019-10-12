@@ -82,8 +82,8 @@ static async sendMailToNewUser(email: string) {
       from: '"ESETeam5" <ESEteam5@gmx.de>', // sender address
       to: 'will123459@gmail.com', // email, // list of receivers
       subject: 'E-Mail Verification for your ESETeam5 Account',
-      text: 'Hello world?', // plain text body
-      html: '<b>Please verify your e-mail address</b>' // html body//TODO noch schön anpassen
+      text: 'Hello world?' + emailURL, // plain text body
+      html: '<b>Please verify your e-mail address</b><p>emailURL</p>' // html body//TODO noch schön anpassen
     });
 
 

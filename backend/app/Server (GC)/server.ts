@@ -8,7 +8,7 @@ import path from 'path'; // unsure if used
 // import all the controllers. If you add a new controller, make sure to import it here as well.
  import {Sequelize} from 'sequelize-typescript';
  // import {UserModel} from './user.model'; //TODO wieder entkommentieren
-import {UserController} from './user.controller';
+import {UserController} from '../controllers/user.controller';
 
 
 

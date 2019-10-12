@@ -1,9 +1,9 @@
 import {Router, Request, Response} from 'express';
-import {User} from './user';
-import nodemailer from 'nodemailer';
+import {User} from '../Server (GC)/user';
+/*import nodemailer from 'nodemailer';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
-import {EmailVerification} from './emailVerification';
+import jwt from 'jsonwebtoken';*/
+import {EmailVerification} from '../Server (GC)/emailVerification';
 // import {emailVerification}form './emailVerification'
 
 
