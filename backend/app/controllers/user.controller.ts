@@ -1,24 +1,27 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../Server (GC)/user';
-/*import nodemailer from 'nodemailer';
-import fs from 'fs';
-import jwt from 'jsonwebtoken';*/
 import {EmailVerification} from '../Server (GC)/emailVerification';
-// import {emailVerification}form './emailVerification'
+// import jwt from 'jsonwebtoken';
+var jwt = require('jsonwebtoken');
+import * as fs from 'fs';
 
 
-// just started here
+
 const router: Router = Router(); // part of express needed
-
+const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', false, false); // TODO to delete
 // when frontend signs up a new User is created which is saved (or at least should be)
-router.post('/start/:signUp', async (req: Request, res: Response) => {
+
+const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
+const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
+
+
+router.post('/user/signup', async (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-  EmailVerification.sendMailToNewUser(user.email);
+  EmailVerification.sendMailToNewUser(user);
 
   // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
   // await user.save();
-  // call E-Mail verification fehlt //TODO E-Mail hier?
   res.statusCode = 201 ;
   res.send('Welcome to Express');
   console.log ('post method executed');
@@ -28,98 +31,52 @@ router.post('/start/:signUp', async (req: Request, res: Response) => {
 router.get('/', async (req: Request, res: Response) => {
 
   // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-  EmailVerification.sendMailToNewUser('gillian.cathomas@gmx.ch');
+  EmailVerification.sendMailToNewUser(gillianuser);
 
   // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
   // await user.save();
-  // call E-Mail verification fehlt //TODO E-Mail hier?
+
   res.statusCode = 200 ;
   res.send('Welcome to Express2');
-  console.log ('get method executed');
+
   // res.send(user.toSimplification());
 });
 
-// E-Mail verification Methode oder so ähnlich
-// create reusable transporter object using the default SMTP transport
-// credentials for our server
-// so far si able to send e-mails to one person and of a certain type // TODO gehört das überhaupt hierher?
-/*
-async function sendMailToNewUser(email: string) {
+router.get('/', (req: Request, res: Response) => {
 
-try{
-  const transporter = nodemailer.createTransport({
-    host: 'mail.gmx.net',
-    port: 993,
-    secure: false,
-    auth: {
-      user: 'ESEteam5@gmx.de',
-      pass: 'WecandoIt19'
-    },
-    tls: { // because we are not on that host currently.... just those 2 lines
-      rejectUnauthorized: false
-    }
-  });
-  emailVerification.makeToken();
+  // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
+  EmailVerification.sendMailToNewUser(gillianuser);
+  res.send('Hello from user');
+});
 
 
-// send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: '"ESETeam5" <ESEteam5@gmx.de>', // sender address
-    to: 'will123459@gmail.com', // email, // list of receivers
-    subject: 'E-Mail Verification for your ESETeam5 Account',
-    text: 'Hello world?', // plain text body
-    html: '<b>Please verify your e-mail address</b>' // html body//TODO noch schön anpassen
-  });
+// needed to verify the token
+router.get ('/confirmation/:emailToken', async (req: Request, res: Response) => {
+  try {
+    const emailToken = req.params.emailURl; // TODO unsure if it works
+    const verifyOptions = {
+      issuer: 'Eventdoo',
+      subject: req.body.email,
+      audience: req.body.email,
+      expiresIn: '24h',
+      algorithm: 'RS256'};
+
+
+  jwt.verify(emailToken, publicKey, verifyOptions);
+} catch (err) {
+    res.send(err);
+}
+});
 
 
 
-    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-
-} catch (Error) { // ersetzt das unten dran
-  console.error();
-}}
-// sendMailToNewUser(user.email).catch(console.error);
-*/
 
 
 // TODO noch mals so ne function die ich keine Ahnung hab wo sie überhaupt hingehört, was für models und dann wären da noch Secret, Secret_2
 // vom 2 Teil
 // if user that wants to login was not found = Invalid login, if User isn't verified user is being told to verify
 
-// sollte helfer funktion zu db hat und  und hier nur token oder so machen
-/*
-async function tryLogin(email, password, models) {
-  /!*const user = await models.User.findOne({where: {email}, raw: true}); // TODO denke das hängt schon mit DB zusammen oder?
-  if (!user) {
-    throw new Error('Invalid login, please check your email address');
-  }
-  if (user.isVerified) {
-    throw new Error ('Please confirm your email address');
-  }
-  const valid = await brcypt.compare(password, user.password); // TODO auch wieder DP??
-  if (!valid) {
-    throw new Error ('Invalid password');
-  }*!/
-  // all das mit DB machen
- const [token, refreshToken] = await makeTokens(user, SECRET, SECRET_2 + user.password);
-}
 
-async function makeToken (){
-  const emailToken= jwt.sign({
-    user: _.pick(user, 'id'),
-  }),EMAIL_SECRET,
-    {
-      expiresIn: '1d',
-    },
-
-    const url= `http://localhost:3000/confirmation/${emailToken}`;
-
-  await transporter.sendMail();
-}
-
-*/
 
 // router.get('/', async (req: Request, res: Response) => {
 /*  const todoListID = parseInt(req.query.todoListId);
