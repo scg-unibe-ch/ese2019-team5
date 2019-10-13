@@ -1,10 +1,10 @@
-import {Router, Request, Response} from 'express';
+import {Router, Request, Response, urlencoded} from 'express';
 import {User} from '../Server (GC)/user';
 import {EmailVerification} from '../Server (GC)/emailVerification';
 // import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
-import * as assert from "assert";
+import * as assert from 'assert';
 
 
 
@@ -56,7 +56,13 @@ router.get('/', (req: Request, res: Response) => {
 
 
 const verifyToken = (req: Request, res: Response) => {
-   const token = req.headers.authorization;
+
+
+const tokenUrl = req.url;
+const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+
+  // console.log(this.href.substring(this.href.lastIndexOf('/') + 1));
+console.log(token);
 
   const verifyOptions = {
     issuer: 'Eventdoo',
@@ -67,14 +73,17 @@ const verifyToken = (req: Request, res: Response) => {
 
   try {
   jwt.verify(token, publicKey, verifyOptions ) ;
+// TODO logik um user auf verified zu stellen und evt res.send ändern
+  res.send('jwt token was verified :)');
 } catch (err) {
     res.send(err);
   }
+
   }
 
 router.get('/confirmation/:token', verifyToken);
-router.post('/confirmation/:token', verifyToken);
-router.patch('/confirmation/:token', verifyToken);
+// router.post('/confirmation/:token', verifyToken);
+// router.patch('/confirmation/:token', verifyToken);
 
 
 
