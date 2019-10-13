@@ -22,7 +22,7 @@ function makeToken(payload: any, email: string) {
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
   (console.log('make token was done'));
-  const emailUrl = `http://localhost:3000/user/confirmation${emailToken}`;
+  const emailUrl = `http://localhost:3000/user/confirmation/${emailToken}`;
   token = emailToken;
 
   return emailUrl;
@@ -89,16 +89,6 @@ export class EmailVerification {
   }
 }
 
-/*    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-
-  } catch (Error) { // ersetzt das unten dran
-    console.error();
-  }
-}*/
-
-// sendMailToNewUser(user.email).catch(console.error);
 
 
 
@@ -109,16 +99,4 @@ export class EmailVerification {
 
 
 
-/*
-
-
-const verifyOptions = {
-  issuer: sender,
-  subject: subject,
-  audience: audience,
-  expiresIn: '24h',
-  algorithm: ['RS256']
-};
-*!/
-*/
 

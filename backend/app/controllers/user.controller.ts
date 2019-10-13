@@ -4,6 +4,8 @@ import {EmailVerification} from '../Server (GC)/emailVerification';
 // import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
+import * as assert from "assert";
+
 
 
 
@@ -51,9 +53,35 @@ router.get('/', (req: Request, res: Response) => {
 
 
 // needed to verify the token
-router.get ('/confirmation/:emailToken', async (req: Request, res: Response) => {
+
+
+const verifyToken = (req: Request, res: Response) => {
+   const token = req.headers.authorization;
+
+  const verifyOptions = {
+    issuer: 'Eventdoo',
+    subject: req.body.email,
+    audience: req.body.email,
+    expiresIn: '24h',
+    algorithm: 'RS256'};
+
   try {
-    const emailToken = req.params.emailURl; // TODO unsure if it works
+  jwt.verify(token, publicKey, verifyOptions ) ;
+} catch (err) {
+    res.send(err);
+  }
+  }
+
+router.get('/confirmation/:token', verifyToken);
+router.post('/confirmation/:token', verifyToken);
+router.patch('/confirmation/:token', verifyToken);
+
+
+
+router.patch('/confirmation/:emailToken', async (req: Request, res: Response) => {
+  try {
+    console.log('got into emailtoken');
+    const emailToken = req.params.emailUrl; // TODO unsure if it works
     const verifyOptions = {
       issuer: 'Eventdoo',
       subject: req.body.email,
@@ -64,6 +92,7 @@ router.get ('/confirmation/:emailToken', async (req: Request, res: Response) => 
 
   jwt.verify(emailToken, publicKey, verifyOptions);
 } catch (err) {
+    res.status(401);
     res.send(err);
 }
 });
@@ -72,8 +101,6 @@ router.get ('/confirmation/:emailToken', async (req: Request, res: Response) => 
 
 
 
-// TODO noch mals so ne function die ich keine Ahnung hab wo sie überhaupt hingehört, was für models und dann wären da noch Secret, Secret_2
-// vom 2 Teil
 // if user that wants to login was not found = Invalid login, if User isn't verified user is being told to verify
 
 
