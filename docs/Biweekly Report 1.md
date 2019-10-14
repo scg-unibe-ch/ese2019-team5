@@ -22,7 +22,16 @@ with HTTPClient definitions. (We are still not sure whether we got it right or n
 
 
 ###### Backend:
-I felt pretty lost in the beginning with a new environment language and framework.
+In the beginning it was quite difficult for both of us to get used to all the new things, like 
+understanding how to connect to database or which part actually belongs to the backend and how HTTPClient works. 
+But step by step after many google search requests, looking at the demo folder and watching tutorials I think we started to understand what has to be
+done and how. For example one of us focused on the database and the other on the email verification. From the email verification we 
+have learnt how a basic jwt token works and how to send mails to the user using nodemailer. Even though we had some problems
+when it came to verify the token and send the email. The solution to the email problem was to tick a box in the 
+email programm(from the address we are sending the mails). And the solution to the verifying problem was to find the right attributes and not to
+forget the res.send part in the Http Event otherwise the site won't tell you that it worked. We
+also realized then that nodemon gives really good feedback and is very useful. There are still many things that we are uncertain about, but we
+feel like we already learnt a lot. Also the communication within the backend works quite well.
 
 ###### Frontend:
 In frontend project, the first difficulty was to get used to the new technologies. 
