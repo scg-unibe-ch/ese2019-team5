@@ -1,6 +1,7 @@
 import {Router, Request, Response, urlencoded} from 'express';
 import {User} from '../Server (GC)/user';
 import {EmailVerification} from '../Server (GC)/emailVerification';
+import {DbServices} from '../db.services';
 // import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
@@ -14,6 +15,8 @@ const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', 
 const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
 const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
 
+// create new DBService
+const dbService = new DbServices();
 
 router.post('/', async (req: Request, res: Response) => {
 
@@ -109,7 +112,7 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
  let email: string = req.params.email;
- let userWithoutMail: User = DB.getUserFromEmail(email); // TODO zu implementieren Cyrill pls?
+ const userWithoutMail = dbService.getUserFromEmail(email); // TODO zu implementieren Cyrill pls?
  EmailVerification.sendMailToNewUser(userWithoutMail);
 
 // TODO get all infos about user and call EmailVerification.sendMailToNewUser again with those infos
