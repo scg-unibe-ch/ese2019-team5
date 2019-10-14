@@ -4,65 +4,61 @@ import {EmailVerification} from '../Server (GC)/emailVerification';
 // import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
-import * as assert from 'assert';
-
-
 
 
 const router: Router = Router(); // part of express needed
 const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', false, false); // TODO to delete
 // when frontend signs up a new User is created which is saved (or at least should be)
 
+// keys for jwt token
 const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
 const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
 
 
-router.post('/user/signup', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
 
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(user);
 
-  // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
-  // await user.save();
+  // TODO hier noch logik um DB ein user zu erstellen
+
   res.statusCode = 201 ;
   res.send('Welcome to Express');
   console.log ('post method executed');
  // res.send(user.toSimplification());
 });
 
+
+
 router.get('/', async (req: Request, res: Response) => {
 
   // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
+
   EmailVerification.sendMailToNewUser(gillianuser);
-
-  // user.formSimplification(req.body); //TODO hier noch totales Durcheinander
-  // await user.save();
-
   res.statusCode = 200 ;
   res.send('Welcome to Express2');
 
-  // res.send(user.toSimplification());
+
 });
 
+/*
 router.get('/', (req: Request, res: Response) => {
 
   // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(gillianuser);
+  res.statusCode = 200;
   res.send('Hello from user');
+
 });
+*/
 
 
 // needed to verify the token
 
 
 const verifyToken = (req: Request, res: Response) => {
-
-
 const tokenUrl = req.url;
 const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
-
-  // console.log(this.href.substring(this.href.lastIndexOf('/') + 1));
-console.log(token);
 
   const verifyOptions = {
     issuer: 'Eventdoo',
@@ -89,7 +85,9 @@ router.get('/confirmation/:token', verifyToken);
 
 router.patch('/confirmation/:emailToken', async (req: Request, res: Response) => {
   try {
-    console.log('got into emailtoken');
+
+    const tokenUrl = req.url;
+    const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     const emailToken = req.params.emailUrl; // TODO unsure if it works
     const verifyOptions = {
       issuer: 'Eventdoo',

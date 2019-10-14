@@ -24,7 +24,7 @@ export class AuthService {
    */
   // TODO: url must match backend
   login(email: string, password: string) {
-    return this.httpClient.post<User>('http://localhost:3000/login', {email, password}).pipe(map(user => {
+    return this.httpClient.post<User>('http://localhost:3000/user', {email, password}).pipe(map(user => {
       // store jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);

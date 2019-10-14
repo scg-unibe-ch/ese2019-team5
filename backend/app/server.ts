@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
 
 
+
 // import all the controllers. If you add a new controller, make sure to import it here as well.
 import {Sequelize} from 'sequelize-typescript';
  // import {UserModel} from './user.model'; //TODO wieder entkommentieren
@@ -68,6 +69,7 @@ app.use(function (req, res, next) {
 // app.use('/todoitem', TodoItemController);
 app.use('/welcome', WelcomeController);
 app.use('/user', UserController);
+
 
 
 
