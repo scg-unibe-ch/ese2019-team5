@@ -20,7 +20,7 @@ router.post('/', async (req: Request, res: Response) => {
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
   EmailVerification.sendMailToNewUser(user);
 
-  // TODO hier noch logik um DB ein user zu erstellen
+//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen
 
   res.statusCode = 201 ;
   res.send('Welcome to Express');
@@ -70,6 +70,7 @@ const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
   try {
   jwt.verify(token, publicKey, verifyOptions ) ;
 // TODO logik um user auf verified zu stellen und evt res.send ändern
+    // DB.makeUserVerified(req.body.email);
   res.send('jwt token was verified :)');
 } catch (err) {
     res.send(err);
@@ -77,7 +78,7 @@ const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
   }
 
-router.get('/confirmation/:token', verifyToken);
+router.get('/confirmation/:token', verifyToken); // hier wird drauf zugegriffen
 // router.post('/confirmation/:token', verifyToken);
 // router.patch('/confirmation/:token', verifyToken);
 
@@ -98,13 +99,24 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 
 
   jwt.verify(emailToken, publicKey, verifyOptions);
+  console.log(' verifie funktioniert'); // TODO noch User auf verified setze
+   // DB.makeUserVerified(req.body.email);
 } catch (err) {
     res.status(401);
     res.send(err);
 }
 });
 
+router.get('/sendMailAgain', async (req: Request, res: Response) => {
+ let email: string = req.params.email;
+ let userWithoutMail: User = DB.getUserFromEmail(email); // TODO zu implementieren Cyrill pls?
+ EmailVerification.sendMailToNewUser(userWithoutMail);
 
+// TODO get all infos about user and call EmailVerification.sendMailToNewUser again with those infos
+  }
+
+// TODO zum implementieren
+)
 
 
 
