@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {BehaviorSubject, Observable, pipe} from 'rxjs';
 import {User} from '../User class/user';
-import {map} from 'rxjs/operators';
+import {Token} from '@angular/compiler';
+import * as fs from 'fs';
+
+import * as jwt from 'jsonwebtoken';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
+  publicKey = fs.readFileSync('../backend/app/Server (GC)/public.key', 'utf8');
+  private token: Observable<Token>;
 
   constructor(private httpClient: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -24,13 +29,21 @@ export class AuthService {
    */
   // TODO: url must match backend
   login(email: string, password: string) {
-    return this.httpClient.post<User>('http://localhost:3000/user', {email, password}).pipe(map(user => {
+    let params = new HttpParams();
+    params = params.append('email', email);
+    params = params.append('password', password);
+
+    this.token = this.httpClient.get<Token>('http://localhost:3000/login', { params} );
+    this.setSession(this.token);
+    return this.token;
+  }
+
+    /*pipe(map(user => {
       // store jwt token in local storage to keep user logged in between page refreshes
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);
       return user;
-    }));
-  }
+    }));*/
 
   /**
    * Called by the logout button on any page
@@ -38,7 +51,24 @@ export class AuthService {
    */
   logout() {
     // remove user from local storage to log out
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
     this.currentUserSubject.next(null);
   }
+
+  private setSession(authResult) {
+    const verifyOptions = {
+      issuer: 'Eventdoo',
+      subject: 'email',
+      expiresIn: '7d',
+      algorithm: 'RS256'
+    };
+
+    if (jwt.verify(authResult, this.publicKey, verifyOptions)) {
+      const decoded = jwt.decode(authResult);
+      localStorage.setItem('id_token', authResult);
+    }
+  }
+
+
 }
