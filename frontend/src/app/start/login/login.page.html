@@ -1,5 +1,5 @@
 <!-- Log-In-Form -->
-<!-- Collects data from a (existing) user to authentificate -->
+<!-- Collects data from a (existing) user to authenticate -->
 <!-- ToDo: Implement logic -->
 <!-- ToDo: Styling -->
 
@@ -24,17 +24,24 @@
   <form [formGroup]="logInForm">
     <div class="form-group">
       <ion-item>
-        <ion-label> e-mail address</ion-label>
-        <ion-input formControlName="email" type="email" class="form-control" [(ngModel)]="mail"></ion-input>
+        <ion-label> e-mail address </ion-label>
+        <ion-input formControlName="email" type="email" class="form-control"> </ion-input>
       </ion-item>
+      <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
+      <!-- ToDo: Why doesn't this work? -->
+      <small [class.ion-hide]="email.untouched || email.valid"
+             style="color: red"> Invalid e-mail-address </small>
     </div>
+    {{email.touched}}{{email.valid}}
+
 
     <div class="form-group">
       <ion-item>
         <ion-label> password </ion-label>
-        <ion-input formControlName="password" type="password" class="form-control" [(ngModel)]="pw"> </ion-input>
+        <ion-input formControlName="password" type="password" class="form-control"> </ion-input>
       </ion-item>
     </div>
+    {{password.touched}}{{password.valid}}
   </form>
 
   <!-- When all information is valid, the log in button is shown -->
@@ -50,6 +57,7 @@
          style="color: red">
     You can log in as soon as all required information is valid. </small>
 
-  <ion-button style="position: center"> log in </ion-button>
+  <ion-button style="position: center" [class.ion-hide]="email.invalid || password.invalid"> log in </ion-button>
+  <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
 </ion-infinite-scroll-content>
 
