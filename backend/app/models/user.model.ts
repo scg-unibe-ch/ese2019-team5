@@ -4,15 +4,17 @@ export class User {
   firstname: string;
   lastname: string;
   email: string;
-  password: string;
+  password: string
+  isVerified: boolean;
   newUser = false;
 
-  constructor(id: number, firstname: string, lastname: string, email: string, password: string) {
+  constructor(id: number, firstname: string, lastname: string, email: string, password: string, isVerified: boolean) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
     this.password = password;
+    this.isVerified = isVerified;
   }
 
 
