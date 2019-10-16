@@ -78,7 +78,7 @@ export class SignupPage implements OnInit {
     const name = this.firstname;
     const surname = this.lastname;
     const isVerified = false;
-    this.http.post(this.ROOT_URL + '/signup', {email, name, surname, pwhash, isVerified})
+    this.http.post(this.ROOT_URL + '/user', {email, name, surname, pwhash, isVerified}) // Todo Change to signup
       .subscribe();
   }
 }
