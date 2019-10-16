@@ -14,6 +14,7 @@ import {LoginPage} from './start/login/login.page';
 import {StartPage} from './start/start.page';
 import {SignupPage} from './start/signup/signup.page';
 
+
 @NgModule({
   declarations: [AppComponent, StartPage, LoginPage, SignupPage],
   entryComponents: [],

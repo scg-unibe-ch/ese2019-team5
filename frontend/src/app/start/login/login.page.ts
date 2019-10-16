@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, Validators, FormsModule} from '@angular/forms';
 import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
 import {first} from 'rxjs/operators';
+import {NgModel} from '@angular/forms';
+
 
 @Component({
   selector: 'app-login',
@@ -21,25 +23,28 @@ export class LoginPage implements OnInit {
   returnUrl: string;
   error = '';
 
+  email: string;
+  password: string;
+
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router) {}
 
-  loginForm = this.formBuilder.group({
+  /*loginForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
-  });
+  });*/
 
   ngOnInit() {
   }
 
-  get email() {
+  /*get email() {
     return this.loginForm.get('email');
   }
   get password() {
     return this.loginForm.get('password');
-  }
+  }*/
 
   /**
    * Called when the user presses the login button.
@@ -49,8 +54,8 @@ export class LoginPage implements OnInit {
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
   logIn() {
-    this.authService.login(this.email.value, this.password.value).pipe(first()).subscribe(
+    /*this.authService.login(this.email.value, this.password.value).pipe(first()).subscribe(
       data => {this.router.navigate([this.returnUrl]).then(r => {}); },
-        error => { this.error = error; });
+        error => { this.error = error; });*/
   }
 }
