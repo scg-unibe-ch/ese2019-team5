@@ -21,9 +21,6 @@ export class LoginPage implements OnInit {
   returnUrl: string;
   error = '';
 
-  mail: string;
-  pw: string;
-
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,9 +41,15 @@ export class LoginPage implements OnInit {
     return this.loginForm.get('password');
   }
 
-  // ToDo: Implement verification etc.
+  /**
+   * Called when the user presses the login button.
+   * Sends data entered in the form to the AuthService
+   * Handles the "result":
+   * If log in was successful, the user is sent to another url.
+   * If an error occurs, the error message is displayed on the bottom of the page.
+   */
   logIn() {
-    this.authService.login(this.mail, this.pw).pipe(first()).subscribe(
+    this.authService.login(this.email.value, this.password.value).pipe(first()).subscribe(
       data => {this.router.navigate([this.returnUrl]).then(r => {}); },
         error => { this.error = error; });
   }
