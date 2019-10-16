@@ -72,11 +72,11 @@ export class SignupPage implements OnInit {
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    const pwhash = 'hashpw'; // bcrypt.hashSync(this.pw, 10);
+    const pwhash = this.pw; // bcrypt.hashSync(this.pw, 10);
     // this.user = new User(this.mail, hashedPw);
-    const email = 'gillian.cathomas@gmx.ch'; // this.mail;
-    const name = 'blub';
-    const surname = 'blabb';
+    const email =  this.mail;
+    const name = this.firstname;
+    const surname = this.lastname;
     const isVerified = false;
     this.http.post(this.ROOT_URL + '/signup', {email, name, surname, pwhash, isVerified})
       .subscribe();
