@@ -22,17 +22,30 @@ export class DbServices {
 
     public async getUserFromEmail(email: string): Promise<User> {
       await client.connect();
+      const user = await this.getUserFromEmailDB(email);
+      await client.end();
+      return user;
+    }
+
+
+
+    // @ts-ignore
+    private async getUserFromEmailDB(email: string): Promise<User> {
+      let user: User;
 
       const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw From users Where email = $1', [email]);
 
-      for await (const row of stream) {
-        // console.log(row.get('pn'));
+      for await(const row of stream) {
         if (stream.rows == null) {
-          throw new Error('no result found in database');
+          throw new Error('no user with this email found');
+        } else if (stream.rows.length !== 1) {
+          throw new Error('this email isnt unique in the database');
+        } else {
+          // tslint:disable-next-line:max-line-length
+          user = new User(Number(row.get('id')), String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')));
+          return user;
         }
       }
-        // tslint:disable-next-line:max-line-length
-      return new User(Number(row.get('id')), String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')));
     }
 
     async testSql( name: string): Promise<SqlResult> {
