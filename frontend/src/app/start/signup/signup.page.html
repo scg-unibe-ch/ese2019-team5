@@ -3,6 +3,7 @@
 <!-- Does some verification (email-format, matching passwords) -->
 <!-- Passes the user-object/data to the database (to be implemented)-->
 <!-- ToDo: Styling-->
+<!-- ToDo: Add forms for name and surname-->
 
 <!-- Header contains... (f.l.t.r.) -->
 <!-- 1) Back button to return to StartPage  -->
@@ -37,6 +38,26 @@
                style="color: red"> Invalid e-mail-address </small>
       </div>
 
+      <!-- User must enter their name -->
+      <div class="form-group">
+        <ion-item>
+          <ion-label> First name  </ion-label>
+          <ion-input formControlName="fname" type="text" class="form-control" [(ngModel)]="firstname"></ion-input>
+        </ion-item>
+        <small [class.ion-hide]="fname.untouched || fname.valid"
+               style="color: red"> Invalid name </small>
+      </div>
+
+      <!-- User must enter their last name -->
+      <div class="form-group">
+        <ion-item>
+          <ion-label> Last Name  </ion-label>
+          <ion-input formControlName="lname" type="text" class="form-control" [(ngModel)]="lastname"></ion-input>
+        </ion-item>
+        <small [class.ion-hide]="lname.untouched || lname.valid"
+               style="color: red"> Invalid name </small>
+      </div>
+
       <!-- User must enter his/her password here -->
       <!-- Password is stored in the email-propriety of a User-Object -->
       <!-- ToDo: What are requirements for password-security?  -->
@@ -66,12 +87,12 @@
   </div>
 
     <!-- When all information is valid, the sign up button is shown -->
-    <ion-button [class.ion-hide]="signUpForm.get('email').invalid || signUpForm.get('password').invalid || signUpForm.get('confirmation').invalid"
+    <ion-button [class.ion-hide]="signUpForm.get('email').invalid || signUpForm.get('password').invalid || signUpForm.get('confirmation').invalid || signUpForm.get('fname').invalid || signUpForm.get('lname').invalid"
                 (click)="saveUser()">
       Sign Up
     </ion-button>
     <!-- If all information isn't valid this message is shown  -->
-    <small [class.ion-hide]="signUpForm.get('email').valid && signUpForm.get('password').valid && signUpForm.get('confirmation').valid"
+    <small [class.ion-hide]="signUpForm.get('email').valid && signUpForm.get('password').valid && signUpForm.get('confirmation').valid || signUpForm.get('fname').invalid || signUpForm.get('lname').invalid"
            style="color: red">
       You can sign up as soon as all required information is valid. </small>
 </ion-content>

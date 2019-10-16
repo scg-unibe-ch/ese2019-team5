@@ -21,17 +21,21 @@ export class SignupPage implements OnInit {
 
   // Todo figure out where to send HTTP requests
   readonly ROOT_URL = 'http://localhost:3000';
-  //const bcrypt = require('bcrypt');
+  // const bcrypt = require('bcrypt');
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) { }
 
   pw: string;
   mail: string;
+  firstname: string;
+  lastname: string;
 
   user: User;
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
+    firstname: ['', [Validators.required]],
+    lastname: ['', [Validators.required]],
     // ToDo: What are safety requirements for passwords? Which characters are allowed?
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]]
@@ -46,6 +50,12 @@ export class SignupPage implements OnInit {
   }
   get password() {
     return this.signUpForm.get('password');
+  }
+  get fname() {
+    return this.signUpForm.get('fname');
+  }
+  get lname() {
+    return this.signUpForm.get('lname');
   }
   get confirmation() {
     return this.signUpForm.get('confirmation');
@@ -62,12 +72,13 @@ export class SignupPage implements OnInit {
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    const pwhash: string = 'hashpw';//bcrypt.hashSync(this.pw, 10);
+    const pwhash = 'hashpw'; // bcrypt.hashSync(this.pw, 10);
     // this.user = new User(this.mail, hashedPw);
-    const email: string = 'gillian.cathomas@gmx.ch';//this.mail;
-    const name: string = 'blub';
-    const surname: string = 'blabb';
-    const isVerified: boolean = false;
-    this.http.post(this.ROOT_URL + '/signup', email&name&surname&pwhash&isVerified);
+    const email = 'gillian.cathomas@gmx.ch'; // this.mail;
+    const name = 'blub';
+    const surname = 'blabb';
+    const isVerified = false;
+    this.http.post(this.ROOT_URL + '/signup', {email, name, surname, pwhash, isVerified})
+      .subscribe();
   }
 }
