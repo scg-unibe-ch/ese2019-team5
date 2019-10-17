@@ -20,7 +20,7 @@ export class DbServices {
     }
 
     public async checkLoginData(email: string, password: string): Promise<User> {
-      return new User(1, 't', 't', 't', 't', true);
+      return new User('t', 't', 't', 't', true);
     }
 
     public async getUserFromEmail(email: string): Promise<User> {
@@ -62,10 +62,10 @@ export class DbServices {
     }
 
     private checkIfPasswordCorrect(user: User, password: string): boolean {
-      return password === user.password;
+      return password === user.pwhash;
     }
 
-  private isUserVerified(user: User): boolean{
+  private isUserVerified(user: User): boolean {
       return user.isVerified;
   }
 
@@ -85,7 +85,8 @@ export class DbServices {
           throw new Error('this email isnt unique in the database');
         } else {
           // tslint:disable-next-line:max-line-length
-          user = new User(Number(row.get('id')), String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')));
+          user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')));
+          user.setId(Number(row.get('id')));
           return user;
         }
       }
@@ -104,9 +105,11 @@ export class DbServices {
             if (stream.rows == null) {
                 throw new Error('no result found in database');
             }
-
-          // tslint:disable-next-line:max-line-length
-            sqlResult.addUser(new User(Number(row.get('id')), String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv'))));
+            // tslint:disable-next-line:max-line-length
+            const user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')))
+            user.setId(Number(row.get('id')));
+            // tslint:disable-next-line:max-line-length
+            sqlResult.addUser(user);
         }
         await client.end();
 

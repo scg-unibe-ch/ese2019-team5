@@ -4,22 +4,25 @@ export class User {
   firstname: string;
   lastname: string;
   email: string;
-  password: string
+  pwhash: string;
   isVerified: boolean;
   newUser = false;
+  isAdmin = false;
 
-  constructor(id: number, firstname: string, lastname: string, email: string, password: string, isVerified: boolean) {
-    this.id = id;
+  constructor(firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
-    this.password = password;
+    this.pwhash = pwhash;
     this.isVerified = isVerified;
   }
 
+  setId(id: number) {
+    this.id = id;
+  }
 
   toString(): string {
-    return String(this.id) + ' ' + this.firstname + ' ' + this.lastname + ' ' + this.email + ' ' + this.password;
+    return String(this.id) + ' ' + this.firstname + ' ' + this.lastname + ' ' + this.email + ' ' + this.pwhash;
   }
 
   toNameString(): string {
