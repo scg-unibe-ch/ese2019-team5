@@ -21,7 +21,7 @@ const dbService = new DbServices();
 
 router.post('/', async (req: Request, res: Response) => {
 
-  const user = new User( req.body.firstname, req.body.lastname, req.body.email,req.body.pwhash, req.body.isVerified);
+  const user = new User( req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified);
   console.log(req.body.name);
   console.log(req.body.surname);
   console.log(req.body.pwhash);
@@ -33,7 +33,7 @@ router.post('/', async (req: Request, res: Response) => {
 //  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat
 
   res.statusCode = 201 ;
-  res.send('Welcome to Express');
+  res.send('Welcome to Express');// TODO hier noch richtige antwort senden
   console.log ('post method executed');
  // res.send(user.toSimplification());
 });

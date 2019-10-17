@@ -78,11 +78,10 @@ export class SignupPage implements OnInit {
     const name = this.firstname;
     const surname = this.lastname;
     const isVerified = false;
-<<<<<<< Updated upstream
-    this.http.post(this.ROOT_URL + '/user', {email, name, surname, pwhash, isVerified}) // Todo Change to signup
-=======
-    this.http.post(this.ROOT_URL + '/user', {email, name, surname, pwhash, isVerified})
->>>>>>> Stashed changes
+
+  //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
+
+    this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified}) // TODO auswählen welche Variante
       .subscribe();
   }
 }
