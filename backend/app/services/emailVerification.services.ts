@@ -29,7 +29,7 @@ function makeToken(payload: any, email: string) {
 }
 
 
-export class EmailVerification {
+export class EmailVerificationServices {
 
 
   static async sendMailToNewUser (user: User) {

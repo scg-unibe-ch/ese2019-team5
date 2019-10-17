@@ -13,7 +13,7 @@ import {User} from './Server (GC)/user';
 import {SqlTestController} from './controllers';
 import {LoginController} from './controllers';
 
-import {EmailVerification} from './Server (GC)/emailVerification';
+import {EmailVerificationServices} from './services/emailVerification.services';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 
@@ -97,7 +97,7 @@ app.get('/user', (req: Request, res: Response) => {
 
 
 // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-  EmailVerification.sendMailToNewUser(gillianuser);
+  EmailVerificationServices.sendMailToNewUser(gillianuser);
 res.send('Hello from user');
 });
 

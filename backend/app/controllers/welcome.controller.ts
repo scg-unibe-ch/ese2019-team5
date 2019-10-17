@@ -1,5 +1,5 @@
 import {Router, Request, Response} from 'express';
-import {EmailVerification} from '../Server (GC)/emailVerification';
+import {EmailVerificationServices} from '../services/emailVerification.services';
 import {User} from '../Server (GC)/user';
 
 const router: Router = Router();

@@ -1,7 +1,7 @@
 import {Router, Request, Response, urlencoded} from 'express';
 import {User} from '../models/user.model';
-import {EmailVerification} from '../Server (GC)/emailVerification';
-import {DbServices} from '../db.services';
+import {EmailVerificationServices} from '../services/emailVerification.services';
+import {DbServices} from '../services/db.services';
 // import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
@@ -28,7 +28,7 @@ router.post('/', async (req: Request, res: Response) => {
  console.log(req.body.email);
  console.log(req.body.isVerified);
 
-  EmailVerification.sendMailToNewUser(user);
+  EmailVerificationServices.sendMailToNewUser(user);
 
 //  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat
 
@@ -45,7 +45,7 @@ router.get('/', async (req: Request, res: Response) => {
   const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified);
   console.log(req.body.name);
 
-  EmailVerification.sendMailToNewUser(user);
+  EmailVerificationServices.sendMailToNewUser(user);
   res.statusCode = 200 ;
   res.send('Welcome to Express2');
 
@@ -56,7 +56,7 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
 
   // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-  EmailVerification.sendMailToNewUser(gillianuser);
+  EmailVerificationServices.sendMailToNewUser(gillianuser);
   res.statusCode = 200;
   res.send('Hello from user');
 
@@ -122,9 +122,9 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
  let email: string = req.params.email;
  const userWithoutMail = dbService.getUserFromEmail(email); // TODO zu implementieren Cyrill pls? und wieder entkommentieren
- EmailVerification.sendMailToNewUser(userWithoutMail);
+ EmailVerificationServices.sendMailToNewUser(userWithoutMail);
 
-// TODO get all infos about user and call EmailVerification.sendMailToNewUser again with those infos
+// TODO get all infos about user and call EmailVerificationServices.sendMailToNewUser again with those infos
   }
 
 // TODO zum implementieren E-mail stimmt nicht kein Ergebnis kommt

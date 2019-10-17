@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 import {SqlResult} from '../models/sqlresult.model';
-import {DbServices} from '../db.services';
+import {DbServices} from '../services/db.services';
 import {User} from '../models/user.model';
 
 

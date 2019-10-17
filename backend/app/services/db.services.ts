@@ -1,6 +1,6 @@
 import {Client} from 'ts-postgres';
-import {SqlResult} from './models/sqlresult.model';
-import {User} from './models/user.model';
+import {SqlResult} from '../models/sqlresult.model';
+import {User} from '../models/user.model';
 import * as fs from 'fs';
 
 const jwt = require('jsonwebtoken');

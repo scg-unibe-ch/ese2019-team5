@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 
-import {DbServices} from '../db.services';
+import {DbServices} from '../services/db.services';
 
 const dbService = new DbServices();
 const router: Router = Router();
