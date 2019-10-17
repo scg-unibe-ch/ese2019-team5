@@ -3,8 +3,9 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable, pipe} from 'rxjs';
 import {User} from '../User class/user';
 import * as fs from 'fs';
-
+import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
+import { assert } from 'console';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -38,6 +39,15 @@ export class AuthService {
     return this.user;
   }
 
+  public isLoggedIn() {
+    return moment().isBefore(this.getExpiration());
+  }
+
+  isLoggedOut() {
+    return !this.isLoggedIn();
+  }
+
+
   /**
    * Called by the logout button on any page
    * Deletes all stored authentication data from the local storage
@@ -59,8 +69,15 @@ export class AuthService {
     };
 
     if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
-      localStorage.setItem('expires_at', authResult.token.expiresIn);
+      const expiresAt = moment().add(authResult.token.expiresIn, 'second');
+      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
       localStorage.setItem('id_token', authResult.token.id);
     }
+  }
+
+  private getExpiration() {
+    const expiration = localStorage.getItem('expires_at');
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
   }
 }
