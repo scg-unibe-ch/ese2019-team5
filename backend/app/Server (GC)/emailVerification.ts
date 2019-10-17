@@ -2,7 +2,7 @@
 // noch keine Ahnung aber das brauchts für E-Mail verifikation
 
 import * as fs from 'fs';
-import {User} from '../Server (GC)/user';
+import {User} from '../models/user.model';
 // import jwt, {sign, verify, decode} from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
@@ -35,8 +35,8 @@ export class EmailVerification {
   static async sendMailToNewUser (user: User) {
     // try {
     let payload = {
-      name: user.name,
-      surname: user.surname,
+      name: user.firstname,
+      surname: user.lastname,
       email: user.email,
     }
     var transporter = nodemailer.createTransport({

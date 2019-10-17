@@ -1,5 +1,5 @@
 import {Router, Request, Response, urlencoded} from 'express';
-import {User} from '../Server (GC)/user';
+import {User} from '../models/user.model';
 import {EmailVerification} from '../Server (GC)/emailVerification';
 import {DbServices} from '../db.services';
 // import jwt from 'jsonwebtoken';
@@ -8,7 +8,7 @@ import * as fs from 'fs';
 
 
 const router: Router = Router(); // part of express needed
-const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', false); // TODO to delete
+const gillianuser = new User('Gillian', 'Will', 'gillian.cathomas@gmx.ch','1', false); // TODO to delete
 // when frontend signs up a new User is created which is saved (or at least should be)
 
 // keys for jwt token
@@ -21,7 +21,7 @@ const dbService = new DbServices();
 
 router.post('/', async (req: Request, res: Response) => {
 
-  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified);
+  const user = new User( req.body.firstname, req.body.lastname, req.body.email,req.body.pwhash, req.body.isVerified);
  console.log(req.body.name);
  console.log(req.body.surname);
  console.log(req.body.pwhash);
