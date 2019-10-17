@@ -11,6 +11,8 @@ import {Sequelize} from 'sequelize-typescript';
 import {UserController, WelcomeController} from './controllers';
 import {User} from './Server (GC)/user';
 import {SqlTestController} from './controllers';
+import {LoginController} from './controllers';
+
 import {EmailVerification} from './Server (GC)/emailVerification';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
@@ -71,6 +73,7 @@ app.use(function (req, res, next) {
 app.use('/welcome', WelcomeController);
 app.use('/user', UserController);
 app.use('/sqlTest', SqlTestController);
+app.use('/login', LoginController);
 
 
 

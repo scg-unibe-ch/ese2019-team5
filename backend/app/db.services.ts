@@ -1,10 +1,9 @@
 import {Client} from 'ts-postgres';
 import {SqlResult} from './models/sqlresult.model';
 import {User} from './models/user.model';
-import jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 
-
+const jwt = require('jsonwebtoken');
 const client = new Client({
     'user' : 'cyrill',
     'host' : 'localhost',
@@ -32,8 +31,11 @@ export class DbServices {
     }
 
     public async tryLogin(email: string, password: string): Promise<string> {
-      await client.connect();
-      const user = await this.getUserFromEmailDB(email);
+      let user: User;
+      user = await this.getUserFromEmail(email);
+
+      console.log(user);
+
       if (this.checkIfPasswordCorrect(user, password)) {
         if (this.isUserVerified(user)) {
           return this.generateJWT(email, user.id);
@@ -46,13 +48,17 @@ export class DbServices {
     }
 
     private generateJWT(email: string, userId: number): string {
-      const payload = userId;
+      const payload = {
+        data1: String(userId),
+      };
       const signOption = {
         issuer: 'Eventdoo',
+        audience: 'http://eventdoo.ch',
         subject: email,
         expiresIn: '7d',
-        algorithm: 'RS256'};
-      return jwt.sign(String(payload), privateKey, signOption);
+        algorithm: 'RS256'
+      };
+      return jwt.sign(payload, privateKey, signOption);
     }
 
     private checkIfPasswordCorrect(user: User, password: string): boolean {
@@ -66,13 +72,16 @@ export class DbServices {
     // @ts-ignore
     private async getUserFromEmailDB(email: string): Promise<User> {
       let user: User;
+      console.log('hallooooo');
 
       const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv From users Where email = $1', [email]);
 
       for await(const row of stream) {
         if (stream.rows == null) {
+          client.end();
           throw new Error('no user with this email found');
         } else if (stream.rows.length !== 1) {
+          client.end();
           throw new Error('this email isnt unique in the database');
         } else {
           // tslint:disable-next-line:max-line-length
@@ -80,6 +89,8 @@ export class DbServices {
           return user;
         }
       }
+      client.end();
+      throw new Error('no user with this email found');
     }
 
     async testSql( name: string): Promise<SqlResult> {
