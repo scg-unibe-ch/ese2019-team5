@@ -32,6 +32,7 @@
   "devDependencies": {
     "@types/express-handlebars": "0.0.33",
     "@types/jsonwebtoken": "^8.3.4",
+    "@types/nodemailer": "^6.2.1",
     "tslint": "^5.20.0"
   },
   "repository": {

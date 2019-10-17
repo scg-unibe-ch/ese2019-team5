@@ -11,7 +11,7 @@ const client = new Client({
     'port' : 5432,
     'database' : 'eventdoo'
 });
-const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
+const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
 export class DbServices {
 

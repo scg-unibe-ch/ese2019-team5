@@ -12,8 +12,8 @@ const gillianuser = new User('Gillian', 'Will', 'gillian.cathomas@gmx.ch','1', f
 // when frontend signs up a new User is created which is saved (or at least should be)
 
 // keys for jwt token
-const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
-const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
+
+const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
 
 // create new DBService
 const dbService = new DbServices();

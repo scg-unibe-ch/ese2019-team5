@@ -8,8 +8,8 @@ import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 // const privateKey = fs.readFileSync('./private.key', 'utf8');
-const privateKey = fs.readFileSync('./app/Server (GC)/private.key', 'utf8');
-const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
+const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
+const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
  let token: string;
 
 function makeToken(payload: any, email: string) {
