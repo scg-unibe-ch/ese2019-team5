@@ -10,7 +10,7 @@ router.get('/', async (req: Request, res: Response) => {
   const pwhash = req.body.pwhash;
 
   try {
-    const sessionToken = dbService.tryLogin(email, pwhash);
+    const sessionToken = await dbService.tryLogin(email, pwhash);
     res.send(sessionToken);
     res.statusCode = 200;
   } catch (error) {
@@ -18,6 +18,27 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(error.msg);
   }
 });
+
+router.get('/test', async (req: Request, res: Response) => {
+    res.statusCode = 200;
+    res.send('00000sessionToken');
+});
+
+router.get('/test/:email/:pw', async (req: Request, res: Response) => {
+  const email = req.params.email; // evt auch req.params.email
+  const pwhash = req.params.pw;
+
+  try {
+    const sessionToken = await dbService.tryLogin(email, pwhash);
+    res.statusCode = 200;
+    res.send(sessionToken + 'abc');
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 404;
+    res.send(e.msg);
+  }
+});
+
 
 
 
