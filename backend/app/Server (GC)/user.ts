@@ -6,7 +6,6 @@ export class User {
     public surname: string,
     public pwhash: string,
     public isVerified: boolean,
-    public isAdmin: boolean
   ) {}
 }
 

@@ -8,7 +8,7 @@ import * as fs from 'fs';
 
 
 const router: Router = Router(); // part of express needed
-const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', false, false); // TODO to delete
+const gillianuser = new User('gillian.cathomas@gmx.ch', 'Gillian', 'Will', '1', false); // TODO to delete
 // when frontend signs up a new User is created which is saved (or at least should be)
 
 // keys for jwt token
@@ -18,12 +18,19 @@ const publicKey = fs.readFileSync('./app/Server (GC)/public.key', 'utf8');
 // create new DBService
 const dbService = new DbServices();
 
+
 router.post('/', async (req: Request, res: Response) => {
 
-  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
+  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified);
+ console.log(req.body.name);
+ console.log(req.body.surname);
+ console.log(req.body.pwhash);
+ console.log(req.body.email);
+ console.log(req.body.isVerified);
+
   EmailVerification.sendMailToNewUser(user);
 
-//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen
+//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat
 
   res.statusCode = 201 ;
   res.send('Welcome to Express');
@@ -32,17 +39,18 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 
-
+/*
 router.get('/', async (req: Request, res: Response) => {
 
-  // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
+  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified);
+  console.log(req.body.name);
 
-  EmailVerification.sendMailToNewUser(gillianuser);
+  EmailVerification.sendMailToNewUser(user);
   res.statusCode = 200 ;
   res.send('Welcome to Express2');
 
 
-});
+});*/
 
 /*
 router.get('/', (req: Request, res: Response) => {
@@ -92,7 +100,7 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 
     const tokenUrl = req.url;
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
-    const emailToken = req.params.emailUrl; // TODO unsure if it works
+    const emailToken = req.params.emailUrl;
     const verifyOptions = {
       issuer: 'Eventdoo',
       subject: req.body.email,
@@ -110,16 +118,18 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 }
 });
 
+/*
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
  let email: string = req.params.email;
- const userWithoutMail = dbService.getUserFromEmail(email); // TODO zu implementieren Cyrill pls?
+ const userWithoutMail = dbService.getUserFromEmail(email); // TODO zu implementieren Cyrill pls? und wieder entkommentieren
  EmailVerification.sendMailToNewUser(userWithoutMail);
 
 // TODO get all infos about user and call EmailVerification.sendMailToNewUser again with those infos
   }
 
-// TODO zum implementieren
+// TODO zum implementieren E-mail stimmt nicht kein Ergebnis kommt
 )
+*/
 
 
 
@@ -198,4 +208,4 @@ router.delete('/:id', async (req: Request, res: Response) => {
 });
 */
 
-export const UserController: Router = router;
+export const SignupController: Router = router;
