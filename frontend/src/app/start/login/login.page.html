@@ -38,12 +38,7 @@
     </div>
   </form>
 
-  <!-- When all information is valid, the log in button is shown -->
-  <!-- ToDo: Why doesn't this work?-->
-  <ion-button
-              (click)="logIn()">
-    Log In
-  </ion-button>
-  <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+  <ion-button (click)="logIn()"> Log In </ion-button>
+  <div *ngIf="error" class="alert alert-danger mt-3 mb-0"> {{error}} </div>
 </ion-infinite-scroll-content>
 
