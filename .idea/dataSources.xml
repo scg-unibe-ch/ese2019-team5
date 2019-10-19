@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="eventdoo" uuid="16395dc1-ab86-4d1d-989c-29db52fb8f6a">
+    <data-source source="LOCAL" name="eventdoo" uuid="fca58002-18bc-4800-a4d7-ea2ae23be0c5">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
