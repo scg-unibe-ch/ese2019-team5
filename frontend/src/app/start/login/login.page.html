@@ -23,7 +23,7 @@
   <form #loginForm ="ngForm">
     <div class="form-group">
       <ion-item>
-        <ion-label> e-mail address </ion-label>
+        <ion-label position="floating">E-mail address </ion-label>
         <ion-input type="email" required pattern="(.)*@(.)*" class="form-control" name="email" [(ngModel)]="email"> </ion-input>
       </ion-item>
     </div>
@@ -31,7 +31,7 @@
 
     <div class="form-group">
       <ion-item>
-        <ion-label> password </ion-label>
+        <ion-label position="floating">Password </ion-label>
         <ion-input type="password" required class="form-control" name="password" [(ngModel)]="password"> </ion-input>
       </ion-item>
     </div>

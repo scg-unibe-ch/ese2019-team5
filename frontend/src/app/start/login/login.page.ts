@@ -3,6 +3,7 @@ import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
 import {Observable} from "rxjs";
 import {User} from '../../../../../backend/app/models/user.model';
+import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ export class LoginPage implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService) {}
+    private authService: AuthService,
+    private alertController: AlertController) {}
 
   ngOnInit() {
   }
@@ -45,9 +47,24 @@ export class LoginPage implements OnInit {
        this.authService.login(this.email, this.password).subscribe(
         () => {
           console.log('logged in?' + this.authService.isLoggedIn());
-          this.router.navigate([this.returnUrl]).then(r => {}); });
+          this.router.navigate([this.returnUrl]).then(r => {
+            this.LogInPopUp();
+          }); });
     } catch (error) {
       this.error = error.msg;
     }
+  }
+
+  /**
+   * Shows a Pop-Up for a successful login
+   */
+  async LogInPopUp() {
+    const alert = await this.alertController.create({
+      header: 'Congratulations',
+      message: 'You have successfully logged in!',
+      buttons: ['Okay']
+    });
+
+    await alert.present();
   }
 }
