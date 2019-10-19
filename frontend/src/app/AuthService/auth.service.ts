@@ -1,46 +1,61 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {BehaviorSubject, Observable, pipe} from 'rxjs';
-import {User} from '../User class/user';
-import * as fs from 'fs';
+import {HttpClient, HttpParams, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, Subscription, throwError} from 'rxjs';
 import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
-import { assert } from 'console';
+import {User} from '../../../../backend/app/models/user.model';
+import {catchError} from 'rxjs/operators';
+import {error} from 'util';
+//  * as fs from 'fs';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
-  publicKey = fs.readFileSync('../backend/app/Server (GC)/public.key', 'utf8');
+  // publicKey = fs.readFileSync('../backend/app/Server (GC)/public.key', 'utf8');
   private user: Observable<User>;
 
-  constructor(private httpClient: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Called by LoginPage
    * Sends a request to the backend
-   * If the request was valid, it stores the JWT-Token and User details returned form backend in the client's local storage
+   * If the request was valid, a User object with a JWT-Session-Token is returned and is handled in setSession.
    * Otherwise, an error occurs (handled by LoginPage)
    * @param email address entered in the login form
    * @param password entered in the login form
    */
-  // TODO: url must match backend
   login(email: string, password: string) {
     // Set params for http request
     let params = new HttpParams();
     params = params.append('email', email);
     params = params.append('password', password);
 
+      // Post http request
+    try {
+    console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', { params} );
+    } catch (HttpErrorResponse) {
+    console.log('Login failed in backend');
+    return Observable.throw(new Error('Invalid email address or password'));
+    }
+
+    // Set session
+    console.log('Trying to set session');
     this.setSession(this.user);
     return this.user;
   }
 
+
+  /**
+   * Returns whether a user is already logged in by
+   * checking whether there is a session token and whether it is expired.
+   */
   public isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
+    try {
+      return moment().isBefore(this.getExpiration());
+    } catch (e) {
+      return false;
+    }
   }
 
   isLoggedOut() {
@@ -56,23 +71,34 @@ export class AuthService {
     // remove user from local storage to log out
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
-    this.currentUserSubject.next(null);
   }
 
 
+  /**
+   * Verifies the token of the returned User object
+   * Stores the user's ID Token and it's expiration stamp in the user's local storage
+   * @param authResult
+   */
   private setSession(authResult) {
-    const verifyOptions = {
+    /*const verifyOptions = {
       issuer: 'Eventdoo',
       subject: 'email',
       expiresIn: '7d',
       algorithm: 'RS256'
-    };
+    };*/
 
-    if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
+    console.log('Setting session');
+
+    // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
+    try {
       const expiresAt = moment().add(authResult.token.expiresIn, 'second');
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
       localStorage.setItem('id_token', authResult.token.id);
-    }
+      console.log('Setting session successful');
+       } catch (e) {
+      console.log(e);
+      }
+   // }
   }
 
   private getExpiration() {

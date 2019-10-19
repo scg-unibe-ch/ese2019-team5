@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
-import {first} from 'rxjs/operators';
-import {NgModel} from '@angular/forms';
-
+import {Observable} from "rxjs";
+import {User} from '../../../../../backend/app/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -19,15 +18,16 @@ import {NgModel} from '@angular/forms';
  */
 export class LoginPage implements OnInit {
 
-  authService: AuthService;
-  returnUrl= '/start';
-  error = '';
-
   email: string;
   password: string;
 
+  returnUrl = '/start';
+  error = '';
+  user: Observable<User>;
+
   constructor(
-    private router: Router) {}
+    private router: Router,
+    private authService: AuthService) {}
 
   ngOnInit() {
   }
@@ -39,9 +39,15 @@ export class LoginPage implements OnInit {
    * If log in was successful, the user is sent to another url.
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
+  // ToDo: Why can't this.authService.login(...) be read?
   logIn() {
-    this.authService.login(this.email, this.password).pipe(first()).subscribe(
-      data => {this.router.navigate([this.returnUrl]).then(r => {}); },
-        error => { this.error = error; });
+    try {
+       this.authService.login(this.email, this.password).subscribe(
+        () => {
+          console.log('logged in?' + this.authService.isLoggedIn());
+          this.router.navigate([this.returnUrl]).then(r => {}); });
+    } catch (error) {
+      this.error = error.msg;
+    }
   }
 }
