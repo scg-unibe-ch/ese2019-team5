@@ -29,8 +29,16 @@ router.post('/', async (req: Request, res: Response) => {
   console.log(req.body.isVerified);
 
   EmailVerificationServices.sendMailToNewUser(user);
+  try{
+    await dbService.signUp(user);
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send(e.msg);
+  }
 
-//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat
+
+//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat (gemacht Zeile 33)
 
   res.statusCode = 201 ;
   res.send('Welcome to Express');// TODO hier noch richtige antwort senden
@@ -110,26 +118,32 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 
 
   jwt.verify(emailToken, publicKey, verifyOptions);
-  console.log(' verifie funktioniert'); // TODO noch User auf verified setze
-   // DB.makeUserVerified(req.body.email);
+  console.log(' verifie funktioniert');
+   dbService.makeUserVerified(req.body.email);
 } catch (err) {
     res.status(401);
     res.send(err);
 }
 });
 
-/*
+
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
  let email: string = req.params.email;
- const userWithoutMail = dbService.getUserFromEmail(email); // TODO zu implementieren Cyrill pls? und wieder entkommentieren
- EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+ try{
+   const userWithoutMail = await dbService.getUserFromEmail(email);
+   EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+ }catch (e) {
+   console.log(e);
+ }
+
+
 
 // TODO get all infos about user and call EmailVerificationServices.sendMailToNewUser again with those infos
   }
 
 // TODO zum implementieren E-mail stimmt nicht kein Ergebnis kommt
-)
-*/
+);
+
 
 
 
