@@ -1,5 +1,3 @@
-
-
 import * as fs from 'fs';
 import {User} from '../models/user.model';
 import * as jwt from 'jsonwebtoken';
@@ -72,19 +70,7 @@ export class EmailVerificationServices {
 
 }
 
-/*
-  verify(token: string) {
-    return jwt.verify(token, publicKey, {algorithms: ['RS256']});
-  }
 
-// no error catching here
-
-  decode(token: string) {
-    jwt.decode(token, {complete: true});
-  }
-}
-
-*/
 
 
 

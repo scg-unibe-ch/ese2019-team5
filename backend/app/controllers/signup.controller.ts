@@ -58,9 +58,7 @@ const verifyToken = async (req: Request, res: Response) => {
   try {
     let decoded = jwt.verify(token, publicKey, verifyOptions ) ;
     console.log('before db verifie');
-    console.log(decoded.email);
     await dbService.makeUserVerified(decoded.email);
-    console.log('after db verifie');
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (err) {
     res.send(err);
