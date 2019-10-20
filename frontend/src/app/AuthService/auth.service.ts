@@ -23,7 +23,7 @@ export class AuthService {
    * Sends a request to the backend
    * If the request was valid, a User object with a JWT-Session-Token is returned and is handled in setSession.
    * Otherwise, an error occurs (handled by LoginPage)
-   * @param email address entered in the login form
+   * @param mail address entered in the login form
    * @param password entered in the login form
    */
   login(mail: string, password: string) {
@@ -89,9 +89,9 @@ export class AuthService {
     console.log('Setting session');
     // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
-      const expiresAt = moment().add(authResult.token.expiresIn, 'second');
+      const expiresAt = moment().add(authResult.expiresIn, 'second');
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-      localStorage.setItem('id_token', authResult.token.id);
+      localStorage.setItem('id_token', authResult.id);
       console.log('Setting session successful');
        } catch (e) {
       console.log(e);
