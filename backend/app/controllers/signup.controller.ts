@@ -56,9 +56,10 @@ const verifyToken = async (req: Request, res: Response) => {
     algorithm: 'RS256'};
 
   try {
-    jwt.verify(token, publicKey, verifyOptions ) ;
+    let decoded = jwt.verify(token, publicKey, verifyOptions ) ;
     console.log('before db verifie');
-    await dbService.makeUserVerified(req.body.email);
+    console.log(decoded.email);
+    await dbService.makeUserVerified(decoded.email);
     console.log('after db verifie');
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (err) {
