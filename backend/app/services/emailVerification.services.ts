@@ -20,7 +20,7 @@ function makeToken(payload: any, email: string) {
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
   (console.log('make token was done'));
-  const emailUrl = `http://localhost:3000/user/confirmation/${emailToken}`;
+  const emailUrl = `http://localhost:3000/signup/confirmation/${emailToken}`;
   token = emailToken;
 
   return emailUrl;

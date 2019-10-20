@@ -7,20 +7,33 @@ const dbService = new DbServices();
 const router: Router = Router();
 
 
-router.get('/', async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const email = req.body.email; // evt auch req.params.email
   const pwhash = req.body.pwhash;
+  console.log('entered login');
+  console.log(email);
+  console.log(pwhash);
 
   try {
     const loginResult = await dbService.tryLogin(email, pwhash);
     const sessionToken = loginResult.token;
-    res.send(sessionToken);
+    const user= dbService.getUserFromEmail(email);
+    res.send(sessionToken + user); //TODO user auch noch nach vorne senden
     res.statusCode = 200;
   } catch (error) {
     res.statusCode = 404;
     res.send(error.msg);
   }
 });
+
+
+
+
+
+
+
+
+// von Cyrill glaubs
 
 router.get('/test', async (req: Request, res: Response) => {
     res.statusCode = 200;

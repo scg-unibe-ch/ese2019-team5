@@ -8,8 +8,6 @@ import * as fs from 'fs';
 
 const router: Router = Router(); // part of express needed
 
-// when frontend signs up a new User is created which is saved (or at least should be)
-
 // keys for jwt token
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
 
@@ -25,7 +23,7 @@ router.post('/', async (req: Request, res: Response) => {
   console.log(req.body.pwhash);
   console.log(req.body.email);
   console.log(req.body.isVerified);
-
+ //TODO hier doch zuerst schauen ob user schon existiert und sonst abbrechen
   EmailVerificationServices.sendMailToNewUser(user);
   try{
     await dbService.signUp(user);
