@@ -71,6 +71,7 @@ export class SignupPage implements OnInit {
    */
   saveUser() {
     const pwhash = HashService.hashPassword(this.pw);
+    console.log(pwhash);
     const email =  this.mail;
     const firstname = this.firstname;
     const lastname = this.lastname;

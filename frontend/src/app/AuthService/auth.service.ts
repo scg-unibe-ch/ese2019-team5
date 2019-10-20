@@ -36,11 +36,8 @@ export class AuthService {
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', { params} );
     this.user.subscribe(
-      res => {
-        this.setSession(res)
-      },
-      error => {
-        return Observable.throw(new Error('Invalid email address or password'));
+      data => {
+        this.setSession(data)
       });
     return this.user;
     }
@@ -87,9 +84,7 @@ export class AuthService {
       expiresIn: '7d',
       algorithm: 'RS256'
     };*/
-
     console.log('Setting session');
-
     // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
       const expiresAt = moment().add(authResult.token.expiresIn, 'second');
@@ -101,6 +96,20 @@ export class AuthService {
       }
    // }
   }
+
+  // Not used but might be used later?
+  /*handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent){
+      errorMessage = 'Error: $[error.error.message]';
+    } else {
+      errorMessage = 'Error Code: $[error.status] \n' +
+        'Message: $[error.message]';
+    }
+    return throwError(errorMessage);
+  } */
+
+
 
   private getExpiration() {
     const expiration = localStorage.getItem('expires_at');
