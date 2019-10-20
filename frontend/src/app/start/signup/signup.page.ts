@@ -3,6 +3,7 @@ import {User} from '../../User class/user';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {AlertController} from "@ionic/angular";
+import {HashService} from '../../HashService/hash.service';
 
 // @ts-ignore
 @Component({
@@ -19,7 +20,6 @@ import {AlertController} from "@ionic/angular";
  */
 export class SignupPage implements OnInit {
 
-  // Todo figure out where to send HTTP requests
   readonly ROOT_URL = 'http://localhost:3000';
   // const bcrypt = require('bcrypt');
 
@@ -65,15 +65,12 @@ export class SignupPage implements OnInit {
   ngOnInit() {
   }
 
-  // ToDo: Implement how data is sent to the database
-  // ToDo: Hashing  password bcrypt
   /**
    * Creates a new User-object according to data entered in form
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    const pwhash = this.pw; // bcrypt.hashSync(this.pw, 10);
-    // this.user = new User(this.mail, hashedPw);
+    const pwhash = HashService.hashPassword(this.pw);
     const email =  this.mail;
     const firstname = this.firstname;
     const lastname = this.lastname;
@@ -81,7 +78,7 @@ export class SignupPage implements OnInit {
 
   //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
 
-    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified}) // TODO auswählen welche Variante
+    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
       .subscribe(
         (completed) => this.presentSuccessAlert(),
         (error) => this.presentFailureAlert(error.message))
