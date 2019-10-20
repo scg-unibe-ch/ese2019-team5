@@ -18,8 +18,8 @@ const dbService = new DbServices();
 router.post('/', async (req: Request, res: Response) => {
 
   const user = new User( req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified);
-  console.log(req.body.firstname);
-  console.log(req.body.lastname);
+  console.log(req.body.name);
+  console.log(req.body.surname);
   console.log(req.body.pwhash);
   console.log(req.body.email);
   console.log(req.body.isVerified);
@@ -34,7 +34,7 @@ router.post('/', async (req: Request, res: Response) => {
   } catch (e) {
     console.log(e);
     res.statusCode = 400;
-    res.send(e.msg); // TODO diese Message wird dem User noch nicht ausgegeben.
+    res.send(e.msg);
   }
 
 });
@@ -44,9 +44,9 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 // needed to verify the token
-const verifyToken = (req: Request, res: Response) => {
-const tokenUrl = req.url;
-const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+const verifyToken = async (req: Request, res: Response) => {
+  const tokenUrl = req.url;
+  const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
   const verifyOptions = {
     issuer: 'Eventdoo',
@@ -56,15 +56,14 @@ const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     algorithm: 'RS256'};
 
   try {
-  jwt.verify(token, publicKey, verifyOptions ) ;
-// TODO logik um user auf verified zu stellen und evt res.send ändern
-    dbService.makeUserVerified(req.body.email);
-  res.send('Thank you for verifying your email-address you can now login.');
-} catch (err) {
+    jwt.verify(token, publicKey, verifyOptions ) ;
+    await dbService.makeUserVerified(req.body.email);
+    res.send('Thank you for verifying your email-address you can now login.');
+  } catch (err) {
     res.send(err);
   }
 
-  }
+};
 
 router.get('/confirmation/:token', verifyToken); // hier wird drauf zugegriffen
 // router.post('/confirmation/:token', verifyToken);
@@ -108,8 +107,13 @@ router.get('/sendMailAgain', async (req: Request, res: Response) => {
    res.send(e + 'unknown email-address. Please check or sign up.');
    console.log(e);
  }
+
+
+
+// TODO get all infos about user and call EmailVerificationServices.sendMailToNewUser again with those infos
   }
 
+// TODO zum implementieren E-mail stimmt nicht kein Ergebnis kommt
 );
 
 
