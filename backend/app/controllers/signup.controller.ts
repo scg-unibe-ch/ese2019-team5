@@ -43,9 +43,9 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 // needed to verify the token
-const verifyToken = (req: Request, res: Response) => {
-const tokenUrl = req.url;
-const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+const verifyToken = async (req: Request, res: Response) => {
+  const tokenUrl = req.url;
+  const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
   const verifyOptions = {
     issuer: 'Eventdoo',
@@ -55,15 +55,14 @@ const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     algorithm: 'RS256'};
 
   try {
-  jwt.verify(token, publicKey, verifyOptions ) ;
-// TODO logik um user auf verified zu stellen und evt res.send ändern
-    // DB.makeUserVerified(req.body.email);
-  res.send('Thank you for verifying your email-address you can now login.');
-} catch (err) {
+    jwt.verify(token, publicKey, verifyOptions ) ;
+    await dbService.makeUserVerified(req.body.email);
+    res.send('Thank you for verifying your email-address you can now login.');
+  } catch (err) {
     res.send(err);
   }
 
-  }
+};
 
 router.get('/confirmation/:token', verifyToken); // hier wird drauf zugegriffen
 // router.post('/confirmation/:token', verifyToken);
