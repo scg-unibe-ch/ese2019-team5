@@ -3,7 +3,6 @@
  * Stores all information about a User
  * Initialized by SignupPage
  */
-
 export class User {
   static currentId = 1;
   id: number;

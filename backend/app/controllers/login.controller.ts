@@ -21,7 +21,7 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(sessionToken + user); //TODO user auch noch nach vorne senden
     res.statusCode = 200;
   } catch (error) {
-    res.statusCode = 404;
+    res.status(404);
     res.send(error.msg);
   }
 });
