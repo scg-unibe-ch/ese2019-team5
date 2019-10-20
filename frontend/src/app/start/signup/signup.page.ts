@@ -75,13 +75,13 @@ export class SignupPage implements OnInit {
     const pwhash = this.pw; // bcrypt.hashSync(this.pw, 10);
     // this.user = new User(this.mail, hashedPw);
     const email =  this.mail;
-    const name = this.firstname;
-    const surname = this.lastname;
+    const firstname = this.firstname;
+    const lastname = this.lastname;
     const isVerified = false;
 
   //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
 
-    this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified}) // TODO auswählen welche Variante
+    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified}) // TODO auswählen welche Variante
       .subscribe();
   }
 }
