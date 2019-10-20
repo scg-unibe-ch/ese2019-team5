@@ -23,10 +23,11 @@ router.post('/', async (req: Request, res: Response) => {
   console.log(req.body.pwhash);
   console.log(req.body.email);
   console.log(req.body.isVerified);
- //TODO hier doch zuerst schauen ob user schon existiert und sonst abbrechen
-  EmailVerificationServices.sendMailToNewUser(user);
+
+
   try{
     await dbService.signUp(user);
+    EmailVerificationServices.sendMailToNewUser(user);
     res.statusCode = 201 ;
     res.send("Please check your emails and verify your email-address in order to sign up. If you can't find it please also check your spam folder");// TODO hier noch richtige antwort senden Z.B.
 
