@@ -49,7 +49,8 @@ export class LoginPage implements OnInit {
           console.log('logged in?' + this.authService.isLoggedIn());
           this.router.navigate([this.returnUrl]).then(r => {
             this.LogInPopUp();
-          }); });
+          });
+        });
     } catch (error) {
       this.error = error.msg;
     }
