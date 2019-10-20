@@ -6,6 +6,7 @@ import {LoginResult} from "../models/loginResult.model";
 const dbService = new DbServices();
 const router: Router = Router();
 
+
 router.get('/', async (req: Request, res: Response) => {
   const email = req.body.email; // evt auch req.params.email
   const pwhash = req.body.pwhash;
