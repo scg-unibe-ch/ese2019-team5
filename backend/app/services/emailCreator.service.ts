@@ -5,7 +5,7 @@ export class EmailCreatorService{
     "<div align=center style='font-size:14.0pt;font-family:\"Arial\",sans-serif'>"+
       "<p>Vielen Dank, dass Sie Eventdoo nutzen möchten.</p>"+
     "<p>Um unseren Service in seinem vollen Umfang nutzen zu können, bitten wir Sie noch Ihre Email-Address zu bestätigen.</p>"+
-    "<a href=" + token + ">Email bestätigen</a><\br>"+
+    "<a href=" + token + ">Email bestätigen</a>"+
       "<p>Wir wünschen Ihnen viel Spass beim Planen Ihres Eventes</p>"+
     "<p><b><i>Ihr Eventdoo Team</i></b></p>"+
     "</div>"+
