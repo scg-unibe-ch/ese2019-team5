@@ -68,3 +68,4 @@ sequelize.sync().then(() => {
     console.log(`Listening at http://localhost:${port}/`);
   });
 });
+module.exports= app;

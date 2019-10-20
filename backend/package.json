@@ -6,8 +6,7 @@
   "description": "A todo list backend with express and node",
   "main": "build/server.js",
   "scripts": {
-    "tsc": "tsc",
-    "test": "mocha -r backend/app/tests/**/*.spec.ts"
+    "tsc": "tsc"
   },
   "keywords": [],
   "license": "ISC",
