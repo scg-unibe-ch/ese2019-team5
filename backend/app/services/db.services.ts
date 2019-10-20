@@ -3,6 +3,7 @@ import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
+import {error} from "ts-postgres/dist/src/logging";
 
 const jwt = require('jsonwebtoken');
 

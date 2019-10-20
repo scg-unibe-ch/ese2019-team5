@@ -45,6 +45,8 @@ export class AuthService {
     }
 
 
+
+
   /**
    * Returns whether a user is already logged in by
    * checking whether there is a session token and whether it is expired.

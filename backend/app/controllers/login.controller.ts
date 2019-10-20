@@ -17,16 +17,17 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('got here');
     const loginResult = await dbService.tryLogin(email, pwhash);
-    console.log(loginResult);
+    console.log('hahah' + loginResult);
     const sessionToken = loginResult.token;
-    const user= dbService.getUserFromEmail(email);
+    const user= loginResult.user;
     res.send(sessionToken); //TODO user auch noch nach vorne senden evt noch user
     res.statusCode = 200;
   } catch (error) {
-
-    console.log(error.message);
-    res.json(error.message);
-    res.statusCode=404;
+    console.log('hahahaha' + error.message);
+   // res.json(error.message);
+    //res.send(error.message);
+   // res.send(error);
+    res.status(404).send(error.message);
   }
 });
 
