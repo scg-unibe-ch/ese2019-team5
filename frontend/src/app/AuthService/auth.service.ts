@@ -26,7 +26,7 @@ export class AuthService {
    * @param mail address entered in the login form
    * @param password entered in the login form
    */
-  login(mail: string, password: string) {
+  login(mail: string, password: number) {
     // Set params for http request
     /*let params = new HttpParams();
     params = params.append('email', email);
@@ -38,9 +38,10 @@ export class AuthService {
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
     this.user.subscribe(
-      data => {
+      (data) => {
         this.setSession(data)
-      });
+      }
+      /*(error) => {this.handleError(error)}*/);
     return this.user;
     }
 
@@ -102,7 +103,7 @@ export class AuthService {
   }
 
   // Not used but might be used later?
-  /*handleError(error) {
+  handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent){
       errorMessage = 'Error: $[error.error.message]';
@@ -111,7 +112,7 @@ export class AuthService {
         'Message: $[error.message]';
     }
     return throwError(errorMessage);
-  } */
+  }
 
 
 

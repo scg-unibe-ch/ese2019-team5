@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {User} from '../../../../../backend/app/models/user.model';
 import {AlertController} from "@ionic/angular";
 import {BehaviorSubject, Observable, Subscription, throwError} from 'rxjs';
+import {HashService} from "../../HashService/hash.service";
 
 @Component({
   selector: 'app-login',
@@ -41,9 +42,8 @@ export class LoginPage implements OnInit {
    * If log in was successful, the user is sent to another url.
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
-  // ToDo: Why can't this.authService.login(...) be read?
   logIn() {
-    this.authService.login(this.email, this.password).subscribe(
+    this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
       () => {
         this.router.navigate([this.returnUrl]).then(r => {
         });
