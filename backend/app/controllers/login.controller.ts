@@ -15,14 +15,17 @@ router.post('/', async (req: Request, res: Response) => {
   console.log(pwhash);
 
   try {
+    console.log('got here');
     const loginResult = await dbService.tryLogin(email, pwhash);
+    console.log(loginResult);
     const sessionToken = loginResult.token;
     const user= dbService.getUserFromEmail(email);
-    res.send(sessionToken + user); //TODO user auch noch nach vorne senden
+    res.send(sessionToken); //TODO user auch noch nach vorne senden evt noch user
     res.statusCode = 200;
   } catch (error) {
     res.status(404);
-    res.send(error.msg);
+    console.log(error.message);
+    res.send(error.message);
   }
 });
 
