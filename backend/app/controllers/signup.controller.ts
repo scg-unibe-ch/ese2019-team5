@@ -18,8 +18,8 @@ const dbService = new DbServices();
 router.post('/', async (req: Request, res: Response) => {
 
   const user = new User( req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified);
-  console.log(req.body.name);
-  console.log(req.body.surname);
+  console.log(req.body.firstname);
+  console.log(req.body.lastname);
   console.log(req.body.pwhash);
   console.log(req.body.email);
   console.log(req.body.isVerified);
@@ -57,7 +57,9 @@ const verifyToken = async (req: Request, res: Response) => {
 
   try {
     jwt.verify(token, publicKey, verifyOptions ) ;
+    console.log('before db verifie');
     await dbService.makeUserVerified(req.body.email);
+    console.log('after db verifie');
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (err) {
     res.send(err);
