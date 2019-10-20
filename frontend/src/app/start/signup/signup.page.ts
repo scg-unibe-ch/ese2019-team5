@@ -81,7 +81,7 @@ export class SignupPage implements OnInit {
 
     this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
       .subscribe(
-        (completed) => this.presentSuccessAlert(),
+        (success) => this.presentSuccessAlert(),
         (error) => this.presentFailureAlert(error.message))
   }
 
