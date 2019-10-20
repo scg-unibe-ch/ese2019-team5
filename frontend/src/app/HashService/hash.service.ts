@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as bcrypt from 'bcrypt';
+//import * as bcrypt from 'bcrypt';
 
   @Injectable({
   providedIn: 'root'
@@ -13,7 +13,8 @@ export class HashService {
    * @param plainTextPw
    */
   static hashPassword(plainTextPw: string){
-    return bcrypt.hash(plainTextPw,2);
+    //return bcrypt.hash(plainTextPw,2);
+    return ' ';
   }
 
 
