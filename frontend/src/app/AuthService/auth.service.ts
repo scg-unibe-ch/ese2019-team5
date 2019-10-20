@@ -35,7 +35,7 @@ export class AuthService {
       // Post http request
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', { params} );
-   /* if (res.status == 404) {
+    if (res.status == 404) {
         console.log('Login failed in backend');
         return Observable.throw(new Error('Invalid email address or password'));
       } else {
@@ -43,7 +43,7 @@ export class AuthService {
         console.log('Trying to set session');
         this.setSession(this.user);
       return this.user;
-    }*/
+    }
   }
 
 
