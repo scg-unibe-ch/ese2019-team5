@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {User} from '../../User class/user';
 import {FormControl, FormBuilder, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
+import {AlertController} from "@ionic/angular";
+import {HashService} from '../../HashService/hash.service';
 
 // @ts-ignore
 @Component({
@@ -15,15 +17,13 @@ import {HttpClient} from '@angular/common/http';
  * Asks the user for the minimal required information and "saves" it as a User-Object
  * Only when all information is available and valid, a User can sign up (send his data to the database)
  * Sends data to the Database (to be implemented)
- * ToDo: get name and surname
  */
 export class SignupPage implements OnInit {
 
-  // Todo figure out where to send HTTP requests
   readonly ROOT_URL = 'http://localhost:3000';
   // const bcrypt = require('bcrypt');
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) { }
+  constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) { }
 
   pw: string;
   mail: string;
@@ -65,15 +65,12 @@ export class SignupPage implements OnInit {
   ngOnInit() {
   }
 
-  // ToDo: Implement how data is sent to the database
-  // ToDo: Hashing  password bcrypt
   /**
    * Creates a new User-object according to data entered in form
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    const pwhash = this.pw; // bcrypt.hashSync(this.pw, 10);
-    // this.user = new User(this.mail, hashedPw);
+    const pwhash = HashService.hashPassword(this.pw);
     const email =  this.mail;
     const firstname = this.firstname;
     const lastname = this.lastname;
@@ -81,7 +78,39 @@ export class SignupPage implements OnInit {
 
   //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
 
-    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified}) // TODO auswählen welche Variante
-      .subscribe();
+    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
+      .subscribe(
+        (completed) => this.presentSuccessAlert(),
+        (error) => this.presentFailureAlert(error.message))
+  }
+
+
+
+  /**
+   *  A success and Failure alert for the ion controller for both responses from the backend
+   */
+  async presentSuccessAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Successful Registration',
+      message: 'You have registered successfully. We have sent you an email to verify your account. Please confirm your email to gain access to all features',
+      buttons: [{
+        text: 'Got it',
+        handler: () => {
+          document.location.href = 'http://localhost:4200/start';
+        }
+      }]
+    });
+    await alert.present();
+  }
+
+  async presentFailureAlert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Failed to register',
+      message: message,
+      buttons: [{
+        text: 'Got it'
+      }]
+    });
+    await alert.present();
   }
 }

@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import {User} from '../models/user.model';
+import {EmailCreatorService} from "./emailCreator.service";
 import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
+const emailService = new EmailCreatorService();
  let token: string;
 
  // creates a jwt token for the email
@@ -48,24 +50,28 @@ export class EmailVerificationServices {
       }
     });
     const emailURL = makeToken(payload, user.email);
-
 // send mail with defined transport object
-    var mailOptions = {
-      from: '"Eventdoo" <ESEteam5@gmx.de>',
-      to: user.email,
-      subject: 'E-Mail Verification for your Eventdoo Account',
-      // text: 'Hello world?' + emailURL, // plain text body
-      html: `Please verify your e-mail address: <a href="${emailURL}">${emailURL}</a>` // html body//TODO noch schön anpassen
-    };
+    try{
+      var mailOptions = {
+        from: '"Eventdoo" <ESEteam5@gmx.de>',
+        to: user.email,
+        subject: 'E-Mail Verification for your Eventdoo Account',
+        // text: 'Hello world?' + emailURL, // plain text body
+        //html: `Please verify your e-mail address: <a href="${emailURL}">${emailURL}</a>` // html body//TODO noch schön anpassen
+        html: emailService.getEmailText(emailURL)
+      };
 
-    transporter.sendMail(mailOptions, function (err, info) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('Email sent' + info.response);
-      }
-    });
+      transporter.sendMail(mailOptions, function (err, info) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Email sent' + info.response);
+        }
+      });
 
+    }catch (e) {
+      console.log(e);
+    }
   }
 
 }
