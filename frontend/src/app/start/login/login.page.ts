@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
-import {Observable} from "rxjs";
 import {User} from '../../../../../backend/app/models/user.model';
 import {AlertController} from "@ionic/angular";
+import {BehaviorSubject, Observable, Subscription, throwError} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -43,16 +43,12 @@ export class LoginPage implements OnInit {
    */
   // ToDo: Why can't this.authService.login(...) be read?
   logIn() {
-    try {
-       this.authService.login(this.email, this.password).subscribe(
-        () => {
-          console.log('logged in?' + this.authService.isLoggedIn());
-          this.router.navigate([this.returnUrl]).then(r => {
-            this.LogInPopUp();
-          });
+    this.user = this.authService.login(this.email, this.password);
+    if (this.user) {
+      this.router.navigate([this.returnUrl]).then(r => {
         });
-    } catch (error) {
-      this.error = error.msg;
+    } else {
+      this.error = 'Invalid email address or password';
     }
   }
 
