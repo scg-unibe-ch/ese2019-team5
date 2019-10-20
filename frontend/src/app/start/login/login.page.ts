@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
         });
       },
       error => {
-        this.error = 'Invalid email address or password';
+        this.error = error.message;
       });
   }
 
