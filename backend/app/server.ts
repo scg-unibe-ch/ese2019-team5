@@ -26,17 +26,11 @@ const sequelize =  new Sequelize({
 
 // cors to make request between differen ports
 const cors = require('cors');
-
-
 // create a new express application instance
 const app: express.Application = express();
 
 app.use(express.json());
-
 app.use(cors());
-
-
-// View engine setup Also Ansicht //TODO Frontend link zu Formansicht herstellen via path glaubs
 
 app.engine('handlebars', exphbs());
 app.set( 'view engine', 'handlebars');
@@ -62,12 +56,9 @@ app.use(function (req, res, next) {
 });
 
 app.use('/welcome', WelcomeController);
-app.use('/singup', SignupController);
+app.use('/signup', SignupController);
 app.use('/sqlTest', SqlTestController);
 app.use('/login', LoginController);
-
-
-
 
 
 sequelize.sync().then(() => {

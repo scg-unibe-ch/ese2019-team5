@@ -1,24 +1,22 @@
-import {Router, Request, Response, urlencoded} from 'express';
+import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {EmailVerificationServices} from '../services/emailVerification.services';
 import {DbServices} from '../services/db.services';
-// import jwt from 'jsonwebtoken';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 
 
 const router: Router = Router(); // part of express needed
-const gillianuser = new User('Gillian', 'Will', 'gillian.cathomas@gmx.ch','1', false); // TODO to delete
+
 // when frontend signs up a new User is created which is saved (or at least should be)
 
 // keys for jwt token
-
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
 
 // create new DBService
 const dbService = new DbServices();
 
-
+//reacts on HTTP Client post events by sending Mail to new user and adding the user to DB
 router.post('/', async (req: Request, res: Response) => {
 
   const user = new User( req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified);
@@ -31,50 +29,22 @@ router.post('/', async (req: Request, res: Response) => {
   EmailVerificationServices.sendMailToNewUser(user);
   try{
     await dbService.signUp(user);
+    res.statusCode = 201 ;
+    res.send("Please check your emails and verify your email-address in order to sign up. If you can't find it please also check your spam folder");// TODO hier noch richtige antwort senden Z.B.
+
   } catch (e) {
     console.log(e);
     res.statusCode = 400;
     res.send(e.msg);
   }
 
-
-//  DB.createUser(user) // TODO hier noch logik um DB ein user zu erstellen und hier abfangen falls es Email  schon hat (gemacht Zeile 33)
-
-  res.statusCode = 201 ;
-  res.send('Welcome to Express');// TODO hier noch richtige antwort senden
-  console.log ('post method executed');
- // res.send(user.toSimplification());
 });
 
 
-/*
-router.get('/', async (req: Request, res: Response) => {
 
-  const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified);
-  console.log(req.body.name);
-
-  EmailVerificationServices.sendMailToNewUser(user);
-  res.statusCode = 200 ;
-  res.send('Welcome to Express2');
-
-
-});*/
-
-/*
-router.get('/', (req: Request, res: Response) => {
-
-  // const user = new User(req.body.email, req.body.name, req.body.surname, req.body.pwhash, req.body.isVerified, req.body.isAdmin);
-  EmailVerificationServices.sendMailToNewUser(gillianuser);
-  res.statusCode = 200;
-  res.send('Hello from user');
-
-});
-*/
 
 
 // needed to verify the token
-
-
 const verifyToken = (req: Request, res: Response) => {
 const tokenUrl = req.url;
 const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
@@ -90,7 +60,7 @@ const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
   jwt.verify(token, publicKey, verifyOptions ) ;
 // TODO logik um user auf verified zu stellen und evt res.send ändern
     // DB.makeUserVerified(req.body.email);
-  res.send('jwt token was verified :)');
+  res.send('Thank you for verifying your email-address you can now login.');
 } catch (err) {
     res.send(err);
   }
@@ -126,13 +96,17 @@ router.patch('/confirmation/:emailToken', async (req: Request, res: Response) =>
 }
 });
 
-
+// reacts on sendMailAgain events if user has not found the email or lost it.
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
  let email: string = req.params.email;
  try{
    const userWithoutMail = await dbService.getUserFromEmail(email);
    EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+   res.status(200);
+   res.send('The email was sent again please also check your spam folder. Thank you');
  }catch (e) {
+   res.status(404);
+   res.send(e + 'unknown email-address. Please check or sign up.');
    console.log(e);
  }
 
@@ -147,79 +121,6 @@ router.get('/sendMailAgain', async (req: Request, res: Response) => {
 
 
 
-// if user that wants to login was not found = Invalid login, if User isn't verified user is being told to verify
 
-
-
-// router.get('/', async (req: Request, res: Response) => {
-/*  const todoListID = parseInt(req.query.todoListId);
-  let options = {};
-  if (todoListId != null) {
-    options = {
-      include: [{
-        model: TodoList,
-        where: {
-          id: todoListId
-        }
-      }]
-    };
-  }
-  const instances = await TodoItem.findAll(options);
-  res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
-});*/
-/*
-
-router.post('/', async (req: Request, res: Response) => {
-  const instance = new TodoItem();
-  instance.fromSimplification(req.body);
-  await instance.save();
-  res.statusCode = 201;
-  res.send(instance.toSimplification());
-});
-router.get('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
-  if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'not found'
-    });
-    return;
-  }
-  res.statusCode = 200;
-  res.send(instance.toSimplification());
-});
-router.put('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
-  if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'not found'
-    });
-    return;
-  }
-  instance.fromSimplification(req.body);
-  await instance.save();
-  res.statusCode = 200;
-  res.send(instance.toSimplification());
-});
-router.delete('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
-  if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'not found'
-    });
-    return;
-  }
-  instance.fromSimplification(req.body);
-  await instance.destroy();
-  res.statusCode = 204;
-  res.send();
-});
-*/
 
 export const SignupController: Router = router;

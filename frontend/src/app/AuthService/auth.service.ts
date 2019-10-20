@@ -6,12 +6,14 @@ import * as jwt from 'jsonwebtoken';
 import {User} from '../../../../backend/app/models/user.model';
 import {catchError} from 'rxjs/operators';
 import {error} from 'util';
-//  * as fs from 'fs';
+//import * as fs from 'fs';
+var fs =require(fs);
+
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // publicKey = fs.readFileSync('../backend/app/Server (GC)/public.key', 'utf8');
+  publicKey = fs.readFileSync('../backend/app/services/public.key', 'utf8');
   private user: Observable<User>;
 
   constructor(private httpClient: HttpClient) {}

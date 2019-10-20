@@ -1,17 +1,15 @@
-// TODO wo gehört das hin
-// noch keine Ahnung aber das brauchts für E-Mail verifikation
+
 
 import * as fs from 'fs';
 import {User} from '../models/user.model';
-// import jwt, {sign, verify, decode} from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
-// const privateKey = fs.readFileSync('./private.key', 'utf8');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
  let token: string;
 
+ // creates a jwt token for the email
 function makeToken(payload: any, email: string) {
   console.log('in make token');
   var signOptions = {
@@ -32,8 +30,7 @@ function makeToken(payload: any, email: string) {
 export class EmailVerificationServices {
 
 
-  static async sendMailToNewUser (user: User) {
-    // try {
+  static async sendMailToNewUser(user: User) {
     let payload = {
       name: user.firstname,
       surname: user.lastname,
@@ -49,19 +46,17 @@ export class EmailVerificationServices {
       },
       tls: { // because we are not on that host currently.... just those 2 lines
         ciphers: 'SSLv3',
-         rejectUnauthorized: false
-       }
+        rejectUnauthorized: false
+      }
     });
-    console.log('sendMail before token');
     const emailURL = makeToken(payload, user.email);
 
 // send mail with defined transport object
-    // const info = await transporter.sendMail({ // new version below
     var mailOptions = {
       from: '"Eventdoo" <ESEteam5@gmx.de>',
       to: user.email,
       subject: 'E-Mail Verification for your Eventdoo Account',
-     // text: 'Hello world?' + emailURL, // plain text body
+      // text: 'Hello world?' + emailURL, // plain text body
       html: `Please verify your e-mail address: <a href="${emailURL}">${emailURL}</a>` // html body//TODO noch schön anpassen
     };
 
@@ -74,10 +69,10 @@ export class EmailVerificationServices {
     });
 
   }
-// gibt das wirklich boolean
-// let legitimate: boolean = jwt.verify(token, publicKEY, verifyOptions);
 
+}
 
+/*
   verify(token: string) {
     return jwt.verify(token, publicKey, {algorithms: ['RS256']});
   }
@@ -89,6 +84,7 @@ export class EmailVerificationServices {
   }
 }
 
+*/
 
 
 
