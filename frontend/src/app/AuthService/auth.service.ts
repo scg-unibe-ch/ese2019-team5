@@ -26,15 +26,17 @@ export class AuthService {
    * @param email address entered in the login form
    * @param password entered in the login form
    */
-  login(email: string, password: string) {
+  login(mail: string, password: string) {
     // Set params for http request
-    let params = new HttpParams();
+    /*let params = new HttpParams();
     params = params.append('email', email);
-    params = params.append('password', password);
+    params = params.append('password', password);*/
+    const email = mail;
+    const pwhash = password;
 
       // Post http request
     console.log('Try to log in');
-    this.user = this.httpClient.post<User>('http://localhost:3000/login', { params} );
+    this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
     this.user.subscribe(
       data => {
         this.setSession(data)
