@@ -29,12 +29,14 @@ router.post('/', async (req: Request, res: Response) => {
     await dbService.signUp(user);
     EmailVerificationServices.sendMailToNewUser(user);
     res.statusCode = 201 ;
-    res.send("Please check your emails and verify your email-address in order to sign up. If you can't find it please also check your spam folder");// TODO hier noch richtige antwort senden Z.B.
-
+    // res.send("Please check your emails and verify your email-address in order to sign up. If you can't find it please also check your spam folder");// TODO hier noch richtige antwort senden Z.B.
+   res.json('verifie email pls');
   } catch (e) {
     console.log(e);
+    res.json(e.message);
     res.statusCode = 400;
-    res.send(e.message);
+
+    //res.send(e.message);
   }
 
 });

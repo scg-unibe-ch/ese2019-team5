@@ -6,15 +6,15 @@ var expect = require('chai').expect;
 var baseUrl= 'localhost:3000';
 var util = require('util');
 // var router = require('./controllers/signup.controller.ts');
-let server = require('../app');
-
+//requrie (app) from "../server.ts";
+var app = require('../server');
 describe('Index Test', () =>{
 it ('should always pass', function () {
   expect(true).to.equal(true);});
 });
 
 it('test post', async function () {
-  const res = await request(server).get('/signup');
+  const res = await request(app).get('/signup');
   expect(res.statusCode).to.equal(201);
 
 })
