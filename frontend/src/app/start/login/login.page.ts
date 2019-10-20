@@ -43,13 +43,14 @@ export class LoginPage implements OnInit {
    */
   // ToDo: Why can't this.authService.login(...) be read?
   logIn() {
-    this.user = this.authService.login(this.email, this.password);
-    if (this.user) {
-      this.router.navigate([this.returnUrl]).then(r => {
+    this.authService.login(this.email, this.password).subscribe(
+      () => {
+        this.router.navigate([this.returnUrl]).then(r => {
         });
-    } else {
-      this.error = 'Invalid email address or password';
-    }
+      },
+      error => {
+        this.error = 'Invalid email address or password';
+      });
   }
 
   /**
