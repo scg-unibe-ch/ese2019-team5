@@ -81,6 +81,7 @@ export class SignupPage implements OnInit {
 
     this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
       .subscribe(
+
         (success) => this.presentSuccessAlert(),
         (error) => this.presentFailureAlert(error.message))
   }
@@ -107,7 +108,7 @@ export class SignupPage implements OnInit {
   async presentFailureAlert(message: string) {
     const alert = await this.alertCtrl.create({
       header: 'Failed to register',
-      message: message,
+      message: 'This email is already signed up, please log in or use a different email address',
       buttons: [{
         text: 'Got it'
       }]
