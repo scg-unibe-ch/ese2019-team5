@@ -23,7 +23,7 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(sessionToken); //TODO user auch noch nach vorne senden evt noch user
     res.statusCode = 200;
   } catch (error) {
-    console.log('hahahaha' + error.message);
+    console.log(error.message);
    // res.json(error.message);
     //res.send(error.message);
    // res.send(error);

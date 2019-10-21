@@ -123,7 +123,7 @@ export class DbServices {
     }
 
     private checkIfPasswordCorrect(user: User, password: string): boolean {
-      return password === user.pwhash;
+      return password == user.pwhash;
     }
 
   private isUserVerified(user: User): boolean {
