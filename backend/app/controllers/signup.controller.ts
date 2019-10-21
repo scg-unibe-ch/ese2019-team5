@@ -4,6 +4,7 @@ import {EmailVerificationServices} from '../services/emailVerification.services'
 import {DbServices} from '../services/db.services';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
+import {error} from "ts-postgres/dist/src/logging";
 
 
 const router: Router = Router(); // part of express needed
@@ -33,9 +34,10 @@ router.post('/', async (req: Request, res: Response) => {
    res.json('verifie email pls');
   } catch (e) {
     console.log(e);
-    res.json(e.message);
+    //res.json(e.message);
     res.statusCode = 400;
 
+  res.send(new Error ('Nope'));
     //res.send(e.message);
   }
 

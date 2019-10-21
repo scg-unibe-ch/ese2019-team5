@@ -2,6 +2,7 @@ import {Router, Request, Response} from 'express';
 
 import {DbServices} from '../services/db.services'
 import {LoginResult} from "../models/loginResult.model";
+import {User} from "../models/user.model";
 
 const dbService = new DbServices();
 const router: Router = Router();
@@ -15,12 +16,12 @@ router.post('/', async (req: Request, res: Response) => {
   console.log(pwhash);
 
   try {
-    console.log('got here');
+
     const loginResult = await dbService.tryLogin(email, pwhash);
-    console.log('loginResult: ' + loginResult.user);
     const sessionToken = loginResult.token;
     const user= loginResult.user;
-    res.send(sessionToken); //TODO user auch noch nach vorne senden evt noch user
+
+    res.send(sessionToken + user); //TODO user auch noch nach vorne senden evt noch user
     res.statusCode = 200;
   } catch (error) {
     console.log(error.message);
