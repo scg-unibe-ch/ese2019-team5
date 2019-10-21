@@ -17,7 +17,7 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('got here');
     const loginResult = await dbService.tryLogin(email, pwhash);
-    console.log('hahah' + loginResult);
+    console.log('loginResult: ' + loginResult.user);
     const sessionToken = loginResult.token;
     const user= loginResult.user;
     res.send(sessionToken); //TODO user auch noch nach vorne senden evt noch user
