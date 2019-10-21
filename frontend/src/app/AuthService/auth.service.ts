@@ -42,6 +42,7 @@ export class AuthService {
         this.setSession(data)
       }
       /*(error) => {this.handleError(error)}*/);
+    console.log("return user: " + this.user);
     return this.user;
     }
 
@@ -92,10 +93,12 @@ export class AuthService {
     console.log('Setting session');
     // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
+      console.log(authResult.user);
       const expiresAt = moment().add(authResult.expiresIn, 'second');
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-      localStorage.setItem('id_token', authResult.id);
+      localStorage.setItem('id_token', authResult.user.id);
       console.log('Setting session successful');
+
        } catch (e) {
       console.log(e);
       }

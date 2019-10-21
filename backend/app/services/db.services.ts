@@ -7,32 +7,41 @@ import {error} from "ts-postgres/dist/src/logging";
 
 const jwt = require('jsonwebtoken');
 
-const client = new Client({
-    'user' : 'cyrill',
-    'host' : 'localhost',
-    'password' : 'root',
-    'port' : 5432,
-    'database' : 'eventdoo'
-});
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
 export class DbServices {
+
+    private getClient(): Client {
+      return new Client({
+        'user' : 'cyrill',
+        'host' : 'localhost',
+        'password' : 'root',
+        'port' : 5432,
+        'database' : 'eventdoo'
+      });
+    }
+
     // This function is only for testing purpose
     public async getSqlResult(name: string): Promise<SqlResult> {
-      await client.connect();
+      const localClient = this.getClient();
+      await localClient.connect();
       try{
-        return await this.testSql(name);
-      }finally {
-        await client.end();
+        return await this.testSql(name, localClient);
+      } finally {
+        await localClient.end();
       }
     }
 
     public async getUserFromEmail(email: string): Promise<User> {
-      await client.connect();
+
+      const localClient = this.getClient();
+
+
+      await localClient.connect();
       try{
-        return await this.getUserFromEmailDB(email);
+        return await this.getUserFromEmailDB(email, localClient);
       } finally {
-        await client.end();
+        await localClient.end();
       }
     }
 
@@ -51,36 +60,40 @@ export class DbServices {
     }
 
     public async signUp(user: User): Promise<number>{
-      await client.connect();
+      const localClient = this.getClient();
+      await localClient.connect();
       var id = -1;
       try {
-        if(await this.checkIfMailIsUniqueDB(user.email)){
-          id = Number(await this.creatUserInDB(user));
+        if(await this.checkIfMailIsUniqueDB(user.email, localClient)){
+          id = Number(await this.creatUserInDB(user, localClient));
           user.setId(id);
         } else {
           throw Error('The email address already exists in the database');
         }
       } finally {
-        await client.end();
+        await localClient.end();
       }
       return id;
     }
 
     public async makeUserVerified(email: string){
-      await client.connect();
+      const localClient = this.getClient();
+      await localClient.connect();
       try {
-        const user = await this.getUserFromEmailDB(email);
-        await this.makeUserVerifiedDB(user);
+        const user = await this.getUserFromEmailDB(email, localClient);
+        await this.makeUserVerifiedDB(user, localClient);
       } finally {
-        await client.end();
+        await localClient.end();
       }
     }
 
-    private async makeUserVerifiedDB(user: User){
+
+
+    private async makeUserVerifiedDB(user: User, client: Client){
       await client.query('Update users Set isverified=true Where id = $1', [user.id])
     }
 
-    private async creatUserInDB(user: User): Promise<number>{
+    private async creatUserInDB(user: User, client: Client): Promise<number>{
       const stream = client.query('Insert into users(prename, lastname,email,password,isverified) Values ($1,$2,$3,$4,$5) Returning id As id',[user.firstname, user.lastname,user.email,user.pwhash,user.isVerified]);
       var id = -1;
       for await (const row of stream){
@@ -98,7 +111,7 @@ export class DbServices {
    * takes an email address and checks if an user is allready using this address
    * @param email-address of new User
    */
-  private async checkIfMailIsUniqueDB(email: string) : Promise<boolean>{
+  private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
       const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
       var counter = 0;
       for await(const row of stream){
@@ -131,7 +144,7 @@ export class DbServices {
   }
 
     // @ts-ignore
-    private async getUserFromEmailDB(email: string): Promise<User> {
+    private async getUserFromEmailDB(email: string, client: Client): Promise<User> {
       let user: User;
 
       const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv From users Where email = $1', [email]);
@@ -151,7 +164,7 @@ export class DbServices {
       throw new Error('no user with this email found');
     }
 
-    async testSql( name: string): Promise<SqlResult> {
+    async testSql( name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
         const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv From users Where lastname = $1', [name]);
