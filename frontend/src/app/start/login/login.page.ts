@@ -44,11 +44,13 @@ export class LoginPage implements OnInit {
    */
   logIn() {
     this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
-      () => {
+      success => {
         this.router.navigate([this.returnUrl]).then(r => {
+          this.LogInPopUp();
         });
       },
       error => {
+        console.log("error appeard" + error.message);
         this.error = error.message;
       });
   }

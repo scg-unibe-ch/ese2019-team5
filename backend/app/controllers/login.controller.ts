@@ -21,10 +21,15 @@ router.post('/', async (req: Request, res: Response) => {
     const sessionToken = loginResult.token;
     const user= loginResult.user;
 
-    res.send(sessionToken + user); //TODO user auch noch nach vorne senden evt noch user
+    const lRes = {
+      'user': user,
+      'token': sessionToken
+    };
+
+    res.send(lRes); //TODO user auch noch nach vorne senden evt noch user
     res.statusCode = 200;
   } catch (error) {
-    console.log(error.message);
+    console.log("error in backend:" + error.message);
    // res.json(error.message);
     //res.send(error.message);
    // res.send(error);
@@ -39,7 +44,7 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 
-// von Cyrill glaubs
+// von Cyrill zu test zwecken. kann in finaler version dann gelöscht werden
 
 router.get('/test', async (req: Request, res: Response) => {
     res.statusCode = 200;
@@ -56,7 +61,7 @@ router.get('/test/:email/:pw', async (req: Request, res: Response) => {
     res.statusCode = 200;
     res.send(sessionToken);
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     res.statusCode = 400;
     res.send(e.msg);
   }
