@@ -96,10 +96,10 @@ export class AuthService {
     console.log('Setting session');
     // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
-      console.log(moment());
       console.log("expIn: " + authResult.token.exp);
       console.log(authResult.token);
       var decoded = jwtDecode(authResult.token);
+      console.log(decoded);
       const expiresAt = moment().add(decoded.exp);
       console.log("expAt: " + expiresAt);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
