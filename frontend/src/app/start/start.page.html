@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="success">
     <ion-title style="color: darkgreen"> Welcome </ion-title>
-    <ion-button [hidden]="!authService.isLoggedIn()" style="position: absolute; right: 5px; top: 6px"
+    <ion-button [hidden]="authService.isLoggedOut()" style="position: absolute; right: 5px; top: 6px"
                 (click)="authService.logout()"> Log out
     </ion-button>
    <ion-button  [hidden]="authService.isLoggedIn()" [routerLink]="['login']" style="position: absolute; right: 5px; top: 6px" > Log in </ion-button>
@@ -10,5 +10,6 @@
 </ion-header>
 
 <ion-content>
+  <!-- To show that login was successful-->
   <p *ngIf="isLoggedIn()"> Login was successful! </p>
 </ion-content>

@@ -3,7 +3,7 @@ import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
 import {User} from '../../../../../backend/app/models/user.model';
 import {AlertController} from "@ionic/angular";
-import {BehaviorSubject, Observable, Subscription, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 
 @Component({
@@ -11,12 +11,12 @@ import {HashService} from "../../HashService/hash.service";
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-
 /**
  * LoginPage
  * Asks an (existing) user for his authentication data (e-mail, password)
- * Does entire Authentication-stuff...
- * To be implemented
+ * Uses AuthService to verify data
+ * Sends the User back to start page if log in was successful
+ * Displays an error message if there was a mistake (invalid combination or User not verified)
  */
 export class LoginPage implements OnInit {
 

@@ -1,6 +1,5 @@
 <!-- Log-In-Form -->
 <!-- Collects data from a (existing) user to authenticate -->
-<!-- ToDo: Styling -->
 
 
 <!-- Header contains... (f.l.t.r.) -->
@@ -18,7 +17,6 @@
 </ion-header>
 
 
-<!-- ToDo: Adapt content so it works in a similar way as signup-page-->
 <ion-infinite-scroll-content style="position: absolute; top: 60px; left: 10px; right: 10px">
   <form #loginForm ="ngForm">
     <div class="form-group">
@@ -38,6 +36,6 @@
   </form>
 
   <ion-button (click)="logIn()"> Log In </ion-button>
-  <div *ngIf="error" class="alert alert-danger mt-3 mb-0"> {{error}} </div>
+  <div *ngIf="error" style="color: darkred"> {{error}} </div>
 </ion-infinite-scroll-content>
 

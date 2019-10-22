@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable, Subscription, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
 import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
 import {User} from '../../../../backend/app/models/user.model';
-import {catchError} from 'rxjs/operators';
-import {error} from 'util';
-//import * as fs from 'fs';
-//var fs =require(fs);
 
 
 var jwtDecode = require('jwt-decode');
@@ -29,9 +25,6 @@ export class AuthService {
    */
   login(mail: string, password: number) {
     // Set params for http request
-    /*let params = new HttpParams();
-    params = params.append('email', email);
-    params = params.append('password', password);*/
     const email = mail;
     const pwhash = password;
 
@@ -42,7 +35,8 @@ export class AuthService {
       (data) => {
         this.setSession(data)
       }
-      /*(error) => {this.handleError(error)}*/);
+      /*(error) => {this.handleError(error)}*/
+    );
     console.log("return user: " + this.user);
     return this.user;
     }
@@ -56,8 +50,6 @@ export class AuthService {
    */
   public isLoggedIn() {
     try {
-      //console.log("is logged in: " + moment().isBefore(this.getExpiration()));
-      //console.log("moment: " + moment());
       return moment().isBefore(this.getExpiration());
     } catch (e) {
       return false;
@@ -81,7 +73,8 @@ export class AuthService {
 
 
   /**
-   * Verifies the token of the returned User object
+   * Called by method login()
+   * Decodes the session token returned by backend
    * Stores the user's ID Token and it's expiration stamp in the user's local storage
    * @param authResult
    */
