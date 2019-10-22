@@ -1,16 +1,11 @@
-// import everything from express and assign it to the express variable
 import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
 
-
-
 // import all the controllers. If you add a new controller, make sure to import it here as well.
 import {Sequelize} from 'sequelize-typescript';
- // import {UserModel} from './user.model'; //TODO wieder entkommentieren
-import {SignupController, WelcomeController} from './controllers';
-import {SqlTestController} from './controllers';
-import {LoginController} from './controllers';
+import {SignupController, WelcomeController,SqlTestController,LoginController} from './controllers';
+
 
 
 const sequelize =  new Sequelize({
@@ -20,7 +15,7 @@ const sequelize =  new Sequelize({
   password: '',
   storage: 'db.sqlite'
 });
-// sequelize.addModels([UserModel]); // TODO entkommentieren
+
 
 
 
@@ -36,14 +31,12 @@ app.engine('handlebars', exphbs());
 app.set( 'view engine', 'handlebars');
 
 // Body Parser Middleware
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 // parse application/json
 app.use(bodyParser.json());
 
-// define the port the express app will listen on // the port we will use
-var port = 3000;
 
+var port = 3000;
 if (process.env.PORT !== undefined) {
   port = parseInt(process.env.PORT);
 }
@@ -68,4 +61,5 @@ sequelize.sync().then(() => {
     console.log(`Listening at http://localhost:${port}/`);
   });
 });
+
 module.exports = app;

@@ -21,7 +21,7 @@ it('test post', async function () {
 
 
 
-
+//in server // sequelize.addModels([UserModel]); // TODO entkommentieren
 
 
 

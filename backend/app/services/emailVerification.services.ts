@@ -5,13 +5,17 @@ import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
-const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
 const emailService = new EmailCreatorService();
  let token: string;
 
- // creates a jwt token for the email
+/**
+ * creates a jwt token for the email using payload and email
+ * @param payload that will be part of the jwt token
+ * @param email needed vor subject and audience
+ * @return emailURL that will be sent to user by sendMailToNewUser Method
+ * is called from sendMailToNewUser
+ */
 function makeToken(payload: any, email: string) {
-  console.log('in make token');
   var signOptions = {
     issuer: 'Eventdoo',
      subject: email,
@@ -19,17 +23,23 @@ function makeToken(payload: any, email: string) {
     expiresIn: '24h',
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
-  (console.log('make token was done'));
   const emailUrl = `http://localhost:3000/signup/confirmation/${emailToken}`;
   token = emailToken;
-
   return emailUrl;
 }
 
+/**
+ * creates an jwt token that is is part of url which is send to user by using {nodemailer}
+ * User needs to verify email by clicking on URL to login
+ */
 
 export class EmailVerificationServices {
 
-
+  /**
+   * sends a email using nodemailer to a new sign up user
+   * @param user that just signed up
+   * is called in SignUp controller POST Event listener
+   */
   static async sendMailToNewUser(user: User) {
     let payload = {
       name: user.firstname,
@@ -56,8 +66,6 @@ export class EmailVerificationServices {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: user.email,
         subject: 'E-Mail Verification for your Eventdoo Account',
-        // text: 'Hello world?' + emailURL, // plain text body
-        //html: `Please verify your e-mail address: <a href="${emailURL}">${emailURL}</a>` // html body//TODO noch schön anpassen
         html: emailService.getEmailText(emailURL)
       };
 

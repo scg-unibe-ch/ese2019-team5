@@ -1,19 +1,20 @@
 import {Router, Request, Response} from 'express';
 
 import {DbServices} from '../services/db.services'
-import {LoginResult} from "../models/loginResult.model";
-import {User} from "../models/user.model";
+
 
 const dbService = new DbServices();
 const router: Router = Router();
 
-
+/**
+ * listens to HTTP Client POST events when user sign up
+ * returns error if password or email is incorrect or
+ * if user is not verified yet (email address)
+ * sends ok if request was ok
+ */
 router.post('/', async (req: Request, res: Response) => {
-  const email = req.body.email; // evt auch req.params.email
+  const email = req.body.email;
   const pwhash = req.body.pwhash;
-  console.log('entered login');
-  console.log(email);
-  console.log(pwhash);
 
   try {
 
@@ -26,79 +27,14 @@ router.post('/', async (req: Request, res: Response) => {
       'token': sessionToken
     };
 
-    res.send(lRes); //TODO user auch noch nach vorne senden evt noch user
+    res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
     console.log("error in backend:" + error.message);
-   // res.json(error.message);
-    //res.send(error.message);
-   // res.send(error);
     res.status(404).send(error.message);
   }
 });
 
-
-
-
-
-
-
-
-// von Cyrill zu test zwecken. kann in finaler version dann gelöscht werden
-
-router.get('/test', async (req: Request, res: Response) => {
-    res.statusCode = 200;
-    res.send('00000sessionToken');
-});
-
-router.get('/test/:email/:pw', async (req: Request, res: Response) => {
-  const email = req.params.email;
-  const pwhash = req.params.pw;
-
-  try {
-    const loginResult = await dbService.tryLogin(email, pwhash);
-    const sessionToken = loginResult.token;
-    res.statusCode = 200;
-    res.send(sessionToken);
-  } catch (e) {
-    console.log(e.message);
-    res.statusCode = 400;
-    res.send(e.msg);
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-// helper functions
-  function ok(body?: {
-      id: any; email: any; token: string;
-      }) {
-    return of(new HttpResponse({status: 200, body}));
-  }
-
-  function error(message: string) {
-    return throwError( { error: {message} } );
-  }
-*/
 
   export const LoginController: Router = router;
 
