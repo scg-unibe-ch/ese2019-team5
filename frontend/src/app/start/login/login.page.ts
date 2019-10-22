@@ -46,12 +46,13 @@ export class LoginPage implements OnInit {
     this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
       success => {
         this.router.navigate([this.returnUrl]).then(r => {
-          this.LogInPopUp();
+          this.LogInPopUp().then(r => {
+          });
         });
       },
       error => {
         console.log("error appeard" + error.message);
-        this.error = error.message;
+        this.error = 'Invalid email or password. \n If you have not verified your email address yet, please check your mails';
       });
   }
 

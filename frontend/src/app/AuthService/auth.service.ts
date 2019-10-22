@@ -98,7 +98,7 @@ export class AuthService {
     try {
       console.log("expIn: " + authResult.token.exp);
       console.log(authResult.token);
-      
+
       var decoded = jwtDecode(authResult.token);
       console.log(decoded);
       const expiresAt = moment().add(decoded.exp);
@@ -107,7 +107,8 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.user.id);
       console.log('Setting session successful');
 
-       } catch (e) {
+
+    } catch (e) {
       console.log(e);
       }
    // }
