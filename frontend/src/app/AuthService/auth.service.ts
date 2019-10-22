@@ -98,6 +98,7 @@ export class AuthService {
     try {
       console.log("expIn: " + authResult.token.exp);
       console.log(authResult.token);
+      
       var decoded = jwtDecode(authResult.token);
       console.log(decoded);
       const expiresAt = moment().add(decoded.exp);
