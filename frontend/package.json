@@ -28,6 +28,7 @@
     "bcrypt": "^3.0.6",
     "core-js": "^2.5.4",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "password-hash": "^1.2.2",
     "rxjs": "~6.5.1",

@@ -10,6 +10,7 @@ import {error} from 'util';
 //var fs =require(fs);
 
 
+var jwtDecode = require('jwt-decode');
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -55,6 +56,8 @@ export class AuthService {
    */
   public isLoggedIn() {
     try {
+      //console.log("is logged in: " + moment().isBefore(this.getExpiration()));
+      //console.log("moment: " + moment());
       return moment().isBefore(this.getExpiration());
     } catch (e) {
       return false;
@@ -93,8 +96,12 @@ export class AuthService {
     console.log('Setting session');
     // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
-      console.log(authResult.user);
-      const expiresAt = moment().add(authResult.expiresIn, 'second');
+      console.log(moment());
+      console.log("expIn: " + authResult.token.exp);
+      console.log(authResult.token);
+      var decoded = jwtDecode(authResult.token);
+      const expiresAt = moment().add(decoded.exp);
+      console.log("expAt: " + expiresAt);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
       localStorage.setItem('id_token', authResult.user.id);
       console.log('Setting session successful');
