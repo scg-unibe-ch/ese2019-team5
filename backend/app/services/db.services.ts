@@ -3,7 +3,6 @@ import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
-import {error} from "ts-postgres/dist/src/logging";
 
 const jwt = require('jsonwebtoken');
 
@@ -11,6 +10,9 @@ const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
 export class DbServices {
 
+  /**
+   * returns an Client to connect to our database
+   */
     private getClient(): Client {
       return new Client({
         'user' : 'cyrill',
@@ -32,7 +34,11 @@ export class DbServices {
       }
     }
 
-    public async getUserFromEmail(email: string): Promise<User> {
+  /**
+   * takes an eamil-address and retruns the user with this email from the database
+   * @param email of an user as string
+   */
+  public async getUserFromEmail(email: string): Promise<User> {
 
       const localClient = this.getClient();
 
@@ -45,6 +51,13 @@ export class DbServices {
       }
     }
 
+  /**
+   * tries to login a user with given email and password. Therefore it takes the email address and searches with
+   * the getUserFromEmail method the corresponding user.
+   * If the login credentials are correct, it returns an LoginResult object wich contains the user as well as the JSON web token
+   * @param email
+   * @param password, hashed password as string as received from the frontend
+   */
     public async tryLogin(email: string, password: string): Promise<LoginResult> {
       let user: User;
       user = await this.getUserFromEmail(email);
@@ -59,7 +72,12 @@ export class DbServices {
       }
     }
 
-    public async signUp(user: User): Promise<number>{
+  /**
+   * signs up an user in the db. Therefore it checks if the email already exists in the database. If not
+   * then the method to enter the entry in the database is called
+   * @param user as User object.
+   */
+  public async signUp(user: User): Promise<number>{
       const localClient = this.getClient();
       await localClient.connect();
       var id = -1;
@@ -76,7 +94,12 @@ export class DbServices {
       return id;
     }
 
-    public async makeUserVerified(email: string){
+  /**
+   * searches the user via email in the database and then calls the method makeUserVerifiedDB which sets the isverified
+   * in the database to true
+   * @param email
+   */
+  public async makeUserVerified(email: string){
       const localClient = this.getClient();
       await localClient.connect();
       try {
@@ -88,11 +111,20 @@ export class DbServices {
     }
 
 
-
+  /**
+   * sets the isverified of an user in the database to true
+   * @param user as UserObject
+   * @param client to use to connect to the database
+   */
     private async makeUserVerifiedDB(user: User, client: Client){
       await client.query('Update users Set isverified=true Where id = $1', [user.id])
     }
 
+  /**
+   * inserts a given user to the database
+   * @param user as User Object
+   * @param client to use to connect to the database
+   */
     private async creatUserInDB(user: User, client: Client): Promise<number>{
       const stream = client.query('Insert into users(prename, lastname,email,password,isverified) Values ($1,$2,$3,$4,$5) Returning id As id',[user.firstname, user.lastname,user.email,user.pwhash,user.isVerified]);
       var id = -1;
@@ -107,11 +139,11 @@ export class DbServices {
       return id;
     }
 
-  /**
-   * takes an email address and checks if an user is allready using this address
-   * @param email-address of new User
-   */
-  private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
+    /**
+     * takes an email address and checks if an user is allready using this address
+     * @param email-address of new User
+     */
+    private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
       const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
       var counter = 0;
       for await(const row of stream){
@@ -121,6 +153,11 @@ export class DbServices {
     }
 
 
+  /**
+   * generates an JSON webtoken out of the eamil address and userid
+   * @param email
+   * @param userId
+   */
     private generateJWT(email: string, userId: number): string {
       const payload = {
         data1: String(userId),
@@ -135,14 +172,29 @@ export class DbServices {
       return jwt.sign(payload, privateKey, signOption);
     }
 
+  /**
+   * helper method that compares an given string password with the password stored in the user
+   * @param user
+   * @param password
+   */
     private checkIfPasswordCorrect(user: User, password: string): boolean {
       return password == user.pwhash;
     }
 
+  /**
+   * helper method that return true if the isVerified attribute of the user is true
+   * @param user
+   */
   private isUserVerified(user: User): boolean {
-      return user.isVerified;
-  }
+        return user.isVerified;
+    }
 
+    /**
+     * returns the user from a given email. It therefore searches the database for the user and creates an User Object
+     * from this given information
+     * @param email
+     * @param client to use to connect to the database
+     */
     // @ts-ignore
     private async getUserFromEmailDB(email: string, client: Client): Promise<User> {
       let user: User;
@@ -164,6 +216,7 @@ export class DbServices {
       throw new Error('no user with this email found');
     }
 
+    // for testing only... returns all the users with given lastname
     async testSql( name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 

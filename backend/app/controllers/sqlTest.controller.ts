@@ -1,3 +1,5 @@
+// this is a test file to test the database connection and the functions of db.service.ts while developing
+
 import {Router, Request, Response} from 'express';
 import {SqlResult} from '../models/sqlresult.model';
 import {DbServices} from '../services/db.services';
