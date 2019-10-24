@@ -6,6 +6,13 @@ import {AlertController} from "@ionic/angular";
 import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 
+// (Sophie)
+// ToDo: Passwort vergessen => '/login/forgotPassword'
+// Sendet Anfrage an Backend (post mail), wenn Email gut, mail an kunde --> Link auf Seite, wo Passwort geändert werden kann
+// ToDo: SendMail again => ''/signUp' (post email-addresse)
+// ToDo: Welcome-Seite "du bist verifiziert" für alle ('/signup/confirmation/token')
+// Muss für beliebige Token funktionieren
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',

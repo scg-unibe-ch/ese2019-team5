@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
 import {User} from '../../../../backend/app/models/user.model';
 
+//ToDo: getUserId()
 
 var jwtDecode = require('jwt-decode');
 
@@ -43,7 +44,6 @@ export class AuthService {
 
 
 
-
   /**
    * Returns whether a user is already logged in by
    * checking whether there is a session token and whether it is expired.
@@ -79,6 +79,7 @@ export class AuthService {
    * @param authResult
    */
 
+  // ToDo: Token in localStorage speichern und bei Abfrage holen und decoden
   private setSession(authResult) {
     /*const verifyOptions = {
       issuer: 'Eventdoo',
@@ -118,7 +119,6 @@ export class AuthService {
     }
     return throwError(errorMessage);
   }
-
 
 
   private getExpiration() {

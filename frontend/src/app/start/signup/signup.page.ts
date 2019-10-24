@@ -5,6 +5,10 @@ import {HttpClient} from '@angular/common/http';
 import {AlertController} from "@ionic/angular";
 import {HashService} from '../../HashService/hash.service';
 
+//ToDo: Adresse ergänzen: Strasse / HausNr. / PLZ / Ort
+//ToDo: Empfangsseite (aus Backend) für Email Verification ('/signup/confirmation/token')
+// (Sophie)
+
 // @ts-ignore
 @Component({
   selector: 'app-signup',
