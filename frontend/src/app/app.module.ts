@@ -13,10 +13,11 @@ import {HttpClientModule} from '@angular/common/http';
 import {LoginPage} from './start/login/login.page';
 import {StartPage} from './start/start.page';
 import {SignupPage} from './start/signup/signup.page';
+import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 
 
 @NgModule({
-  declarations: [AppComponent, StartPage, LoginPage, SignupPage],
+  declarations: [AppComponent, StartPage, LoginPage, SignupPage, ConfirmationPage],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule],
   providers: [
