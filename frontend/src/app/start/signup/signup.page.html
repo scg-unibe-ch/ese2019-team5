@@ -32,7 +32,7 @@
       <div class="form-group">
         <ion-item>
           <ion-label> e-mail address  </ion-label>
-          <ion-input formControlName="email" type="email" class="form-control" [(ngModel)]="mail"></ion-input>
+          <ion-input formControlName="email" type="email" class="form-control"></ion-input>
         </ion-item>
         <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
         <small [class.ion-hide]="email.untouched || email.valid"
@@ -43,9 +43,9 @@
       <div class="form-group">
         <ion-item>
           <ion-label> First name  </ion-label>
-          <ion-input formControlName="fname" type="text" class="form-control" [(ngModel)]="firstname"></ion-input>
+          <ion-input formControlName="firstname" type="text" class="form-control"></ion-input>
         </ion-item>
-        <small [class.ion-hide]="fname.untouched || fname.valid"
+        <small [class.ion-hide]="firstname.untouched || firstname.valid"
                style="color: red"> Invalid name </small>
       </div>
 
@@ -53,10 +53,25 @@
       <div class="form-group">
         <ion-item>
           <ion-label> Last Name  </ion-label>
-          <ion-input formControlName="lname" type="text" class="form-control" [(ngModel)]="lastname"></ion-input>
+          <ion-input formControlName="lastname" type="text" class="form-control"></ion-input>
         </ion-item>
-        <small [class.ion-hide]="lname.untouched || lname.valid"
+        <small [class.ion-hide]="lastname.untouched || lastname.valid"
                style="color: red"> Invalid name </small>
+      </div>
+
+      <div class="form-group">
+        <ion-item>
+          <ion-label> Street</ion-label>
+          <ion-input formControlName="street" type="text" class="form-control"></ion-input>
+          <ion-label> HouseNr.</ion-label>
+          <ion-input formControlName="housenumber" type="text" class="form-control"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label> ZIP</ion-label>
+          <ion-input formControlName="zip" type="text" class="form-control"></ion-input>
+          <ion-label> City</ion-label>
+          <ion-input formControlName="city" type="text" class="form-control"></ion-input>
+        </ion-item>
       </div>
 
       <!-- User must enter his/her password here -->
@@ -88,13 +103,14 @@
   </div>
 
     <!-- When all information is valid, the sign up button is shown -->
-    <ion-button [class.ion-hide]="signUpForm.get('email').invalid || signUpForm.get('password').invalid || signUpForm.get('confirmation').invalid || signUpForm.get('fname').invalid || signUpForm.get('lname').invalid"
-                (click)="saveUser()">
+  <ion-button
+    [class.ion-hide]="email.invalid || password.invalid || confirmation.invalid || firstname.invalid || lastname.invalid"
+    (click)="saveUser()">
       Sign Up
     </ion-button>
     <!-- If all information isn't valid this message is shown  -->
-    <small [class.ion-hide]="signUpForm.get('email').valid && signUpForm.get('password').valid && signUpForm.get('confirmation').valid || signUpForm.get('fname').invalid || signUpForm.get('lname').invalid"
-           style="color: red">
+  <small [class.ion-hide]="email.valid && password.valid && confirmation.valid || firstname.invalid || lastname.invalid"
+         style="color: red">
       You can sign up as soon as all required information is valid. </small>
 </ion-content>
 

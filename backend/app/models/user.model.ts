@@ -17,14 +17,24 @@ export class User {
     this.isVerified = isVerified;
   }
 
+  /**
+   * sets the id
+   * @param id
+   */
   setId(id: number) {
     this.id = id;
   }
 
+  /**
+   * returns the user element as string
+   */
   toString(): string {
     return String(this.id) + ' ' + this.firstname + ' ' + this.lastname + ' ' + this.email + ' ' + this.pwhash;
   }
 
+  /**
+   * returns the firstname and the lastname as string
+   */
   toNameString(): string {
     return this.firstname + ' ' + this.lastname;
   }

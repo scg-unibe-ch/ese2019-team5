@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from '../../User class/user';
-import {FormControl, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {AlertController} from "@ionic/angular";
 import {HashService} from '../../HashService/hash.service';
 
-// @ts-ignore
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
@@ -26,16 +25,15 @@ export class SignupPage implements OnInit {
   constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) { }
 
   pw: string;
-  mail: string;
-  firstname: string;
-  lastname: string;
-
-  user: User;
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    fname: ['', [Validators.required]],
-    lname: ['', [Validators.required]],
+    firstname: ['', [Validators.required]],
+    lastname: ['', [Validators.required]],
+    street: ['', Validators.required],
+    housenumber: ['', Validators.required],
+    zip: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
+    city: ['', Validators.required],
     // ToDo: What are safety requirements for passwords? Which characters are allowed?
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]]
@@ -51,12 +49,31 @@ export class SignupPage implements OnInit {
   get password() {
     return this.signUpForm.get('password');
   }
-  get fname() {
-    return this.signUpForm.get('fname');
+
+  get firstname() {
+    return this.signUpForm.get('firstname');
   }
-  get lname() {
-    return this.signUpForm.get('lname');
+
+  get lastname() {
+    return this.signUpForm.get('lastname');
   }
+
+  get street() {
+    return this.signUpForm.get('street');
+  }
+
+  get housenumber() {
+    return this.signUpForm.get('housenumber');
+  }
+
+  get zip() {
+    return this.signUpForm.get('zip');
+  }
+
+  get city() {
+    return this.signUpForm.get('city');
+  }
+
   get confirmation() {
     return this.signUpForm.get('confirmation');
   }
@@ -70,26 +87,29 @@ export class SignupPage implements OnInit {
    * "Valid" is false as User must first be verified
    */
   saveUser() {
-    const pwhash = HashService.hashPassword(this.pw);
+    //prepare body for httpClient-post
+    const pwhash = HashService.hashPassword(this.password.value);
     console.log(pwhash);
-    const email =  this.mail;
-    const firstname = this.firstname;
-    const lastname = this.lastname;
+    const email = this.email.value;
+    const firstname = this.firstname.value;
+    const lastname = this.lastname.value;
+    const street = this.street.value;
+    const housenumber = this.housenumber.value;
+    const zip = this.zip.value;
+    const city = this.city.value;
     const isVerified = false;
 
-  //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
-
-    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
+    // post data to the htttpClient
+    //ToDo: Include address data in post-request -> Order?
+    this.http.post(this.ROOT_URL + '/signup',
+      {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
       .subscribe(
-
         (success) => this.presentSuccessAlert(),
-        (error) => this.presentFailureAlert(error.message))
+        (error) => this.presentFailureAlert(error.message));
   }
 
-
-
   /**
-   *  A success and Failure alert for the ion controller for both responses from the backend
+   *  A success and failure alert for the ion controller for both responses from the backend
    */
   async presentSuccessAlert() {
     const alert = await this.alertCtrl.create({
