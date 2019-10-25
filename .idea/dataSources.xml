@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/eventdoo</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="PostgreSQL - eventdoo@localhost" uuid="f2465d27-7c60-42f8-9316-e6f1f702d3ec">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/eventdoo</jdbc-url>
+    </data-source>
   </component>
 </project>

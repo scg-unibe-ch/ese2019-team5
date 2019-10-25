@@ -36,7 +36,7 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-
+//TODO auf andere HTTP lösen warten bis Frontend dort ist
 /**
  * Method used to verify jwt token
  * @param req from HTTP client
@@ -57,6 +57,7 @@ const verifyToken = async (req: Request, res: Response) => {
   try {
     let decoded = jwt.verify(token, publicKey, verifyOptions);
     await dbService.makeUserVerified(decoded.email);
+    res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (err) {
     res.send(err);
@@ -70,7 +71,7 @@ router.get('/confirmation/:token', verifyToken);
 /**
  * Reacts on sendMailAgain events using HTTP Client
  * will resend the email so user can verify and then login
- * //TODO button missing
+ * //TODO button missing forntend warten
  */
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
     let email: string = req.params.email;
