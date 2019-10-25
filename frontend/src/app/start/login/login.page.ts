@@ -9,8 +9,7 @@ import {HashService} from "../../HashService/hash.service";
 // (Sophie)
 // ToDo: Passwort vergessen => '/login/forgotPassword'
 // Sendet Anfrage an Backend (post mail), wenn Email gut, mail an kunde --> Link auf Seite, wo Passwort geändert werden kann
-// ToDo: SendMail again => ''/signUp' (post email-addresse)
-// Muss für beliebige Token funktionieren
+// ToDo: SendMail again => 'localhost3000/signUp' (post email-addresse)
 
 @Component({
   selector: 'app-login',
@@ -42,7 +41,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.isVerified = true;
-    this.isValidCombination = false;
+    this.isValidCombination = true;
   }
 
   /**
@@ -63,6 +62,7 @@ export class LoginPage implements OnInit {
       error => {
         console.log("error appeard" + error.message);
         this.error = 'Invalid email or password. \n If you have not verified your email address yet, please check your mails';
+        // ToDo: Handle different kind of errors in different ways (invalid combination / not verificated etc.)
       });
   }
 
