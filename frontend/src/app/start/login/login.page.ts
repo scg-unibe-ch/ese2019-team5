@@ -10,7 +10,6 @@ import {HashService} from "../../HashService/hash.service";
 // ToDo: Passwort vergessen => '/login/forgotPassword'
 // Sendet Anfrage an Backend (post mail), wenn Email gut, mail an kunde --> Link auf Seite, wo Passwort geändert werden kann
 // ToDo: SendMail again => ''/signUp' (post email-addresse)
-// ToDo: Welcome-Seite "du bist verifiziert" für alle ('/signup/confirmation/token')
 // Muss für beliebige Token funktionieren
 
 @Component({
@@ -29,17 +28,21 @@ export class LoginPage implements OnInit {
 
   email: string;
   password: string;
-
   returnUrl = '/start';
   error = '';
   user: Observable<User>;
+  isVerified: boolean;
+  isValidCombination: boolean;
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private alertController: AlertController) {}
+    private alertController: AlertController) {
+  }
 
   ngOnInit() {
+    this.isVerified = true;
+    this.isValidCombination = false;
   }
 
   /**
@@ -63,6 +66,53 @@ export class LoginPage implements OnInit {
       });
   }
 
+  sendMailAgain() {
+    //to test button. Will be replaced by "real" code.
+    console.log('send mail again');
+    const emailAddress = this.emailAddressPopUp('Send verification-email again').then(r => {
+    });
+    if (emailAddress != null) {
+      // ToDo: Send verification mail one more time to the email address (if it already exists in DB)
+    }
+  }
+
+  resetPassword() {
+    console.log('Reset Password');
+    const emailAddress = this.emailAddressPopUp('Reset password').then(r => {
+    });
+    if (emailAddress != null) {
+      // ToDo: Send mail to email address so the user can reset the password (if the email address exists in DB)
+    }
+  }
+
+  async emailAddressPopUp(header: string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: 'Please enter your email address: ',
+      inputs: [{
+        name: 'mail',
+        type: "email",
+        placeholder: 'email address'
+      }],
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+          return null;
+        }
+      },
+        {
+          text: 'Submit',
+          handler: (alertData) => {
+            return alertData.mail;
+          }
+        }]
+    });
+
+    await alert.present();
+    return
+
+  }
 
 
   /**

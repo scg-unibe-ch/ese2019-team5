@@ -5,8 +5,6 @@ import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
 import {User} from '../../../../backend/app/models/user.model';
 
-//ToDo: getUserId()
-
 var jwtDecode = require('jwt-decode');
 
 @Injectable({ providedIn: 'root' })
@@ -56,8 +54,13 @@ export class AuthService {
     }
   }
 
-  isLoggedOut() {
+  public isLoggedOut() {
     return !this.isLoggedIn();
+  }
+
+  //ToDo: getUserId()
+  public getUserId() {
+    return localStorage.getItem('id_token');
   }
 
 
@@ -78,20 +81,14 @@ export class AuthService {
    * Stores the user's ID Token and it's expiration stamp in the user's local storage
    * @param authResult
    */
-
   // ToDo: Token in localStorage speichern und bei Abfrage holen und decoden
   private setSession(authResult) {
-    /*const verifyOptions = {
-      issuer: 'Eventdoo',
-      subject: 'email',
-      expiresIn: '7d',
-      algorithm: 'RS256'
-    };*/
     console.log('Setting session');
-    // if (jwt.verify(authResult.token, this.publicKey, verifyOptions)) {
     try {
       console.log("expIn: " + authResult.token.exp);
       console.log(authResult.token);
+
+      localStorage.setItem('token', authResult.token);
 
       var decoded = jwtDecode(authResult.token);
       console.log(decoded);
@@ -100,8 +97,6 @@ export class AuthService {
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
       localStorage.setItem('id_token', authResult.user.id);
       console.log('Setting session successful');
-
-
     } catch (e) {
       console.log(e);
       }
@@ -119,7 +114,6 @@ export class AuthService {
     }
     return throwError(errorMessage);
   }
-
 
   private getExpiration() {
     const expiration = localStorage.getItem('expires_at');

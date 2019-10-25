@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from '../../User class/user';
-import {FormControl, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {AlertController} from "@ionic/angular";
 import {HashService} from '../../HashService/hash.service';
 
 
-//ToDo: Empfangsseite (aus Backend) für Email Verification ('/signup/confirmation/token')
-// (Sophie)
-
-// @ts-ignore
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
@@ -30,9 +25,6 @@ export class SignupPage implements OnInit {
   constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) { }
 
   pw: string;
-
-
-  user: User;
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -95,6 +87,7 @@ export class SignupPage implements OnInit {
    * "Valid" is false as User must first be verified
    */
   saveUser() {
+    //prepare body for httpClient-post
     const pwhash = HashService.hashPassword(this.password.value);
     console.log(pwhash);
     const email = this.email.value;
@@ -104,24 +97,19 @@ export class SignupPage implements OnInit {
     const housenumber = this.housenumber.value;
     const zip = this.zip.value;
     const city = this.city.value;
-
     const isVerified = false;
 
-  //  this.http.post(this.ROOT_URL + '/signup', { name, surname, email, pwhash, isVerified});
-
-    //ToDo: Include address data in post-request -> reihenfole?
-    this.http.post(this.ROOT_URL + '/signup', { firstname, lastname, email, pwhash, isVerified})
+    // post data to the htttpClient
+    //ToDo: Include address data in post-request -> Order?
+    this.http.post(this.ROOT_URL + '/signup',
+      {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
       .subscribe(
-
         (success) => this.presentSuccessAlert(),
-        (error) => this.presentFailureAlert(error.message))
-    console.log(city, zip, housenumber, street);
+        (error) => this.presentFailureAlert(error.message));
   }
 
-
-
   /**
-   *  A success and Failure alert for the ion controller for both responses from the backend
+   *  A success and failure alert for the ion controller for both responses from the backend
    */
   async presentSuccessAlert() {
     const alert = await this.alertCtrl.create({

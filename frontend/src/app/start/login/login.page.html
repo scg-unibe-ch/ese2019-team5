@@ -36,6 +36,12 @@
   </form>
 
   <ion-button (click)="logIn()"> Log In </ion-button>
-  <div *ngIf="error" style="color: darkred"> {{error}} </div>
+  <div>
+    <small [class.ion-hide]="isValidCombination" style="color: darkred"> Invalid email address or password. </small>
+    <ion-button [class.ion-hide]="isValidCombination" (click)="resetPassword()"> Forgot password</ion-button>
+    <small [class.ion-hide]="isVerified" style="color: darkred"> Email address is not verified yet. Please check your
+      emails. </small>
+    <ion-button [class.ion-hide]="isVerified" (click)="sendMailAgain()"> Send mail again</ion-button>
+  </div>
 </ion-infinite-scroll-content>
 
