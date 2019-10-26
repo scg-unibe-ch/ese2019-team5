@@ -7,17 +7,17 @@ export class User {
   lastname: string;
   email: string;
   pwhash: string;
-  address: Address;
+ // address: Address;
   isVerified: boolean;
   newUser = false;
   isAdmin = false;
 
-  constructor(firstname: string, lastname: string, email: string, pwhash: string, address: Address,isVerified: boolean) {
+  constructor(firstname: string, lastname: string, email: string, pwhash: string,isVerified: boolean) { //TODO addresse hier einfügen nach pwhash???
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
     this.pwhash = pwhash;
-    this.address= address;
+   // this.address= address;
     this.isVerified = isVerified;
   }
 

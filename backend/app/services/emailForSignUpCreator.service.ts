@@ -1,5 +1,5 @@
-export class EmailCreatorService{
-  getEmailText(token: string): string {
+export class EmailForSignUpCreatorService{
+  getEmailSignUpText(token: string): string {
     return "<body>" +
       "<div align=center style='font-size:24.0pt;font-family:\"Arial Black\",sans-serif'>Welcome to Eventdoo<\div>" +
     "<div align=center style='font-size:14.0pt;font-family:\"Arial\",sans-serif'>"+
@@ -15,4 +15,5 @@ export class EmailCreatorService{
     "</body>";
   }
 }
+
 

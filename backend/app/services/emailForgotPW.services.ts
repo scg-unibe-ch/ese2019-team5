@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import {User} from '../models/user.model';
-import {EmailForSignUpCreatorService} from "./emailForSignUpCreator.service";
 import * as jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
-
-const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
-const emailService = new EmailForSignUpCreatorService();
+import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
+//TODO interface or abstract class because code is used more than once
+const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
+const emailService = new EmailForgotPWCreatorService();
  let token: string;
 
 /**
@@ -20,10 +20,10 @@ function makeToken(payload: any, email: string) {
     issuer: 'Eventdoo',
      subject: email,
     audience: email,
-    expiresIn: '24h',
+    expiresIn: '2h',
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
-  const emailUrl = `http://localhost:4200/signup/confirmation/${emailToken}`;
+  const emailUrl = `http://localhost:4200/login/resetPassword/${emailToken}`;
   token = emailToken;
   return emailUrl;
 }
@@ -33,14 +33,14 @@ function makeToken(payload: any, email: string) {
  * User needs to verify email by clicking on URL to login
  */
 
-export class EmailVerificationServices {
+export class EmailForgotPWServices {
 
   /**
    * sends a email using nodemailer to a new sign up user
    * @param user that just signed up
    * is called in SignUp controller POST Event listener
    */
-  static async sendMailToNewUser(user: User) {
+  static async sendMailToUser(user: User) {
     let payload = {
       name: user.firstname,
       surname: user.lastname,
@@ -65,8 +65,8 @@ export class EmailVerificationServices {
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: user.email,
-        subject: 'E-Mail Verification for your Eventdoo Account',
-        html: emailService.getEmailSignUpText(emailURL)
+        subject: 'Password Reset',
+        html: emailService.getEmailForgotPWText(emailURL)
       };
 
       transporter.sendMail(mailOptions, function (err, info) {
