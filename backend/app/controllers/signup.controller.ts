@@ -1,5 +1,6 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
+import {Address} from "../models/address.model";
 import {EmailVerificationServices} from '../services/emailVerification.services';
 import {DbServices} from '../services/db.services';
 
@@ -19,8 +20,9 @@ const dbService = new DbServices();
  * reacts on HTTP Client POST events by sending Mail to new user and adding the user to DB
  */
 router.post('/', async (req: Request, res: Response) => {
-
-  const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified);
+  const address = new Address(req.body.street,req.body.housenumber, req.body.zip, req.body.city);
+  const isVerified: boolean= false;
+  const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash,address, isVerified);
 
   try {
     await dbService.signUp(user);

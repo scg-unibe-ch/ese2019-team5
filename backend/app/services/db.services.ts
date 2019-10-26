@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
 
 const jwt = require('jsonwebtoken');
-
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
 export class DbServices {
@@ -62,6 +61,7 @@ export class DbServices {
       let user: User;
       user = await this.getUserFromEmail(email);
       if (this.checkIfPasswordCorrect(user, password)) {
+
         if (this.isUserVerified(user)) {
           return new LoginResult(user,this.generateJWT(email, user.id));
         } else {

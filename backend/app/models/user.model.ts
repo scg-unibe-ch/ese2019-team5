@@ -1,3 +1,5 @@
+import {Address} from "./address.model";
+//TODO unsicher mit addresse
 export class User {
 
   id = -1;
@@ -5,15 +7,17 @@ export class User {
   lastname: string;
   email: string;
   pwhash: string;
+  address: Address;
   isVerified: boolean;
   newUser = false;
   isAdmin = false;
 
-  constructor(firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean) {
+  constructor(firstname: string, lastname: string, email: string, pwhash: string, address: Address,isVerified: boolean) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
     this.pwhash = pwhash;
+    this.address= address;
     this.isVerified = isVerified;
   }
 
@@ -26,7 +30,7 @@ export class User {
   }
 
   /**
-   * returns the user element as string
+   * returns the user element as string //TODO hier addresse auch hin??
    */
   toString(): string {
     return String(this.id) + ' ' + this.firstname + ' ' + this.lastname + ' ' + this.email + ' ' + this.pwhash;
