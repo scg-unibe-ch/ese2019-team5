@@ -40,8 +40,8 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.get('/forgotPassword', async (req: Request, res: Response) => {
-  //const email = req.body.email; //TODo entkommentieren
-  const email= 'gillian.cathomas@gmx.ch';
+  const email = req.body.email;
+
   try {
     let user: User =await dbService.getUserFromEmail(email); // TODO wird hier Fehler gesendet wenns noch nicht gibt oder email falsch ist ??
     await EmailForgotPWServices.sendMailToUser(user);
