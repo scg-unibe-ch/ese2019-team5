@@ -1,5 +1,6 @@
 import {Address} from "./address.model";
-//TODO unsicher mit addresse
+import assert from "assert";
+//TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
 export class User {
 
   id = -1;
@@ -11,6 +12,9 @@ export class User {
   isVerified: boolean;
   newUser = false;
   isAdmin = false;
+//  isFirm=false;
+ // phoneNumber: string;
+
 
   constructor(firstname: string, lastname: string, email: string, pwhash: string,isVerified: boolean) { //TODO addresse hier einfügen nach pwhash???
     this.firstname = firstname;
@@ -18,6 +22,8 @@ export class User {
     this.email = email;
     this.pwhash = pwhash;
    // this.address= address;
+    //this.isFirm= isFirm;
+    //this.phoneNumber= phoneNumber;
     this.isVerified = isVerified;
   }
 

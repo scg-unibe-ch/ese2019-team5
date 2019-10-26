@@ -49,9 +49,9 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
     res.statusCode = 201;
     res.send('reset Password send');
 
-  } catch (e) {
+  } catch (error) {
     res.statusCode = 400;
-    res.send(e);
+    res.send(error);
 
   }
 
