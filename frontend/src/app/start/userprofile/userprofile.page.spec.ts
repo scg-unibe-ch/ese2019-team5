@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserprofileComponent } from './userprofile.component';
+import { UserprofilePage } from './userprofile.page';
 
-describe('UserprofileComponent', () => {
-  let component: UserprofileComponent;
-  let fixture: ComponentFixture<UserprofileComponent>;
+describe('UserprofilePage', () => {
+  let component: UserprofilePage;
+  let fixture: ComponentFixture<UserprofilePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserprofileComponent ],
+      declarations: [ UserprofilePage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserprofileComponent);
+    fixture = TestBed.createComponent(UserprofilePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
