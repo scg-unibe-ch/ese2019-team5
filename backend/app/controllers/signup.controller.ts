@@ -26,7 +26,6 @@ router.post('/', async (req: Request, res: Response) => {
 
   try {
     await dbService.signUp(user);
-
     EmailVerificationServices.sendMailToNewUser(user);
     res.statusCode = 201;
     res.json('sign up success');

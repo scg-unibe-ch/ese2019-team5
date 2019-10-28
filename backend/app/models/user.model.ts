@@ -1,5 +1,5 @@
-import {Address} from "./address.model";
-import assert from "assert";
+//import {Address} from "./address.model";
+//import assert from "assert";
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
 export class User {
 
