@@ -34,8 +34,15 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
+    if(error.message.compareTo('To login, please verify your email-address')){ //TODO aufräumen .....
     console.log("error in backend:" + error.message);
-    res.status(404).send(error.message);
+   // res.status(404).send(error.message);
+    res.status(406);
+    res.send('Verification error');}
+    else{
+      res.status (404).send('Password error');
+    }
+
   }
 });
 
