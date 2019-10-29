@@ -3,6 +3,7 @@ import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
+import {Address} from "../models/address.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -27,6 +28,18 @@ export class DbServices {
       };
     //console.log(config);
       return new Client(config);
+    }
+
+    // test function
+    public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
+      const localClient = this.getClient();
+      await localClient.connect();
+      try{
+        const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
+        return id;
+      } finally {
+        await localClient.end();
+      }
     }
 
     // This function is only for testing purpose
@@ -68,7 +81,6 @@ export class DbServices {
       let user: User;
       user = await this.getUserFromEmail(email);
       if (this.checkIfPasswordCorrect(user, password)) {
-
         if (this.isUserVerified(user)) {
           return new LoginResult(user,this.generateJWT(email, user.id));
         } else {
@@ -133,13 +145,19 @@ export class DbServices {
    * @param client to use to connect to the database
    */
     private async creatUserInDB(user: User, client: Client): Promise<number>{
-      const stream = client.query('Insert into users(prename, lastname,email,password,isverified) Values ($1,$2,$3,$4,$5) Returning id As id',[user.firstname, user.lastname,user.email,user.pwhash,user.isVerified]);
+
+      //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
+
+      const addressId = Number(await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client));
+      const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.firstname, user.lastname, user.email, user.pwhash, user.isVerified, addressId, user.isFirm]);
+
       var id = -1;
       for await (const row of stream){
         id = Number(row.get('id'));
 
       }
       if(id == -1) {
+        console.log("hello");
         throw Error('An error occured while creating the DB entry');
       }
 
@@ -206,7 +224,7 @@ export class DbServices {
     private async getUserFromEmailDB(email: string, client: Client): Promise<User> {
       let user: User;
 
-      const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv From users Where email = $1', [email]);
+      const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
 
       for await(const row of stream) {
         if (stream.rows == null) {
@@ -214,8 +232,10 @@ export class DbServices {
         } else if (stream.rows.length !== 1) {
           throw new Error('this email isnt unique in the database');
         } else {
-          // tslint:disable-next-line:max-line-length
-          user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')));
+
+          const address = await this.getAddressFromAId(Number(row.get('aid')), client);
+
+          user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
           user.setId(Number(row.get('id')));
           return user;
         }
@@ -223,11 +243,46 @@ export class DbServices {
       throw new Error('no user with this email found');
     }
 
+    private async getAddressFromAId(addressId: number, client: Client): Promise<Address>{
+      let address: Address;
+      const stream = client.query('Select id, street, number, zip, city From address Where id = $1', [addressId]);
+      for await(const row of stream){
+        if (stream.rows == null){
+          throw new Error('no address with this id found');
+        } else {
+          address = new Address(String(row.get('street')),Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
+          address.setId(addressId);
+          return address;
+        }
+      }
+      throw new Error('no address with this id found');
+    }
+
+    private async checkIfAddressExistsAndCreate(street: string, number:number, zip: number, city: string, client: Client): Promise<Number> {
+      var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4',[street, number, zip, city]);
+
+      for await (const row of stream){
+        return Number(row.get('id'));
+      }
+
+
+
+      stream = client.query('Insert into address(street, number, zip, city) Values ($1,$2,$3,$4) Returning id As id',[street, number, zip, city]);
+
+      for await (const row of stream) {
+        return Number(row.get('id'));
+      }
+
+      console.log("hello");
+
+      throw Error('address not found and error while inserting');
+    }
+
     // for testing only... returns all the users with given lastname
-    async testSql( name: string, client: Client): Promise<SqlResult> {
+    async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
-        const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv From users Where lastname = $1', [name]);
+        const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where lastname = $1', [name]);
 
         for await (const row of stream) {
 
@@ -235,7 +290,9 @@ export class DbServices {
                 throw new Error('no result found in database');
             }
             // tslint:disable-next-line:max-line-length
-            const user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')))
+            const address = await this.getAddressFromAId(Number(row.get('aid')), client);
+
+            const user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
             user.setId(Number(row.get('id')));
             // tslint:disable-next-line:max-line-length
             sqlResult.addUser(user);

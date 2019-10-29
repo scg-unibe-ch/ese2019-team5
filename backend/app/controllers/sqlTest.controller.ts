@@ -42,6 +42,24 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   }
 
 });
+
+
+router.get('/address/:street/:number/:zip/:city', async (req: Request, res: Response) => {
+  const street = req.params.street;
+  const number = Number(req.params.number);
+  const zip = Number(req.params.zip);
+  const city = req.params.city;
+  try {
+    const id = await dbService.testAddress(street, number,zip,city);
+    res.statusCode = 200;
+    res.send(String(id));
+  } catch (e) {
+    console.log(e.stack);
+    res.statusCode = 404;
+    res.send('an error occured');
+  }
+});
+
 /*
 router.get('/testEmail/:mail', async(req: Request, res: Response) => {
   const mail = req.params.mail;
@@ -75,7 +93,7 @@ router.get('/createUser/:z', async(req: Request, res: Response) => {
 });
 
  */
-
+/*
 router.get('/trySignUp/:z', async(req: Request, res: Response) => {
   const user = new User('Simon', 'Guyer','simon.guyer@gmail.com','pwGuyer',false);
   try {
@@ -87,7 +105,7 @@ router.get('/trySignUp/:z', async(req: Request, res: Response) => {
     res.statusCode = 200;
     res.send(e.msg);
   }
-});
+});*/
 
 router.get('/tryMakeUserVerified/:z', async(req: Request, res: Response) => {
 

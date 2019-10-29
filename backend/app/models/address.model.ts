@@ -1,4 +1,5 @@
 export class Address {
+  id = -1;
   street: string;
   housenumber: number;
   zip: number;
@@ -10,4 +11,8 @@ export class Address {
     this.zip = zip;
     this.city = city;
   }
+  setId(id: number){
+    this.id = id;
+  }
+
 }
