@@ -2,15 +2,12 @@
 <!-- Collects data from a new user and saves it in a user-object -->
 <!-- Does some verification (email-format, matching passwords) -->
 <!-- Passes the user-object/data to the database (to be implemented)-->
-<!-- ToDo: Styling-->
 
 <!-- Header contains... (f.l.t.r.) -->
 <!-- 1) Back button to return to StartPage  -->
 <!-- 2) Page title -->
 <!-- 3) Login-Button to change to LoginPage  -->
 <!-- 4) SignUp Button which doesn't change anything -->
-
-
 <ion-header>
   <ion-toolbar color="primary">
     <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px">
@@ -24,7 +21,7 @@
 </ion-header>
 
 <!-- Content contains a simple SignUp-Form  -->
-<!-- User must enter a e-mail address and 2 identical passwords -->
+<!-- User must enter a e-mail address, name, address and 2 identical passwords -->
 <!-- All information is required to sign up -->
 <ion-content>
   <div class="container-fluid">
@@ -105,16 +102,25 @@
     </form>
   </div>
 
+  <div>
+    <!-- If all information isn't valid this message is shown  -->
+    <small
+      [class.ion-hide]="email.valid && password.valid && confirmation.valid || firstname.invalid || lastname.invalid"
+      style="color: red">
+      You can sign up as soon as all required information is valid. </small>
     <!-- When all information is valid, the sign up button is shown -->
-  <ion-button
-    [class.ion-hide]="email.invalid || password.invalid || confirmation.invalid || firstname.invalid || lastname.invalid"
-    (click)="saveUser()">
+    <ion-button color="secondary"
+                [class.ion-hide]="email.invalid || password.invalid || confirmation.invalid || firstname.invalid || lastname.invalid || loading"
+                (click)="saveUser()">
       Sign Up
     </ion-button>
-    <!-- If all information isn't valid this message is shown  -->
-  <small [class.ion-hide]="email.valid && password.valid && confirmation.valid || firstname.invalid || lastname.invalid"
-         style="color: red">
-      You can sign up as soon as all required information is valid. </small>
+  </div>
+
+  <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->
+  <div>
+    <p *ngIf="loading"> Submitting data... </p>
+    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+  </div>
 </ion-content>
 
 

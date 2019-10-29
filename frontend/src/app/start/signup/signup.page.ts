@@ -19,12 +19,16 @@ import {HashService} from '../../HashService/hash.service';
  */
 export class SignupPage implements OnInit {
 
-  readonly ROOT_URL = 'http://localhost:3000';
+  readonly ROOT_URL = 'http://localhost:3000/signup';
   // const bcrypt = require('bcrypt');
 
-  constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) { }
-
   pw: string;
+  loading: boolean;
+
+  constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) {
+  }
+
+
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -38,6 +42,11 @@ export class SignupPage implements OnInit {
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]]
   });
+
+  // ToDo: Implement initialization
+  ngOnInit() {
+    this.loading = false;
+  }
 
   /**
    * Get-methods
@@ -78,15 +87,14 @@ export class SignupPage implements OnInit {
     return this.signUpForm.get('confirmation');
   }
 
-  // ToDo: Implement initialization
-  ngOnInit() {
-  }
+
 
   /**
    * Creates a new User-object according to data entered in form
    * "Valid" is false as User must first be verified
    */
   saveUser() {
+    this.loading = true;
     //prepare body for httpClient-post
     const pwhash = HashService.hashPassword(this.password.value);
     console.log(pwhash);
@@ -101,11 +109,20 @@ export class SignupPage implements OnInit {
 
     // post data to the htttpClient
     //ToDo: Include address data in post-request -> Order?
-    this.http.post(this.ROOT_URL + '/signup',
+    this.http.post(this.ROOT_URL,
       {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
       .subscribe(
-        (success) => this.presentSuccessAlert(),
-        (error) => this.presentFailureAlert(error.message));
+        (success) => {
+          this.loading = false;
+          this.presentSuccessAlert().then(r => {
+          });
+        },
+        (error) => {
+          this.loading = false;
+          this.presentFailureAlert(error.message).then(r => {
+          });
+        }
+      );
   }
 
   /**

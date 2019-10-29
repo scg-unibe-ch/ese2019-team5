@@ -31,6 +31,7 @@ export class LoginPage implements OnInit {
   returnUrl = '/start';
   error = '';
   user: Observable<User>;
+  loading: boolean;
   isVerified: boolean;
   isValidCombination: boolean;
   mailSent: boolean;
@@ -43,6 +44,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = false;
     this.isVerified = true;
     this.isValidCombination = true;
     this.mailSent = false;
@@ -56,25 +58,33 @@ export class LoginPage implements OnInit {
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
   logIn() {
+    this.loading = true;
     this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
       (success) => {
+        this.loading = false;
         this.router.navigate([this.returnUrl]).then(r => {
           this.LogInPopUp().then(r => {
           });
         });
       },
       (error) => {
-        console.log("error appeared" + error.message);
-        this.error = 'Invalid email or password. \n If you have not verified your email address yet, please check your mails';
-
-        // ToDo: Handle different kind of errors in different ways (invalid combination / not verificated etc.)
+        this.loading = false;
+        console.log("error: " + error.message);
+        if (error.status == 406) {
+          this.isVerified = false;
+        }
+        if (error.status == 404) {
+          this.isValidCombination = false;
+        }
       });
+
   }
 
+  //ToDo: Does not work yet
   sendMailAgain() {
-    //to test button. Will be replaced by "real" code.
     console.log('send mail again');
     const emailAddress = this.emailAddressPopUp('Send verification-email again').then(r => {
+      console.log(emailAddress)
     });
     if (emailAddress != null) {
       this.httpClient.post('http://localhost3000/signup/sendMailAgain', emailAddress).subscribe(
@@ -87,6 +97,7 @@ export class LoginPage implements OnInit {
     }
   }
 
+  //ToDo: Does not work yet
   resetPassword() {
     console.log('Reset Password');
     const emailAddress = this.emailAddressPopUp('Reset password').then(r => {
@@ -103,6 +114,7 @@ export class LoginPage implements OnInit {
   }
 
   async emailAddressPopUp(header: string) {
+    let result = '';
     const alert = await this.alertController.create({
       header: header,
       message: 'Please enter your email address: ',
@@ -115,19 +127,18 @@ export class LoginPage implements OnInit {
         text: 'Cancel',
         role: 'cancel',
         handler: () => {
-          return null;
         }
       },
         {
           text: 'Submit',
           handler: (alertData) => {
-            return alertData.mail;
+            result = alertData.mail;
           }
         }]
     });
 
     await alert.present();
-    return
+    return result;
 
   }
 
