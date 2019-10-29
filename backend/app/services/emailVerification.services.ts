@@ -23,7 +23,7 @@ function makeToken(payload: any, email: string) {
     expiresIn: '24h',
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
-  const emailUrl = `http://localhost:4200/signup/confirmation/${emailToken}`;
+  const emailUrl = `http://localhost:4200/start/signup/confirmation/${emailToken}`;
   token = emailToken;
   return emailUrl;
 }
