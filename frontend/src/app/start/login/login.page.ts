@@ -5,6 +5,7 @@ import {User} from '../../../../../backend/app/models/user.model';
 import {AlertController} from "@ionic/angular";
 import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
+import {HttpClient} from "@angular/common/http";
 
 // (Sophie)
 // ToDo: Passwort vergessen => '/login/forgotPassword'
@@ -32,9 +33,11 @@ export class LoginPage implements OnInit {
   user: Observable<User>;
   isVerified: boolean;
   isValidCombination: boolean;
+  mailSent: boolean;
 
   constructor(
     private router: Router,
+    private httpClient: HttpClient,
     private authService: AuthService,
     private alertController: AlertController) {
   }
@@ -42,6 +45,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.isVerified = true;
     this.isValidCombination = true;
+    this.mailSent = false;
   }
 
   /**
@@ -53,15 +57,16 @@ export class LoginPage implements OnInit {
    */
   logIn() {
     this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
-      success => {
+      (success) => {
         this.router.navigate([this.returnUrl]).then(r => {
           this.LogInPopUp().then(r => {
           });
         });
       },
-      error => {
-        console.log("error appeard" + error.message);
+      (error) => {
+        console.log("error appeared" + error.message);
         this.error = 'Invalid email or password. \n If you have not verified your email address yet, please check your mails';
+
         // ToDo: Handle different kind of errors in different ways (invalid combination / not verificated etc.)
       });
   }
@@ -72,7 +77,13 @@ export class LoginPage implements OnInit {
     const emailAddress = this.emailAddressPopUp('Send verification-email again').then(r => {
     });
     if (emailAddress != null) {
-      // ToDo: Send verification mail one more time to the email address (if it already exists in DB)
+      this.httpClient.post('http://localhost3000/signup/sendMailAgain', emailAddress).subscribe(
+        () => {
+          this.mailSent = true
+        },
+        (error) => {
+          this.error = error.message
+        });
     }
   }
 
@@ -81,7 +92,13 @@ export class LoginPage implements OnInit {
     const emailAddress = this.emailAddressPopUp('Reset password').then(r => {
     });
     if (emailAddress != null) {
-      // ToDo: Send mail to email address so the user can reset the password (if the email address exists in DB)
+      this.httpClient.post('http:/localhost3000/login/forgotPassword', emailAddress).subscribe(
+        () => {
+          this.mailSent = true
+        },
+        (error) => {
+          this.error = error.message
+        });
     }
   }
 

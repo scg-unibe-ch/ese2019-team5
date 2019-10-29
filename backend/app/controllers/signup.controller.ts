@@ -26,14 +26,13 @@ router.post('/', async (req: Request, res: Response) => {
 
   try {
     await dbService.signUp(user);
-
     EmailVerificationServices.sendMailToNewUser(user);
     res.statusCode = 201;
     res.json('sign up success');
 
-  } catch (e) {
+  } catch (error) {
     res.statusCode = 400;
-    res.send(e);
+    res.send(error);
 
   }
 });
@@ -61,8 +60,8 @@ const verifyToken = async (req: Request, res: Response) => {
     await dbService.makeUserVerified(decoded.email);
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
-  } catch (err) {
-    res.send(err);
+  } catch (error) {
+    res.send(error);
   }
 
 };
@@ -82,10 +81,10 @@ router.get('/sendMailAgain', async (req: Request, res: Response) => {
       EmailVerificationServices.sendMailToNewUser(userWithoutMail);
       res.status(200);
       res.send('The email was sent again please also check your spam folder. Thank you');
-    } catch (e) {
+    } catch (error) {
       res.status(404);
-      res.send(e + 'unknown email-address. Please check or sign up.');
-      console.log(e);
+      res.send(error + 'unknown email-address. Please check or sign up.');
+      console.log(error);
     }
 
   }

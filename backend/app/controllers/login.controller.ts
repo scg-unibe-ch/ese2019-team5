@@ -34,8 +34,16 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
+    let message: string= error.message;
+    if(message.localeCompare('To login, please verify your email-address')==0){ //TODO aufräumen .....
     console.log("error in backend:" + error.message);
-    res.status(404).send(error.message);
+   // res.status(404).send(error.message);
+    res.status(406);
+    res.send('Verification error');}
+    else{
+      res.status (404).send('Password error');
+    }
+
   }
 });
 
@@ -49,9 +57,9 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
     res.statusCode = 201;
     res.send('reset Password send');
 
-  } catch (e) {
+  } catch (error) {
     res.statusCode = 400;
-    res.send(e);
+    res.send(error);
 
   }
 

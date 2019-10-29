@@ -8,11 +8,14 @@
 <!-- 3) Login-Button which doesn't do anything  -->
 <!-- 4) SignUp Button to change to SignupPage -->
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-button style="position: absolute; left: 5px; top: 6px "> <ion-back-button defaultHref="/start" style="size: 20px"> </ion-back-button> </ion-button>
+  <ion-toolbar color="primary">
+    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px ">
+      <ion-back-button defaultHref="/start" style="size: 20px"></ion-back-button>
+    </ion-button>
     <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Log in </ion-title>
     <ion-button color="medium"  style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
-    <ion-button style="position: absolute; right: 95px; top: 6px" href="/start/signup"> Sign Up </ion-button>
+    <ion-button color="secondary" style="position: absolute; right: 95px; top: 6px" href="/start/signup"> Sign Up
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -42,6 +45,10 @@
     <small [class.ion-hide]="isVerified" style="color: darkred"> Email address is not verified yet. Please check your
       emails. </small>
     <ion-button [class.ion-hide]="isVerified" (click)="sendMailAgain()"> Send mail again</ion-button>
+  </div>
+  <div>
+    <small *ngIf="mailSent"> Please check your emails. </small>
+    <small *ngIf="error" style="color: darkred"> An error occurred: {{error}} </small>
   </div>
 </ion-infinite-scroll-content>
 

@@ -4,6 +4,7 @@ import {LoginPage} from './start/login/login.page';
 import {StartPage} from './start/start.page';
 import {SignupPage} from './start/signup/signup.page';
 import {ConfirmationPage} from "./start/confirmation/confirmation.page";
+import {UserprofilePage} from "./start/userprofile/userprofile.page";
 
 
 
@@ -17,9 +18,9 @@ const routes: Routes = [
           {path: '', component: SignupPage},
           {path: 'confirmation/:token', component: ConfirmationPage}
         ]
-      }]
-  }
-];
+      },
+      { path: 'userprofile', component: UserprofilePage }]
+  }];
 
 
 @NgModule({
