@@ -3,11 +3,13 @@
 import {Router, Request, Response} from 'express';
 import {SqlResult} from '../models/sqlresult.model';
 import {DbServices} from '../services/db.services';
+import {DbServicesTest} from '../services/db.servicesTest';
 import {User} from '../models/user.model';
 
 
 const router: Router = Router();
 const dbService = new DbServices();
+const dbServiceTest = new DbServicesTest();
 router.get('/', async (req: Request, res: Response) => {
 
   res.statusCode = 200;

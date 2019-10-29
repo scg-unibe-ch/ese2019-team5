@@ -6,6 +6,9 @@ import {LoginResult} from "../models/loginResult.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
+const clientKey = fs.readFileSync('./app/services/client-key.pem').toString();
+const clientCert = fs.readFileSync('./app/services/client-cert.pem').toString();
+const serverCA = fs.readFileSync('./app/services/server-ca.pem').toString();
 
 export class DbServices {
 
@@ -13,13 +16,17 @@ export class DbServices {
    * returns an Client to connect to our database
    */
     private getClient(): Client {
-      return new Client({
+
+      const config = {
         'user' : 'cyrill',
-        'host' : 'localhost',
-        'password' : 'root',
+        'host' : '34.65.95.137',
+        //'host' : 'localhost',
+        'password' : 'eseTeam5_2019!',
         'port' : 5432,
-        'database' : 'eventdoo'
-      });
+        'database' : 'eventdoo',
+      };
+    //console.log(config);
+      return new Client(config);
     }
 
     // This function is only for testing purpose
@@ -233,6 +240,9 @@ export class DbServices {
             // tslint:disable-next-line:max-line-length
             sqlResult.addUser(user);
         }
+
+      // tslint:disable-next-line:max-line-length
+
         return sqlResult;
     }
 
