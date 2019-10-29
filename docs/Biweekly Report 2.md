@@ -41,4 +41,14 @@ soulution.
 ###### Frontend:
 We get along much better with the technologies and we are more efficient when searching for solutions for our problems.
 It feels like we're developing some kind of "intuition" which makes it much more easier to code. 
+A good chunk of work was needed to get past our initial frustrations and difficulties with the Http Client.
+It was difficult to pinpoint the origin of some of our bugs, as we were not fully understanding how all our requests were sent
+nor how it was handled exactly in the backend, as initially we mostly stuck to our domain of code we were allowed to modify (Backend and frontend)
+But as we improved our communication, finding what went wrong suddenly became much more efficient and we exchanged the knowledge and
+to some extent the technologies (for example having running databases on everyones side) of our "side" to allow both ends to fully run and test (right now manually) the program.
+
+Looking ahead we're much more confident in actually being able to implement the features we're planning, as technical hiccups occure much less frequently.
+Our first priority at the moment is to just make our features work. This includes some research on testing methods in the frontend.
+At some point it would probably be wise to revise our code, maybe refactor a few things and overall make it more flexible and elegant, but right now
+we're not at that point where there is an urgency for that, nor much room for code improvement. 
 
