@@ -38,17 +38,31 @@
     </div>
   </form>
 
-  <ion-button (click)="logIn()"> Log In </ion-button>
+  <ion-button color="secondary" [hidden]="loading" (click)="logIn()"> Log In</ion-button>
+
+  <!-- User feedback while trying to log in -->
+  <div>
+    <p *ngIf="loading"> Trying to log in </p>
+    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+  </div>
+
+  <!-- Handling common errors after trying to log in -->
   <div>
     <small [class.ion-hide]="isValidCombination" style="color: darkred"> Invalid email address or password. </small>
-    <ion-button [class.ion-hide]="isValidCombination" (click)="resetPassword()"> Forgot password</ion-button>
-    <small [class.ion-hide]="isVerified" style="color: darkred"> Email address is not verified yet. Please check your
-      emails. </small>
-    <ion-button [class.ion-hide]="isVerified" (click)="sendMailAgain()"> Send mail again</ion-button>
-  </div>
-  <div>
+    <ion-button color="secondary" [class.ion-hide]="isValidCombination" (click)="resetPassword()"> Forgot password
+    </ion-button>
+    <small [class.ion-hide]="isVerified || mailSent" style="color: darkred"> Email address is not verified yet. Please
+      check your emails. </small>
+    <ion-button color="secondary" [class.ion-hide]="isVerified || mailSent" (click)="sendMailAgain()"> Send mail again
+    </ion-button>
     <small *ngIf="mailSent"> Please check your emails. </small>
-    <small *ngIf="error" style="color: darkred"> An error occurred: {{error}} </small>
   </div>
+
+  <!-- Handling unexpected errors -->
+  <div>
+    <small *ngIf="error" style="color: darkred"> An unexpected error occurred: {{error}}. Please try again
+      later. </small>
+  </div>
+
 </ion-infinite-scroll-content>
 

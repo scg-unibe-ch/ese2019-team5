@@ -3,6 +3,8 @@ import {AuthService} from "../../AuthService/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
+//ToDo: Handle expired tokens etc.
+
 @Component({
   selector: 'app-confirmation',
   templateUrl: './confirmation.page.html',
