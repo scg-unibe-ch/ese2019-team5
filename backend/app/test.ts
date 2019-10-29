@@ -1,6 +1,9 @@
 
 import chai from 'chai';
 import chaiHttp from "chai-http";
+import {User} from "./models/user.model";
+import {Address} from "./models/address.model";
+import {error} from "ts-postgres/dist/src/logging";
 let server = require('./server');
 let signUpController = require('./controllers/signup.controller');
 let user = require('./models/user.model');
@@ -66,17 +69,26 @@ const expect = chai.expect;
 const assert= chai.assert;
 const should = chai.should();
 
-
+let testAddress = new Address('someStreet',22,3456,'Cityhall');
+let testUser:User= new User('Testy','Testyfable','gillian.cathomas@gmx.ch','aaaaaa',false,testAddress,false);
 
 describe( 'POST Event for Signup',() => {
-  it('should return "please verify your email"', function(done){
+  it('should return "please verify your email"', function (done) {
     chai.request(server)
       .post('/signup')
-      .end((err, res)=> {
-        res.should.have.status (201);
-
+      .send(testUser)
+      .end((err, res) => {
+        res.should.have.status(201);
         res.body.error.should.equal(false);
         done();
-         });
+
+
+      }).catch(function (error) {
+      console.log('error:' + error);
+      expect(error).should.have.status(400);
+      done();
+    });
+
   });
 });
+
