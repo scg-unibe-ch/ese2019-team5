@@ -6,11 +6,11 @@
       Log out
       </ion-button>
     <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
-                [hidden]="authService.isLoggedIn()" [routerLink]="['login']">
+                [hidden]="authService.isLoggedIn()" href="start/login">
       Log in
       </ion-button>
     <ion-button color="secondary" style="position: absolute; right: 95px; top: 6px"
-                [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
+                [hidden]="authService.isLoggedIn()" href="start/signup">
       Sign Up
       </ion-button>
     </ion-toolbar>
@@ -19,7 +19,7 @@
 <ion-content>
   <p *ngIf="loading"> Trying to verify your email address </p>
   <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
-  <h3 *ngIf="verified"> Thank you for verifying your email address. You can <a href="../login/login.page.html"> log
+  <h3 *ngIf="verified"> Thank you for verifying your email address. You can <a href="/start/login"> log
     in </a> now. </h3>
   <h3 *ngIf="!verified && !loading"> An error occurred: {{error}} </h3>
 </ion-content>
