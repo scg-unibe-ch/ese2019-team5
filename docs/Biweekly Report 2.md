@@ -21,9 +21,9 @@ Also, we set goals for the next two weeks:
 
 ###### Backend:
 In the backend especially before Milestone 1 we had the problem, that the backend to frontend communication 
-wasn�t working (as in not with the other group members but in the programm).
+wasn't working (as in not with the other group members but in the programm).
 One of the mistakes we made was sending the wrong error to the front but also figuring out what data the
-frontend actually needs wasn�t easy. Finally the test works as in fails but at least it is an assertion error.
+frontend actually needs wasn't easy. Finally the test works as in fails but at least it is an assertion error.
 I still think that communication within backend is working quite well.
 Also before Milestone 1 ended I felt that communication was working quite well.
 But as I feared as soon as a Milestone is over people tend to take it a little bit less serious and 
@@ -39,6 +39,11 @@ Implement	  -sendMailAgain
 -	Update Profile and Change Password
 -	Create EventServices and display them as a list
 
+Considering that the next step needs often adjustments to the database it would be very annoying to just go as it was with an database dump that everyone
+has to import in to their own locally hosted database. So I researched how we could avoid this. The problem is, that  there just isn't a free webhost for Postgresql
+but the Google Cloud Service (normally targeted at businesses) gives you when singing up a budget you can use. This generous budget combined with our very small 
+requirements for the server allows us to use this service for the next 3 months for free. And since this course ends in december anyway this seems like the perfect
+soulution.
 
 ###### Frontend:
 We get along much better with the technologies and we are more efficient when searching for solutions for our problems.
