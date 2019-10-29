@@ -1,20 +1,25 @@
 <ion-header>
-  <ion-header>
-    <ion-toolbar color="success">
-      <ion-title style="color: darkgreen"> Welcome</ion-title>
-      <ion-button [hidden]="authService.isLoggedOut()" style="position: absolute; right: 5px; top: 6px"
-                  (click)="authService.logout()"> Log out
+  <ion-toolbar color="primary">
+    <ion-title style="color: darkgreen"> Verification</ion-title>
+    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
+                [hidden]="authService.isLoggedOut()" (click)="authService.logout()">
+      Log out
       </ion-button>
-      <ion-button [hidden]="authService.isLoggedIn()" [routerLink]="['login']"
-                  style="position: absolute; right: 5px; top: 6px"> Log in
+    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
+                [hidden]="authService.isLoggedIn()" [routerLink]="['login']">
+      Log in
       </ion-button>
-      <ion-button [hidden]="authService.isLoggedIn()" [routerLink]="['signup']"
-                  style="position: absolute; right: 95px; top: 6px"> Sign Up
+    <ion-button color="secondary" style="position: absolute; right: 95px; top: 6px"
+                [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
+      Sign Up
       </ion-button>
     </ion-toolbar>
-  </ion-header>
 </ion-header>
 
 <ion-content>
-  <p> Thank you for verifying your email address. You can log in now. </p>
+  <p *ngIf="loading"> Trying to verify your email address </p>
+  <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+  <h3 *ngIf="verified"> Thank you for verifying your email address. You can <a href="../login/login.page.html"> log
+    in </a> now. </h3>
+  <h3 *ngIf="!verified && !loading"> An error occurred: {{error}} </h3>
 </ion-content>
