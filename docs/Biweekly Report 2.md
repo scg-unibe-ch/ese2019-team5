@@ -5,6 +5,7 @@ In the first week after the last biweekly report, we focused on the first milest
 It was a huge effort but we managed to hand in a satisfying implementation in time and we are happy and proud about that.
 
 One day after the deadline, we met to deliberate the past three weeks and to find solutions to problems and improvements in our working organization.
+For example one of the group members likes to work on things that get done in the beginning so she is not that much involved right before the deadline.
 As there was not (and still is not) defined a second milestone, we discussed about how to continue and what to implement next. 
 Also, we set goals for the next two weeks:
 1) Complete Milestone 1:
@@ -30,14 +31,6 @@ But as I feared as soon as a Milestone is over people tend to take it a little b
 communication as well as coding slows down. (But that is my personal view, that was also communicated to
 the rest of the team).
 
-
-
-General: We are glad we did a small retroperspective in the last group meeting, realizing what should be improved. For example one of the group members likes to work on things that get done in the beginning so she is not that much involved right before the deadline. Also we agreed on Milestone 2 to be:
-
-Implement	  -sendMailAgain
--	Forgot Password
--	Update Profile and Change Password
--	Create EventServices and display them as a list
 
 Considering that the next step needs often adjustments to the database it would be very annoying to just go as it was with an database dump that everyone
 has to import in to their own locally hosted database. So I researched how we could avoid this. The problem is, that  there just isn't a free webhost for Postgresql
