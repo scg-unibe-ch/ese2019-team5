@@ -75,7 +75,7 @@ router.get('/confirmation/:token', verifyToken);
  * //TODO button missing forntend warten
  */
 router.get('/sendMailAgain', async (req: Request, res: Response) => {
-    let email: string = req.params.email;
+  let email: string = req.body.email;
     try {
       const userWithoutMail = await dbService.getUserFromEmail(email);
       EmailVerificationServices.sendMailToNewUser(userWithoutMail);

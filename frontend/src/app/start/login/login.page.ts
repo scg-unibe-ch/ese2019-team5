@@ -132,7 +132,8 @@ export class LoginPage implements OnInit {
           text: 'Submit',
           handler: (alertData) => {
             const email = alertData.mail;
-            this.httpClient.post(url, email).subscribe(
+            console.log(email);
+            this.httpClient.post(url, {email}).subscribe(
               () => {
                 this.mailSent = true;
               },
