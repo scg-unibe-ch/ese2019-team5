@@ -7,11 +7,6 @@ import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 import {HttpClient} from "@angular/common/http";
 
-// (Sophie)
-// ToDo: Passwort vergessen => '/login/forgotPassword'
-// Sendet Anfrage an Backend (post mail), wenn Email gut, mail an kunde --> Link auf Seite, wo Passwort geändert werden kann
-// ToDo: SendMail again => 'localhost3000/signUp' (post email-addresse)
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -58,7 +53,10 @@ export class LoginPage implements OnInit {
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
   logIn() {
+    this.isValidCombination = true;
+    this.isVerified = true;
     this.loading = true;
+
     this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
       (success) => {
         this.loading = false;
@@ -80,41 +78,42 @@ export class LoginPage implements OnInit {
 
   }
 
-  //ToDo: Does not work yet
+  //ToDo: Posting to sendMailAgain does not work yet. (Error 404: not found)
+  /**
+   * Called by the user by pushing the correspondent button
+   * Opens a PopUp asking the User to enter his/her email address
+   * Posts the email address to backend demanding it to send a new verification email to the user.
+   */
   sendMailAgain() {
-    console.log('send mail again');
-    const emailAddress = this.emailAddressPopUp('Send verification-email again').then(r => {
-      console.log(emailAddress)
+    let url = 'http://localhost:3000/signup/sendMailAgain';
+    let header = 'Send verification mail again';
+    this.emailPopUp(header, url).then(r => {
     });
-    if (emailAddress != null) {
-      this.httpClient.post('http://localhost3000/signup/sendMailAgain', emailAddress).subscribe(
-        () => {
-          this.mailSent = true
-        },
-        (error) => {
-          this.error = error.message
-        });
-    }
   }
 
-  //ToDo: Does not work yet
+  //ToDo: Posting to forgotPassword does not work yet (Error 404: not found)
+  /**
+   * Called by the user by pushing the correspondent button
+   * Opens a PopUp asking the User to enter his/her email address
+   * Posts the email address to backend demanding it to send a mail with a link to a page
+   * where he/she can change the password.
+   */
   resetPassword() {
-    console.log('Reset Password');
-    const emailAddress = this.emailAddressPopUp('Reset password').then(r => {
+    let header = 'Reset password';
+    let url = 'http://localhost:3000/login/forgotPassword';
+    this.emailPopUp(header, url).then(r => {
     });
-    if (emailAddress != null) {
-      this.httpClient.post('http:/localhost3000/login/forgotPassword', emailAddress).subscribe(
-        () => {
-          this.mailSent = true
-        },
-        (error) => {
-          this.error = error.message
-        });
-    }
   }
 
-  async emailAddressPopUp(header: string) {
-    let result = '';
+
+  /**
+   * Called by sendMailAgain() and resetPassword()
+   * Demands the User to enter his/her email address
+   * If the user confirms, data is posted to backend.
+   * @param header, the title of the popup
+   * @param url, the url where the data should be posted to in backend
+   */
+  async emailPopUp(header: string, url: string) {
     const alert = await this.alertController.create({
       header: header,
       message: 'Please enter your email address: ',
@@ -132,14 +131,18 @@ export class LoginPage implements OnInit {
         {
           text: 'Submit',
           handler: (alertData) => {
-            result = alertData.mail;
+            const email = alertData.mail;
+            this.httpClient.post(url, email).subscribe(
+              () => {
+                this.mailSent = true;
+              },
+              (error) => {
+                this.error = error.message;
+              });
           }
         }]
     });
-
     await alert.present();
-    return result;
-
   }
 
 

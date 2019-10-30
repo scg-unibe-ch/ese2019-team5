@@ -27,6 +27,8 @@ export class AuthService {
     const email = mail;
     const pwhash = password;
 
+    console.log(password);
+
       // Post http request
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
