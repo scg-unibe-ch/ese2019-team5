@@ -43,7 +43,7 @@
       <div class="form-group">
         <ion-item>
           <ion-label> First name  </ion-label>
-          <ion-input formControlName="firstname" type="text" class="form-control" pattern="(A-Z)(a-z)*"></ion-input>
+          <ion-input formControlName="firstname" type="text" class="form-control"></ion-input>
         </ion-item>
         <small [class.ion-hide]="firstname.untouched || firstname.valid"
                style="color: red"> Invalid name </small>
@@ -53,7 +53,7 @@
       <div class="form-group">
         <ion-item>
           <ion-label> Last Name  </ion-label>
-          <ion-input formControlName="lastname" type="text" class="form-control" pattern="(A-Z)(a-z)*"></ion-input>
+          <ion-input formControlName="lastname" type="text" class="form-control"></ion-input>
         </ion-item>
         <small [class.ion-hide]="lastname.untouched || lastname.valid"
                style="color: red"> Invalid name </small>
@@ -70,7 +70,7 @@
           <ion-label> ZIP</ion-label>
           <ion-input formControlName="zip" type="text" class="form-control"></ion-input>
           <ion-label> City</ion-label>
-          <ion-input formControlName="city" type="text" class="form-control" pattern="(A-Z)(a-z)*"></ion-input>
+          <ion-input formControlName="city" type="text" class="form-control"></ion-input>
         </ion-item>
       </div>
 
@@ -102,23 +102,7 @@
   </div>
 
   <div>
-    <!-- If all information isn't valid this message is shown  -->
-    <small
-      [class.ion-hide]="email.valid && password.valid && confirmation.valid &&
-      firstname.valid && lastname.valid &&
-      street.valid && housenumber.valid && zip.valid && city.valid ||
-      loading"
-      style="color: red">
-      You can sign up as soon as all required information is valid. </small>
-    <!-- When all information is valid, the sign up button is shown -->
-    <ion-button color="secondary"
-                [class.ion-hide]="email.invalid || password.invalid || confirmation.invalid ||
-                firstname.invalid || lastname.invalid ||
-                street.invalid || housenumber.invalid || zip.invalid || city.invalid ||
-                loading"
-                (click)="saveUser()">
-      Sign Up
-    </ion-button>
+    <ion-button color="secondary" (click)="saveUser()"> Sign Up</ion-button>
   </div>
 
   <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->
