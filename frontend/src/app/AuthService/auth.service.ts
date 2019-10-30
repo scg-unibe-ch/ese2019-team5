@@ -27,8 +27,6 @@ export class AuthService {
     const email = mail;
     const pwhash = password;
 
-    console.log(password);
-
       // Post http request
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
@@ -38,7 +36,6 @@ export class AuthService {
       }
       /*(error) => {this.handleError(error)}*/
     );
-    console.log("return user: " + this.user);
     return this.user;
     }
 
@@ -55,12 +52,11 @@ export class AuthService {
       return false;
     }
   }
-
   public isLoggedOut() {
     return !this.isLoggedIn();
   }
 
-  //ToDo: getUserId()
+
   public getUserId() {
     return localStorage.getItem('id_token');
   }
@@ -102,10 +98,9 @@ export class AuthService {
     } catch (e) {
       console.log(e);
       }
-   // }
   }
 
-  // Not used but might be used later?
+  // Not used yet but might be used later
   handleError(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent){
