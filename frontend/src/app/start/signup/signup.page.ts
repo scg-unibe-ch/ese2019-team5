@@ -107,8 +107,7 @@ export class SignupPage implements OnInit {
     const city = this.city.value;
     const isVerified = false;
 
-    // post data to the htttpClient
-    //ToDo: Include address data in post-request -> Order?
+    // post data to the httpClient
     this.http.post(this.ROOT_URL,
       {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
       .subscribe(
