@@ -74,11 +74,15 @@ router.get('/confirmation/:token', verifyToken);
  * will resend the email so user can verify and then login
  * //TODO button missing forntend warten
  */
-router.get('/sendMailAgain', async (req: Request, res: Response) => {
-    let email: string = req.params.email;
+router.post('/sendMailAgain', async (req: Request, res: Response) => {
+    let email: string = req.body.email;
+   console.log(email);
     try {
       const userWithoutMail = await dbService.getUserFromEmail(email);
-      EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+      console.log(userWithoutMail);
+      console.log(userWithoutMail.email);
+      await EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+
       res.status(200);
       res.send('The email was sent again please also check your spam folder. Thank you');
     } catch (error) {
