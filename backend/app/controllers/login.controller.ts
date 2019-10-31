@@ -51,7 +51,7 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
   const email = req.body.email;
 
   try {
-    let user: User =await dbService.getUserFromEmail(email); // TODO wird hier Fehler gesendet wenns noch nicht gibt oder email falsch ist ??
+    let user: User =await dbService.getUserFromEmail(email);
     await EmailForgotPWServices.sendMailToUser(user);
 
     res.statusCode = 201;
@@ -83,7 +83,7 @@ const verifyToken = async (req: Request, res: Response) => {
 
   try {
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-    await dbService; //TODO reset Password mit newPWHash
+    await dbService; //TODO reset Password mit newPWHash Cyrill
     res.status(200);
     res.send('Password was successfully changed');
   } catch (err) {

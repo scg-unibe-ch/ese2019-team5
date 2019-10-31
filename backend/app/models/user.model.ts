@@ -12,7 +12,7 @@ export class User {
   isVerified: boolean;
   newUser = false;
   isAdmin = false;
-  isFirm = false;
+  isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie?
   phoneNumber = "null";
 
 

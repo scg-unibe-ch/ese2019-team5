@@ -37,7 +37,7 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-//TODO auf andere HTTP lösen warten bis Frontend dort ist
+
 /**
  * Method used to verify jwt token
  * @param req from HTTP client
@@ -72,19 +72,17 @@ router.get('/confirmation/:token', verifyToken);
 /**
  * Reacts on sendMailAgain events using HTTP Client
  * will resend the email so user can verify and then login
- * //TODO button missing forntend warten
+ *
  */
 router.post('/sendMailAgain', async (req: Request, res: Response) => {
     let email: string = req.body.email;
-   console.log(email);
+
     try {
       const userWithoutMail = await dbService.getUserFromEmail(email);
-      console.log(userWithoutMail);
-      console.log(userWithoutMail.email);
       await EmailVerificationServices.sendMailToNewUser(userWithoutMail);
-
       res.status(200);
       res.send('The email was sent again please also check your spam folder. Thank you');
+
     } catch (error) {
       res.status(404);
       res.send(error + 'unknown email-address. Please check or sign up.');
