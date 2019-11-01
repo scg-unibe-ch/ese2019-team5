@@ -15,10 +15,11 @@ import {StartPage} from './start/start.page';
 import {SignupPage} from './start/signup/signup.page';
 import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 import {UserprofilePage} from "./start/userprofile/userprofile.page";
+import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 
 
 @NgModule({
-  declarations: [AppComponent, StartPage, LoginPage, SignupPage, ConfirmationPage, UserprofilePage],
+  declarations: [AppComponent, StartPage, LoginPage, SignupPage, ConfirmationPage, UpdatePasswordPage, UserprofilePage],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule],
   providers: [

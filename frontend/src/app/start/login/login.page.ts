@@ -53,6 +53,7 @@ export class LoginPage implements OnInit {
    * If an error occurs, the error message is displayed on the bottom of the page.
    */
   logIn() {
+    this.error = '';
     this.isValidCombination = true;
     this.isVerified = true;
     this.loading = true;
