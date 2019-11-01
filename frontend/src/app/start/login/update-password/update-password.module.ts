@@ -7,6 +7,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {UpdatePasswordPage} from './update-password.page';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -21,7 +22,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ResetPasswordPage]
+  declarations: [UpdatePasswordPage]
 })
-export class ResetPasswordPageModule {
+export class PasswordPageModule {
+
 }
