@@ -1,0 +1,200 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px ">
+      <ion-back-button defaultHref="start/userProfile" style="size: 20px"></ion-back-button>
+    </ion-button>
+    <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Create new service</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container fluid">
+    <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px">
+      <ion-title> General Information</ion-title>
+
+      <!-- Category: Required for all kind of services -->
+      <div class="form-group">
+        <ion-list>
+          <ion-item>
+            <ion-label> Type of service</ion-label>
+            <ion-select class="customSelect" placeholder="Select..." formControlName="category">
+              <ion-select-option value="Location"> Event Location</ion-select-option>
+              <ion-select-option value="Gastronomy"> Gastronomy</ion-select-option>
+              <ion-select-option value="Music"> Music</ion-select-option>
+              <ion-select-option value="Entertainment"> Entertainment</ion-select-option>
+              <ion-select-option value="Photographer"> Photography</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </div>
+      <br/>
+
+      <!-- Details for events -->
+      <div *ngIf="category.value != '' ">
+
+        <!-- Title: Required for all services -->
+        <div class="form-group">
+          <ion-item>
+            <ion-label> Title</ion-label>
+            <ion-input class="form-control" type="text" formControlName="title"></ion-input>
+          </ion-item>
+        </div>
+        <br/>
+
+        <!-- Address required for all services-->
+        <div class="form-group">
+          <ion-item>
+            <ion-label> Street</ion-label>
+            <ion-input class="form-control" type="text" formControlName="street"></ion-input>
+            <ion-label> Housenumber</ion-label>
+            <ion-input class="form-control" formControlName="housenumber"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label> ZIP</ion-label>
+            <ion-input class="form-control" type="text" formControlName="zip"></ion-input>
+            <ion-label> City</ion-label>
+            <ion-input class="form-control" type="text" formControlName="city"></ion-input>
+          </ion-item>
+        </div>
+        <br/>
+
+        <!-- Radius: Required for all services except for locations -->
+        <div class="form-group" *ngIf="category.value != 'Location' ">
+          <ion-list>
+            <ion-item>
+              <ion-label> Max. distance</ion-label>
+              <ion-select class="customSelect" formControlName="distance" placeholder="Select...">
+                <ion-select-option value="0" *ngIf="category.value=='Gastronomy'"> 0km</ion-select-option>
+                <ion-select-option value="-5"> 5km</ion-select-option>
+                <ion-select-option value="-10"> 10km</ion-select-option>
+                <ion-select-option value="-25"> 25km</ion-select-option>
+                <ion-select-option value="-50"> 50km</ion-select-option>
+                <ion-select-option value="-100"> 100km</ion-select-option>
+                <ion-select-option value="100+"> > 100km</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+        <br/>
+
+        <!-- Capacity: Required for all services except for photography-->
+        <div class="form-group" *ngIf="category.value != 'Photographer'">
+          <ion-list>
+            <ion-item>
+              <ion-label> Max. number of people served</ion-label>
+              <ion-select class="customSelect" formControlName="capacity" placeholder="Select...">
+                <ion-select-option value="20"> 20</ion-select-option>
+                <ion-select-option value="-50"> 50</ion-select-option>
+                <ion-select-option value="-75"> 75</ion-select-option>
+                <ion-select-option value="-100"> 100</ion-select-option>
+                <ion-select-option value="-150"> 150</ion-select-option>
+                <ion-select-option value="-200"> 200</ion-select-option>
+                <ion-select-option value="200+"> > 200</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <!-- Availability: Required for all services -->
+        <div class="form-group">
+          <ion-item>
+            <ion-label> Availability</ion-label>
+            <ion-select multiple="true" class="customSelect" formControlName="availability" placeholder="Select...">
+              <ion-select-option value="Monday"> Monday</ion-select-option>
+              <ion-select-option value="Tuesday"> Tuesday</ion-select-option>
+              <ion-select-option value="Wednesday"> Wednesday</ion-select-option>
+              <ion-select-option value="Thursday"> Thursday</ion-select-option>
+              <ion-select-option value="Friday"> Friday</ion-select-option>
+              <ion-select-option value="Saturday"> Saturday</ion-select-option>
+              <ion-select-option value="Sunday"> Sunday</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <br/>
+
+        <!-- Standard Price: Required fpr all services but for different values -->
+        <div class="form-group">
+          <ion-item>
+            <ion-label *ngIf="category.value == 'Location'"> Standard Price (CHF)</ion-label>
+            <ion-label *ngIf="category.value == 'Gastronomy'"> Price per Person (CHF)</ion-label>
+            <ion-label *ngIf="category.value != 'Location' && category.value != 'Gastronomy'"> Price per Hour (CHF)
+            </ion-label>
+            <ion-input class="formControl" type="text" formControlName="price"></ion-input>
+          </ion-item>
+        </div>
+        <br/>
+        <br/>
+
+        <ion-title> Specification</ion-title>
+
+        <!-- "Type": Required for Gastronomy, Music and Entertainment but with different values -->
+        <div class="form-group"
+             *ngIf="category.value == 'Gastronomy' || category.value == 'mMsic' || category.value == 'Entertainment'">
+          <ion-list>
+            <ion-item>
+              <ion-label *ngIf="category.value == 'Gastronomy'"> Cuisine</ion-label>
+              <ion-label *ngIf="category.value == 'Music'"> Genre</ion-label>
+              <ion-label *ngIf="category.value == 'Entertainment'"> Show Type</ion-label>
+              <ion-select multiple="true" class="customSelect" placeholder="Select..." formControlName="type">
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="asian"> Asian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="fingerFood"> Finger Food
+                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="greek"> Greek</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="indian"> Indian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="italian"> Italian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="japanese"> Japanese</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="mexican"> Mexican</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="oriental"> Oriental</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="sweets"> Sweets & Dessert
+                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="vegan"> Vegan</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="vegetarian"> Vegetarian
+                </ion-select-option>
+
+
+                <ion-select-option *ngIf="category.value == 'Music'" value="classical"> Classical</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="electro"> Electronic Music
+                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="dj"> DJ</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="folk"> Folk</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="hiphop"> Hip Hop / Rap</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="jazz"> Jazz</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="latin"> Latin</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="oldie"> Golden Oldies</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="pop"> Pop/Rock</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="schlager"> Schlager</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="unplugged"> Unplugged</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="world"> World Music</ion-select-option>
+
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="cabaret"> Cabaret
+                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="comedy"> Comedy</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="dance"> Dance</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="magic"> Magic</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="pyro"> Pyrotechnics
+                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="theatre"> Theatre
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <!-- Specification for all categories: Requirements and Description -->
+        <div>
+          <ion-item>
+            <ion-label> Special Requirements</ion-label>
+            <ion-input type="text" formControlName="requirements"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label> Description (max. 140 characters)</ion-label>
+            <ion-input type="text" formControlName="description"></ion-input>
+          </ion-item>
+          <!--ToDo: Upload pictures-->
+        </div>
+      </div>
+      <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>
+    </form>
+  </div>
+</ion-content>
