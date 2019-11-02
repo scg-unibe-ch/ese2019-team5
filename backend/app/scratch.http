@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "firstname": "Example",
   "lastname": "Miller",
-  "email": "will123459@gmail.com",
+  "email": "yarel.aras@iiron.us",
   "pwhash": -1425372064,
   "zip": 3031,
   "street": "Herestreet",
@@ -13,23 +13,7 @@ Content-Type: application/json
   "city": "Bern"
 }
 
-###
-//GEHT anscheinend.....
-POST http://localhost:3000/login
-Content-Type: application/json
 
-{
-  "email": "will123459@gmail.com",
-  "pwhash": -1425372064
-}
 
-###
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-  "email": "karrar.ichigo@thtt.us",
-  "pwhash": -1425372064
-}
 
 ###

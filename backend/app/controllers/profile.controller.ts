@@ -55,7 +55,7 @@ router.put('/update', async (req: Request, res: Response) => {
       .setPwhash(req.body.pwhash)
       .setIsVerified(req.body.isVerified)
       .setAddress(address)
-      .setIsFirm(false)
+      .setIsFirm(req.body.isFirm)
       .build();
    // const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified, req.body.address, false); //TODO stimmt das mit Frontend überein
     //db.Service.UpdateUser(user); //TODO hier user  machen und nach hinten schicken Cyrill

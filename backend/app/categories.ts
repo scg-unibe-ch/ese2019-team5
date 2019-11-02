@@ -1,4 +1,4 @@
-enum Categories {
+export enum Categories {
  music = "Music",
   location = "Location",
   photographer = "Photographer",

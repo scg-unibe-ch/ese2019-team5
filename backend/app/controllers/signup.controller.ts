@@ -39,6 +39,7 @@ router.post('/', async (req: Request, res: Response) => {
     res.json('sign up success');
 
   } catch (error) {
+    console.log(error.message);
     res.statusCode = 400;
     res.send(error);
 

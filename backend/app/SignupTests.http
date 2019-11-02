@@ -1,3 +1,31 @@
+### Login welches funktioniert
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "kiai.lenard@iiron.us",
+  "pwhash": -1425372064
+}
+
+### Login welches nicht funktioniert weil nicht verified
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "chelsea.giovonni@iiron.us",
+  "pwhash": -1425372064
+}
+###### funktioniert nicht weil passwort falsch
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+"email": "nalan.draper@iiron.us",
+"pwhash": -1425372965
+}
+
+
+###
 # For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
 # paste cURL into the file and request will be converted to HTTP Request format.
 #
@@ -6,6 +34,7 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
+//geht nur mit neuer addresse
 POST http://localhost:3000/signup
 Content-Type: application/json
 
