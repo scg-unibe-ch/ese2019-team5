@@ -42,9 +42,9 @@ export class EmailVerificationServices {
    */
   static async sendMailToNewUser(user: User) {
     let payload = {
-      name: user.firstname,
-      surname: user.lastname,
-      email: user.email,
+      name: user.getFirstname(),
+      surname: user.getLastname(),
+      email: user.getEmail(),
     }
     var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
@@ -59,12 +59,12 @@ export class EmailVerificationServices {
         rejectUnauthorized: false
       }
     });
-    const emailURL = makeToken(payload, user.email);
+    const emailURL = makeToken(payload, user.getEmail());
 // send mail with defined transport object
     try{
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
-        to: user.email,
+        to: user.getEmail(),
         subject: 'E-Mail Verification for your Eventdoo Account',
         html: emailService.getEmailSignUpText(emailURL)
       };

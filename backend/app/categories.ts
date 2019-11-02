@@ -4,5 +4,6 @@ enum Categories {
   photographer = "Photographer",
   gastronomy = "Gastronomy",
   entertainment = "Entertainment",
+  none="none",
 
 }

@@ -2,6 +2,7 @@ import {Address} from "./address.model";
 //import {UserBuilder} from "./userBuilder.model"
 import assert from "assert";
 import {UserBuilder} from "./userBuilder.model";
+import {last} from "rxjs/operators";
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
  export class User {
    private id = -1;
@@ -27,6 +28,25 @@ import {UserBuilder} from "./userBuilder.model";
     this._isFirm=isFirm;
     //this.phoneNumber= phoneNumber;
     }
+
+   public setFirstname (firstname:string){
+     this._firstname= firstname;
+     return this;
+   }
+
+   public getFirstname(): string {
+     return this._firstname;
+
+   }
+
+   public setLastname(lastname:string){
+     this._lastname= lastname;
+     return this;
+   }
+   public getLastname(): string {
+     return this._lastname;
+
+   }
 
    public setEmail (email:string){
      this._email= email;
@@ -64,7 +84,41 @@ import {UserBuilder} from "./userBuilder.model";
 
    }
 
+
+/**
+ * sets the id
+ * @param id
+ */
+ setId(id:number)
+ {
+    this.id = id;
+  }
+
+ setPhoneNumber(phoneNumber: string)
+ {
+    this.phoneNumber = phoneNumber;
+  }
+
+ /**
+ * returns the user element as string //TODO hier addresse auch hin??
+ */
+ toString(): string
+ {
+    return String(this.id) + ' ' + this.getFirstname() + ' ' + this.getLastname() + ' ' + this.getEmail() + ' ' + this.getPwHash();
+  }
+
+ /**
+ * returns the firstname and the lastname as string
+ */
+ toNameString():string
+ {
+    return this.getFirstname() + ' ' + this.getLastname();
+  }
+
+
  }
+
+
 
 
 
