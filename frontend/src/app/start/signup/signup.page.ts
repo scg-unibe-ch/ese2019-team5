@@ -25,7 +25,10 @@ export class SignupPage implements OnInit {
   pw: string;
   loading: boolean;
 
-  constructor(private alertCtrl: AlertController, private formBuilder: FormBuilder, private http: HttpClient) {
+  constructor(
+    private alertCtrl: AlertController,
+    private formBuilder: FormBuilder,
+    private http: HttpClient) {
   }
 
 

@@ -79,7 +79,7 @@ export class LoginPage implements OnInit {
 
   }
 
-  //ToDo: Posting to sendMailAgain does not work yet. (Error 404: not found)
+  //ToDo: Posting to sendMailAgain does not work properly yet.
   /**
    * Called by the user by pushing the correspondent button
    * Opens a PopUp asking the User to enter his/her email address
@@ -92,7 +92,7 @@ export class LoginPage implements OnInit {
     });
   }
 
-  //ToDo: Posting to forgotPassword does not work yet (Error 404: not found)
+  //ToDo: Test/try
   /**
    * Called by the user by pushing the correspondent button
    * Opens a PopUp asking the User to enter his/her email address

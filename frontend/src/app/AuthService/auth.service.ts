@@ -27,6 +27,8 @@ export class AuthService {
     const email = mail;
     const pwhash = password;
 
+    console.log(email + ' | ' + pwhash);
+
       // Post http request
     console.log('Try to log in');
     this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
@@ -82,11 +84,10 @@ export class AuthService {
   // ToDo: Token in localStorage speichern und bei Abfrage holen und decoden
   private setSession(authResult) {
     console.log('Setting session');
-    try {
-      console.log("expIn: " + authResult.token.exp);
-      console.log(authResult.token);
 
-      localStorage.setItem('token', authResult.token);
+    try {
+      console.log(authResult.token);
+      localStorage.setItem('ed_token', authResult.token);
 
       var decoded = jwtDecode(authResult.token);
       console.log(decoded);
