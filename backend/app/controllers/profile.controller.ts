@@ -1,5 +1,7 @@
 import {Request, Response, Router} from "express";
 import {User} from "../models/user.model";
+import {UserBuilder} from "../models/userBuilder.model";
+import {Address} from "../models/address.model";
 
 const router: Router = Router(); // part of express needed
 
@@ -45,7 +47,17 @@ router.put('/', async (req: Request, res: Response) => {
 
 router.put('/update', async (req: Request, res: Response) => {
   try {
-    const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified, req.body.address, false); //TODO stimmt das mit Frontend überein
+    const address:Address= new Address(req.body.street, req.body.housenumber, req.body.zip,req.body.city);
+    const user: User = UserBuilder.user()
+      .setFirstname(req.body.firstname)
+      .setLastname(req.body.lastname)
+      .setEmail(req.body.email)
+      .setPwhash(req.body.pwhash)
+      .setIsVerified(req.body.isVerified)
+      .setAddress(address)
+      .setIsFirm(false)
+      .build();
+   // const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified, req.body.address, false); //TODO stimmt das mit Frontend überein
     //db.Service.UpdateUser(user); //TODO hier user  machen und nach hinten schicken Cyrill
 
     res.send('Profile updated');

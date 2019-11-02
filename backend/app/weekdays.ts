@@ -6,5 +6,6 @@ enum Weekdays {
   Friday = "Friday",
   Saturday = "Saturday",
   Sunday = "Sunday",
+  NoDay= "NoDay",
 
 }

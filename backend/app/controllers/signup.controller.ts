@@ -6,6 +6,7 @@ import {DbServices} from '../services/db.services';
 
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
+import {UserBuilder} from "../models/userBuilder.model";
 
 const router: Router = Router(); // part of express needed
 
@@ -22,7 +23,14 @@ const dbService = new DbServices();
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street,req.body.housenumber, req.body.zip, req.body.city);
   const isVerified: boolean= false;
-  const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, isVerified, address, false);// TODO addresse hier nach pw hash einfügen??
+  const user: User = UserBuilder.user()
+    .setFirstname(req.body.firstname)
+    .setLastname(req.body.lastname)
+    .setEmail(req.body.email)
+    .setPwhash(req.body.pwhash)
+    .setIsVerified(isVerified)
+    .setAddress(address)
+    .build();// TODO addresse hier nach pw hash einfügen??
 
   try {
     await dbService.signUp(user);

@@ -1,28 +1,78 @@
 import {Address} from "./address.model";
+import {User} from "./user.model";
+import {EventService} from "./eventService.model";
+
+const mockAddress: Address = new Address('', 0, 1234, '')
 
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
 export class EventServiceBuilder {
-/*  private providerId: number;
-  private category: Categories;
-  private title: string;
-  private description: string;
-  private availability: Weekdays;
-  private address: Address;
-  private perimeter: string;*/
-/*
+  private _providerId: number;
+  private _category: Categories;
+  private _title: string;
+  private _description: string;
+  private _availability: Weekdays;
+  private _address: Address;
+  private _perimeter: string;
+
 
   constructor() {
-    this.providerId = -1;
-    this.category = null;
-    this.title = '';
-    this.description = '';
-    this.availability = ;
-    this.address = address;
-    this.perimeter = perimeter;
+    this._providerId = -1;
+    this._category = Categories.none;
+    this._title = '';
+    this._description = '';
+    this._availability = Weekdays.NoDay ;
+    this._address = mockAddress;
+    this._perimeter = 'zero km';
 
   }
-*/
+  public static eventService(): EventServiceBuilder{
+    return new EventServiceBuilder();
+  }
+  public setProviderId(providerId: number): EventServiceBuilder {
+    this._providerId = providerId;
+    return this;
+  }
+
+
+  public setTitle(title: string): EventServiceBuilder {
+    this._title = title;
+    return this;
+  }
+
+  public setCategory(category: Categories): EventServiceBuilder {
+    this._category = category;
+    return this;
+  }
+
+  public setDescription(description: string): EventServiceBuilder {
+    this._description= description;
+    return this;
+  }
+
+  public setAvailability(availiability: Weekdays): EventServiceBuilder {
+    this._availability = availiability;
+    return this;
+  }
+
+  public setAddress(address: Address): EventServiceBuilder {
+    this._address = address;
+    return this;
+  }
+
+
+  public setPerimeter(perimeter:string):EventServiceBuilder{
+    this._perimeter= perimeter;
+    return this;
+  }
+
+
+
+  public build(): EventService {
+    let eventService: EventService = new EventService(this._providerId, this._category, this._title, this._description, this._availability, this._address, this._perimeter);
+    return eventService;
+  }
+
 
 
 }

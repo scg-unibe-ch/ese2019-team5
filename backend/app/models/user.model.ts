@@ -1,6 +1,6 @@
 import {Address} from "./address.model";
 //import {UserBuilder} from "./userBuilder.model"
-//import assert from "assert";
+import assert from "assert";
 import {UserBuilder} from "./userBuilder.model";
 import {last} from "rxjs/operators";
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
