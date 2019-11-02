@@ -15,7 +15,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {}
 
   /**
-   * Called by LoginPage
+   * Called by {@link LoginPage}
    * Sends a request to the backend
    * If the request was valid, a User object with a JWT-Session-Token is returned and is handled in setSession.
    * Otherwise, an error occurs (handled by LoginPage)
@@ -41,37 +41,40 @@ export class AuthService {
     return this.user;
     }
 
-
-
-  /**
-   * Returns whether a user is already logged in by
-   * checking whether there is a session token and whether it is expired.
-   */
-  public isLoggedIn() {
-    try {
-      return moment().isBefore(this.getExpiration());
-    } catch (e) {
-      return false;
-    }
-  }
-  public isLoggedOut() {
-    return !this.isLoggedIn();
-  }
-
-
-  public getUserId() {
-    return localStorage.getItem('id_token');
-  }
-
-
   /**
    * Called by the logout button on any page
    * Deletes all stored authentication data from the local storage
    */
   logout() {
     // remove user from local storage to log out
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+    localStorage.removeItem('ed_token');
+  }
+
+
+
+  /**
+   * Returns whether a user is already logged in by
+   * checking whether there is a session token and whether it can be decoded.
+   */
+  public isLoggedIn() {
+    try {
+      const token = localStorage.getItem('ed_token');
+      const decoded = jwtDecode(token);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  public isLoggedOut() {
+    return !this.isLoggedIn();
+  }
+
+
+  public getUserId() {
+    const token = localStorage.getItem('ed_token');
+    const decoded = jwtDecode(token);
+    return decoded.data1;
   }
 
 
@@ -81,20 +84,12 @@ export class AuthService {
    * Stores the user's ID Token and it's expiration stamp in the user's local storage
    * @param authResult
    */
-  // ToDo: Token in localStorage speichern und bei Abfrage holen und decoden
   private setSession(authResult) {
     console.log('Setting session');
 
     try {
       console.log(authResult.token);
       localStorage.setItem('ed_token', authResult.token);
-
-      var decoded = jwtDecode(authResult.token);
-      console.log(decoded);
-      const expiresAt = moment().add(decoded.exp);
-      console.log("expAt: " + expiresAt);
-      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-      localStorage.setItem('id_token', authResult.user.id);
       console.log('Setting session successful');
     } catch (e) {
       console.log(e);
