@@ -16,7 +16,7 @@ router.post('/add/', async(req: Request, res: Response) => {
       .setCategory(req.body.category)
       .setTitle( req.body.title)
       .setDescription(req.body.description)
-      .setAvailability(req.body.availabilit)
+      .setAvailability(req.body.availability)
       .setAddress(req.body.address)
       .setPerimeter(req.body.perimeter)
       .build();

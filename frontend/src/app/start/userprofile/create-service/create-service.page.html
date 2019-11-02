@@ -1,15 +1,21 @@
+<!-- Header -->
+<!-- Contains (f.l.t.r.) -->
+<!-- Back button navigating back to UserProfilePage -->
+<!-- Page title -->
 <ion-header>
   <ion-toolbar color="primary">
     <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px ">
-      <ion-back-button defaultHref="start/userProfile" style="size: 20px"></ion-back-button>
+      <ion-back-button defaultHref="start/userprofile" style="size: 20px"></ion-back-button>
     </ion-button>
     <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Create new service</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<!-- Content -->
+<!-- Contains a form asking for all important information to create a new Service -->
 <ion-content>
   <div class="container fluid">
-    <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px">
+    <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> General Information</ion-title>
 
       <!-- Category: Required for all kind of services -->
@@ -47,11 +53,11 @@
             <ion-label> Street</ion-label>
             <ion-input class="form-control" type="text" formControlName="street"></ion-input>
             <ion-label> Housenumber</ion-label>
-            <ion-input class="form-control" formControlName="housenumber"></ion-input>
+            <ion-input class="form-control" formControlName="housenumber" type="number"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label> ZIP</ion-label>
-            <ion-input class="form-control" type="text" formControlName="zip"></ion-input>
+            <ion-input class="form-control" type="number" formControlName="zip"></ion-input>
             <ion-label> City</ion-label>
             <ion-input class="form-control" type="text" formControlName="city"></ion-input>
           </ion-item>
@@ -129,7 +135,7 @@
 
         <!-- "Type": Required for Gastronomy, Music and Entertainment but with different values -->
         <div class="form-group"
-             *ngIf="category.value == 'Gastronomy' || category.value == 'mMsic' || category.value == 'Entertainment'">
+             *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment'">
           <ion-list>
             <ion-item>
               <ion-label *ngIf="category.value == 'Gastronomy'"> Cuisine</ion-label>
@@ -193,8 +199,20 @@
           </ion-item>
           <!--ToDo: Upload pictures-->
         </div>
+
+        <!-- Button to submit the form -->
+        <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>
       </div>
-      <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>
     </form>
   </div>
+
+  <!-- User feedback  -->
+  <div *ngIf="loading">
+    <!-- Loading animation -->
+    <p> Creating service... </p>
+    <ion-progress-bar color="tertiary" type="indeterminate"></ion-progress-bar>
+    <!-- Handling errors -->
+    <p *ngIf="error"> An error occurred: {{error}}. Please try again.</p>
+  </div>
+
 </ion-content>
