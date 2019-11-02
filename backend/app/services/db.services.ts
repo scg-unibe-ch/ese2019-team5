@@ -101,7 +101,7 @@ export class DbServices {
       await localClient.connect();
       var id = -1;
       try {
-        if(await this.checkIfMailIsUniqueDB(user.email, localClient)){
+        if(await this.checkIfMailIsUniqueDB(user.getEmail(), localClient)){
           id = Number(await this.creatUserInDB(user, localClient));
           user.setId(id);
         } else {
@@ -148,8 +148,8 @@ export class DbServices {
 
       //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
-      const addressId = Number(await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client));
-      const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.firstname, user.lastname, user.email, user.pwhash, user.isVerified, addressId, user.isFirm]);
+      const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
+      const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.getFirstname(), user.getLastname(), user.getEmail(), user.getPwHash(), user.getIsVerified(), addressId, user.getIsFirm()]);
 
       var id = -1;
       for await (const row of stream){
@@ -203,7 +203,7 @@ export class DbServices {
    * @param password
    */
     private checkIfPasswordCorrect(user: User, password: string): boolean {
-      return password == user.pwhash;
+      return password == user.getPwHash();
     }
 
   /**
@@ -211,7 +211,7 @@ export class DbServices {
    * @param user
    */
   private isUserVerified(user: User): boolean {
-        return user.isVerified;
+        return user.getIsVerified();
     }
 
     /**

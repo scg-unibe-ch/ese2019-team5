@@ -1,11 +1,11 @@
 import {Address} from "./address.model";
 //import {UserBuilder} from "./userBuilder.model"
-import assert from "assert";
+//import assert from "assert";
 import {UserBuilder} from "./userBuilder.model";
 import {last} from "rxjs/operators";
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
  export class User {
-   private id = -1;
+  id = -1;
    private _firstname: string;
    private _lastname: string;
    private _email: string;
@@ -73,6 +73,15 @@ import {last} from "rxjs/operators";
 
    public getIsFirm(): boolean {
      return this._isFirm;
+
+   }
+   public setIsVerified (isVerified:boolean){
+     this._isVerified= isVerified;
+     return this;
+   }
+
+   public getIsVerified(): boolean {
+     return this._isVerified;
 
    }
    public setAddress (address:Address){
