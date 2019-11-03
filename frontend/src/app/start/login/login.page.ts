@@ -12,6 +12,7 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
+
 /**
  * LoginPage
  * Asks an (existing) user for his authentication data (e-mail, password)
@@ -92,7 +93,7 @@ export class LoginPage implements OnInit {
     });
   }
 
-  //ToDo: Test/try
+  //ToDo: Does not work yet. Email is not sent.
   /**
    * Called by the user by pushing the correspondent button
    * Opens a PopUp asking the User to enter his/her email address

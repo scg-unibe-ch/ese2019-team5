@@ -71,6 +71,9 @@ export class AuthService {
   }
 
 
+  /**
+   * Returns the ID of the user who's currently logged in.
+   */
   public getUserId() {
     const token = localStorage.getItem('ed_token');
     const decoded = jwtDecode(token);
@@ -79,7 +82,7 @@ export class AuthService {
 
 
   /**
-   * Called by method login()
+   * Called by method {@link login}
    * Decodes the session token returned by backend
    * Stores the user's ID Token and it's expiration stamp in the user's local storage
    * @param authResult
@@ -108,6 +111,7 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
+  // Not used anymore
   private getExpiration() {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
