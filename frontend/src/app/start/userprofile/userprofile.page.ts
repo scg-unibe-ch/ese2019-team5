@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AlertController} from "@ionic/angular";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {User} from "../../../../../backend/app/models/user.model";
 import {Address} from "../../../../../backend/app/models/address.model";
@@ -18,7 +18,7 @@ export class UserprofilePage implements OnInit {
      ToDo: read changed input
 
    */
-  readonly ROOT_URL = 'http://localhost:3000/profile';
+  readonly ROOT_URL = 'http://localhost:3000/userprofile';
   private userId: number;
 
   private firstname: string;
@@ -72,4 +72,89 @@ export class UserprofilePage implements OnInit {
       console.log(e);
     }
   }
+
+async showUpdateField(){
+  const inputField = await this.alertCtrl.create({
+      header: 'Edit my Info',
+      inputs: [
+        {
+          name: 'firstname',
+          placeholder: 'Firstname',
+          type: "text"
+        },
+        {
+          name: 'lastname',
+          placeholder: 'Lastname',
+          type: "text"
+        },
+        {
+          name: 'street',
+          placeholder: 'Street',
+          type: "text"
+        },
+        {
+          name: 'housenumber',
+          placeholder: 'Number',
+          type: "number"
+        },
+        {
+          name: 'zip',
+          placeholder: 'Zip',
+          type: "number"
+        },
+        {
+          name: 'city',
+          placeholder: 'City',
+          type: "text"
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            if(data.firstname.length>0
+            && data.lastname.length>0
+            && data.street.length>0
+            && data.housenumber.valueOf>0
+            && data.housenumber.matches("[0-9]+")
+              && data.zip.length==4
+            && data.zip.matches("[0-9]+")
+            && data.city.length >0) {
+              this.firstname = data.firstname;
+              this.lastname = data.lastname;
+              this.street = data.street;
+              this.housenumber = data.housenumber;
+              this.zip = data.zip;
+              this.city = data.city;
+              this.http.put(this.ROOT_URL, {
+                firstname: this.firstname,
+                lastname: this.lastname,
+                street: this.street,
+                housenumber: this.housenumber,
+                zip: this.zip,
+                city: this.city
+              })
+                .subscribe(
+                  (success) => {
+                    this.httpGetSuccess = true;
+                  },
+                  (error) => {
+                    this.httpGetSuccess = false;
+                  }
+                );
+            }
+              else{
+                this.httpGetSuccess = false;
+              }
+            }
+        }
+      ]
+    });
+ await inputField.present();
+  }
+
 }

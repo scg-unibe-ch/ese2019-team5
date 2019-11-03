@@ -22,10 +22,10 @@
     <ion-row>
       <p>Address: {{street}} {{housenumber}} ; {{city}} {{zip}}</p>
     </ion-row>
-    <ion-button>Change</ion-button>
+
   </ion-grid>
   <ion-button [routerLink]="['createService']">Create your service offer</ion-button>
-
+  <ion-button color="secondary" (click)="showUpdateField()">Edit Profile</ion-button>
   <ion-list>
     <!-- Use service component here with NgFor-->
   </ion-list>
