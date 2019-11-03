@@ -3,17 +3,15 @@ import {User} from "../models/user.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
 
-
-
-
 const router: Router = Router(); // part of express needed
 
 
-router.get('/', async (req: Request, res: Response) => {
-
-    console.log("get here jhah");
-    let userId= req.params.userId;
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    console.log('huehuehue');
+    const userId = req.params.id;
     let user: User;
+
     console.log(userId);
     // let user: User=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);
@@ -24,7 +22,7 @@ router.get('/', async (req: Request, res: Response) => {
       'EventServicesList': eventServiceList
 
     }*/
-try{
+
     //Version alles einzeln
 /*   const firstname: string= user.getFirstname();
     const lastname: string= user.getLastname();
@@ -97,4 +95,4 @@ res.send(error);
 });
 
 
-export const ProfileController: Router = router;
+export const UserprofileController: Router = router;
