@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AlertController} from "@ionic/angular";
 import {FormBuilder, Validators} from "@angular/forms";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {User} from "../../../../../backend/app/models/user.model";
 import {Address} from "../../../../../backend/app/models/address.model";
 import {AuthService} from "../../AuthService/auth.service";
@@ -48,9 +48,9 @@ export class UserprofilePage implements OnInit {
   getUserData(){
     try {
       this.userId = this.authservice.getUserId();
-      let headers = new HttpHeaders();
-      headers.append("userId", this.userId.toString());
-      this.http.get(this.ROOT_URL, {headers: headers})
+      let params = new HttpParams();
+      params.append("userId", this.userId.toString());
+      this.http.get(this.ROOT_URL, {params: params})
         .subscribe(
           (user:User)=> {
             this.user= user;
