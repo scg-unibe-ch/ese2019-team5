@@ -95,4 +95,4 @@ res.send(error);
 });
 
 
-export const UserprofileController: Router = router;
+export const ProfileController: Router = router;
