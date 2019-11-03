@@ -48,4 +48,4 @@ router.get('/update', async (req:Request, res: Response)=>{
 
 
 
-export const EventServiceController: Router = router;
+export const EventserviceController: Router = router;

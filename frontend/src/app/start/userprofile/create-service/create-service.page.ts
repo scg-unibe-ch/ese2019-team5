@@ -130,7 +130,7 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements;
       const description = this.description;
 
-      this.http.post('http://localhost:3000/eventservice/add/',
+      this.http.post('http://localhost:3000/eventservice/add',
         {
           providerId, category, title, street, housenumber, zip, city, capacity,
           availability, price, type, requirements, description

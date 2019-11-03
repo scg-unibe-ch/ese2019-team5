@@ -39,7 +39,7 @@ export class UpdatePasswordPage implements OnInit {
       if (this.password.match(this.confirmation)) {
         this.loading = true;
         const password = HashService.hashPassword(this.password);
-        this.httpClient.post('http://localhost:3000/login/resetPassword/' + this.token, {password}).subscribe(
+        this.httpClient.post('http://localhost:3000/login/resetPassword' + this.token, {password}).subscribe(
           () => {
             this.setPassword = true;
             this.loading = false;
