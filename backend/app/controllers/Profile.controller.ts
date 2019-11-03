@@ -8,7 +8,7 @@ const router: Router = Router(); // part of express needed
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    console.log('huehuehue');
+
     const userId = req.params.id;
     let user: User;
 

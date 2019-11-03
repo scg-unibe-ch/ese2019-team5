@@ -88,3 +88,4 @@ client.test("Send mail again normal  ", function() {
 %}
 
 ###
+//TODO confirmation token tests fehlen... aber zuerst bug fixen

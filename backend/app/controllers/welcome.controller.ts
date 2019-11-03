@@ -1,4 +1,4 @@
-import {Router, Request, Response} from 'express';
+/*import {Router, Request, Response} from 'express';
 
 
 const router: Router = Router();
@@ -15,4 +15,4 @@ router.get('/:name', async (req: Request, res: Response) => {
 });
 
 
-export const WelcomeController: Router = router;
+export const WelcomeController: Router = router;*/
