@@ -46,7 +46,7 @@ export class CreateServicePage implements OnInit {
     title: ['', [Validators.required, Validators.maxLength(30)]],
     street: ['', Validators.required],
     housenumber: ['', [Validators.required, Validators.pattern('[1-9]*')]],
-    zip: ['', [Validators.required, Validators.pattern('[1-9][1-9][1-9][1-9]')]],
+    zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
     city: ['', Validators.required],
     distance: ['0', Validators.required],
     capacity: ['200+', Validators.required],
@@ -115,32 +115,52 @@ export class CreateServicePage implements OnInit {
 
     this.loading = true;
     if (this.validateInput()) {
+      console.log('Input is valid');
       this.getAvailability();
-      const providerId = this.authService.getUserId();
-      const category = this.setCategory();
-      const title = this.title.value;
-      const street = this.street.value;
-      const housenumber = this.housenumber.value;
-      const zip = this.zip.value;
-      const city = this.city.value;
-      const capacity = this.capacity.value;
-      const availability = this.weekdays;
-      const price = this.price.value;
-      const type = this.setType();
-      const requirements = this.requirements;
-      const description = this.description;
+      console.log(this.weekdays);
 
-      this.http.post('http://localhost:3000/eventservice/add/',
+      const providerId = this.authService.getUserId();
+      console.log(providerId);
+      const category = this.setCategory();
+      console.log(category);
+      const title = this.title.value;
+      console.log(title);
+      const street = this.street.value;
+      console.log(street);
+      const housenumber = this.housenumber.value;
+      console.log(housenumber);
+      const zip = this.zip.value;
+      console.log(zip);
+      const city = this.city.value;
+      console.log(city);
+      const capacity = this.capacity.value;
+      console.log(capacity);
+      const availability = this.weekdays;
+      console.log(availability);
+      const price = this.price.value;
+      console.log(price);
+      const type = this.setType();
+      console.log(type);
+      const requirements = this.requirements.value;
+      console.log(requirements);
+      const description = this.description.value;
+      console.log(description);
+
+      console.log('Params set. Starting http request');
+
+      this.http.post('http://localhost:3000/eventservice/add',
         {
           providerId, category, title, street, housenumber, zip, city, capacity,
           availability, price, type, requirements, description
         }).subscribe(
         () => {
+          console.log('success');
           this.loading = false;
           this.ConfirmationPopUp().then(r => {
           });
         },
         (error) => {
+          console.log('error');
           this.loading = false;
           this.error = error.message;
         });
@@ -225,8 +245,10 @@ export class CreateServicePage implements OnInit {
    * Pushes {@link Weekdays} to the weekdays Array according to the input
    */
   private getAvailability() {
+    console.log("Starting weekdays");
     // remove "noDay"
     this.weekdays.pop();
+
 
     if (this.availability.value.toString().includes('Monday'))
       this.weekdays.push(Weekdays.Monday);
@@ -242,6 +264,8 @@ export class CreateServicePage implements OnInit {
       this.weekdays.push(Weekdays.Saturday);
     if (this.availability.value.toString().includes('Sunday'))
       this.weekdays.push(Weekdays.Sunday);
+
+    console.log("Weekdays is set");
   }
 
   /**
@@ -260,11 +284,11 @@ export class CreateServicePage implements OnInit {
     if (this.price.value == '')
       this.error += 'Standard price missing \n';
 
-    if (this.error == '') {
-      return true;
-    } else {
+    if (this.error) {
       this.loading = false;
       return false;
+    } else {
+      return true;
     }
   }
 
