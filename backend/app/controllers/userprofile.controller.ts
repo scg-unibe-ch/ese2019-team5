@@ -6,10 +6,11 @@ import {Address} from "../models/address.model";
 const router: Router = Router(); // part of express needed
 
 
-router.put('/', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    let id: number= req.body.id;
+    let userId: number= req.body.userId;
     let user: User;
+    console.log(userId);
     // let user: User=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);
 
@@ -53,7 +54,7 @@ router.put('/update', async (req: Request, res: Response) => {
       .setLastname(req.body.lastname)
       .setEmail(req.body.email)
       .setPwhash(req.body.pwhash)
-      .setIsVerified(req.body.isVerified)
+      .setIsVerified(true)
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
       .build();
@@ -92,4 +93,4 @@ res.send(error);
 });
 
 
-export const ProfileController: Router = router;
+export const UserprofileController: Router = router;
