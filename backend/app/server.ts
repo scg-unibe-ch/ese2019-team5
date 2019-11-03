@@ -4,7 +4,7 @@ import exphbs from 'express-handlebars';
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
 import {Sequelize} from 'sequelize-typescript';
-import {SignupController, WelcomeController,SqlTestController,LoginController, UserprofileController,EventServiceController} from './controllers';
+import {SignupController, WelcomeController,SqlTestController,LoginController, ProfileController,EventServiceController} from './controllers';
 
 
 
@@ -52,7 +52,7 @@ app.use('/welcome', WelcomeController);
 app.use('/signup', SignupController);
 app.use('/sqlTest', SqlTestController);
 app.use('/login', LoginController);
-app.use('/profile', UserprofileController);
+app.use('/profile', ProfileController);
 app.use('/eventservice', EventServiceController);
 
 

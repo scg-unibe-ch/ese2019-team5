@@ -6,7 +6,11 @@ Content-Type: application/json
   "email": "kiai.lenard@iiron.us",
   "pwhash": -1425372064
 }
-
+> {%
+client.test("Login works", function() {
+  client.assert(response.status === 200, "Response status is 200");
+});
+%}
 
 ### Login welches nicht funktioniert weil nicht verified
 POST http://localhost:3000/login
@@ -16,6 +20,11 @@ Content-Type: application/json
   "email": "chelsea.giovonni@iiron.us",
   "pwhash": -1425372064
 }
+> {%
+client.test("Login works not because not verified", function() {
+  client.assert(response.status === 200, "Response status is 200");
+});
+%}
 ###### funktioniert nicht weil passwort falsch
 POST http://localhost:3000/login
 Content-Type: application/json
@@ -24,4 +33,10 @@ Content-Type: application/json
 "email": "nalan.draper@iiron.us",
 "pwhash": -1425372965
 }
+
+> {%
+client.test("Login works", function() {
+  client.assert(response.status === 200, "Response status is 200");
+});
+%}
 

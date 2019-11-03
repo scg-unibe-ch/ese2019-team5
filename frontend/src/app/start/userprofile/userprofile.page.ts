@@ -18,7 +18,7 @@ export class UserprofilePage implements OnInit {
      ToDo: read changed input
 
    */
-  readonly ROOT_URL = 'http://localhost:3000/userprofile';
+  readonly ROOT_URL = 'http://localhost:3000/profile';
   private userId: number;
 
   private firstname: string;
@@ -49,7 +49,7 @@ export class UserprofilePage implements OnInit {
     try {
       this.userId = this.authservice.getUserId();
       let params = new HttpParams();
-      params.append("userId", this.userId.toString());
+      params.append('userId', this.userId.toString());
       this.http.get(this.ROOT_URL, {params: params})
         .subscribe(
           (user:User)=> {
