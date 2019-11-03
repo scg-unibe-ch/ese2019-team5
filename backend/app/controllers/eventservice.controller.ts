@@ -10,7 +10,7 @@ const router: Router = Router(); // part of express needed
  * creates an Address and an EventService from the giben requestbody and adds it to the database
  */
 router.post('/add', async(req: Request, res: Response) => {
-  console.log('Got to sphie');
+
     const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const eventService: EventService = EventServiceBuilder.eventService()
       .setProviderId(req.body.providerId)

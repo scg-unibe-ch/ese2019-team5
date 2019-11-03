@@ -1,31 +1,3 @@
-### Login welches funktioniert
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-  "email": "kiai.lenard@iiron.us",
-  "pwhash": -1425372064
-}
-
-
-### Login welches nicht funktioniert weil nicht verified
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-  "email": "chelsea.giovonni@iiron.us",
-  "pwhash": -1425372064
-}
-###### funktioniert nicht weil passwort falsch
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-"email": "nalan.draper@iiron.us",
-"pwhash": -1425372965
-}
-
-
 ###
 # For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
 # paste cURL into the file and request will be converted to HTTP Request format.
@@ -51,5 +23,68 @@ Content-Type: application/json
   "isVerified": false
 }
 
+> {%
+client.test("Sign up normal ", function() {
+  client.assert(response.status === 201, "Response status is 201");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
 ###
 
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+  "firstname": "Example",
+  "lastname": "Miller",
+  "email": "will123459@gmail.com",
+  "pwhash": -1425372064,
+  "zip": 3031,
+  "street": "Herestreet",
+  "housenumber": 11,
+  "city": "Bern",
+  "isVerified": false
+}
+
+> {%
+client.test("Sign up with same email address  ", function() {
+  client.assert(response.status === 400, "Response status is 400");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST http://localhost:3000/signup/sendMailAgain
+Content-Type: application/json
+
+{
+  "email": "will123459@gmail.com"
+
+}
+
+> {%
+client.test("Send mail again normal  ", function() {
+  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+
+###
+POST http://localhost:3000/signup/sendMailAgain
+Content-Type: application/json
+
+{
+  "email": "will123459dd@gmail.com"
+
+}
+
+> {%
+client.test("Send mail again normal  ", function() {
+  client.assert(response.status === 404, "Response status is 404");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

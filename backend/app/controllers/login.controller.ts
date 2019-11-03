@@ -83,6 +83,7 @@ const verifyToken = async (req: Request, res: Response) => {
 
   try {
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
+    console.log(decoded);
     await dbService; //TODO reset Password mit newPWHash Cyrill
     res.status(200);
     res.send('Password was successfully changed');
