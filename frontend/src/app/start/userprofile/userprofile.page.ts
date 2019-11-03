@@ -18,7 +18,7 @@ export class UserprofilePage implements OnInit {
      ToDo: read changed input
 
    */
-  readonly ROOT_URL = 'http://localhost:3000/userprofile';
+  readonly ROOT_URL = 'http://localhost:3000/profile/';
   private userId: number;
 
   private firstname: string;
@@ -48,9 +48,9 @@ export class UserprofilePage implements OnInit {
   getUserData(){
     try {
       this.userId = this.authservice.getUserId();
-      let params = new HttpParams();
-      params.append("userId", this.userId.toString());
-      this.http.get(this.ROOT_URL, {params: params})
+      //let params = new HttpParams({userId: '' + this.userId});
+     // params.append("userId", this.userId.toString());
+      this.http.get(this.ROOT_URL + this.userId)
         .subscribe(
           (user:User)=> {
             this.user= user;
@@ -130,7 +130,7 @@ async showUpdateField(){
               this.housenumber = data.housenumber;
               this.zip = data.zip;
               this.city = data.city;
-              this.http.put(this.ROOT_URL, {
+              this.http.put(this.ROOT_URL+'/update', {
                 firstname: this.firstname,
                 lastname: this.lastname,
                 street: this.street,
