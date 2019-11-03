@@ -10,8 +10,8 @@ router.put('/', async (req: Request, res: Response) => {
   try {
     let id: number= req.body.id;
     let user: User;
-    //user=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
-    //All eventServices=db. Service.GetAllEvents(id);
+    // let user: User=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
+    //All let eventServices: EventService []=db. Service.GetAllEvents(id);
 
     //Version nicht alles einzeln
     /*const userDataAndServices= {
@@ -21,11 +21,11 @@ router.put('/', async (req: Request, res: Response) => {
     }*/
 
     //Version alles einzeln
-/*   const firstname: string= user.firstname;
-    const lastname: string= user.lastname;
-    const email: string= user.email;
-    const address= user.address;
-    const isFirm: boolean= user.isFirm;
+/*   const firstname: string= user.getFirstname();
+    const lastname: string= user.getLastname();
+    const email: string= user.getEmail();
+    const address= user.getAddress();
+    const isFirm: boolean= user.getIsFirm();
    const userDataAndServices= {
     'firstname': firstname,
      'lastname': lastname,
@@ -57,7 +57,14 @@ router.put('/update', async (req: Request, res: Response) => {
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
       .build();
-   // const user = new User(req.body.firstname, req.body.lastname, req.body.email, req.body.pwhash, req.body.isVerified, req.body.address, false); //TODO stimmt das mit Frontend überein
+
+    if (req.body.phoneNumber!=null){
+      user.setPhoneNumber(req.body.phoneNumber);
+    }
+    if (req.body.firmname!=null){
+      user.setFirmname(req.body.firmname);
+    }
+
     //db.Service.UpdateUser(user); //TODO hier user  machen und nach hinten schicken Cyrill
 
     res.send('Profile updated');
@@ -73,10 +80,14 @@ router.put('/update', async (req: Request, res: Response) => {
 
 router.put( '/changepassword', async (req: Request, res: Response)=>{
   try { //TODO bekomme ich neues und altes Passwort nach hinten geschickt, sende sie an DB diese ändert sie und Löse noch eine Mail aus?
+   // let user: User=db.Service.GetUserFromId(id);
 
+    res.send('Password has changed');
+    res.statusCode=202;
   }
   catch (error) {
-
+res.statusCode=400;
+res.send(error);
   }
 });
 

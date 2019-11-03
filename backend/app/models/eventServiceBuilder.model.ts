@@ -1,6 +1,7 @@
 import {Address} from "./address.model";
-import {User} from "./user.model";
 import {EventService} from "./eventService.model";
+import {Categories} from "../categories";
+import {Weekdays} from "../weekdays";
 
 const mockAddress: Address = new Address('', 0, 1234, '')
 
@@ -11,17 +12,18 @@ export class EventServiceBuilder {
   private _category: Categories;
   private _title: string;
   private _description: string;
-  private _availability: Weekdays;
+  private _availability: Weekdays[];
   private _address: Address;
   private _perimeter: string;
 
 
   constructor() {
+    let availability: Weekdays[]= [Weekdays.NoDay];
     this._providerId = -1;
     this._category = Categories.none;
     this._title = '';
     this._description = '';
-    this._availability = Weekdays.NoDay ;
+    this._availability = availability ;
     this._address = mockAddress;
     this._perimeter = 'zero km';
 
@@ -50,7 +52,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setAvailability(availiability: Weekdays): EventServiceBuilder {
+  public setAvailability(availiability: Weekdays[]): EventServiceBuilder {
     this._availability = availiability;
     return this;
   }

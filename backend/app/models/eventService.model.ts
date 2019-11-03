@@ -1,19 +1,23 @@
 import {Address} from "./address.model";
 import {User} from "./user.model";
 import {EventServiceBuilder} from "./eventServiceBuilder.model";
+import {Categories} from "../categories";
+import {Weekdays} from "../weekdays";
 
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
 export class EventService {
+   private serviceId: number= -1;
+  subtype:string= '';
   private _providerId:number;
   private _category: Categories;
   private _title: string;
   private _description: string;
-  private _availability: Weekdays;
+  private _availability: Weekdays[];
   private _address: Address;
   private _perimeter: string;
 
-  constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays,address: Address, perimeter : string){
+  constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays[],address: Address, perimeter : string){
     this._providerId= providerId;
     this._category = category;
     this._title= title;
@@ -64,11 +68,11 @@ export class EventService {
 
   }
 
-  public setAvailability(availiability: Weekdays) {
+  public setAvailability(availiability: Weekdays[]) {
     this._availability = availiability;
     return this;
   }
-  public getAvailability():Weekdays{
+  public getAvailability():Weekdays[]{
     return this._availability;
 
   }
@@ -93,6 +97,13 @@ export class EventService {
 
   }
 
+  public setSubtype(subtype:string){
+    this.subtype=subtype;
+  }
+
+  public setServiceId(serviceId: number){
+    this.serviceId=serviceId;
+  }
 
 
 
