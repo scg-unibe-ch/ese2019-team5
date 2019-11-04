@@ -68,7 +68,7 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
 //TODO irgendwie sicherstellen, dass user nicht einfach so auf passwort zurücksetzen seite kommen kann
 const verifyToken = async (req: Request, res: Response) => {
   try {
-  const tokenUrl = req.url;
+  const tokenUrl = req.body.url;
   const newPWhash= req.body.newPwHash;
 
   const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
