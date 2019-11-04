@@ -53,7 +53,7 @@ router.post('/', async (req: Request, res: Response) => {
  * @param res answer to client that verifiyng token worked and therefore user is no verified or error
  */
 const verifyToken = async (req: Request, res: Response) => {
-  const tokenUrl = req.url;
+  const tokenUrl = req.body.url;
   const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
   const verifyOptions = {
