@@ -3,7 +3,7 @@ import {EventService} from "./eventService.model";
 import {Categories} from "../categories";
 import {Weekdays} from "../weekdays";
 
-const mockAddress: Address = new Address('', 0, 1234, '')
+const mockAddress: Address = new Address('', 0, 1234, '');
 
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen

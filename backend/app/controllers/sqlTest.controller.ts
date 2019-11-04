@@ -1,9 +1,14 @@
 // this is a test file to test the database connection and the functions of db.service.ts while developing
 
-import {Router, Request, Response} from 'express';
+import {Request, Response, Router} from 'express';
 import {SqlResult} from '../models/sqlresult.model';
 import {DbServices} from '../services/db.services';
 import {User} from '../models/user.model';
+import {FileHandlerService} from "../services/fileHandler.service";
+import {EventService} from "../models/eventService.model";
+import {Categories} from "../categories";
+import {Weekdays} from "../weekdays";
+import {Address} from "../models/address.model";
 
 
 const router: Router = Router();
@@ -118,6 +123,32 @@ router.get('/tryMakeUserVerified/:z', async(req: Request, res: Response) => {
     res.statusCode = 200;
     res.send(e.msg);
   }
+});
+
+router.get("/testID/:z", async(req: Request, res: Response) => {
+  const fileHander = new FileHandlerService();
+  fileHander.test(4);
+  res.statusCode = 200;
+  res.send("abc");
+});
+
+router.get("/tryService/:z", async(req: Request, res: Response) => {
+  const w:Weekdays[] = [];
+  w.push(Weekdays.Friday);
+  w.push(Weekdays.Monday);
+  const add = new Address("Ischlag",64,3303,"Jegenstorf");
+  const eServ = new EventService(45,Categories.photographer, "test", "Testing",w,add,"abc");
+  try{
+    await dbService.addEventService(eServ);
+    res.statusCode = 200;
+    res.send("abc");
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("fail");
+  }
+
+
 });
 
 export const SqlTestController: Router = router;

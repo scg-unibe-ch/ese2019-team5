@@ -2,9 +2,10 @@ import {Request, Response, Router} from "express";
 import {Address} from "../models/address.model";
 import {EventService} from "../models/eventService.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
+import {DbServices} from "../services/db.services";
 
 const router: Router = Router(); // part of express needed
-
+const dbService = new DbServices();
 
 /**
  * creates an Address and an EventService from the giben requestbody and adds it to the database
@@ -18,14 +19,14 @@ router.post('/add', async(req: Request, res: Response) => {
       .setTitle( req.body.title)
       .setDescription(req.body.description)
       .setAvailability(req.body.availability)
-      .setAddress(req.body.address)
+      .setAddress(address)
       .setPerimeter(req.body.perimeter)
       .build();
     if(req.body.subtype!=null){
       eventService.setSubtype(req.body.subtype);
     }
     try {
-      //TODO db.service.addEventService(eventService) Cyrill max 5 Stück
+      dbService.addEventService(eventService);
       res.statusCode = 200;
       res.send('Service was created and saved')
     }

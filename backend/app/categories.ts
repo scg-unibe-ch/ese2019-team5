@@ -1,5 +1,5 @@
 export enum Categories {
- music = "Music",
+  music = "Music",
   location = "Location",
   photographer = "Photographer",
   gastronomy = "Gastronomy",

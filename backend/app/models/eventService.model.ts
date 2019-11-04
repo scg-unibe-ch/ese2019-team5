@@ -7,7 +7,7 @@ import {Weekdays} from "../weekdays";
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
 export class EventService {
-   private serviceId: number= -1;
+  private serviceId: number= -1;
   subtype:string= '';
   private _providerId:number;
   private _category: Categories;
@@ -16,8 +16,10 @@ export class EventService {
   private _availability: Weekdays[];
   private _address: Address;
   private _perimeter: string;
+  private pictureIds: File[];
 
   constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays[],address: Address, perimeter : string){
+    this.pictureIds = [];
     this._providerId= providerId;
     this._category = category;
     this._title= title;
@@ -27,6 +29,9 @@ export class EventService {
     this._perimeter = perimeter;
 
   }
+
+
+
   public setProviderId(providerId: number) {
     this._providerId = providerId;
     return this;
@@ -35,6 +40,14 @@ export class EventService {
   public getProviderId():number{
     return this._providerId;
 
+  }
+
+  public addPicture(picture: File){
+    this.pictureIds.push(picture);
+  }
+
+  public getPictures(): File[] {
+    return this.pictureIds;
   }
 
 
