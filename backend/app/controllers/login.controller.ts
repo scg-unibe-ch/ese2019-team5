@@ -67,12 +67,12 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
 
 //TODO irgendwie sicherstellen, dass user nicht einfach so auf passwort zurücksetzen seite kommen kann
 const verifyToken = async (req: Request, res: Response) => {
-  const tokenUrl = req.body.url;
+  try {
+  const tokenUrl = req.url;
   const newPWhash= req.body.newPwHash;
-  console.log(req);
-  console.log (tokenUrl);
+
   const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
-  console.log (token);
+
   const publicForgotPWKey= fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
 
   const verifyOptions = {
@@ -83,7 +83,7 @@ const verifyToken = async (req: Request, res: Response) => {
     algorithm: 'RS256'
   };
 
-  try {
+
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
     console.log(decoded);
     await dbService; //TODO reset Password mit newPWHash Cyrill
