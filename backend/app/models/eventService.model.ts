@@ -9,6 +9,7 @@ import {Weekdays} from "../weekdays";
 export class EventService {
   private serviceId: number= -1;
   subtype:string= '';
+  requirements:string= '';
   private _providerId:number;
   private _category: Categories;
   private _title: string;
@@ -19,6 +20,7 @@ export class EventService {
   private _capacity: string;
   private _price: string;
   private pictureIds: File[];
+
 
   constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays,capacity:string, price:string,address: Address, perimeter : string){
     this.pictureIds = [];
@@ -134,6 +136,9 @@ export class EventService {
     this.subtype=subtype;
   }
 
+  public setRequirements(requirements:string){
+    this.requirements=requirements;
+  }
   public setServiceId(serviceId: number){
     this.serviceId=serviceId;
   }

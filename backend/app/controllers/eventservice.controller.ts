@@ -24,8 +24,11 @@ router.post('/add', async(req: Request, res: Response) => {
       .setAddress(address)
       .setPerimeter(req.body.perimeter)
       .build();
-    if(req.body.subtype!=null){
+    if(req.body.subtype!=undefined){
       eventService.setSubtype(req.body.subtype);
+    }
+    if(req.body.requirements!==undefined){
+      eventService.setRequirements(req.body.requirements);
     }
 
     console.log('haha'+eventService);
