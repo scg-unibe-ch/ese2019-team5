@@ -4,6 +4,8 @@ import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
 import {Address} from "../models/address.model";
+import {EventService} from "../models/eventService.model";
+import {FileHandlerService} from "./fileHandler.service";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -14,44 +16,62 @@ const serverCA = fs.readFileSync('./app/services/server-ca.pem').toString();
 export class DbServices {
 
   /**
-   * returns an Client to connect to our database
-   */
-    private getClient(): Client {
+ * returns an Client to connect to our database
+ */
+  private getClient(): Client {
 
-      const config = {
-        'user' : 'cyrill',
-        'host' : '34.65.95.137',
-        //'host' : 'localhost',
-        'password' : 'eseTeam5_2019!',
-        'port' : 5432,
-        'database' : 'eventdoo',
-      };
-    //console.log(config);
-      return new Client(config);
+    const config = {
+      'user' : 'cyrill',
+      'host' : '34.65.95.137',
+      //'host' : 'localhost',
+      'password' : 'eseTeam5_2019!',
+      'port' : 5432,
+      'database' : 'eventdoo',
+    };
+  //console.log(config);
+    return new Client(config);
+  }
+
+  // test function
+  public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
+      return id;
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  // This function is only for testing purpose
+  public async getSqlResult(name: string): Promise<SqlResult> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.testSql(name, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async addEventService(service: EventService){
+    const fileHandler = new FileHandlerService();
+
+
+    const localClient = this.getClient();
+    await localClient.connect();
+
+    try{
+      const serviceId = await this.addServiceToDB(service, localClient);
+      //fileHandler.safeServicePictures(service.getPictures(),serviceId)
+    } finally{
+      await localClient.end()
     }
 
-    // test function
-    public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
-      const localClient = this.getClient();
-      await localClient.connect();
-      try{
-        const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
-        return id;
-      } finally {
-        await localClient.end();
-      }
-    }
+  }
 
-    // This function is only for testing purpose
-    public async getSqlResult(name: string): Promise<SqlResult> {
-      const localClient = this.getClient();
-      await localClient.connect();
-      try{
-        return await this.testSql(name, localClient);
-      } finally {
-        await localClient.end();
-      }
-    }
+
 
   /**
    * takes an eamil-address and retruns the user with this email from the database
@@ -273,16 +293,38 @@ export class DbServices {
         return Number(row.get('id'));
       }
 
-      console.log("hello");
-
       throw Error('address not found and error while inserting');
     }
+
+    private async addServiceToDB(service: EventService, client: Client): Promise<number>{
+
+      const address = service.getAddress();
+
+      const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
+
+      const stream = client.query('Insert into service(userid, category, titel, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
+        service.getProviderId(),
+        service.getCategory(),
+        service.getTitle(),
+        service.getDescription(),
+        addressId,
+        service.getPerimeter(),
+        service.getAvailability()]);
+
+      for await (const row of stream) {
+        service.setServiceId(Number(row.get('id')));
+        return Number(row.get('id'));
+      }
+
+      throw Error ('an unknown error occured while creating the database entry of the eventService');
+    }
+
 
     // for testing only... returns all the users with given lastname
     async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
-        const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where lastname = $1', [name]);
+        const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [name]);
 
         for await (const row of stream) {
 
