@@ -133,11 +133,11 @@ router.get("/testID/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/tryService/:z", async(req: Request, res: Response) => {
-  const w:Weekdays[] = [];
-  w.push(Weekdays.Friday);
-  w.push(Weekdays.Monday);
+//  const w:Weekdays[] = [];
+ // w.push(Weekdays.Friday);
+ // w.push(Weekdays.Monday);
   const add = new Address("Ischlag",64,3303,"Jegenstorf");
-  const eServ = new EventService(45,Categories.photographer, "test", "Testing",w,add,"abc");
+  const eServ = new EventService(45,Categories.photographer, "test", "Testing",Weekdays.NoDay, '2','5',add,"abc");
   try{
     await dbService.addEventService(eServ);
     res.statusCode = 200;

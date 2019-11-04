@@ -11,7 +11,7 @@ const dbService = new DbServices();
  * creates an Address and an EventService from the giben requestbody and adds it to the database
  */
 router.post('/add', async(req: Request, res: Response) => {
-
+    console.log('got here');
     const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const eventService: EventService = EventServiceBuilder.eventService()
       .setProviderId(req.body.providerId)
@@ -19,12 +19,16 @@ router.post('/add', async(req: Request, res: Response) => {
       .setTitle( req.body.title)
       .setDescription(req.body.description)
       .setAvailability(req.body.availability)
+      .setCapacity(req.body.capacity)
+      .setPrice(req.body.price)
       .setAddress(address)
       .setPerimeter(req.body.perimeter)
       .build();
     if(req.body.subtype!=null){
       eventService.setSubtype(req.body.subtype);
     }
+
+    console.log('haha'+eventService);
     try {
       dbService.addEventService(eventService);
       res.statusCode = 200;
