@@ -16,6 +16,10 @@
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
       Your Profile
     </ion-button>
+    <ion-button color="secondary" style="position: absolute; right: 261px; top: 6px"
+                [hidden]="authService.isLoggedOut()" [routerLink]="['services']">
+      All Services
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 

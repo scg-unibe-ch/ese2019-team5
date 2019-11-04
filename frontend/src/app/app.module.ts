@@ -17,13 +17,14 @@ import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 import {UserprofilePage} from "./start/userprofile/userprofile.page";
 import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
+import {ServicesPage} from './start/services/services.page';
 
 
 @NgModule({
   declarations: [AppComponent,
     StartPage, SignupPage, ConfirmationPage,
     LoginPage, UpdatePasswordPage,
-    UserprofilePage, CreateServicePage],
+    UserprofilePage, CreateServicePage, ServicesPage],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule],
   providers: [

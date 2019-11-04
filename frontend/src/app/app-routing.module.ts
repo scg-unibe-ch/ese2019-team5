@@ -7,6 +7,7 @@ import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 import {UserprofilePage} from "./start/userprofile/userprofile.page";
 import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
+import {ServicesPage} from './start/services/services.page';
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
         path: 'userprofile', children: [
           {path: '', component: UserprofilePage},
           {path: 'createService', component: CreateServicePage}]
+      },
+      {
+        path: 'services', children: [
+          {path: '', component: ServicesPage}]
       }]
   }
 ];
