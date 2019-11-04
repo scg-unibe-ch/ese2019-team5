@@ -39,6 +39,14 @@ router.get('/:id', async (req: Request, res: Response) => {
 
     }*/
     //res.send(userDataAndServices);
+
+    /** Habe hier json form gewählt die im Frontend erwartet wird. Userobjekt senden hat nicht funktioniert.
+     * Genau definiert ist die userJson form im Interface userJson (unter start/userprofile/userJson.js)
+     * Gedacht als Notiz für Gillian
+     */
+    const dummyUser ={firstname:'Dummy', lastname:'McDummson', email:'dummy@dumdum.com', street: 'Streetystreet', housenumber:'8', zip: '4000', city:'Dumbcity'};
+    res.send(dummyUser);
+
     res.statusCode = 200;
   }
   catch (error) { //TODO welche error können auftreten?
