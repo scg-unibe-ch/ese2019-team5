@@ -95,14 +95,12 @@ GET http://localhost:3000/login/resetPassword/:token
 Content-Type: application/json
 
 {
-  "url": "http://localhost:4200/start/login/resetPassword/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW1hIiwic3VybmFtZSI6ImJNRE0iLCJlbWFpbCI6InNhbWFydGgua2FsZGVuQGlpcm9uLnVzIiwiaWF0IjoxNTcyODE0MTEzLCJleHAiOjE1NzI4MjEzMTMsImF1ZCI6InNhbWFydGgua2FsZGVuQGlpcm9uLnVzIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJzYW1hcnRoLmthbGRlbkBpaXJvbi51cyJ9.1tAkMLCw1zTX73nQRFd34t_DP_OSdTNJpzocrG9JRgIqKYk29r4TCltMHB2KEkp_smU0DLDZEm1aJbqbJY8d4Qc4eNZLd9F59oTnB5bRfgsrncBxsRQA6u0GOSHfdRAUC28aCvY-NhesZ_RJmGIMAPRinE-HO_XYas0I21RMyvs",
-  "newPwHash":-1395788608
+  "url": "localhost: 4200/start/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiWWF5bGVuIiwic3VybmFtZSI6ImFrbHhvZG4iLCJlbWFpbCI6InhheWxlbi54eW9uQGlpcm9uLnVzIiwiaWF0IjoxNTcyODY4OTAwLCJleHAiOjE1NzI5NTUzMDAsImF1ZCI6InhheWxlbi54eW9uQGlpcm9uLnVzIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJ4YXlsZW4ueHlvbkBpaXJvbi51cyJ9.Wua8RpYJubqi_yYp5TATkJRG7ZEL6oriyg99VErEblrFPpBOIkVpo1x7uw7f6rOt5RoZ6YwBMyPWg8BgH7q3"
 }
-
 > {%
 client.test("Forgot Password, verify not working because token was changed", function() {
-  client.assert(response.status === 406, "Response status is 200");
-  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+client.assert(response.status === 406, "Response status is 200");
+client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
 

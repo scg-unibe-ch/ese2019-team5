@@ -21,8 +21,8 @@ const dbService = new DbServices();
  * reacts on HTTP Client POST events by sending Mail to new user and adding the user to DB
  */
 router.post('/', async (req: Request, res: Response) => {
-  const address = new Address(req.body.street,req.body.housenumber, req.body.zip, req.body.city);
-  const isVerified: boolean= false;
+  const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
+  const isVerified: boolean = false;
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
@@ -53,9 +53,10 @@ router.post('/', async (req: Request, res: Response) => {
  * @param res answer to client that verifiyng token worked and therefore user is no verified or error
  */
 const verifyToken = async (req: Request, res: Response) => {
-  const tokenUrl = req.url;
-  const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+  const tokenUrl: string= req.url;
 
+  const token = tokenUrl.substr(tokenUrl.lastIndexOf('/') +1);
+  console.log('haha' + token);
   const verifyOptions = {
     issuer: 'Eventdoo',
     subject: req.body.email,
