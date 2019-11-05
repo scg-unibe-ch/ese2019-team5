@@ -5,6 +5,7 @@ import {EmailForgotPWServices} from '../services/emailForgotPW.services';
 import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
 import {error} from "ts-postgres/dist/src/logging";
+import {errorObject} from "rxjs/internal-compatibility";
 
 
 const dbService = new DbServices();
@@ -75,7 +76,7 @@ const verifyToken = async (req: Request, res: Response) => {
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
     const publicForgotPWKey = fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
-    console.log('got before options')
+
     const verifyOptions = {
       issuer: 'Eventdoo',
       subject: req.body.email,
@@ -83,18 +84,24 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-    console.log('got after options')
-    if (!token) {
-      res.status(401).send('No token provided');
 
+    if (token===undefined) {
+
+      res.status(401).send('No token provided');
     } else {
+      console.log('got after else')
       let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
       console.log(decoded);
-      if (error) {
-        if (error.name === 'TokenExpiredError') {
+      if (error!==undefined) {
+        if (errorObject.name==='TokenExpiredError') {
+          console.log('got after token expired')
+
           res.status(401).send('Access token expired');
-        } else {
-          res.status(401).send('Token is not valid');
+        } else if(errorObject.name === 'JsonWebTokenError') {
+          console.log('name'+error.name);
+          console.log('got after else token expired')
+          res.status(401).send('Token is  invalid');
+          return ;
         }
       }
     }

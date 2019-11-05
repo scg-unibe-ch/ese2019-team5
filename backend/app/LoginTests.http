@@ -79,7 +79,7 @@ GET http://localhost:3000/login/resetPassword/:token
 Content-Type: application/json
 
 {
-  "url": "localhost:4200/start/login/resetPassword/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDYXRob21hcyIsImVtYWlsIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpYXQiOjE1NzI5Njg4NzIsImV4cCI6MTU3Mjk3NjA3MiwiYXVkIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpc3MiOiJFdmVudGRvbyIsInN1YiI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIn0.p8xPDYVchsI5yx1cWWkWRP8lXa5oxvLvNGLmLyBrvJkJavZxIpRuuNRGFmLkGdWvqkzQ9Y5Kx2BxZJVS3KuYDIMnAtD4jSoFupK2TXtfdqiz5ZD6pZGN0u9ZxajDEp7vHwrAudmfU2k75YX0cAFPi-qNTOsf5ZKfG_DPl15Nsjk",
+  "url": "localhost:4200/start/login/resetPassword/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRWlyaWsiLCJzdXJuYW1lIjoiR2V2b3JmIiwiZW1haWwiOiJlaXJpay5nZXZvcmdAaWlyb24udXMiLCJpYXQiOjE1NzI5NzE0NjcsImV4cCI6MTU3Mjk3ODY2NywiYXVkIjoiZWlyaWsuZ2V2b3JnQGlpcm9uLnVzIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJlaXJpay5nZXZvcmdAaWlyb24udXMifQ.a_xzEEFcOXVicSIDeBdRGCa5CdYsLl7oAoZaWY_qPJKZPAYOOHomxvBbbL-9NH7pKO9rWe88_LBi4uA1N-ChppBMKBbyvYh4-rDgkgPnjk3hgRGMP5QDbJVLIiMoWdZTOPHknl45z6zr8jtLDddVWrQbmcZ7TEwoK69Dc101rcU",
   "newPwHash":-1395788608
 }
 
@@ -90,7 +90,7 @@ client.test("Forgot Password, verify", function() {
 });
 %}
 
-### //TODO fix bug
+###
 GET http://localhost:3000/login/resetPassword/:token
 Content-Type: application/json
 
@@ -100,7 +100,7 @@ Content-Type: application/json
 }
 > {%
 client.test("Forgot Password, verify not working because token was changed", function() {
-client.assert(response.status === 406, "Response status is 200");
+client.assert(response.status === 406, "Response status is 406");
 client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
