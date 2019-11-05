@@ -2,8 +2,10 @@ import {Router, Request, Response} from 'express';
 import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
 import {EmailForgotPWServices} from '../services/emailForgotPW.services';
-import jwt from 'jsonwebtoken';
+import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
+import {error} from "ts-postgres/dist/src/logging";
+import {errorObject} from "rxjs/internal-compatibility";
 
 
 const dbService = new DbServices();
@@ -34,24 +36,24 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
-    let message: string= error.message;
-    if(message.localeCompare('To login, please verify your email-address')==0){ //TODO aufräumen .....
-    console.log("error in backend:" + error.message);
-   // res.status(404).send(error.message);
-    res.status(406);
-    res.send('Verification error');}
-    else{
-      res.status (404).send('Password error');
+    let message: string = error.message;
+    if (message.localeCompare('To login, please verify your email-address') == 0) { //TODO aufräumen .....
+      console.log("error in backend:" + error.message);
+      // res.status(404).send(error.message);
+      res.status(406);
+      res.send('Verification error');
+    } else {
+      res.status(404).send('Password error');
     }
 
   }
 });
 
-router.get('/forgotPassword', async (req: Request, res: Response) => {
+router.post('/forgotPassword', async (req: Request, res: Response) => {
   const email = req.body.email;
-
+  console.log('got to forgot password');
   try {
-    let user: User =await dbService.getUserFromEmail(email);
+    let user: User = await dbService.getUserFromEmail(email);
     await EmailForgotPWServices.sendMailToUser(user);
 
     res.statusCode = 201;
@@ -68,30 +70,49 @@ router.get('/forgotPassword', async (req: Request, res: Response) => {
 //TODO irgendwie sicherstellen, dass user nicht einfach so auf passwort zurücksetzen seite kommen kann
 const verifyToken = async (req: Request, res: Response) => {
   try {
-  const tokenUrl = req.body.url;
-  const newPWhash= req.body.newPwHash;
+    const tokenUrl = req.body.url;
+    const newPWhash = req.body.newPwHash;
 
-  const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+    const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
-  const publicForgotPWKey= fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
+    const publicForgotPWKey = fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
 
-  const verifyOptions = {
-    issuer: 'Eventdoo',
-    subject: req.body.email,
-    audience: req.body.email,
-    expiresIn: '24h',
-    algorithm: 'RS256'
-  };
+    const verifyOptions = {
+      issuer: 'Eventdoo',
+      subject: req.body.email,
+      audience: req.body.email,
+      expiresIn: '24h',
+      algorithm: 'RS256'
+    };
 
+    if (token===undefined) {
 
-    let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-    console.log(decoded);
+      res.status(401).send('No token provided');
+    } else {
+      console.log('got after else')
+      let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
+      console.log(decoded);
+      if (error!==undefined) {
+        if (errorObject.name==='TokenExpiredError') {
+          console.log('got after token expired')
+
+          res.status(401).send('Access token expired');
+        } else if(errorObject.name === 'JsonWebTokenError') {
+          console.log('name'+error.name);
+          console.log('got after else token expired')
+          res.status(401).send('Token is  invalid');
+          return ;
+        }
+      }
+    }
+
     await dbService; //TODO reset Password mit newPWHash Cyrill
     res.status(200);
     res.send('Password was successfully changed');
   } catch (err) {
-    res.send(err);
     res.status(406);
+    res.send('Error in DB'+ err);
+
   }
 
 };
