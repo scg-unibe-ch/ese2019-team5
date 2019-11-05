@@ -3,7 +3,6 @@ import {Address} from "./address.model";
 //import assert from "assert";
 import {UserBuilder} from "./userBuilder.model";
 import {last} from "rxjs/operators";
-import {userJson} from "../../../frontend/src/app/start/userprofile/userJson";
 
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
 export class User {
@@ -141,10 +140,18 @@ export class User {
   }
 
 
-  //{firstname:'Dummy', lastname:'McDummson', email:'dummy@dumdum.com', street: 'Streetystreet', housenumber:'8', zip: '4000', city:'Dumbcity'}
 
-  public toJSONObject(): userJson {
-    return {firstname:this._firstname, lastname:this._lastname, email:this._email, street:this._address.street, housenumber:String(this._address.housenumber), zip:String(this._address.zip), city:this._address.city};
+  public toJSONObject(): object {
+    const userJ =  {
+      'firstname': this._firstname,
+      'lastname': this._lastname,
+      'email': this._email,
+      'street': this._address.street,
+      'housenumber': String(this._address.housenumber),
+      'zip': String(this._address.zip),
+      'city': this._address.city};
+
+    return userJ;
   }
 
 
