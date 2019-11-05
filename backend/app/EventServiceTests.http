@@ -1,0 +1,106 @@
+###Funktionierendes erstellen von Eventservices
+POST http://localhost:3000/eventservice/add
+Content-Type: application/json
+
+{
+  "providerId": 82,
+  "category": "Location",
+  "title": "Barn",
+  "description": "Beautiful barn to rent for all kind of events",
+  "availability": "Thursday, Friday",
+  "capacity": 200,
+  "price": 1200,
+  "street": "farmersroad",
+  "housenumber": 0,
+  "zip": 1010,
+  "city": "FarFarAway",
+  "perimeter": "20km"
+}
+> {%
+client.test("Adding eventServices without subtype and requirements", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST http://localhost:3000/eventservice/add
+Content-Type: application/json
+
+{
+  "providerId": 82,
+  "category": "Food",
+  "title": "Colourful Cupcakes",
+  "description": "Looking for colourful cupcakes, I can make them all in all the colours you want.",
+  "availability": "Friday, Saturday",
+  "capacity": 20,
+  "price": 100,
+  "street": "HomeOfCupcakes",
+  "housenumber": 12343,
+  "zip": 49494,
+  "city": "New York",
+  "perimeter": "50km",
+  "subtype": "Sweets & Desserts"
+}
+> {%
+client.test("Adding eventServices with subtype without requirments", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+
+POST http://localhost:3000/eventservice/add
+Content-Type: application/json
+
+{
+  "providerId": 7,
+  "category": "Food",
+  "title": "Black Cupcakes",
+  "description": "Looking for black cupcakes? I will bake them.",
+  "availability": "Monday, Saturday",
+  "capacity": 100,
+  "price": 1500,
+  "street": "Black Cupcakes",
+  "housenumber": 12,
+  "zip": 6000,
+  "city": "Luzern",
+  "perimeter": "5km",
+  "subtype": "Sweets & Desserts",
+  "requirements": "glutenfree is not possible yet"
+}
+> {%
+client.test("Adding eventServices with subtype, requirments", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST http://localhost:3000/eventservice/add
+Content-Type: application/json
+
+{
+  "providerId": 48,
+  "category": "Music",
+  "title": "The perfect piano musician",
+  "description": "I will give your event the perfect atmosphere",
+  "availability": "Saturday,Sunday",
+  "capacity": 100,
+  "price": 1500,
+  "street": "Does Not Matter",
+  "housenumber": 0,
+  "zip": 3000,
+  "city": "Bern",
+  "perimeter": "50km",
+  "requirements": "places that are too humid are not possible"
+}
+> {%
+client.test("Adding eventServices with requirments", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

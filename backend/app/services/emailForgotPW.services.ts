@@ -20,7 +20,7 @@ function makeToken(payload: any, email: string) {
     issuer: 'Eventdoo',
      subject: email,
     audience: email,
-    expiresIn: '2h',
+    expiresIn: '24h',
     algorithm: 'RS256'};
   var emailToken = jwt.sign(payload, privateKey, signOptions);
   const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;

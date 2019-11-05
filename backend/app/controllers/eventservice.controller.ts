@@ -30,12 +30,10 @@ router.post('/add', async(req: Request, res: Response) => {
     if(req.body.requirements!==undefined){
       eventService.setRequirements(req.body.requirements);
     }
-
-    console.log('haha'+eventService);
     try {
-      console.log('before db');
+
       dbService.addEventService(eventService);
-      console.log('after db');
+
       res.statusCode = 200;
       res.send('Service was created and saved')
     }
@@ -51,7 +49,7 @@ router.post('/add', async(req: Request, res: Response) => {
 
 
 router.get('/update', async (req:Request, res: Response)=>{
-  // woher wissen welchen Service es betrifft
+  // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
 
 
 })
