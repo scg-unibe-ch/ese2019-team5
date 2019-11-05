@@ -199,6 +199,38 @@
           </ion-item>
           <!--ToDo: Upload pictures-->
         </div>
+        <br/>
+        <br/>
+
+        <ion-title> Upload a picture</ion-title>
+        <div>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div></div>
+              </ion-col>
+              <ion-col>
+                <div>
+                  <ion-button color="secondary" class="icon-only" (click)="accessCamera()">
+                    <ion-icon name="camera"> Camera</ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+              <ion-col>
+                <div>
+                  <ion-button color="secondary" class="icon-only" (click)="accessGallery()">
+                    <ion-icon name="image"> Gallery</ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+              <ion-col>
+                <div></div>
+              </ion-col>
+            </ion-row>
+            <ion-img [src]="image" *ngIf="image"></ion-img>
+          </ion-grid>
+        </div>
+
 
         <!-- Button to submit the form -->
         <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>

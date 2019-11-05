@@ -9,22 +9,28 @@ import {Weekdays} from "../weekdays";
 export class EventService {
   private serviceId: number= -1;
   subtype:string= '';
+  requirements:string= '';
   private _providerId:number;
   private _category: Categories;
   private _title: string;
   private _description: string;
-  private _availability: Weekdays[];
+  private _availability: Weekdays;
   private _address: Address;
   private _perimeter: string;
+  private _capacity: string;
+  private _price: string;
   private pictureIds: File[];
 
-  constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays[],address: Address, perimeter : string){
+
+  constructor(providerId: number,category: Categories, title: string,description: string,availability : Weekdays,capacity:string, price:string,address: Address, perimeter : string){
     this.pictureIds = [];
     this._providerId= providerId;
     this._category = category;
     this._title= title;
     this._description= description;
     this._availability = availability;
+    this._capacity=capacity;
+    this._price=price;
     this._address= address;
     this._perimeter = perimeter;
 
@@ -81,15 +87,31 @@ export class EventService {
 
   }
 
-  public setAvailability(availiability: Weekdays[]) {
+  public setAvailability(availiability: Weekdays) {
     this._availability = availiability;
     return this;
   }
-  public getAvailability():Weekdays[]{
+  public getAvailability():Weekdays{
     return this._availability;
 
   }
+  public setCapacity(capacity:string){
+   this._capacity= capacity;
+   return this;
+  }
+  public getCapacity():string{
+    return  this._capacity;
 
+  }
+
+  public setPrice(price:string){
+    this._price= price;
+    return this;
+  }
+  public getPrice():string{
+    return  this._price;
+
+  }
 
   public setAddress(address: Address){
     this._address = address;
@@ -114,6 +136,9 @@ export class EventService {
     this.subtype=subtype;
   }
 
+  public setRequirements(requirements:string){
+    this.requirements=requirements;
+  }
   public setServiceId(serviceId: number){
     this.serviceId=serviceId;
   }

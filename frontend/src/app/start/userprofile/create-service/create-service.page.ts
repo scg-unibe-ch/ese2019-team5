@@ -4,6 +4,9 @@ import {AlertController} from "@ionic/angular";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 
+import {Camera} from "@ionic-native/camera/ngx";
+
+
 import {Categories} from "../../../../../../backend/app/categories";
 import {Weekdays} from "../../../../../../backend/app/weekdays";
 import {AuthService} from "../../../AuthService/auth.service";
@@ -20,6 +23,9 @@ export class CreateServicePage implements OnInit {
   // Array of weekdays
   weekdays: Weekdays[];
 
+  image: string;
+  picture: any;
+
   //Some properties used for user feedback
   loading: boolean;
   error: string;
@@ -31,7 +37,9 @@ export class CreateServicePage implements OnInit {
     private authService: AuthService,
     private http: HttpClient,
     private alertController: AlertController,
-    private router: Router) {
+    private router: Router,
+    private camera: Camera
+  ) {
   }
 
   ngOnInit() {
@@ -93,9 +101,39 @@ export class CreateServicePage implements OnInit {
   get requirements() {
     return this.serviceForm.get('requirements');
   }
-
   get description() {
     return this.serviceForm.get('description');
+  }
+
+  accessCamera() {
+    this.camera.getPicture({
+      targetWidth: 512,
+      targetHeight: 512,
+      correctOrientation: true,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      destinationType: this.camera.DestinationType.DATA_URL
+    }).then(
+      (imageData) => {
+        this.image = 'data:image/jpeg;base64,' + imageData;
+        this.picture = imageData;
+      },
+      (error) => {
+        console.log(error)
+      });
+  }
+
+  accessGallery() {
+    this.camera.getPicture({
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL
+    }).then(
+      (imageData) => {
+        this.image = 'data:image/jpeg;base64,' + imageData;
+        this.picture = imageData;
+      },
+      (error) => {
+        console.log(error);
+      });
   }
 
   //ToDo: Test whether this works with backend
@@ -119,39 +157,34 @@ export class CreateServicePage implements OnInit {
       this.getAvailability();
       console.log(this.weekdays);
 
+
       const providerId = this.authService.getUserId();
-      console.log(providerId);
       const category = this.setCategory();
-      console.log(category);
       const title = this.title.value;
-      console.log(title);
       const street = this.street.value;
-      console.log(street);
       const housenumber = this.housenumber.value;
-      console.log(housenumber);
       const zip = this.zip.value;
-      console.log(zip);
       const city = this.city.value;
-      console.log(city);
       const capacity = this.capacity.value;
       console.log(capacity);
-      const availability = this.weekdays;
+      const perimeter = this.distance.value;
+      const availability = JSON.stringify(this.weekdays);
       console.log(availability);
       const price = this.price.value;
       console.log(price);
-      const type = this.setType();
-      console.log(type);
+      const subtype = JSON.stringify(this.setType());
+      console.log(subtype);
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      console.log(description);
+      const image = this.image;
 
       console.log('Params set. Starting http request');
 
       this.http.post('http://localhost:3000/eventservice/add',
         {
-          providerId, category, title, street, housenumber, zip, city, capacity,
-          availability, price, type, requirements, description
+          providerId, category, title, street, housenumber, zip, city, perimeter, capacity,
+          availability, price, subtype, requirements, description, image
         }).subscribe(
         () => {
           console.log('success');
@@ -160,7 +193,7 @@ export class CreateServicePage implements OnInit {
           });
         },
         (error) => {
-          console.log('error');
+          console.log('error' + error.message);
           this.loading = false;
           this.error = error.message;
         });
@@ -283,6 +316,8 @@ export class CreateServicePage implements OnInit {
       this.error += 'Available days missing \n';
     if (this.price.value == '')
       this.error += 'Standard price missing \n';
+    if (this.description.value == '')
+      this.error += 'Description missing';
 
     if (this.error) {
       this.loading = false;

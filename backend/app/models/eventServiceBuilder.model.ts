@@ -12,13 +12,15 @@ export class EventServiceBuilder {
   private _category: Categories;
   private _title: string;
   private _description: string;
-  private _availability: Weekdays[];
+  private _availability: Weekdays;
   private _address: Address;
   private _perimeter: string;
+  private _capacity: string;
+  private _price: string;
 
 
   constructor() {
-    let availability: Weekdays[]= [Weekdays.NoDay];
+    let availability: Weekdays= Weekdays.NoDay;
     this._providerId = -1;
     this._category = Categories.none;
     this._title = '';
@@ -26,6 +28,8 @@ export class EventServiceBuilder {
     this._availability = availability ;
     this._address = mockAddress;
     this._perimeter = 'zero km';
+    this._capacity= '0';
+    this._price='0';
 
   }
   public static eventService(): EventServiceBuilder{
@@ -52,7 +56,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setAvailability(availiability: Weekdays[]): EventServiceBuilder {
+  public setAvailability(availiability: Weekdays): EventServiceBuilder {
     this._availability = availiability;
     return this;
   }
@@ -68,10 +72,20 @@ export class EventServiceBuilder {
     return this;
   }
 
+  public setCapacity(capacity:string):EventServiceBuilder{
+    this._capacity= capacity;
+    return this;
+  }
+
+  public setPrice(price:string):EventServiceBuilder{
+    this._price= price;
+    return this;
+  }
+
 
 
   public build(): EventService {
-    let eventService: EventService = new EventService(this._providerId, this._category, this._title, this._description, this._availability, this._address, this._perimeter);
+    let eventService: EventService = new EventService(this._providerId, this._category, this._title, this._description, this._availability,this._capacity,this._price, this._address, this._perimeter);
     return eventService;
   }
 

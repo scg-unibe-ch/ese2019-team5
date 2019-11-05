@@ -19,6 +19,13 @@ import {UpdatePasswordPage} from "./start/login/update-password/update-password.
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
 import {ServicesPage} from './start/services/services.page';
 
+import {Camera} from '@ionic-native/camera/ngx';
+
+/* import {File} from '@ionic-native/File/ngx';
+import {WebView} from '@ionic-native/ionic-webview/ngx';
+import {FilePath} from '@ionic-native/file-path/ngx';
+import {IonicStorageModule} from '@ionic/storage'; */
+
 
 @NgModule({
   declarations: [AppComponent,
@@ -26,12 +33,12 @@ import {ServicesPage} from './start/services/services.page';
     LoginPage, UpdatePasswordPage,
     UserprofilePage, CreateServicePage, ServicesPage],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule/*, IonicStorageModule.forRoot()*/],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-  ],
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    Camera/*, /*File, FilePath, WebView*/],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
