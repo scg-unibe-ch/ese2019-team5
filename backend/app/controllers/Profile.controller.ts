@@ -12,7 +12,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const userId = req.params.id;
     let user: User;
 
-    console.log(userId);
+
     // let user: User=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);
 
