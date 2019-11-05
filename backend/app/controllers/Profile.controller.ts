@@ -2,16 +2,21 @@ import {Request, Response, Router} from "express";
 import {User} from "../models/user.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
+import {DbServices} from "../services/db.services";
 
 const router: Router = Router(); // part of express needed
+const dbService = new DbServices();
 
 
 router.get('/:id', async (req: Request, res: Response) => {
+  const userId = Number(req.params.id);
+  let user: User;
+  console.log(userId);
+
   try {
-
-    const userId = req.params.id;
-    let user: User;
-
+    user = await dbService.getUserFromId(userId);
+    res.statusCode = 200;
+    res.send(user.toJSONObject());
 
     // let user: User=db.Service.GetUserFromId(id); //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);
@@ -44,10 +49,12 @@ router.get('/:id', async (req: Request, res: Response) => {
      * Genau definiert ist die userJson form im Interface userJson (unter start/userprofile/userJson.js)
      * Gedacht als Notiz für Gillian
      */
+    /*
     const dummyUser ={firstname:'Dummy', lastname:'McDummson', email:'dummy@dumdum.com', street: 'Streetystreet', housenumber:'8', zip: '4000', city:'Dumbcity'};
+    //const userAsJson = user.toJSONObject();
     res.send(dummyUser);
 
-    res.statusCode = 200;
+    res.statusCode = 200;*/
   }
   catch (error) { //TODO welche error können auftreten?
     res.send(error);
@@ -76,14 +83,15 @@ router.put('/update', async (req: Request, res: Response) => {
       user.setFirmname(req.body.firmname);
     }
 
-    //db.Service.UpdateUser(user); //TODO hier user  machen und nach hinten schicken Cyrill
+    await dbService.updateUser(user);
 
     res.send('Profile updated');
     res.statusCode = 200;
   }
   catch (error) { //TODO welche error können auftreten?
-  res.send(error);
-  res.statusCode= 400;
+    console.log(error);
+    res.send(error);
+    res.statusCode= 400;
   }
 });
 

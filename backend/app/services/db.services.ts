@@ -1,4 +1,4 @@
-import {Client} from 'ts-postgres';
+import {Client, ResultIterator} from 'ts-postgres';
 import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
@@ -32,32 +32,8 @@ export class DbServices {
     return new Client(config);
   }
 
-  // test function
-  public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
-    const localClient = this.getClient();
-    await localClient.connect();
-    try{
-      const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
-      return id;
-    } finally {
-      await localClient.end();
-    }
-  }
-
-  // This function is only for testing purpose
-  public async getSqlResult(name: string): Promise<SqlResult> {
-    const localClient = this.getClient();
-    await localClient.connect();
-    try{
-      return await this.testSql(name, localClient);
-    } finally {
-      await localClient.end();
-    }
-  }
-
   public async addEventService(service: EventService){
     const fileHandler = new FileHandlerService();
-
 
     const localClient = this.getClient();
     await localClient.connect();
@@ -71,8 +47,6 @@ export class DbServices {
 
   }
 
-
-
   /**
    * takes an eamil-address and retruns the user with this email from the database
    * @param email of an user as string
@@ -84,11 +58,24 @@ export class DbServices {
 
       await localClient.connect();
       try{
-        return await this.getUserFromEmailDB(email, localClient);
+        return await this.getUserFromDB(email, null, localClient);
       } finally {
         await localClient.end();
       }
+  }
+
+  public async getUserFromId(id: number): Promise<User> {
+
+
+    const localClient = this.getClient();
+
+    await localClient.connect();
+    try{
+      return await this.getUserFromDB(null, id, localClient);
+    } finally {
+      await localClient.end();
     }
+  }
 
   /**
    * tries to login a user with given email and password. Therefore it takes the email address and searches with
@@ -97,19 +84,19 @@ export class DbServices {
    * @param email
    * @param password, hashed password as string as received from the frontend
    */
-    public async tryLogin(email: string, password: string): Promise<LoginResult> {
-      let user: User;
-      user = await this.getUserFromEmail(email);
-      if (this.checkIfPasswordCorrect(user, password)) {
-        if (this.isUserVerified(user)) {
-          return new LoginResult(user,this.generateJWT(email, user.id));
-        } else {
-          throw Error('To login, please verify your email-address');
-        }
+  public async tryLogin(email: string, password: string): Promise<LoginResult> {
+    let user: User;
+    user = await this.getUserFromEmail(email);
+    if (this.checkIfPasswordCorrect(user, password)) {
+      if (this.isUserVerified(user)) {
+        return new LoginResult(user,this.generateJWT(email, user.id));
       } else {
-        throw Error('Invalid email-address or password');
+        throw Error('To login, please verify your email-address');
       }
+    } else {
+      throw Error('Invalid email-address or password');
     }
+  }
 
   /**
    * signs up an user in the db. Therefore it checks if the email already exists in the database. If not
@@ -142,60 +129,74 @@ export class DbServices {
       const localClient = this.getClient();
       await localClient.connect();
       try {
-        const user = await this.getUserFromEmailDB(email, localClient);
+        const user = await this.getUserFromDB(email,null, localClient);
         await this.makeUserVerifiedDB(user, localClient);
       } finally {
         await localClient.end();
       }
-    }
+  }
 
+  public async updateUser(user: User){
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      await this.updateUserDB(user,localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+
+
+
+  /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
   /**
    * sets the isverified of an user in the database to true
    * @param user as UserObject
    * @param client to use to connect to the database
    */
-    private async makeUserVerifiedDB(user: User, client: Client){
-      await client.query('Update users Set isverified=true Where id = $1', [user.id])
-    }
+  private async makeUserVerifiedDB(user: User, client: Client){
+    await client.query('Update users Set isverified=true Where id = $1', [user.id])
+  }
 
   /**
    * inserts a given user to the database
    * @param user as User Object
    * @param client to use to connect to the database
    */
-    private async creatUserInDB(user: User, client: Client): Promise<number>{
+  private async creatUserInDB(user: User, client: Client): Promise<number>{
 
-      //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
+    //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
-      const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-      const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.getFirstname(), user.getLastname(), user.getEmail(), user.getPwHash(), user.getIsVerified(), addressId, user.getIsFirm()]);
+    const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.getFirstname(), user.getLastname(), user.getEmail(), user.getPwHash(), user.getIsVerified(), addressId, user.getIsFirm()]);
 
-      var id = -1;
-      for await (const row of stream){
-        id = Number(row.get('id'));
+    var id = -1;
+    for await (const row of stream){
+      id = Number(row.get('id'));
 
-      }
-      if(id == -1) {
-        console.log("hello");
-        throw Error('An error occured while creating the DB entry');
-      }
-
-      return id;
+    }
+    if(id == -1) {
+      console.log("hello");
+      throw Error('An error occured while creating the DB entry');
     }
 
-    /**
-     * takes an email address and checks if an user is allready using this address
-     * @param email-address of new User
-     */
-    private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
-      const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
-      var counter = 0;
-      for await(const row of stream){
-        counter ++;
-      }
-      return (counter == 0);
+    return id;
+  }
+
+  /**
+   * takes an email address and checks if an user is allready using this address
+   * @param email-address of new User
+   */
+  private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
+    const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
+    var counter = 0;
+    for await(const row of stream){
+      counter ++;
     }
+    return (counter == 0);
+  }
 
 
   /**
@@ -203,28 +204,28 @@ export class DbServices {
    * @param email
    * @param userId
    */
-    private generateJWT(email: string, userId: number): string {
-      const payload = {
-        data1: String(userId),
-      };
-      const signOption = {
-        issuer: 'Eventdoo',
-        audience: 'http://eventdoo.ch',
-        subject: email,
-        expiresIn: '7d',
-        algorithm: 'RS256'
-      };
-      return jwt.sign(payload, privateKey, signOption);
-    }
+  private generateJWT(email: string, userId: number): string {
+    const payload = {
+      data1: String(userId),
+    };
+    const signOption = {
+      issuer: 'Eventdoo',
+      audience: 'http://eventdoo.ch',
+      subject: email,
+      expiresIn: '7d',
+      algorithm: 'RS256'
+    };
+    return jwt.sign(payload, privateKey, signOption);
+  }
 
   /**
    * helper method that compares an given string password with the password stored in the user
    * @param user
    * @param password
    */
-    private checkIfPasswordCorrect(user: User, password: string): boolean {
-      return password == user.getPwHash();
-    }
+  private checkIfPasswordCorrect(user: User, password: string): boolean {
+    return password == user.getPwHash();
+  }
 
   /**
    * helper method that return true if the isVerified attribute of the user is true
@@ -232,92 +233,150 @@ export class DbServices {
    */
   private isUserVerified(user: User): boolean {
         return user.getIsVerified();
+  }
+
+
+  private async getUserFromDB(email: string | null, id: number | null, client: Client): Promise<User> {
+    let user: User;
+    let stream: ResultIterator;
+
+
+    if(id == null) {
+      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
+    }else {
+      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where id = $1', [id]);
     }
 
-    /**
-     * returns the user from a given email. It therefore searches the database for the user and creates an User Object
-     * from this given information
-     * @param email
-     * @param client to use to connect to the database
-     */
-    // @ts-ignore
-    private async getUserFromEmailDB(email: string, client: Client): Promise<User> {
-      let user: User;
 
-      const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
+    for await(const row of stream) {
+      if (stream.rows == null) {
+        throw new Error('no user with this email found');
+      } else if (stream.rows.length !== 1) {
+        throw new Error('this email isnt unique in the database');
+      } else {
 
-      for await(const row of stream) {
-        if (stream.rows == null) {
-          throw new Error('no user with this email found');
-        } else if (stream.rows.length !== 1) {
-          throw new Error('this email isnt unique in the database');
-        } else {
+        const address = await this.getAddressFromAId(Number(row.get('aid')), client);
 
-          const address = await this.getAddressFromAId(Number(row.get('aid')), client);
-
-          user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
-          user.setId(Number(row.get('id')));
-          return user;
-        }
+        user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
+        user.setId(Number(row.get('id')));
+        return user;
       }
-      throw new Error('no user with this email found');
+    }
+    throw new Error('no user with this email found');
+  }
+
+  private async getAddressFromAId(addressId: number, client: Client): Promise<Address>{
+    let address: Address;
+    const stream = client.query('Select id, street, number, zip, city From address Where id = $1', [addressId]);
+    for await(const row of stream){
+      if (stream.rows == null){
+        throw new Error('no address with this id found');
+      } else {
+        address = new Address(String(row.get('street')),Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
+        address.setId(addressId);
+        return address;
+      }
+    }
+    throw new Error('no address with this id found');
+  }
+
+  private async checkIfAddressExistsAndCreate(street: string, number:number, zip: number, city: string, client: Client): Promise<Number> {
+    var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4',[street, number, zip, city]);
+
+    for await (const row of stream){
+      return Number(row.get('id'));
     }
 
-    private async getAddressFromAId(addressId: number, client: Client): Promise<Address>{
-      let address: Address;
-      const stream = client.query('Select id, street, number, zip, city From address Where id = $1', [addressId]);
-      for await(const row of stream){
-        if (stream.rows == null){
-          throw new Error('no address with this id found');
-        } else {
-          address = new Address(String(row.get('street')),Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
-          address.setId(addressId);
-          return address;
-        }
-      }
-      throw new Error('no address with this id found');
+    stream = client.query('Insert into address(street, number, zip, city) Values ($1,$2,$3,$4) Returning id As id',[street, number, zip, city]);
+
+    for await (const row of stream) {
+      return Number(row.get('id'));
     }
 
-    private async checkIfAddressExistsAndCreate(street: string, number:number, zip: number, city: string, client: Client): Promise<Number> {
-      var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4',[street, number, zip, city]);
+    throw Error('address not found and error while inserting');
+  }
 
-      for await (const row of stream){
-        return Number(row.get('id'));
-      }
+  private async addServiceToDB(service: EventService, client: Client): Promise<number>{
 
+    const address = service.getAddress();
 
+    const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-      stream = client.query('Insert into address(street, number, zip, city) Values ($1,$2,$3,$4) Returning id As id',[street, number, zip, city]);
+    const stream = client.query('Insert into service(userid, category, titel, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
+      service.getProviderId(),
+      service.getCategory(),
+      service.getTitle(),
+      service.getDescription(),
+      addressId,
+      service.getPerimeter(),
+      service.getAvailability()]);
 
-      for await (const row of stream) {
-        return Number(row.get('id'));
-      }
-
-      throw Error('address not found and error while inserting');
+    for await (const row of stream) {
+      service.setServiceId(Number(row.get('id')));
+      return Number(row.get('id'));
     }
 
-    private async addServiceToDB(service: EventService, client: Client): Promise<number>{
+    throw Error ('an unknown error occured while creating the database entry of the eventService');
+  }
 
-      const address = service.getAddress();
+  private async updateUserDB(user: User, client: Client){
 
-      const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
+    const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
-      const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
-        service.getProviderId(),
-        service.getCategory(),
-        service.getTitle(),
-        service.getDescription(),
-        addressId,
-        service.getPerimeter(),
-        service.getAvailability()]);
-
-      for await (const row of stream) {
-        service.setServiceId(Number(row.get('id')));
-        return Number(row.get('id'));
-      }
-
-      throw Error ('an unknown error occured while creating the database entry of the eventService');
+    const stream = client.query('SELECT addressid As id FROM users WHERE id=$1',[user.id]);
+    var oldAddressId = -1;
+    for await (const row of stream){
+      oldAddressId = Number(row.get('id'));
     }
+
+    if (oldAddressId = -1) {
+      throw Error("An ERROR occured while getting the old addres id of updated User")
+    }
+
+    client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname()]);
+
+    this.searchForAddressUsageAndDelete(oldAddressId, client);
+
+  }
+
+  private async searchForAddressUsageAndDelete(addressId: number, client: Client){
+    const rows = await client.query('Select id FROM users WHERE addressid=$1',[addressId]).rows;
+    if (rows == null){
+      client.query('DELETE FROM address WHERE id=$1',[addressId]);
+    }
+  }
+
+
+
+
+
+
+
+
+    //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////
+
+  // test function
+  public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
+      return id;
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  // This function is only for testing purpose
+  public async getSqlResult(name: string): Promise<SqlResult> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.testSql(name, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
 
 
     // for testing only... returns all the users with given lastname
@@ -344,6 +403,7 @@ export class DbServices {
 
         return sqlResult;
     }
+
 
 }
 
