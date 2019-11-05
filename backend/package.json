@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "author": "",
   "homepage": "https://expressjs.com/",
-  "description": "A todo list backend with express and node",
-  "main": "build/server.js",
+  "description": "An event management platform",
+  "main": "build/backend/app/server.js",
   "scripts": {
     "tsc": "tsc"
   },
@@ -26,7 +26,8 @@
     "sequelize": "^4.44.3",
     "sequelize-typescript": "^0.6.11",
     "sqlite3": "^4.1.0",
-    "ts-postgres": "^1.1.0"
+    "ts-postgres": "^1.1.0",
+    "tsc": "^1.20150623.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.3",
@@ -46,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoelNiklaus/ESE-2019-Scaffolding.git"
+    "url": "https://github.com/scg-unibe-ch/ese2019-team5.git"
   }
 }

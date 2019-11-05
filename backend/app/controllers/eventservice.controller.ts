@@ -8,10 +8,10 @@ const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
 
 /**
- * creates an Address and an EventService from the giben requestbody and adds it to the database
+ * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async(req: Request, res: Response) => {
-    console.log('got here');
+
     const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const eventService: EventService = EventServiceBuilder.eventService()
       .setProviderId(req.body.providerId)
@@ -24,7 +24,7 @@ router.post('/add', async(req: Request, res: Response) => {
       .setAddress(address)
       .setPerimeter(req.body.perimeter)
       .build();
-    if(req.body.subtype!=undefined){
+    if(req.body.subtype!==undefined){
       eventService.setSubtype(req.body.subtype);
     }
     if(req.body.requirements!==undefined){
@@ -33,7 +33,9 @@ router.post('/add', async(req: Request, res: Response) => {
 
     console.log('haha'+eventService);
     try {
+      console.log('before db');
       dbService.addEventService(eventService);
+      console.log('after db');
       res.statusCode = 200;
       res.send('Service was created and saved')
     }
