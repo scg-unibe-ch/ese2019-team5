@@ -12,8 +12,7 @@ const dbService = new DbServices();
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
   let user: User;
-  console.log(userId);
-
+  console.log('got here' + userId);
   try {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
@@ -39,47 +38,39 @@ router.get('/:id', async (req: Request, res: Response) => {
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
-        }}
-      else
-        {
-         userDataAndServices = {
-            'firstname': firstname,
-            'lastname': lastname,
-            'email': email,
-            'address': address,
-            'isFirm': isFirm,
-            'firmname': firmname,
-          }
-        }}
-      else if(phonenumber !== undefined)
-        {
-          userDataAndServices = {
-            'firstname': firstname,
-            'lastname': lastname,
-            'email': email,
-            'address': address,
-            'isFirm': isFirm,
-            'phonenumber': phonenumber,
-          }
         }
-      else{
+      } else {
+        userDataAndServices = {
+          'firstname': firstname,
+          'lastname': lastname,
+          'email': email,
+          'address': address,
+          'isFirm': isFirm,
+          'firmname': firmname,
+        }
+      }
+    } else if (phonenumber !== undefined) {
       userDataAndServices = {
         'firstname': firstname,
         'lastname': lastname,
         'email': email,
         'address': address,
         'isFirm': isFirm,
-      }}
-
-
+        'phonenumber': phonenumber,
+      }
+    } else {
+      userDataAndServices = {
+        'firstname': firstname,
+        'lastname': lastname,
+        'email': email,
+        'address': address,
+        'isFirm': isFirm,
+      }
+    }
 
     res.send(userDataAndServices);
-  res.status(200);}
-
-
-
-
-   catch (error) { //TODO welche error können auftreten?
+    res.status(200);
+  } catch (error) { //TODO welche error können auftreten?
     res.send(error);
     res.statusCode = 400;
   }
@@ -99,10 +90,10 @@ router.put('/update', async (req: Request, res: Response) => {
       .setIsFirm(req.body.isFirm)
       .build();
 
-    if (req.body.phoneNumber != null) {
+    if (req.body.phoneNumber !== undefined) {
       user.setPhoneNumber(req.body.phoneNumber);
     }
-    if (req.body.firmname != null) {
+    if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
     }
 
