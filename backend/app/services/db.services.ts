@@ -302,7 +302,7 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-    const stream = client.query('Insert into service(userid, category, titel, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
+    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
       service.getProviderId(),
       service.getCategory(),
       service.getTitle(),

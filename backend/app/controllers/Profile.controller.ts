@@ -12,7 +12,6 @@ const dbService = new DbServices();
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
   let user: User;
-  console.log('got here' + userId);
   try {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
@@ -23,18 +22,26 @@ router.get('/:id', async (req: Request, res: Response) => {
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
     const address = user.getAddress();
+    const street:string =address.street;
+    const housenumber:number =address.housenumber;
+    const zip :number =address.zip;
+    const city:string =address.city
     const isFirm: boolean = user.getIsFirm();
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
 
+    console.log(address);
     if (firmname !== undefined) {
       if (phonenumber !== undefined) {
         userDataAndServices = {
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
-          'address': address,
+          'street': street,
+          'housenumber': housenumber,
+          'zip': zip,
+          'city': city,
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
@@ -79,6 +86,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.put('/update', async (req: Request, res: Response) => {
   try {
+    console.log('got here');
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
       .setFirstname(req.body.firstname)
