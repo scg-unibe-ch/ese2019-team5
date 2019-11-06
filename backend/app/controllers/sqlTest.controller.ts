@@ -43,27 +43,12 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   } catch (e) {
     console.log(e);
     res.statusCode = 404;
-    res.send('no user with this email: ' + mail +  '  found');
-  }
-
-});
-
-
-router.get('/address/:street/:number/:zip/:city', async (req: Request, res: Response) => {
-  const street = req.params.street;
-  const number = Number(req.params.number);
-  const zip = Number(req.params.zip);
-  const city = req.params.city;
-  try {
-    const id = await dbService.testAddress(street, number,zip,city);
-    res.statusCode = 200;
-    res.send(String(id));
-  } catch (e) {
-    console.log(e.stack);
-    res.statusCode = 404;
-    res.send('an error occured');
+    res.send(e);
   }
 });
+
+
+
 
 /*
 router.get('/testEmail/:mail', async(req: Request, res: Response) => {
@@ -133,21 +118,6 @@ router.get("/testID/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/tryService/:z", async(req: Request, res: Response) => {
-//  const w:Weekdays[] = [];
- // w.push(Weekdays.Friday);
- // w.push(Weekdays.Monday);
-  const add = new Address("Ischlag",64,3303,"Jegenstorf");
-  const eServ = new EventService(45,Categories.photographer, "test", "Testing",Weekdays.NoDay, '2','5',add,"abc");
-  try{
-    await dbService.addEventService(eServ);
-    res.statusCode = 200;
-    res.send("abc");
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send("fail");
-  }
-
 
 });
 
