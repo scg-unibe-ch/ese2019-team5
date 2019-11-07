@@ -118,7 +118,11 @@ router.get("/testID/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/tryService/:z", async(req: Request, res: Response) => {
-
+  const services = await dbService.getAllServices();
+  console.log(services);
+  res.statusCode = 200;
+  res.send(services);
 });
+
 
 export const SqlTestController: Router = router;

@@ -150,7 +150,15 @@ export class DbServices {
     }
   }
 
-
+  public async getAllServices(): Promise<EventServiceContainer> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.getServiceFromDB(localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
 
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -331,29 +339,26 @@ export class DbServices {
   }
 
 
-  private async getServiceFromDB(userId: number, client: Client): Promise<EventServiceContainer> {
+  private async getServiceFromDB(client: Client): Promise<EventServiceContainer> {
     const container = new EventServiceContainer([]);
-    const stream = client.query('SELECT id, userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price FROM service WHERE userid=$1',[userId]);
+    const stream = client.query('SELECT id, userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price FROM service');
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
-
-      const category= <Categories>String(row.get('category'));
-      const availability = <Weekdays>String(row.get('availability'));
 
 
       let serviceBuilder = new EventServiceBuilder();
       container.addService(
         serviceBuilder.setServiceId(Number(row.get('id')))
           .setProviderId(Number(row.get('userid')))
-          .setCategory(category)
+          .setCategory(String(row.get('category')))
           .setTitle(String(row.get('title')))
           .setDescription(String(row.get('description')))
           .setAddress(address)
           .setPerimeter(String(row.get('radius')))
-          .setAvailability(availability)
-          .setRequirments(String(row.get('requirments')))
+          .setAvailability(String(row.get('availability')))
+          .setRequirments(String(row.get('requirements')))
           .setSubtype(String(row.get('subtype')))
           .setCapacity(String(row.get('capacity')))
           .setPrice(String(row.get('price')))
@@ -369,16 +374,19 @@ export class DbServices {
 
   private async updateUserDB(user: User, client: Client){
 
+
+
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
     const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
     var oldAddressId = -1;
     for await (const row of stream){
       oldAddressId = Number(row.get('addressid'));
+
     }
 
     if (oldAddressId = -1) {
-      throw Error("An ERROR occured while getting the old addres id of updated User")
+      throw Error("An error occured while getting the old address id of updated user")
     }
 
     client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname()]);
