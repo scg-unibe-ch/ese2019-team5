@@ -155,7 +155,7 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try{
-      return await this.getServiceFromDBFilter([],localClient);
+      return await this.getServiceFromDB([],localClient);
     } finally {
       await localClient.end();
     }
@@ -165,7 +165,7 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try{
-      return await this.getServiceFromDBFilter(filter, localClient);
+      return await this.getServiceFromDB(filter, localClient);
     } finally {
       await localClient.end();
     }
@@ -364,8 +364,6 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-
-
     const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) Returning id',[
       service.getProviderId(),
       service.getCategory(),
@@ -387,9 +385,9 @@ export class DbServices {
 
     throw Error ('an unknown error occured while creating the database entry of the eventService');
   }
-  
 
-  private async getServiceFromDBFilter(filterArray: EventServiceFilter[], client: Client) : Promise<EventServiceContainer>{
+
+  private async getServiceFromDB(filterArray: EventServiceFilter[], client: Client) : Promise<EventServiceContainer>{
     const container = new EventServiceContainer([]);
 
     let query = 'SELECT * FROM service';
@@ -408,8 +406,6 @@ export class DbServices {
       qArray.push(filter.getValue());
       qCount++;
     }
-
-
 
     const stream = client.query(query,qArray);
 
