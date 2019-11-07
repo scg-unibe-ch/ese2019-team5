@@ -10,6 +10,7 @@ import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {Categories} from "../categories";
 import {Weekdays} from "../weekdays";
+import {EventServiceFilter} from "../models/eventServiceFilter.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -154,7 +155,17 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try{
-      return await this.getServiceFromDB(localClient);
+      return await this.getServiceFromDBFilter([],localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async getServiceFilter(filter: EventServiceFilter[]){
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.getServiceFromDBFilter(filter, localClient);
     } finally {
       await localClient.end();
     }
@@ -162,6 +173,8 @@ export class DbServices {
 
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
 
   /**
    * sets the isverified of an user in the database to true
@@ -197,6 +210,62 @@ export class DbServices {
     return id;
   }
 
+  private async updateUserDB(user: User, client: Client){
+
+    const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
+
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
+    var oldAddressId = -1;
+    for await (const row of stream){
+      oldAddressId = Number(row.get('addressid'));
+
+    }
+
+    if (oldAddressId = -1) {
+      throw Error("An error occured while getting the old address id of updated user")
+    }
+
+    client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname()]);
+
+    this.searchForAddressUsageAndDelete(oldAddressId, client);
+
+  }
+
+  private async getUserFromDB(email: string | null, id: number | null, client: Client): Promise<User> {
+    let user: User;
+    let stream: ResultIterator;
+
+
+    if(id == null) {
+      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
+    }else {
+      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where id = $1', [id]);
+    }
+
+
+    for await(const row of stream) {
+      if (stream.rows == null) {
+        throw new Error('no user with this email found');
+      } else if (stream.rows.length !== 1) {
+        throw new Error('this email isnt unique in the database');
+      } else {
+
+        const address = await this.getAddressFromAId(Number(row.get('aid')), client);
+
+        user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
+        user.setId(Number(row.get('id')));
+        return user;
+      }
+    }
+    throw new Error('no user with this email found');
+  }
+
+  private async deleteUserFromDB(userId: number, client: Client) {
+    client.query('')
+  }
+
+
+
   /**
    * takes an email address and checks if an user is allready using this address
    * @param email-address of new User
@@ -209,7 +278,6 @@ export class DbServices {
     }
     return (counter == 0);
   }
-
 
   /**
    * generates an JSON webtoken out of the eamil address and userid
@@ -248,34 +316,6 @@ export class DbServices {
   }
 
 
-  private async getUserFromDB(email: string | null, id: number | null, client: Client): Promise<User> {
-    let user: User;
-    let stream: ResultIterator;
-
-
-    if(id == null) {
-      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
-    }else {
-      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where id = $1', [id]);
-    }
-
-
-    for await(const row of stream) {
-      if (stream.rows == null) {
-        throw new Error('no user with this email found');
-      } else if (stream.rows.length !== 1) {
-        throw new Error('this email isnt unique in the database');
-      } else {
-
-        const address = await this.getAddressFromAId(Number(row.get('aid')), client);
-
-        user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
-        user.setId(Number(row.get('id')));
-        return user;
-      }
-    }
-    throw new Error('no user with this email found');
-  }
 
   private async getAddressFromAId(addressId: number, client: Client): Promise<Address>{
     let address: Address;
@@ -308,6 +348,16 @@ export class DbServices {
     throw Error('address not found and error while inserting');
   }
 
+  private async searchForAddressUsageAndDelete(addressId: number, client: Client){
+    const rows = await client.query('Select id FROM users WHERE addressid=$1',[addressId]).rows;
+    if (rows == null){
+      client.query('DELETE FROM address WHERE id=$1',[addressId]);
+    }
+  }
+
+
+
+
   private async addServiceToDB(service: EventService, client: Client): Promise<number>{
 
     const address = service.getAddress();
@@ -337,11 +387,31 @@ export class DbServices {
 
     throw Error ('an unknown error occured while creating the database entry of the eventService');
   }
+  
 
-
-  private async getServiceFromDB(client: Client): Promise<EventServiceContainer> {
+  private async getServiceFromDBFilter(filterArray: EventServiceFilter[], client: Client) : Promise<EventServiceContainer>{
     const container = new EventServiceContainer([]);
-    const stream = client.query('SELECT id, userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price FROM service');
+
+    let query = 'SELECT * FROM service';
+    let qArray = [];
+    let qCount = 1;
+
+    let flag = false;
+    for(const filter of filterArray) {
+      if(flag){
+        query = query + " AND ";
+      } else {
+        query = query + " WHERE ";
+      }
+      query = query + filter.getType() + " = $" + qCount;
+      flag = true;
+      qArray.push(filter.getValue());
+      qCount++;
+    }
+
+
+
+    const stream = client.query(query,qArray);
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
@@ -366,43 +436,8 @@ export class DbServices {
       );
 
     }
-
     return container;
-
   }
-
-
-  private async updateUserDB(user: User, client: Client){
-
-
-
-    const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-
-    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
-    var oldAddressId = -1;
-    for await (const row of stream){
-      oldAddressId = Number(row.get('addressid'));
-
-    }
-
-    if (oldAddressId = -1) {
-      throw Error("An error occured while getting the old address id of updated user")
-    }
-
-    client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname()]);
-
-    this.searchForAddressUsageAndDelete(oldAddressId, client);
-
-  }
-
-  private async searchForAddressUsageAndDelete(addressId: number, client: Client){
-    const rows = await client.query('Select id FROM users WHERE addressid=$1',[addressId]).rows;
-    if (rows == null){
-      client.query('DELETE FROM address WHERE id=$1',[addressId]);
-    }
-  }
-
-
 
 
 
@@ -459,6 +494,8 @@ export class DbServices {
 
         return sqlResult;
     }
+
+
 
 
 }
