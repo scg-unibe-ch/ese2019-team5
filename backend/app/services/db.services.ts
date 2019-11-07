@@ -371,10 +371,10 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
-    const stream = client.query('SELECT addressid As id FROM users WHERE id=$1',[user.id]);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
     var oldAddressId = -1;
     for await (const row of stream){
-      oldAddressId = Number(row.get('id'));
+      oldAddressId = Number(row.get('addressid'));
     }
 
     if (oldAddressId = -1) {
