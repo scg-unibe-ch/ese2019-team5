@@ -33,7 +33,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
     res.send('Profile updated');
     res.statusCode = 200;
-  } catch (error) { //TODO welche error können auftreten?
+  } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
     console.log(error);
     res.send(error);
     res.statusCode = 400;
@@ -48,7 +48,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
 
-    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
+    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);//TODO get all Services Cyrill
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
