@@ -37,7 +37,7 @@ router.post('/add', async (req: Request, res: Response) => {
 
       res.statusCode = 200;
       res.send('Service was created and saved')
-    } catch (error) { //TODO welche error können auftreten?
+    } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
       res.send(error);
       res.statusCode = 400;
 
@@ -60,7 +60,7 @@ router.delete('/:id/:serviceId', async (req: Request, res: Response) => {
   let eventService: EventService;
   try{
   user = await dbService.getUserFromId(userId);
-  //eventService= await dbService.getEventService(serviceId); //TODO mit Cyrill anschauen
+
     //dbService.deleteEventService(userId,serviceId) TODO für Cyrill zum implementieren
     res.status(200).send('Service was deleted');
     }catch (error) {
