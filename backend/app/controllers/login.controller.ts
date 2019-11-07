@@ -84,35 +84,20 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-
-    if (token===undefined) {
-
-      res.status(401).send('No token provided');
-    } else {
-      console.log('got after else')
+    
       let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-      console.log(decoded);
-      if (error!==undefined) {
-        if (errorObject.name==='TokenExpiredError') {
-          console.log('got after token expired')
+      await dbService; //TODO reset Password mit newPWHash Cyrill
+      res.status(200);
+      res.send('Password was successfully changed');
 
-          res.status(401).send('Access token expired');
-        } else if(errorObject.name === 'JsonWebTokenError') {
-          console.log('name'+error.name);
-          console.log('got after else token expired')
-          res.status(401).send('Token is  invalid');
-          return ;
-        }
-      }
+  } catch (error) {
+    if (errorObject.name === 'TokenExpiredError') {
+      res.status(401).send('Access token expired');
+    } else {
+      res.status(406);
+      res.send('invalid Token' + error);
+
     }
-
-    await dbService; //TODO reset Password mit newPWHash Cyrill
-    res.status(200);
-    res.send('Password was successfully changed');
-  } catch (err) {
-    res.status(406);
-    res.send('Error in DB'+ err);
-
   }
 
 };

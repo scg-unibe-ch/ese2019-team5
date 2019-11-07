@@ -6,6 +6,10 @@ import {LoginResult} from "../models/loginResult.model";
 import {Address} from "../models/address.model";
 import {EventService} from "../models/eventService.model";
 import {FileHandlerService} from "./fileHandler.service";
+import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
+import {Categories} from "../categories";
+import {Weekdays} from "../weekdays";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -302,14 +306,21 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-    const stream = client.query('Insert into service(userid, category, titel, description, addressid, radius, availability) Values($1,$2,$3,$4,$5,$6,$7)Returning id',[
+
+
+    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) Returning id',[
       service.getProviderId(),
       service.getCategory(),
       service.getTitle(),
       service.getDescription(),
       addressId,
       service.getPerimeter(),
-      service.getAvailability()]);
+      service.getAvailability(),
+      service.getRequirements(),
+      service.getSubtype(),
+      service.getCapacity(),
+      service.getPrice()
+    ]);
 
     for await (const row of stream) {
       service.setServiceId(Number(row.get('id')));
@@ -319,14 +330,51 @@ export class DbServices {
     throw Error ('an unknown error occured while creating the database entry of the eventService');
   }
 
+
+  private async getServiceFromDB(userId: number, client: Client): Promise<EventServiceContainer> {
+    const container = new EventServiceContainer([]);
+    const stream = client.query('SELECT id, userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price FROM service WHERE userid=$1',[userId]);
+
+    for await (const row of stream) {
+      const addressid = row.get('addressid');
+      const address = await this.getAddressFromAId(Number(addressid), client);
+
+      const category= <Categories>String(row.get('category'));
+      const availability = <Weekdays>String(row.get('availability'));
+
+
+      let serviceBuilder = new EventServiceBuilder();
+      container.addService(
+        serviceBuilder.setServiceId(Number(row.get('id')))
+          .setProviderId(Number(row.get('userid')))
+          .setCategory(category)
+          .setTitle(String(row.get('title')))
+          .setDescription(String(row.get('description')))
+          .setAddress(address)
+          .setPerimeter(String(row.get('radius')))
+          .setAvailability(availability)
+          .setRequirments(String(row.get('requirments')))
+          .setSubtype(String(row.get('subtype')))
+          .setCapacity(String(row.get('capacity')))
+          .setPrice(String(row.get('price')))
+          .build()
+      );
+
+    }
+
+    return container;
+
+  }
+
+
   private async updateUserDB(user: User, client: Client){
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
-    const stream = client.query('SELECT addressid As id FROM users WHERE id=$1',[user.id]);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
     var oldAddressId = -1;
     for await (const row of stream){
-      oldAddressId = Number(row.get('id'));
+      oldAddressId = Number(row.get('addressid'));
     }
 
     if (oldAddressId = -1) {

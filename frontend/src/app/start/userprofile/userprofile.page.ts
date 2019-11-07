@@ -122,21 +122,22 @@ async showUpdateField(){
         {
           text: 'Save',
           handler: data => {
-            if(data.firstname.length>0
+         /*   if(data.firstname.length>0
             && data.lastname.length>0
             && data.street.length>0
             && data.housenumber.valueOf>0
             && data.housenumber.matches("[0-9]+")
               && data.zip.length==4
             && data.zip.matches("[0-9]+")
-            && data.city.length >0) {
+            && data.city.length >0) {*/
               this.firstname = data.firstname;
               this.lastname = data.lastname;
               this.street = data.street;
               this.housenumber = data.housenumber;
               this.zip = data.zip;
               this.city = data.city;
-              this.http.put(this.ROOT_URL+'/update', {
+              console.log('front here');
+              this.http.post(this.ROOT_URL+'update', {
                 firstname: this.firstname,
                 lastname: this.lastname,
                 street: this.street,
@@ -144,7 +145,7 @@ async showUpdateField(){
                 zip: this.zip,
                 city: this.city
               })
-                .subscribe(
+              .subscribe(
                   (success) => {
                     this.httpGetSuccess = true;
                   },
@@ -152,10 +153,10 @@ async showUpdateField(){
                     this.httpGetSuccess = false;
                   }
                 );
-            }
-              else{
+            //}
+           /*   else{
                 this.httpGetSuccess = false;
-              }
+              }*/
             }
         }
       ]

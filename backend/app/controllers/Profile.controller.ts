@@ -8,77 +8,9 @@ import {elementAt} from "rxjs/operators";
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
 
-
-router.get('/:id', async (req: Request, res: Response) => {
-  const userId = Number(req.params.id);
-  let user: User;
-  console.log('got here' + userId);
+router.post('/update', async (req: Request, res: Response) => {
   try {
-    user = await dbService.getUserFromId(userId);
-    //  res.send(user.toJSONObject());
-
-    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
-    //All let eventServices: EventService []=db. Service.GetAllEvents(id);//TODO get all Services Cyrill
-    const firstname: string = user.getFirstname();
-    const lastname: string = user.getLastname();
-    const email: string = user.getEmail();
-    const address = user.getAddress();
-    const isFirm: boolean = user.getIsFirm();
-    const firmname: string = user.getFirmname();
-    const phonenumber: string = user.getPhoneNumber();
-    let userDataAndServices;
-
-    if (firmname !== undefined) {
-      if (phonenumber !== undefined) {
-        userDataAndServices = {
-          'firstname': firstname,
-          'lastname': lastname,
-          'email': email,
-          'address': address,
-          'isFirm': isFirm,
-          'firmname': firmname,
-          'phonenumber': phonenumber,
-        }
-      } else {
-        userDataAndServices = {
-          'firstname': firstname,
-          'lastname': lastname,
-          'email': email,
-          'address': address,
-          'isFirm': isFirm,
-          'firmname': firmname,
-        }
-      }
-    } else if (phonenumber !== undefined) {
-      userDataAndServices = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'email': email,
-        'address': address,
-        'isFirm': isFirm,
-        'phonenumber': phonenumber,
-      }
-    } else {
-      userDataAndServices = {
-        'firstname': firstname,
-        'lastname': lastname,
-        'email': email,
-        'address': address,
-        'isFirm': isFirm,
-      }
-    }
-
-    res.send(userDataAndServices);
-    res.status(200);
-  } catch (error) { //TODO welche error können auftreten?
-    res.send(error);
-    res.statusCode = 400;
-  }
-
-});
-
-router.put('/update', async (req: Request, res: Response) => {
-  try {
+    console.log('got here update');
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
       .setFirstname(req.body.firstname)
@@ -107,6 +39,56 @@ router.put('/update', async (req: Request, res: Response) => {
     res.statusCode = 400;
   }
 });
+
+
+router.get('/:id', async (req: Request, res: Response) => {
+  const userId = Number(req.params.id);
+  let user: User;
+  try {
+    user = await dbService.getUserFromId(userId);
+    //  res.send(user.toJSONObject());
+
+    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
+    //All let eventServices: EventService []=db. Service.GetAllEvents(id);//TODO get all Services Cyrill
+    const firstname: string = user.getFirstname();
+    const lastname: string = user.getLastname();
+    const email: string = user.getEmail();
+    const address = user.getAddress();
+    const street:string =address.street;
+    const housenumber:number =address.housenumber;
+    const zip :number =address.zip;
+    const city:string =address.city;
+    const isFirm: boolean = user.getIsFirm();
+    const firmname: string = user.getFirmname();
+    const phonenumber: string = user.getPhoneNumber();
+    let userDataAndServices;
+
+    console.log(address);
+
+        userDataAndServices = {
+          'firstname': firstname,
+          'lastname': lastname,
+          'email': email,
+          'street': street,
+          'housenumber': housenumber,
+          'zip': zip,
+          'city': city,
+          'isFirm': isFirm,
+          'firmname': firmname,
+          'phonenumber': phonenumber,
+        }
+
+
+
+    res.send(userDataAndServices);
+    res.status(200);
+  } catch (error) { //TODO welche error können auftreten?
+    res.send(error);
+    res.statusCode = 400;
+  }
+
+});
+
 
 
 router.put('/changepassword', async (req: Request, res: Response) => {
