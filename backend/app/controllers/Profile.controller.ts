@@ -4,6 +4,7 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
 import {DbServices} from "../services/db.services";
 import {elementAt} from "rxjs/operators";
+import {EventServiceContainer} from "../models/eventServiceContainer.model";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -62,6 +63,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
+    let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
 
     console.log(address);
 
@@ -76,6 +78,7 @@ router.get('/:id', async (req: Request, res: Response) => {
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
+          'allServicesContainer': allServicesContainer,
         }
 
 
