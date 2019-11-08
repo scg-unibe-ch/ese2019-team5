@@ -33,7 +33,7 @@
     <div class="form-group">
       <ion-item>
         <ion-label position="floating">Password </ion-label>
-        <ion-input type="password" required class="form-control" name="password" [(ngModel)]="password"> </ion-input>
+        <ion-input type="password" required class="form-control" name="password" [(ngModel)]="password" (keyup.enter)="logIn()"> </ion-input>
       </ion-item>
     </div>
   </form>

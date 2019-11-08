@@ -4,6 +4,7 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
 import {DbServices} from "../services/db.services";
 import {elementAt} from "rxjs/operators";
+import {EventServiceContainer} from "../models/eventServiceContainer.model";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -33,7 +34,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
     res.send('Profile updated');
     res.statusCode = 200;
-  } catch (error) { //TODO welche error können auftreten?
+  } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
     console.log(error);
     res.send(error);
     res.statusCode = 400;
@@ -48,7 +49,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
 
-    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele Einzelne Events?  Cyrill
+    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
     //All let eventServices: EventService []=db. Service.GetAllEvents(id);//TODO get all Services Cyrill
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
@@ -62,6 +63,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
+    let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
 
     console.log(address);
 
@@ -76,6 +78,7 @@ router.get('/:id', async (req: Request, res: Response) => {
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
+          'allServicesContainer': allServicesContainer,
         }
 
 
@@ -103,6 +106,7 @@ router.put('/changepassword', async (req: Request, res: Response) => {
     res.send(error);
   }
 });
+
 
 
 export const ProfileController: Router = router;

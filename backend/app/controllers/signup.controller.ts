@@ -30,7 +30,7 @@ router.post('/', async (req: Request, res: Response) => {
     .setPwhash(req.body.pwhash)
     .setIsVerified(isVerified)
     .setAddress(address)
-    .build();// TODO addresse hier nach pw hash einfügen??
+    .build();
 
   try {
     await dbService.signUp(user);

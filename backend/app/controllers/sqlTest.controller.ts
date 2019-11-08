@@ -5,10 +5,8 @@ import {SqlResult} from '../models/sqlresult.model';
 import {DbServices} from '../services/db.services';
 import {User} from '../models/user.model';
 import {FileHandlerService} from "../services/fileHandler.service";
-import {EventService} from "../models/eventService.model";
-import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
-import {Address} from "../models/address.model";
+import {EventServiceFilter} from "../models/eventServiceFilter.model";
+import {FilterCategories} from "../models/filterCategories.enum";
 
 
 const router: Router = Router();
@@ -118,7 +116,21 @@ router.get("/testID/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/tryService/:z", async(req: Request, res: Response) => {
-
+  const services = await dbService.getAllServices();
+  console.log(services);
+  res.statusCode = 200;
+  res.send(services);
 });
+
+router.get("/testFilter/:z", async(req: Request, res: Response) => {
+  const id: number = 88;
+  const filters = [new EventServiceFilter(FilterCategories.user,id), new EventServiceFilter(FilterCategories.category, 'Location')];
+
+  const filters2: EventServiceFilter[] = [];
+  const services = await dbService.getServiceFilter(filters2);
+  res.statusCode = 200;
+  res.send(services);
+});
+
 
 export const SqlTestController: Router = router;

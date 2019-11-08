@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
     <ion-title style="color: darkgreen; position: absolute; left: 80px; top: 15px"> Your Profile </ion-title>
-    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px;" href="/start/start"> Logout </ion-button>
+    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px;" href="/start" (click)="authservice.logout()"> Logout </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -12,9 +12,12 @@
 
 
 <ion-content>
-  <ion-grid [hidden]="!httpGetSuccess">
+  <ion-grid [hidden]="!httpGetSuccess||isEditing">
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
+    </ion-row>
+    <ion-row [hidden]="firmname==''">
+      <p>Firm name: {{firmname}}</p>
     </ion-row>
     <ion-row>
       <p>Email: {{email}}</p>
@@ -22,10 +25,69 @@
     <ion-row>
       <p>Address: {{street}} {{housenumber}} ; {{city}} {{zip}}</p>
     </ion-row>
-
+    <ion-row [hidden]="phonenumber==''">
+      <p>Phone number: {{phonenumber}}</p>
+    </ion-row>
   </ion-grid>
-  <ion-button color="secondary"[routerLink]="['createService']">Create your service offer</ion-button>
-  <ion-button color="secondary" (click)="showUpdateField()">Edit Profile</ion-button>
+
+  <div [hidden]="!isEditing">
+    <form [formGroup]="editForm">
+
+     <div class="container-fluid">
+      <ion-item>
+        <ion-label >First Name: </ion-label>
+        <ion-input formCOntrolName="firstnameInput" value="{{firstname}}"></ion-input>
+        <small [class.ion-hide]="firstnameInput.untouched || firstnameInput.valid"
+               style="color: red"> Can't be empty </small>
+      </ion-item>
+    </div>
+
+      <div class="container-fluid">
+        <ion-item>
+          <ion-label>Last Name: </ion-label>
+          <ion-input formCOntrolName="lastnameInput" value="{{lastname}}"></ion-input>
+          <small [class.ion-hide]="lastnameInput.untouched || lastnameInput.valid"
+                 style="color: red"> Can't be empty </small>
+        </ion-item>
+      </div>
+
+      <div class="container-fluid">
+        <ion-item>
+          <ion-label>Firm name: </ion-label>
+          <ion-input formCOntrolName="firstnameInput" value="{{firmname}}"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="container-fluid">
+        <ion-item>
+          <ion-label>Street: </ion-label>
+          <ion-input formCOntrolName="streetInput" value="{{street}}"></ion-input>
+          <ion-label>Housenumber: </ion-label>
+          <ion-input formCOntrolName="firstnameInput" value="{{housenumber}}"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Zip: </ion-label>
+          <ion-input formCOntrolName="zipInput" value="{{zip}}"></ion-input>
+          <ion-label>City: </ion-label>
+          <ion-input formCOntrolName="cityInput" value="{{city}}"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="container-fluid">
+        <ion-item>
+          <ion-label>Phone number: </ion-label>
+          <ion-input formCOntrolName="phonenumberInput" value="{{phonenumber}}"></ion-input>
+        </ion-item>
+      </div>
+
+    </form>
+    <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
+  </div>
+
+  <ion-button [hidden]="isEditing" color="secondary"[routerLink]="['createService']">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
+
+
   <ion-list>
     <!-- Use service component here with NgFor-->
   </ion-list>

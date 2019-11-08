@@ -24,15 +24,18 @@ export class UserprofilePage implements OnInit {
   readonly ROOT_URL = 'http://localhost:3000/profile/';
   private userId: number;
 
-  private firstname: string;
-  private lastname: string;
-  private email:string;
-  private street: string;
-  private housenumber: string;
-  private zip: string;
-  private city: string;
-  private user: User;
+  private firstname: string = '';
+  private lastname: string = '';
+  private email:string = '';
+  private street: string = '';
+  private housenumber: string = '';
+  private zip: string = '';
+  private city: string = '';
+  private firmname: string = '';
+  private phonenumber: string = '';
+
   httpGetSuccess:boolean;
+  isEditing:boolean = false;
 
 
   constructor(
@@ -43,6 +46,49 @@ export class UserprofilePage implements OnInit {
 
   ngOnInit() {
     this.getUserData();
+  }
+
+  editForm = this.formBuilder.group({
+    firstnameInput: [this.firstname, [Validators.required]],
+    lastnameInput: ['', Validators.required],
+    firmnameInput: [''],
+    streetInput: ['', Validators.required],
+    housenumberInput: ['', [Validators.required, Validators.pattern('[0-9]+')]],
+    zipInput: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]+')]],
+    cityInput: ['', Validators.required],
+    phonenumberInput: ['', [Validators.pattern('[0-9]+')]]
+  });
+
+  get firstnameInput() {
+    return this.editForm.get('firstnameInput');
+  }
+
+  get lastnameInput() {
+    return this.editForm.get('lastnameInput');
+  }
+
+  get firmnameInput() {
+    return this.editForm.get('firmnameInput');
+  }
+
+  get streetInput() {
+    return this.editForm.get('streetInput');
+  }
+
+  get housenumberInput() {
+    return this.editForm.get('housenumberInput');
+  }
+
+  get zipInput() {
+    return this.editForm.get('zipInput');
+  }
+
+  get cityInput() {
+    return this.editForm.get('cityInput');
+  }
+
+  get phonenumberInput() {
+    return this.editForm.get('phonenumberInput');
   }
 
   /**
@@ -64,6 +110,8 @@ export class UserprofilePage implements OnInit {
             this.housenumber = user.housenumber; //address.housenumber;
             this.zip = user.zip; //address.zip;
             this.city = user.city; //address.city;
+            this.firmname = user.firmname;
+            this.phonenumber = user.phonenumber;
             this.httpGetSuccess = true;
           },
           (error)=> {
@@ -79,91 +127,42 @@ export class UserprofilePage implements OnInit {
     }
   }
 
-async showUpdateField(){
-  const inputField = await this.alertCtrl.create({
-      header: 'Edit my Info',
-      inputs: [
-        {
-          name: 'firstname',
-          placeholder: 'Firstname',
-          type: "text"
-        },
-        {
-          name: 'lastname',
-          placeholder: 'Lastname',
-          type: "text"
-        },
-        {
-          name: 'street',
-          placeholder: 'Street',
-          type: "text"
-        },
-        {
-          name: 'housenumber',
-          placeholder: 'Number',
-          type: "number"
-        },
-        {
-          name: 'zip',
-          placeholder: 'Zip',
-          type: "number"
-        },
-        {
-          name: 'city',
-          placeholder: 'City',
-          type: "text"
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Save',
-          handler: data => {
-         /*   if(data.firstname.length>0
-            && data.lastname.length>0
-            && data.street.length>0
-            && data.housenumber.valueOf>0
-            && data.housenumber.matches("[0-9]+")
-              && data.zip.length==4
-            && data.zip.matches("[0-9]+")
-            && data.city.length >0) {*/
-              this.firstname = data.firstname;
-              this.lastname = data.lastname;
-              this.street = data.street;
-              this.housenumber = data.housenumber;
-              this.zip = data.zip;
-              this.city = data.city;
-              console.log('front here');
-              this.http.post(this.ROOT_URL+'update', {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                street: this.street,
-                housenumber: this.housenumber,
-                zip: this.zip,
-                city: this.city
-              })
-              .subscribe(
-                  (success) => {
-                    this.httpGetSuccess = true;
-                  },
-                  (error) => {
-                    this.httpGetSuccess = false;
-                  }
-                );
-            //}
-           /*   else{
-                this.httpGetSuccess = false;
-              }*/
-            }
-        }
-      ]
-    });
- await inputField.present();
+  enableEditing(){
+    this.isEditing = true;
   }
 
+  saveChanges(){
+    this.firstname = this.firstnameInput.value;
+    this.lastname = this.lastnameInput.value;
+    this.street = this.streetInput.value;
+    this.housenumber = this.housenumberInput.value;
+    this.zip = this.zipInput.value;
+    this.city = this.cityInput.value;
+    this.firmname = this.firmnameInput.value;
+    this.phonenumber = this.phonenumberInput.value;
+    console.log('front here');
+    this.http.post(this.ROOT_URL+'update', {
+      id: this.userId,
+      firstname: this.firstname,
+      lastname: this.lastname,
+      firmname: this.firmname,
+      street: this.street,
+      housenumber: this.housenumber,
+      zip: this.zip,
+      city: this.city,
+      phonenumber: this.phonenumber
+    })
+      .subscribe(
+        (success) => {
+          this.httpGetSuccess = true;
+        },
+        (error) => {
+          this.httpGetSuccess = false;
+        }
+      );
+    this.getUserData();
+    this.isEditing = false;
+  }
 
 
 }
