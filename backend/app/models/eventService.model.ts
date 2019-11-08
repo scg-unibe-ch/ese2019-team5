@@ -9,10 +9,10 @@ import {Weekdays} from "../weekdays";
 export class EventService {
   private serviceId: number;
   private _providerId:number;
-  private _category: Categories;
+  private _category: string;
   private _title: string;
   private _description: string;
-  private _availability: Weekdays;
+  private _availability: string;
   private _address: Address;
   private _perimeter: string;
   private subtype:string;
@@ -23,7 +23,7 @@ export class EventService {
   private pictureIds: File[]; // TODO Fotos werden wahrscheinlich als file array übergeben un dann abgespeichert
 
 
-  constructor(serviceId: number, providerId: number, category: Categories, title: string, description: string, address: Address, perimeter : string, availability: Weekdays, requirements: string, subtype: string, capacity:string, price:string){
+  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:string, price:string){
     this.serviceId = serviceId;
     this._providerId= providerId;
     this._category = category;
@@ -58,11 +58,11 @@ export class EventService {
 
   }
 
-  public setCategory(category: Categories) {
+  public setCategory(category: string) {
     this._category = category;
     return this;
   }
-  public getCategory():Categories{
+  public getCategory():string{
     return this._category;
 
   }
@@ -103,11 +103,11 @@ export class EventService {
 
   }
 
-  public setAvailability(availiability: Weekdays) {
+  public setAvailability(availiability: string) {
     this._availability = availiability;
     return this;
   }
-  public getAvailability():Weekdays{
+  public getAvailability():string{
     return this._availability;
 
   }

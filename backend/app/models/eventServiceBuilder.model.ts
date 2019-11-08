@@ -10,12 +10,12 @@ const mockAddress: Address = new Address('', 0, 1234, '');
 export class EventServiceBuilder {
   private _serviceId: number;
   private _providerId: number;
-  private _category: Categories;
+  private _category: string;
   private _title: string;
   private _description: string;
   private _address: Address;
   private _perimeter: string;
-  private _availability: Weekdays;
+  private _availability: string;
   private _requirments: string;
   private _subtype: string;
   private _capacity: string;
@@ -23,10 +23,10 @@ export class EventServiceBuilder {
 
 
   constructor() {
-    let availability: Weekdays= Weekdays.NoDay;
+    let availability = '';
     this._serviceId = -1;
     this._providerId = -1;
-    this._category = Categories.none;
+    this._category = '';
     this._title = '';
     this._description = '';
     this._address = mockAddress;
@@ -52,7 +52,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setCategory(category: Categories): EventServiceBuilder {
+  public setCategory(category: string): EventServiceBuilder {
     this._category = category;
     return this;
   }
@@ -77,7 +77,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setAvailability(availiability: Weekdays): EventServiceBuilder {
+  public setAvailability(availiability: string): EventServiceBuilder {
     this._availability = availiability;
     return this;
   }
