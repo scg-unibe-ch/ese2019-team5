@@ -12,7 +12,7 @@
 
 
 <ion-content>
-  <ion-grid [hidden]="!httpGetSuccess">
+  <ion-grid [hidden]="!httpGetSuccess||isEditing">
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
     </ion-row>

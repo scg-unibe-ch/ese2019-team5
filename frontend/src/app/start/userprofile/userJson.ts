@@ -6,4 +6,6 @@ export interface userJson{
   housenumber: string;
   zip: string;
   city: string;
+  firmname: string;
+  phonenumber: string;
 }

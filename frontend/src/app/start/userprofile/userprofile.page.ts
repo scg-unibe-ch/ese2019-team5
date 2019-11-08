@@ -31,8 +31,11 @@ export class UserprofilePage implements OnInit {
   private housenumber: string;
   private zip: string;
   private city: string;
-  private user: User;
+  private firmname: string;
+  private phonenumber: string;
+
   httpGetSuccess:boolean;
+  isEditing:boolean = false;
 
 
   constructor(
@@ -64,6 +67,8 @@ export class UserprofilePage implements OnInit {
             this.housenumber = user.housenumber; //address.housenumber;
             this.zip = user.zip; //address.zip;
             this.city = user.city; //address.city;
+            this.firmname = user.firmname;
+            this.phonenumber = user.phonenumber;
             this.httpGetSuccess = true;
           },
           (error)=> {
@@ -80,6 +85,7 @@ export class UserprofilePage implements OnInit {
   }
 
 async showUpdateField(){
+    //this.isEditing ? true;
   const inputField = await this.alertCtrl.create({
       header: 'Edit my Info',
       inputs: [
@@ -136,8 +142,11 @@ async showUpdateField(){
               this.housenumber = data.housenumber;
               this.zip = data.zip;
               this.city = data.city;
+              this.firmname = ''; // ToDo: assign inputfield to firmname and phone
+              this.phonenumber = '';
               console.log('front here');
               this.http.post(this.ROOT_URL+'update', {
+                id: this.userId,
                 firstname: this.firstname,
                 lastname: this.lastname,
                 street: this.street,
@@ -161,6 +170,7 @@ async showUpdateField(){
         }
       ]
     });
+  this.getUserData();
  await inputField.present();
   }
 
