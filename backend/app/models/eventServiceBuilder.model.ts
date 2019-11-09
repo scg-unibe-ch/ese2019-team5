@@ -1,7 +1,7 @@
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
 import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
+
 
 const mockAddress: Address = new Address('', 0, 1234, '');
 

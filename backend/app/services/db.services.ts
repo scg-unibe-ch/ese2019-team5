@@ -9,7 +9,7 @@ import {FileHandlerService} from "./fileHandler.service";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
+
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 
 const jwt = require('jsonwebtoken');

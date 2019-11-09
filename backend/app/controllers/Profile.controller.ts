@@ -15,6 +15,7 @@ router.post('/update', async (req: Request, res: Response) => {
     console.log (req.body.id);
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
+      .setId(req.body.id)
       .setFirstname(req.body.firstname)
       .setLastname(req.body.lastname)
       .setEmail(req.body.email)
@@ -23,7 +24,7 @@ router.post('/update', async (req: Request, res: Response) => {
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
       .build();
-    user.id=req.body.id;
+
     //TODO ID dann noch besser machen warten auf Cyrill
 
     if (req.body.phoneNumber !== undefined) {
@@ -31,6 +32,9 @@ router.post('/update', async (req: Request, res: Response) => {
     }
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
+    }
+    if(req.body.isAdmin!== undefined){
+      user.setIsAdmin(true);
     }
 
     await dbService.updateUser(user);

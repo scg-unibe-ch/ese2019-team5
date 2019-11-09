@@ -2,7 +2,7 @@ import {Address} from "./address.model";
 import {User} from "./user.model";
 import {EventServiceBuilder} from "./eventServiceBuilder.model";
 import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
+
 
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
