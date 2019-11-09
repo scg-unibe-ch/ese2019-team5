@@ -104,7 +104,7 @@ client.test("Adding eventServices with requirments", function() {
 %}
 
 ###
-DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=20&providerid=94
+DELETE http://localhost:3000/eventservice/20/94
 Content-Type: application/json
 
 > {%

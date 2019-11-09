@@ -22,7 +22,7 @@ client.test("updating profile no phone no firm", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/:id?id=94
+GET http://localhost:3000/profile/94
 Content-Type: application/json
 
 
@@ -34,7 +34,7 @@ client.test("getting user information for profile", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/:id?id=12
+GET http://localhost:3000/profile/12
 Content-Type: application/json
 
 > {%

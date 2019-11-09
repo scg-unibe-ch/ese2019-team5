@@ -62,9 +62,9 @@ router.put('/update', async (req: Request, res: Response) => {
  * 406 if User or Service does not exist and 400 otherwise
  */
 router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => {
-  const userId = Number(req.query.providerid);
+  const userId = Number(req.params.providerid);
   console.log(userId);
-  const serviceId = Number(req.query.serviceid);
+  const serviceId = Number(req.params.serviceid);
   console.log(serviceId);
   let user: User;
   let eventService: EventService;

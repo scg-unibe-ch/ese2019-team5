@@ -53,7 +53,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
 
 router.get('/:id', async (req: Request, res: Response) => {
-  const userId = Number(req.query.id);
+  const userId = Number(req.params.id);
   console.log(userId);
   let user: User;
   try {
