@@ -5,6 +5,8 @@ import {Address} from "../models/address.model";
 import {DbServices} from "../services/db.services";
 import {elementAt} from "rxjs/operators";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {FilterCategories} from "../models/filterCategories.enum";
+import {EventServiceFilter} from "../models/eventServiceFilter.model";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -70,7 +72,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
-   let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
+   let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
 
     console.log(address);
 

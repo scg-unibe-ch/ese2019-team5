@@ -8,8 +8,9 @@ import {Camera} from "@ionic-native/camera/ngx";
 
 
 import {Categories} from "../../../../../../backend/app/categories";
-import {Weekdays} from "../../../../../../backend/app/weekdays";
+//import {Weekdays} from "../../../../../../backend/app/weekdays";
 import {AuthService} from "../../../AuthService/auth.service";
+import {templateJitUrl} from "@angular/compiler";
 
 
 @Component({
@@ -21,7 +22,9 @@ import {AuthService} from "../../../AuthService/auth.service";
 export class CreateServicePage implements OnInit {
 
   // Array of weekdays
-  weekdays: Weekdays[];
+ // weekdays: Weekdays[];
+  //TODO von Gillian
+  weekdays: string[];
 
   image: string;
   picture: any;
@@ -46,7 +49,9 @@ export class CreateServicePage implements OnInit {
     this.loading = false;
     this.error = '';
     // Reset weekdays Array
-    this.weekdays = [Weekdays.NoDay];
+    //this.weekdays = [Weekdays.NoDay];
+    //TODO von Gillian
+    this.weekdays= [];
   }
 
   serviceForm = this.formBuilder.group({
@@ -281,9 +286,23 @@ export class CreateServicePage implements OnInit {
     console.log("Starting weekdays");
     // remove "noDay"
     this.weekdays.pop();
-
-
+    //TODO von Gillian
     if (this.availability.value.toString().includes('Monday'))
+      this.weekdays.push('Monday');
+    if (this.availability.value.toString().includes('Tuesday'))
+      this.weekdays.push('Tuesday');
+    if (this.availability.value.toString().includes('Wednesday'))
+      this.weekdays.push('Wednesday');
+    if (this.availability.value.toString().includes('Thursday'))
+      this.weekdays.push('Thursday');
+    if (this.availability.value.toString().includes('Friday'))
+      this.weekdays.push('Friday');
+    if (this.availability.value.toString().includes('Saturday'))
+      this.weekdays.push('Saturday');
+    if (this.availability.value.toString().includes('Sunday'))
+      this.weekdays.push('Sunday');
+
+  /*  if (this.availability.value.toString().includes('Monday'))
       this.weekdays.push(Weekdays.Monday);
     if (this.availability.value.toString().includes('Tuesday'))
       this.weekdays.push(Weekdays.Tuesday);
@@ -296,7 +315,7 @@ export class CreateServicePage implements OnInit {
     if (this.availability.value.toString().includes('Saturday'))
       this.weekdays.push(Weekdays.Saturday);
     if (this.availability.value.toString().includes('Sunday'))
-      this.weekdays.push(Weekdays.Sunday);
+      this.weekdays.push(Weekdays.Sunday);*/
 
     console.log("Weekdays is set");
   }
