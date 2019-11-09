@@ -22,12 +22,9 @@ client.test("updating profile no phone no firm", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/:id
+GET http://localhost:3000/profile/:id?id=94
 Content-Type: application/json
 
-{
-  "id": 94
-}
 
 > {%
 client.test("getting user information for profile", function() {
@@ -37,12 +34,9 @@ client.test("getting user information for profile", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/:id
+GET http://localhost:3000/profile/:id?id=12
 Content-Type: application/json
 
-{
-  "id": 12
-}
 > {%
 client.test("getting user information for profile, user does not exist", function() {
   client.assert(response.status === 400, "Response status is 400");
