@@ -112,6 +112,35 @@ client.test("deleting one service, normal", function() {
   client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
-
-
+%}
 ###
+
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=20&providerid=12
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, user does not exist", function() {
+  client.assert(response.status === 406, "Response status is 406");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=94&providerid=94
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, service does not exist", function() {
+  client.assert(response.status === 406, "Response status is 406");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=333&providerid=333
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, service could not be deleted", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}

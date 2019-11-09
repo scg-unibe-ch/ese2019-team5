@@ -13,7 +13,7 @@ const dbService = new DbServices();
 
 router.post('/update', async (req: Request, res: Response) => {
   try {
-    console.log('got here update');
+
     console.log (req.body.id);
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
@@ -38,6 +38,7 @@ router.post('/update', async (req: Request, res: Response) => {
     if(req.body.isAdmin!== undefined){
       user.setIsAdmin(true);
     }
+    console.log(req.body.firstname, req.body.street, req.body.lastname);
 
     await dbService.updateUser(user);
 

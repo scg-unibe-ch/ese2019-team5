@@ -9,6 +9,7 @@ const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
 
 /**
+ * listens to HTTP events Post with add
  * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async (req: Request, res: Response) => {
@@ -48,16 +49,22 @@ router.post('/add', async (req: Request, res: Response) => {
 
 
 
-router.get('/update', async (req: Request, res: Response) => {
+router.put('/update', async (req: Request, res: Response) => {
   // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
 
 
 })
 
+/**
+ *  listens to HTTP events Delete with userId and ServiceId given in URL
+ * deletes a certain Service of a certain provider
+ * returns 200 if Service was deleted
+ * 406 if User or Service does not exist and 400 otherwise
+ */
 router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => {
   const userId = Number(req.query.providerid);
   console.log(userId);
-  const serviceId = Number(req.params.serviceid);
+  const serviceId = Number(req.query.serviceid);
   console.log(serviceId);
   let user: User;
   let eventService: EventService;
