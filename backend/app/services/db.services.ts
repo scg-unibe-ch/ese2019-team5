@@ -251,7 +251,7 @@ export class DbServices {
         throw new Error('this email isnt unique in the database');
       } else {
 
-        const address = await this.getAddressFromAId(Number(row.get('aid')), client);
+        const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
         user = new UserBuilder()
           .setId(Number(row.get('id')))
