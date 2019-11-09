@@ -1,7 +1,7 @@
 import {User} from "./user.model";
 import {Address} from "./address.model";
 
-const mockAddress: Address = new Address('', 0, 1234, '')
+const mockAddress: Address = new Address('', 0, 1234, '');
 
 export class UserBuilder {
 
@@ -27,7 +27,7 @@ export class UserBuilder {
     this._address = mockAddress;
     this._isVerified = false;
     this._firmname= '';
-    this._phonenumber='0000000000';
+    this._phonenumber='';
     this._isAdmin= false;
   }
 
