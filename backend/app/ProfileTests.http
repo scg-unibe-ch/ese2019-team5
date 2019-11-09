@@ -22,4 +22,32 @@ client.test("updating profile no phone no firm", function() {
 %}
 
 ###
+GET http://localhost:3000/profile/:id
+Content-Type: application/json
 
+{
+  "id": 94
+}
+
+> {%
+client.test("getting user information for profile", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/profile/:id
+Content-Type: application/json
+
+{
+  "id": 12
+}
+> {%
+client.test("getting user information for profile, user does not exist", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
