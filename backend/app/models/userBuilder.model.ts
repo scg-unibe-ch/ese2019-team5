@@ -5,7 +5,7 @@ const mockAddress: Address = new Address('', 0, 1234, '')
 
 export class UserBuilder {
 
-  private id = -1;
+  _id:number=-1;
   private _firstname: string;
   private _lastname: string;
   private _email: string;
@@ -28,6 +28,7 @@ export class UserBuilder {
     this._isVerified = false;
     this._Firmname= '';
     this._phonenumber='0000000000';
+   // this._id=-1;
   }
 
   public static user(): UserBuilder {
@@ -78,8 +79,13 @@ export class UserBuilder {
     return this;
   }
 
+
+  public setId(id:number):UserBuilder{
+    this._id= id;
+    return this;
+  }
   public build(): User {
-    let user: User = new User(this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm);
+    let user: User = new User(this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm);//this._id);
     return user;
   }
 

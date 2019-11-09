@@ -47,6 +47,12 @@ router.post('/add', async (req: Request, res: Response) => {
 )
 
 
+router.get('/', async (req: Request, res: Response) => {
+
+
+})
+
+
 router.get('/update', async (req: Request, res: Response) => {
   // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
 
