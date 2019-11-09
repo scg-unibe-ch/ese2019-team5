@@ -81,7 +81,7 @@ Content-Type: application/json
 }
 
 > {%
-client.test("Send mail again normal  ", function() {
+client.test("Send mail again error, no user found ", function() {
   client.assert(response.status === 404, "Response status is 404");
   client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
@@ -101,9 +101,43 @@ Content-Type: application/json
 
 > {%
 client.test("verify normal  ", function() {
-  client.assert(response.status === 200, "Response status is 404");
+  client.assert(response.status === 200, "Response status is 200");
   client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
 
 ###
+GET http://localhost:3000/signup/confirmation/:token
+Content-Type: application/json
+
+{
+  "email": "gillian.cathomas@gmx.ch",
+  "url": "localhost:4200/start/signup/confirmation/deyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQUMiLCJzdXJuYW1lIjoiQ0EiLCJlbWFpbCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaWF0IjoxNTczMzA1OTg0LCJleHAiOjE1NzMzOTIzODQsImF1ZCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCJ9.TVorfgkxC2S736-qXaUSJWI1IqcSE2QVP9eG6EvLldl17SYtwMN7fzI642d_QxNXOPjb4c0aQ58BVRyqtIIgnQ"
+
+}
+
+
+> {%
+client.test("verify token invalid  ", function() {
+  client.assert(response.status === 406 , "Response status is 406");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+### //TODO test tomorrow
+GET http://localhost:3000/signup/confirmation/:token
+Content-Type: application/json
+
+{
+  "email": "gillian.cathomas@gmx.ch",
+  "url": "localhost:4200/start/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQUMiLCJzdXJuYW1lIjoiQ0EiLCJlbWFpbCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaWF0IjoxNTczMzA1OTg0LCJleHAiOjE1NzMzOTIzODQsImF1ZCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCJ9.TVorfgkxC2S736-qXaUSJWI1IqcSE2QVP9eG6EvLldl17SYtwMN7fzI642d_QxNXOPjb4c0aQ58BVRyqtIIgnQ"
+
+}
+
+
+> {%
+client.test("verify token expired  ", function() {
+  client.assert(response.status === 401 , "Response status is 401");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}

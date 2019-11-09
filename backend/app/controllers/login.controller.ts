@@ -4,8 +4,7 @@ import {User} from "../models/user.model";
 import {EmailForgotPWServices} from '../services/emailForgotPW.services';
 import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
-import {error} from "ts-postgres/dist/src/logging";
-import {errorObject} from "rxjs/internal-compatibility";
+
 
 
 const dbService = new DbServices();
@@ -49,6 +48,11 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * listens to HTTP Client POST events when user forgot Password
+ * returns error if error occured because mail is not known
+ * sends 'reset Passwort sent' if request was ok
+ */
 router.post('/forgotPassword', async (req: Request, res: Response) => {
   const email = req.body.email;
   console.log('got to forgot password');
@@ -58,7 +62,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
 
 
     res.statusCode = 201;
-    res.send('reset Password send');
+    res.send('reset Password sent');
 
   } catch (error) {
     console.log('this is the error' +error)
@@ -69,7 +73,13 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
 
 });
 
-//TODO irgendwie sicherstellen, dass user nicht einfach so auf passwort zurücksetzen seite kommen kann
+/**
+ * verify Method for token that is sent by mail
+ * @param req which has the URL in it
+ * @param res ok (200) if password could be changed
+ * 401 if token is expired otherwise 406 if token is manipulated or
+ * invalid otherwise
+ */
 const verifyToken = async (req: Request, res: Response) => {
   try {
     const tokenUrl = req.body.url;
@@ -93,7 +103,7 @@ const verifyToken = async (req: Request, res: Response) => {
       res.send('Password was successfully changed');
 
   } catch (error) {
-    if (errorObject.name === 'TokenExpiredError') {
+    if (error.name.localeCompare('TokenExpiredError')) {
       res.status(401).send('Access token expired');
     } else {
       res.status(406);
@@ -104,6 +114,9 @@ const verifyToken = async (req: Request, res: Response) => {
 
 };
 
+/**
+ * HTTP eventlistener to /resetPassword/:token Events and then calling verify Token
+ */
 router.get('/resetPassword/:token', verifyToken);
 
 

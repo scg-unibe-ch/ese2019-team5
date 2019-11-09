@@ -7,7 +7,7 @@ import {DbServices} from '../services/db.services';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
-import {errorObject} from "rxjs/internal-compatibility";
+
 
 const router: Router = Router(); // part of express needed
 
@@ -57,9 +57,7 @@ const verifyToken = async (req: Request, res: Response) => {
   console.log('got here to verify sign up');
   try {
     const tokenUrl = req.body.url;
-    console.log('URL: ' + tokenUrl);
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
-    console.log('haha' + token);
     const verifyOptions = {
       issuer: 'Eventdoo',
       subject: req.body.email,
@@ -74,12 +72,10 @@ const verifyToken = async (req: Request, res: Response) => {
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {
-    if (errorObject.name === 'TokenExpiredError') {
-      console.log('expride token');
+    if (error.name === 'TokenExpiredError') { //TODO evt error object
       res.status(401).send('Access token expired');
     } else {
       res.status(406);
-      console.log('infalid token');
       res.send('invalid Token' + error);
 
     }

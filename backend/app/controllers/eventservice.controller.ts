@@ -47,11 +47,6 @@ router.post('/add', async (req: Request, res: Response) => {
 )
 
 
-router.get('/', async (req: Request, res: Response) => {
-
-
-})
-
 
 router.get('/update', async (req: Request, res: Response) => {
   // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
@@ -59,9 +54,11 @@ router.get('/update', async (req: Request, res: Response) => {
 
 })
 
-router.delete('/:id/:serviceId', async (req: Request, res: Response) => {
-  const userId = Number(req.params.id);
-  const serviceId = Number(req.params.serviceId);
+router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => {
+  const userId = Number(req.query.providerid);
+  console.log(userId);
+  const serviceId = Number(req.params.serviceid);
+  console.log(serviceId);
   let user: User;
   let eventService: EventService;
   try{

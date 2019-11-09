@@ -32,7 +32,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email": "nalan.draper@iiron.us",
+"email": "kiai.lenard@iiron.us",
 "pwhash": -1425372965
 }
 
@@ -45,11 +45,11 @@ client.test("Login does not work, wrong password ", function() {
 
 ###
 
-GET http://localhost:3000/login/forgotPassword
+POST http://localhost:3000/login/forgotPassword
 Content-Type: application/json
 
 {
-  "email": "samarth.kalden@iiron.us"
+  "email": "gillian.cathomas@gmx.ch"
 }
 
 > {%
@@ -60,7 +60,7 @@ client.test("Send Mail for Passwort reset ", function() {
 %}
 
 ###
-GET http://localhost:3000/login/forgotPassword
+POST http://localhost:3000/login/forgotPassword
 Content-Type: application/json
 
 {

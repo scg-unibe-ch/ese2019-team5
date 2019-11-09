@@ -13,7 +13,7 @@ export class UserBuilder {
   private _address: Address;
   private _isVerified: boolean;
   private _isFirm=false;
-  private _firmname = ''; //TODO wie anders lösen?? mit Name oder sonst wie?
+  private _firmname = '';
   private _phonenumber: string;
   private _isAdmin = false;
 
