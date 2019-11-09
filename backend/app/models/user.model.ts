@@ -116,6 +116,10 @@ export class User {
   setId(id: number) {
     this.id = id;
   }
+  public getId(): number {
+    return this.id;
+  }
+
 
   setPhoneNumber(phoneNumber: string) {
     this.phoneNumber = phoneNumber;

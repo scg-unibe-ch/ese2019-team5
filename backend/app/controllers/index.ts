@@ -4,3 +4,4 @@ export * from './sqlTest.controller';
 export * from './login.controller';
 export * from './Profile.controller';
 export * from './eventservice.controller';
+export * from './search.controller';

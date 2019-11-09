@@ -12,6 +12,7 @@ const dbService = new DbServices();
 router.post('/update', async (req: Request, res: Response) => {
   try {
     console.log('got here update');
+    console.log (req.body.id);
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
       .setFirstname(req.body.firstname)
@@ -22,6 +23,8 @@ router.post('/update', async (req: Request, res: Response) => {
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
       .build();
+    user.id=req.body.id;
+    //TODO ID dann noch besser machen warten auf Cyrill
 
     if (req.body.phoneNumber !== undefined) {
       user.setPhoneNumber(req.body.phoneNumber);
@@ -63,7 +66,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
-    let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
+   let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
 
     console.log(address);
 
