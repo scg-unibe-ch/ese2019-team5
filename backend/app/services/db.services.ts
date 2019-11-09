@@ -11,6 +11,7 @@ import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {Categories} from "../categories";
 
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
+import {UserBuilder} from "../models/userBuilder.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -94,7 +95,7 @@ export class DbServices {
     user = await this.getUserFromEmail(email);
     if (this.checkIfPasswordCorrect(user, password)) {
       if (this.isUserVerified(user)) {
-        return new LoginResult(user,this.generateJWT(email, user.id));
+        return new LoginResult(user,this.generateJWT(email, user.getId()));
       } else {
         throw Error('To login, please verify your email-address');
       }
@@ -182,7 +183,7 @@ export class DbServices {
    * @param client to use to connect to the database
    */
   private async makeUserVerifiedDB(user: User, client: Client){
-    await client.query('Update users Set isverified=true Where id = $1', [user.id])
+    await client.query('Update users Set isverified=true Where id = $1', [user.getId()])
   }
 
   /**
@@ -214,7 +215,7 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
-    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.id]);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.getId()]);
     var oldAddressId = -1;
     for await (const row of stream){
       oldAddressId = Number(row.get('addressid'));
@@ -237,9 +238,9 @@ export class DbServices {
 
 
     if(id == null) {
-      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [email]);
+      stream = client.query('SELECT * From users Where email = $1', [email]);
     }else {
-      stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where id = $1', [id]);
+      stream = client.query('SELECT * From users Where id = $1', [id]);
     }
 
 
@@ -252,8 +253,19 @@ export class DbServices {
 
         const address = await this.getAddressFromAId(Number(row.get('aid')), client);
 
-        user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
-        user.setId(Number(row.get('id')));
+        user = new UserBuilder()
+          .setId(Number(row.get('id')))
+          .setFirstname(String(row.get('prename')))
+          .setLastname(String(row.get('lastname')))
+          .setEmail(String(row.get('email')))
+          .setPwhash(String(row.get('password')))
+          .setIsVerified(Boolean(row.get('isverified')))
+          .setAddress(address)
+          .setIsFirm(Boolean(row.get('isfirm')))
+          .setPhonenumber(String(row.get('phonenumber')))
+          .setFirmname(String(row.get('firmname')))
+          .build();
+
         return user;
       }
     }
@@ -470,7 +482,7 @@ export class DbServices {
     async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
-        const stream = client.query('SELECT id As id, prename As pn, lastname As ln, email As email, password As pw, isverified As isv, isFirm As isf, phonenumber As phone, addressId As aid From users Where email = $1', [name]);
+        const stream = client.query('SELECT * From users Where email = $1', [name]);
 
         for await (const row of stream) {
 
@@ -478,10 +490,23 @@ export class DbServices {
                 throw new Error('no result found in database');
             }
             // tslint:disable-next-line:max-line-length
-            const address = await this.getAddressFromAId(Number(row.get('aid')), client);
+            const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
-            const user = new User(String(row.get('pn')), String(row.get('ln')), String(row.get('email')), String(row.get('pw')), Boolean(row.get('isv')), address,Boolean(row.get('isf')));
-            user.setId(Number(row.get('id')));
+            const user = new UserBuilder()
+              .setId(Number(row.get('id')))
+              .setFirstname(String(row.get('prename')))
+              .setLastname(String(row.get('lastname')))
+              .setEmail(String(row.get('email')))
+              .setPwhash(String(row.get('password')))
+              .setIsVerified(Boolean(row.get('isverified')))
+              .setAddress(address)
+              .setIsFirm(Boolean(row.get('isfirm')))
+              .setPhonenumber(String(row.get('phonenumber')))
+              .setFirmname(String(row.get('firmname')))
+              .build();
+
+
+
             // tslint:disable-next-line:max-line-length
             sqlResult.addUser(user);
         }
