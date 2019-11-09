@@ -56,10 +56,12 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
     let user: User = await dbService.getUserFromEmail(email);
     await EmailForgotPWServices.sendMailToUser(user);
 
+
     res.statusCode = 201;
     res.send('reset Password send');
 
   } catch (error) {
+    console.log('this is the error' +error)
     res.statusCode = 400;
     res.send(error);
 
@@ -84,7 +86,7 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-    
+
       let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
       await dbService; //TODO reset Password mit newPWHash Cyrill
       res.status(200);

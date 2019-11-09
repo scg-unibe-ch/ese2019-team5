@@ -7,6 +7,7 @@ import {DbServices} from '../services/db.services';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
+import {errorObject} from "rxjs/internal-compatibility";
 
 const router: Router = Router(); // part of express needed
 
@@ -53,25 +54,35 @@ router.post('/', async (req: Request, res: Response) => {
  * @param res answer to client that verifiyng token worked and therefore user is no verified or error
  */
 const verifyToken = async (req: Request, res: Response) => {
-  const tokenUrl: string= req.url;
-
-  const token = tokenUrl.substr(tokenUrl.lastIndexOf('/') +1);
-  console.log('haha' + token);
-  const verifyOptions = {
-    issuer: 'Eventdoo',
-    subject: req.body.email,
-    audience: req.body.email,
-    expiresIn: '24h',
-    algorithm: 'RS256'
-  };
-
+  console.log('got here to verify sign up');
   try {
+    const tokenUrl = req.body.url;
+    console.log('URL: ' + tokenUrl);
+    const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+    console.log('haha' + token);
+    const verifyOptions = {
+      issuer: 'Eventdoo',
+      subject: req.body.email,
+      audience: req.body.email,
+      expiresIn: '24h',
+      algorithm: 'RS256'
+    };
+
+
     let decoded = jwt.verify(token, publicKey, verifyOptions);
     await dbService.makeUserVerified(decoded.email);
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {
-    res.send(error);
+    if (errorObject.name === 'TokenExpiredError') {
+      console.log('expride token');
+      res.status(401).send('Access token expired');
+    } else {
+      res.status(406);
+      console.log('infalid token');
+      res.send('invalid Token' + error);
+
+    }
   }
 
 };

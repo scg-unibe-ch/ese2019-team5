@@ -68,7 +68,7 @@ export class EmailForgotPWServices {
         subject: 'Password Reset',
         html: emailService.getEmailForgotPWText(emailURL)
       };
-
+  console.log('got before transporter');
       transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
           console.log(err);
