@@ -3,16 +3,11 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/IonicAndAngularTry/platforms" />
-      <excludeFolder url="file://$MODULE_DIR$/IonicAndAngularTry/www" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/platforms" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/www" />
+      <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="ionic" level="application" />
-    <orderEntry type="library" name="ionic.esm" level="application" />
   </component>
 </module>
