@@ -7,6 +7,8 @@ import {User} from '../models/user.model';
 import {FileHandlerService} from "../services/fileHandler.service";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
+import {UserBuilder} from "../models/userBuilder.model";
+import {Address} from "../models/address.model";
 
 
 const router: Router = Router();
@@ -130,6 +132,26 @@ router.get("/testFilter/:z", async(req: Request, res: Response) => {
   const services = await dbService.getServiceFilter(filters2);
   res.statusCode = 200;
   res.send(services);
+});
+
+router.get("/testUpdateUser/:z", async(req: Request, res: Response) => {
+  const address = new Address("Ischlag", 64, 3303, "Jegenstorf");
+
+  const user = new UserBuilder()
+    .setId(88)
+    .setFirstname("Cyrill J")
+    .setLastname("Rohrbach")
+    .setAddress(address)
+    .setIsFirm(false)
+    .setPhonenumber("+41 79 955 00 92")
+    .build();
+
+  // console.log(user);
+
+  dbService.updateUser(user);
+
+  res.statusCode = 200;
+  res.send(await dbService.getUserFromId(88));
 });
 
 

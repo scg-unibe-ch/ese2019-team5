@@ -216,17 +216,17 @@ export class DbServices {
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
     const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.getId()]);
-    var oldAddressId = -1;
+    let oldAddressId = -1;
     for await (const row of stream){
       oldAddressId = Number(row.get('addressid'));
 
     }
 
-    if (oldAddressId = -1) {
+    if (oldAddressId == -1) {
       throw Error("An error occured while getting the old address id of updated user")
     }
 
-    client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname()]);
+    await client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6 WHERE id=$7',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname(), user.getId()]);
 
     this.searchForAddressUsageAndDelete(oldAddressId, client);
 
