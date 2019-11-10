@@ -15,7 +15,8 @@ router.post('/update', async (req: Request, res: Response) => {
   try {
 
     console.log (req.body.id);
-    console.log(req.body);
+    console.log('body'+ req.body);
+    console.log("email" +req.body.email);
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
       .setId(req.body.id)

@@ -84,11 +84,19 @@ const verifyToken = async (req: Request, res: Response) => {
 
     console.log(req.body);
 
-    const tokenU = req.body.token; //req.url
-    const userEmail:string = req.body.email;
+    const token = req.body.token; //req.url
+    //const userEmail:string = req.body.email;
     const newPWhash: string = req.body.password;
-    const token = tokenU.substring(1)
+   // const token = tokenU.substring(1)
     console.log(token);
+
+    const notVerified= jwt.decode(token);
+    if (notVerified['email']!== null){
+    const userEmail = notVerified['email']}
+
+
+
+
     //const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
     const publicForgotPWKey = fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
