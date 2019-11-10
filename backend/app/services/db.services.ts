@@ -172,6 +172,16 @@ export class DbServices {
     }
   }
 
+  public async deleteUser(userId: number){
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.deleteUserFromDB(userId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -273,7 +283,11 @@ export class DbServices {
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
-    client.query('')
+    let stream = await client.query('SELECT COUNT(id) FROM users');
+    console.log(stream);
+    for await (const row of stream){
+      console.log(row.get('count'));
+    }
   }
 
 

@@ -144,8 +144,8 @@ export class EventService {
 
   }
 
-  public toSimplification():any{
-    return{
+  public toSimplification(): object{
+    return {
       'serviceId':this.getServiceId(),
       'providerId':this.getProviderId(),
       'title':this.getTitle(),
@@ -156,7 +156,6 @@ export class EventService {
       'availability': this.getAvailability(),
       'requirements': this.getRequirements(),
       'subtype':this.getSubtype()
-
     }
 
 

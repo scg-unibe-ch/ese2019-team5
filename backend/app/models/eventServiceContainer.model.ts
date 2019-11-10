@@ -15,4 +15,12 @@ export class EventServiceContainer {
     this.services.push(service);
   }
 
+  public toObjectArray(): object[] {
+    let res: object[] = [];
+    for(const service of this.services) {
+      res.push(service.toSimplification());
+    }
+    return res;
+  }
+
 }
