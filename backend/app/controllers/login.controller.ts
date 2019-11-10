@@ -81,27 +81,16 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
  */
 const verifyToken = async (req: Request, res: Response) => {
   try {
-
-    console.log(req.body);
-
     const token = req.body.token; //req.url
-    //const userEmail:string = req.body.email;
     const newPWhash: string = req.body.password;
-   // const token = tokenU.substring(1)
-    console.log(token);
-    let userEmail:string;
-    const notVerified= jwt.decode(token);
+    let userEmail: string;
+    const notVerified = jwt.decode(token);
 
-    if(notVerified===null){
-      userEmail='a@b.ch';
+    if (notVerified === null) {
+      userEmail = 'a@b.ch';
+    } else {
+      userEmail = notVerified['sub']
     }
-    else{
-  userEmail = notVerified['sub']}
-
-
-
-
-    //const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
     const publicForgotPWKey = fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
 
@@ -112,7 +101,6 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-
 
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
     console.log('gotbefore db');

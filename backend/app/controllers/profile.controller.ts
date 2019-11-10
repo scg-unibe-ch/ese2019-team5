@@ -67,6 +67,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
+    const pwHash:string= user.getPwHash();
     const address = user.getAddress();
     const street:string =address.street;
     const housenumber:number =address.housenumber;
@@ -84,6 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
+          'pwHash': pwHash,
           'street': street,
           'housenumber': housenumber,
           'zip': zip,
