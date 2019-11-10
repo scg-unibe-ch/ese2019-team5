@@ -56,7 +56,8 @@ router.post('/', async (req: Request, res: Response) => {
 const verifyToken = async (req: Request, res: Response) => {
   console.log('got here to verify sign up');
   try {
-    const tokenUrl = req.body.url;
+    const tokenUrl = req.url;
+    console.log(tokenUrl)
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     const verifyOptions = {
       issuer: 'Eventdoo',
@@ -74,9 +75,11 @@ const verifyToken = async (req: Request, res: Response) => {
   } catch (error) {
     if (error.name === 'TokenExpiredError') { //TODO evt error object
       res.status(401).send('Access token expired');
+      console.log(401)
     } else {
       res.status(406);
       res.send('invalid Token' + error);
+      console.log(406 + error);
 
     }
   }
