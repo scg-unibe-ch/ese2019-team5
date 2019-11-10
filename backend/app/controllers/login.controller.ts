@@ -82,10 +82,11 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
  */
 const verifyToken = async (req: Request, res: Response) => {
   try {
-    const tokenUrl = req.url;
+    const tokenU = req.body.token; //req.url
     const newPWhash = req.body.newPwHash;
-
-    const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+    const token= tokenU.substring(1)
+    console.log(token);
+    //const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
     const publicForgotPWKey = fs.readFileSync('./app/services/publicForgotPWKey.key', 'utf8');
 
@@ -97,6 +98,7 @@ const verifyToken = async (req: Request, res: Response) => {
       algorithm: 'RS256'
     };
 
+
       let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
       await dbService; //TODO reset Password mit newPWHash Cyrill
       res.status(200);
@@ -105,6 +107,7 @@ const verifyToken = async (req: Request, res: Response) => {
   } catch (error) {
     if (error.name.localeCompare('TokenExpiredError')) {
       res.status(401).send('Access token expired');
+      console.log(error)
     } else {
       res.status(406);
       res.send('invalid Token' + error);
@@ -117,7 +120,7 @@ const verifyToken = async (req: Request, res: Response) => {
 /**
  * HTTP eventlistener to /resetPassword/:token Events and then calling verify Token
  */
-router.get('/resetPassword/:token', verifyToken);
+router.post('/resetPassword', verifyToken);
 
 
 export const LoginController: Router = router;
