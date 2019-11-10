@@ -70,7 +70,7 @@ const assert= chai.assert;
 const should = chai.should();
 
 let testAddress = new Address('someStreet',22,3456,'Cityhall');
-let testUser:User= new User('Testy','Testyfable','gillian.cathomas@gmx.ch','aaaaaa',false,testAddress,false);
+let testUser:User= new User(3,'Testy','Testyfable','gillian.cathomas@gmx.ch','aaaaaa',false,testAddress,false,'','000000',false);
 
 describe( 'POST Event for Signup',() => {
   it('should return "please verify your email"', function (done) {

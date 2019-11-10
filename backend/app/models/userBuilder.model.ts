@@ -1,34 +1,34 @@
 import {User} from "./user.model";
 import {Address} from "./address.model";
 
-const mockAddress: Address = new Address('', 0, 1234, '')
+const mockAddress: Address = new Address('', 0, 1234, '');
 
 export class UserBuilder {
 
-  _id:number=-1;
+  private _id :number;
   private _firstname: string;
   private _lastname: string;
   private _email: string;
   private _pwhash: string;
   private _address: Address;
   private _isVerified: boolean;
-  private _newUser = false;
-  private _isAdmin = false;
-  private _Firmname = ''; //TODO wie anders lösen?? mit Name oder sonst wie?
-  private _phonenumber = "null";
   private _isFirm=false;
+  private _firmname = '';
+  private _phonenumber: string;
+  private _isAdmin = false;
 
 
   constructor() {
+    this._id=-1;
     this._firstname = '';
     this._lastname = '';
     this._email = '';
     this._pwhash = '';
     this._address = mockAddress;
     this._isVerified = false;
-    this._Firmname= '';
-    this._phonenumber='0000000000';
-   // this._id=-1;
+    this._firmname= '';
+    this._phonenumber='';
+    this._isAdmin= false;
   }
 
   public static user(): UserBuilder {
@@ -70,7 +70,7 @@ export class UserBuilder {
     return this;
   }
   public setFirmname(Firmname: string): UserBuilder {
-    this._Firmname = Firmname;
+    this._firmname = Firmname;
     return this;
   }
 
@@ -79,13 +79,18 @@ export class UserBuilder {
     return this;
   }
 
-
   public setId(id:number):UserBuilder{
     this._id= id;
     return this;
   }
+
+  public setIsAdmin(isAdmin:boolean):UserBuilder{
+    this._isAdmin= isAdmin;
+    return this;
+  }
+
   public build(): User {
-    let user: User = new User(this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm);//this._id);
+    let user: User = new User(this._id,this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm,this._firmname,this._phonenumber,this._isAdmin);//this._id);
     return user;
   }
 

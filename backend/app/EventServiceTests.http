@@ -3,7 +3,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 82,
+  "providerId": 93,
   "category": "Location",
   "title": "Barn",
   "description": "Beautiful barn to rent for all kind of events",
@@ -28,7 +28,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 82,
+  "providerId": 93,
   "category": "Food",
   "title": "Colourful Cupcakes",
   "description": "Looking for colourful cupcakes, I can make them all in all the colours you want.",
@@ -55,7 +55,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 7,
+  "providerId": 94,
   "category": "Food",
   "title": "Black Cupcakes",
   "description": "Looking for black cupcakes? I will bake them.",
@@ -82,7 +82,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 48,
+  "providerId": 95,
   "category": "Music",
   "title": "The perfect piano musician",
   "description": "I will give your event the perfect atmosphere",
@@ -104,19 +104,43 @@ client.test("Adding eventServices with requirments", function() {
 %}
 
 ###
-DELETE  http://localhost:3000/eventservice
+DELETE http://localhost:3000/eventservice/20/94
 Content-Type: application/json
 
-{
-  "id": 82,
-  "serviceId": 10
-
-}
 > {%
-client.test("Adding eventServices with requirments", function() {
+client.test("deleting one service, normal", function() {
   client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
-
-
+%}
 ###
+
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=20&providerid=12
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, user does not exist", function() {
+  client.assert(response.status === 406, "Response status is 406");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=94&providerid=94
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, service does not exist", function() {
+  client.assert(response.status === 406, "Response status is 406");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/eventservice/:serviceid/:providerid?serviceid=333&providerid=333
+Content-Type: application/json
+
+> {%
+client.test("deleting one service, service could not be deleted", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}

@@ -9,10 +9,12 @@ const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
 
 /**
+ * listens to HTTP events Post with add
  * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async (req: Request, res: Response) => {
-
+  console.log('got here')
+  try {
     const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const eventService: EventService = EventServiceBuilder.eventService()
       .setProviderId(req.body.providerId)
@@ -31,7 +33,13 @@ router.post('/add', async (req: Request, res: Response) => {
     if (req.body.requirements !== undefined) {
       eventService.setRequirements(req.body.requirements);
     }
-    try {
+    if(req.body.image !== undefined){
+    let b64string=req.body.image;
+    let buffer = Buffer.from(b64string,'base64');
+    eventService.setImage(buffer);
+    }
+console.log(req.body.capacity)
+    console.log(eventService)
 
       dbService.addEventService(eventService);
 
@@ -47,21 +55,24 @@ router.post('/add', async (req: Request, res: Response) => {
 )
 
 
-router.get('/', async (req: Request, res: Response) => {
 
-
-})
-
-
-router.get('/update', async (req: Request, res: Response) => {
+router.put('/update', async (req: Request, res: Response) => {
   // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
 
 
 })
 
-router.delete('/:id/:serviceId', async (req: Request, res: Response) => {
-  const userId = Number(req.params.id);
-  const serviceId = Number(req.params.serviceId);
+/**
+ *  listens to HTTP events Delete with userId and ServiceId given in URL
+ * deletes a certain Service of a certain provider
+ * returns 200 if Service was deleted
+ * 406 if User or Service does not exist and 400 otherwise
+ */
+router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => {
+  const userId = Number(req.params.providerid);
+  console.log(userId);
+  const serviceId = Number(req.params.serviceid);
+  console.log(serviceId);
   let user: User;
   let eventService: EventService;
   try{

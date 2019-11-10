@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
 
+
 const router: Router = Router(); // part of express needed
 
 // keys for jwt token
@@ -22,13 +23,12 @@ const dbService = new DbServices();
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
-  const isVerified: boolean = false;
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
     .setEmail(req.body.email)
     .setPwhash(req.body.pwhash)
-    .setIsVerified(isVerified)
+    .setIsVerified(false)
     .setAddress(address)
     .build();
 
@@ -53,25 +53,34 @@ router.post('/', async (req: Request, res: Response) => {
  * @param res answer to client that verifiyng token worked and therefore user is no verified or error
  */
 const verifyToken = async (req: Request, res: Response) => {
-  const tokenUrl: string= req.url;
-
-  const token = tokenUrl.substr(tokenUrl.lastIndexOf('/') +1);
-  console.log('haha' + token);
-  const verifyOptions = {
-    issuer: 'Eventdoo',
-    subject: req.body.email,
-    audience: req.body.email,
-    expiresIn: '24h',
-    algorithm: 'RS256'
-  };
-
+  console.log('got here to verify sign up');
   try {
+    const tokenUrl = req.url;
+    console.log(tokenUrl)
+    const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
+    const verifyOptions = {
+      issuer: 'Eventdoo',
+      subject: req.body.email,
+      audience: req.body.email,
+      expiresIn: '24h',
+      algorithm: 'RS256'
+    };
+
+
     let decoded = jwt.verify(token, publicKey, verifyOptions);
     await dbService.makeUserVerified(decoded.email);
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {
-    res.send(error);
+    if (error.name === 'TokenExpiredError') { //TODO evt error object
+      res.status(401).send('Access token expired');
+      console.log(401)
+    } else {
+      res.status(406);
+      res.send('invalid Token' + error);
+      console.log(406 + error);
+
+    }
   }
 
 };

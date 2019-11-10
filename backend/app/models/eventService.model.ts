@@ -2,7 +2,7 @@ import {Address} from "./address.model";
 import {User} from "./user.model";
 import {EventServiceBuilder} from "./eventServiceBuilder.model";
 import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
+
 
 
 //TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
@@ -15,15 +15,16 @@ export class EventService {
   private _availability: string;
   private _address: Address;
   private _perimeter: string;
-  private subtype:string;
-  private requirements:string;
+  private _subtype:string;
+  private _requirements:string;
   private _capacity: string;
   private _price: string;
+  private _image:Buffer;
 
   private pictureIds: File[]; // TODO Fotos werden wahrscheinlich als file array übergeben un dann abgespeichert
 
 
-  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:string, price:string){
+  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:string, price:string,image:Buffer){
     this.serviceId = serviceId;
     this._providerId= providerId;
     this._category = category;
@@ -32,10 +33,11 @@ export class EventService {
     this._address= address;
     this._perimeter = perimeter;
     this._availability = availability;
-    this.requirements = requirements;
-    this.subtype = subtype;
+    this._requirements = requirements;
+    this._subtype = subtype;
     this._capacity=capacity;
     this._price=price;
+    this._image=image
 
 
     this.pictureIds = []; // provisorisch
@@ -113,17 +115,17 @@ export class EventService {
   }
 
   public setRequirements(requirements:string){
-    this.requirements=requirements;
+    this._requirements=requirements;
   }
   public getRequirements(): string {
-    return this.requirements;
+    return this._requirements;
   }
 
   public setSubtype(subtype:string){
-    this.subtype=subtype;
+    this._subtype=subtype;
   }
   public getSubtype(): string {
-    return this.subtype;
+    return this._subtype;
   }
 
   public setCapacity(capacity:string){
@@ -141,6 +143,36 @@ export class EventService {
   }
   public getPrice():string{
     return  this._price;
+
+  }
+
+  public setImage(image:Buffer){
+    this._image=image;
+    return this;
+  }
+
+
+  public getImage():Buffer{
+
+    return this._image;
+  }
+
+
+  public toSimplification():any{
+    return{
+      'serviceId':this.getServiceId(),
+      'providerId':this.getProviderId(),
+      'title':this.getTitle(),
+      'category':this.getCategory(),
+      'description': this.getDescription(),
+      'address':this.getAddress(),
+      'perimeter': this.getPerimeter(),
+      'availability': this.getAvailability(),
+      'requirements': this.getRequirements(),
+      'subtype':this.getSubtype()
+
+    }
+
 
   }
 }

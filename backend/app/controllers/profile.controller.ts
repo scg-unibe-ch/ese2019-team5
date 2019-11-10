@@ -5,16 +5,21 @@ import {Address} from "../models/address.model";
 import {DbServices} from "../services/db.services";
 import {elementAt} from "rxjs/operators";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {FilterCategories} from "../models/filterCategories.enum";
+import {EventServiceFilter} from "../models/eventServiceFilter.model";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
 
 router.post('/update', async (req: Request, res: Response) => {
   try {
-    console.log('got here update');
+
     console.log (req.body.id);
+    console.log('body'+ req.body);
+    console.log("email" +req.body.email);
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
+      .setId(req.body.id)
       .setFirstname(req.body.firstname)
       .setLastname(req.body.lastname)
       .setEmail(req.body.email)
@@ -23,8 +28,8 @@ router.post('/update', async (req: Request, res: Response) => {
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
       .build();
-    user.id=req.body.id;
-    //TODO ID dann noch besser machen warten auf Cyrill
+
+
 
     if (req.body.phoneNumber !== undefined) {
       user.setPhoneNumber(req.body.phoneNumber);
@@ -32,6 +37,10 @@ router.post('/update', async (req: Request, res: Response) => {
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
     }
+    if(req.body.isAdmin!== undefined){
+      user.setIsAdmin(true);
+    }
+    console.log(req.body.firstname, req.body.street, req.body.lastname);
 
     await dbService.updateUser(user);
 
@@ -47,16 +56,18 @@ router.post('/update', async (req: Request, res: Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
+  console.log(userId);
   let user: User;
   try {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
 
     //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
-    //All let eventServices: EventService []=db. Service.GetAllEvents(id);//TODO get all Services Cyrill
+
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
+    const pwHash:string= user.getPwHash();
     const address = user.getAddress();
     const street:string =address.street;
     const housenumber:number =address.housenumber;
@@ -66,7 +77,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
-   let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
+   let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
 
     console.log(address);
 
@@ -74,6 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
+          'pwHash': pwHash,
           'street': street,
           'housenumber': housenumber,
           'zip': zip,

@@ -1,0 +1,47 @@
+###Funktionierendes erstellen von Eventservices
+POST http://localhost:3000/profile/update
+Content-Type: application/json
+
+{
+  "id": 95,
+  "firstname": "My new firstname",
+  "lastname": "Meier",
+  "email": "kiai.lenard@iiron.us",
+  "pwhash": -1425372064,
+  "street": "Station",
+  "housenumber": 22,
+  "zip": 1245,
+  "city": "San Francisco",
+  "isFrim": false
+}
+> {%
+client.test("updating profile no phone no firm", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/profile/94
+Content-Type: application/json
+
+
+> {%
+client.test("getting user information for profile", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/profile/12
+Content-Type: application/json
+
+> {%
+client.test("getting user information for profile, user does not exist", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

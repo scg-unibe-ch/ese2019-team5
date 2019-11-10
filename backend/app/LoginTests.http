@@ -32,7 +32,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-"email": "nalan.draper@iiron.us",
+"email": "kiai.lenard@iiron.us",
 "pwhash": -1425372965
 }
 
@@ -45,11 +45,11 @@ client.test("Login does not work, wrong password ", function() {
 
 ###
 
-GET http://localhost:3000/login/forgotPassword
+POST http://localhost:3000/login/forgotPassword
 Content-Type: application/json
 
 {
-  "email": "samarth.kalden@iiron.us"
+  "email": "gillian.cathomas@gmx.ch"
 }
 
 > {%
@@ -60,7 +60,7 @@ client.test("Send Mail for Passwort reset ", function() {
 %}
 
 ###
-GET http://localhost:3000/login/forgotPassword
+POST http://localhost:3000/login/forgotPassword
 Content-Type: application/json
 
 {
@@ -106,12 +106,12 @@ client.assert(response.body.isEmpty !== -1, "Response is not empty")
 %}
 
 ###
-GET http://localhost:3000/login/resetPassword/:token
+POST http://localhost:3000/login/resetPassword
 Content-Type: application/json
 
 {
-  "url": "localhost:4200/start/login/resetPassword/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDYXRob21hcyIsImVtYWlsIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpYXQiOjE1NzI5ODI1OTEsImV4cCI6MTU3MzA2ODk5MSwiYXVkIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpc3MiOiJFdmVudGRvbyIsInN1YiI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIn0.cK5HQkDdp6UDtMDuGRXjf9IDCOLCmdpZNf8mvOgyi91_AuAwTeqd8yWElNY7tOmhYmZIsxZ_tM3Bh5jsrgm9nof_hZlS8RgzcGebxRepxAfyScP4WvefMvSK-zf1l5Gb-CsQc2IJTMT0cr0wZBcmiJjSzIbJYIsH9bZH5URG6CE",
-  "newPwHash":-1395788608
+"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibnVsbCIsInN1cm5hbWUiOiJudWxsIiwiZW1haWwiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlhdCI6MTU3MzQwOTkwMCwiZXhwIjoxNTczNDk2MzAwLCJhdWQiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2gifQ.j4LTpuO6EBddWOOU_8uMu5-ZhSybI76n4ZNg-_nkDKMJrSmhFbYWev9LTzBXrNEKQhpSmRry2vqmRmBRSSO3gV4f4M_AsjJGNn_mJoRhfEO7hCu16MUhSs1O1YxumFKv26Kh2wW_gnll0YpXwfRSihhCS33eoF62cyJWGgzjeBE",
+  "password":-1395788608
 }
 
 > {%

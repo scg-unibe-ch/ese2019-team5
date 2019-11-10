@@ -1,7 +1,7 @@
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
 import {Categories} from "../categories";
-import {Weekdays} from "../weekdays";
+
 
 const mockAddress: Address = new Address('', 0, 1234, '');
 
@@ -20,6 +20,7 @@ export class EventServiceBuilder {
   private _subtype: string;
   private _capacity: string;
   private _price: string;
+  private _image: Buffer;
 
 
   constructor() {
@@ -30,20 +31,22 @@ export class EventServiceBuilder {
     this._title = '';
     this._description = '';
     this._address = mockAddress;
-    this._perimeter = 'zero km';
+    this._perimeter = '';
     this._availability = availability;
     this._requirments = '';
     this._subtype = '';
-    this._capacity= '0';
-    this._price='0';
+    this._capacity = '0';
+    this._price = '0';
+    this._image = Buffer.from('');
 
   }
-  public static eventService(): EventServiceBuilder{
+
+  public static eventService(): EventServiceBuilder {
     return new EventServiceBuilder();
   }
 
   public setServiceId(serviceId: number): EventServiceBuilder {
-    this._serviceId=serviceId;
+    this._serviceId = serviceId;
     return this;
   }
 
@@ -63,7 +66,7 @@ export class EventServiceBuilder {
   }
 
   public setDescription(description: string): EventServiceBuilder {
-    this._description= description;
+    this._description = description;
     return this;
   }
 
@@ -72,8 +75,8 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setPerimeter(perimeter:string):EventServiceBuilder{
-    this._perimeter= perimeter;
+  public setPerimeter(perimeter: string): EventServiceBuilder {
+    this._perimeter = perimeter;
     return this;
   }
 
@@ -92,23 +95,26 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setCapacity(capacity:string):EventServiceBuilder{
-    this._capacity= capacity;
+  public setCapacity(capacity: string): EventServiceBuilder {
+    this._capacity = capacity;
     return this;
   }
 
-  public setPrice(price:string):EventServiceBuilder{
-    this._price= price;
+  public setPrice(price: string): EventServiceBuilder {
+    this._price = price;
     return this;
   }
 
+  public setImage(image: Buffer): EventServiceBuilder {
+    this._image = image
+    return this;
+  }
 
 
   public build(): EventService {
-    let eventService: EventService = new EventService(this._serviceId, this._providerId, this._category, this._title, this._description, this._address, this._perimeter, this._availability, this._requirments, this._subtype, this._capacity, this._price);
+    let eventService: EventService = new EventService(this._serviceId, this._providerId, this._category, this._title, this._description, this._address, this._perimeter, this._availability, this._requirments, this._subtype, this._capacity, this._price, this._image);
     return eventService;
   }
-
 
 
 }

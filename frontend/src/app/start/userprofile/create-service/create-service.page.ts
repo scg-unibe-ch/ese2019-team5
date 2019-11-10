@@ -6,10 +6,8 @@ import {Router} from "@angular/router";
 
 import {Camera} from "@ionic-native/camera/ngx";
 
-
-import {Categories} from "../../../../../../backend/app/categories";
-import {Weekdays} from "../../../../../../backend/app/weekdays";
 import {AuthService} from "../../../AuthService/auth.service";
+
 
 
 @Component({
@@ -20,8 +18,6 @@ import {AuthService} from "../../../AuthService/auth.service";
 
 export class CreateServicePage implements OnInit {
 
-  // Array of weekdays
-  weekdays: Weekdays[];
 
   image: string;
   picture: any;
@@ -45,8 +41,6 @@ export class CreateServicePage implements OnInit {
   ngOnInit() {
     this.loading = false;
     this.error = '';
-    // Reset weekdays Array
-    this.weekdays = [Weekdays.NoDay];
   }
 
   serviceForm = this.formBuilder.group({
@@ -154,12 +148,8 @@ export class CreateServicePage implements OnInit {
     this.loading = true;
     if (this.validateInput()) {
       console.log('Input is valid');
-      this.getAvailability();
-      console.log(this.weekdays);
-
-
       const providerId = this.authService.getUserId();
-      const category = this.setCategory();
+      const category = this.category.value;
       const title = this.title.value;
       const street = this.street.value;
       const housenumber = this.housenumber.value;
@@ -168,7 +158,7 @@ export class CreateServicePage implements OnInit {
       const capacity = this.capacity.value;
       console.log(capacity);
       const perimeter = this.distance.value;
-      const availability = JSON.stringify(this.weekdays);
+      const availability = JSON.stringify(this.availability.value);
       console.log(availability);
       const price = this.price.value;
       console.log(price);
@@ -199,29 +189,6 @@ export class CreateServicePage implements OnInit {
         });
 
 
-    }
-  }
-
-  /**
-   * Called by {@link createService()}
-   * Sets the category according to the user input
-   * Returns a {@link Categories} type
-   */
-  private setCategory() {
-    switch (this.category.value) {
-      case 'Location':
-        return Categories.location;
-      case 'Gastronomy':
-        return Categories.gastronomy;
-      case 'Music':
-        return Categories.music;
-      case 'Entertainment':
-        return Categories.entertainment;
-      case 'Photographer':
-        return Categories.photographer;
-      default:
-        // Should never be reached
-        return Categories.none;
     }
   }
 
@@ -272,34 +239,6 @@ export class CreateServicePage implements OnInit {
     }
   }
 
-  /**
-   * Called by {@link createService()}
-   * Reads the Input for Availability and
-   * Pushes {@link Weekdays} to the weekdays Array according to the input
-   */
-  private getAvailability() {
-    console.log("Starting weekdays");
-    // remove "noDay"
-    this.weekdays.pop();
-
-
-    if (this.availability.value.toString().includes('Monday'))
-      this.weekdays.push(Weekdays.Monday);
-    if (this.availability.value.toString().includes('Tuesday'))
-      this.weekdays.push(Weekdays.Tuesday);
-    if (this.availability.value.toString().includes('Wednesday'))
-      this.weekdays.push(Weekdays.Wednesday);
-    if (this.availability.value.toString().includes('Thursday'))
-      this.weekdays.push(Weekdays.Thursday);
-    if (this.availability.value.toString().includes('Friday'))
-      this.weekdays.push(Weekdays.Friday);
-    if (this.availability.value.toString().includes('Saturday'))
-      this.weekdays.push(Weekdays.Saturday);
-    if (this.availability.value.toString().includes('Sunday'))
-      this.weekdays.push(Weekdays.Sunday);
-
-    console.log("Weekdays is set");
-  }
 
   /**
    * Called by {@link createService()}

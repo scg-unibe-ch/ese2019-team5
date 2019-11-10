@@ -6,21 +6,22 @@ import {last} from "rxjs/operators";
 
 //TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
 export class User {
-  id = -1;
-  private firmname:string = '';
+  private _id: number;
+
   private _firstname: string;
   private _lastname: string;
   private _email: string;
   private _pwhash: string;
   private _address: Address;
   private _isVerified: boolean;
-  private _newUser = false;
-  private _isAdmin = false;
+  private _isAdmin: boolean;
   private _isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie?
-  private phoneNumber = "null";
+  private _phoneNumber: string;
+  private _firmname:string ;
 
 
-  constructor(firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean, address: Address, isFirm: boolean) {//phoneNumber:string) {
+  constructor(id:number,firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean, address: Address, isFirm: boolean, firmname: string, phoneNumber:string, isAdmin:boolean) {
+   this._id= id;
     this._firstname = firstname;
     this._lastname = lastname;
     this._email = email;
@@ -28,7 +29,9 @@ export class User {
     this._address = address;
     this._isVerified = isVerified;
     this._isFirm = isFirm;
-    //this.phoneNumber= phoneNumber;
+    this._firmname=firmname;
+    this._phoneNumber= phoneNumber;
+    this._isAdmin= isAdmin;
   }
 
   public setFirstname(firstname: string) {
@@ -101,39 +104,50 @@ export class User {
 
   }
 
-  setFirmname(firmname: string) {
-  this.firmname=firmname;
+  public setFirmname(firmname: string) {
+  this._firmname=firmname;
   }
 
   public getFirmname(): string {
-    return this.firmname;
+    return this._firmname;
   }
 
   /**
    * sets the id
    * @param id
    */
-  setId(id: number) {
-    this.id = id;
+  public setId(id: number) {
+    this._id = id;
   }
+
   public getId(): number {
-    return this.id;
+    return this._id;
   }
 
 
-  setPhoneNumber(phoneNumber: string) {
-    this.phoneNumber = phoneNumber;
+  public setPhoneNumber(phoneNumber: string) {
+    this._phoneNumber = phoneNumber;
   }
 
   public getPhoneNumber(): string {
-    return this.phoneNumber;
+    return this._phoneNumber;
+  }
+
+  public setIsAdmin(isAdmin: boolean) {
+    this._isAdmin = isAdmin;
+    return this;
+  }
+
+  public getIsAdmin(): boolean {
+    return this._isAdmin;
+
   }
 
   /**
    * returns the user element as string //TODO hier addresse auch hin??
    */
   toString(): string {
-    return String(this.id) + ' ' + this.getFirstname() + ' ' + this.getLastname() + ' ' + this.getEmail() + ' ' + this.getPwHash();
+    return String(this.getId()) + ' ' + this.getFirstname() + ' ' + this.getLastname() + ' ' + this.getEmail() + ' ' + this.getPwHash();
   }
 
   /**

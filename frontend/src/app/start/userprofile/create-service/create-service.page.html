@@ -12,9 +12,10 @@
 </ion-header>
 
 <!-- Content -->
-<!-- Contains a form asking for all important information to create a new Service -->
 <ion-content>
-  <div class="container fluid">
+  <!-- Form asking for all important information to create a new Service -->
+  <!-- Only displayed if the User is logged in -->
+  <div class="container fluid" *ngIf="authService.isLoggedIn()">
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> General Information</ion-title>
 
@@ -236,15 +237,24 @@
         <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>
       </div>
     </form>
+
+    <!-- User feedback  -->
+    <div *ngIf="loading">
+      <!-- Loading animation -->
+      <p> Creating service... </p>
+      <ion-progress-bar color="tertiary" type="indeterminate"></ion-progress-bar>
+      <!-- Handling errors -->
+      <p *ngIf="error"> An error occurred: {{error}}. Please try again.</p>
+    </div>
   </div>
 
-  <!-- User feedback  -->
-  <div *ngIf="loading">
-    <!-- Loading animation -->
-    <p> Creating service... </p>
-    <ion-progress-bar color="tertiary" type="indeterminate"></ion-progress-bar>
-    <!-- Handling errors -->
-    <p *ngIf="error"> An error occurred: {{error}}. Please try again.</p>
+  <!-- Displayed when an unauthorized User tries to access the page -->
+  <div *ngIf="authService.isLoggedOut()">
+    <p> You are not an authenticated user of this platform.
+      Please <a href="../../../start/signup"> sign up </a> or <a href="../../../start/login"> log in </a> to provide
+      services.
+    </p>
   </div>
+
 
 </ion-content>
