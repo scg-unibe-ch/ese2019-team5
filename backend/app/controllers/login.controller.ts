@@ -89,10 +89,14 @@ const verifyToken = async (req: Request, res: Response) => {
     const newPWhash: string = req.body.password;
    // const token = tokenU.substring(1)
     console.log(token);
-
+    let userEmail:string;
     const notVerified= jwt.decode(token);
-    if (notVerified['email']!== null){
-    const userEmail = notVerified['email']}
+
+    if(notVerified===null){
+      userEmail='a@b.ch';
+    }
+    else{
+  userEmail = notVerified['sub']}
 
 
 
