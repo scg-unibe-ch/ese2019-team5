@@ -182,6 +182,16 @@ export class DbServices {
     }
   }
 
+  public async deleteService(serviceId: number){
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.deleteServiceFromDB(serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   public async resetPassword(email: string, newPW: string) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -302,6 +312,7 @@ export class DbServices {
 
   private async resetPasswordDB(email: string, newPW: string, client: Client) {
     await client.query('UPDATE users SET password = $1 WHERE email = $2', [newPW, email]);
+    console.log("passwort reset");
   }
 
 
@@ -473,6 +484,24 @@ export class DbServices {
 
     }
     return container;
+  }
+
+  private async deleteServiceFromDB (serviceId: number, client: Client) {
+
+    const stream = client.query('SELECT addressid FROM service WHERE id=$1',[serviceId]);
+    let oldAddressId = -1;
+    for await (const row of stream){
+      oldAddressId = Number(row.get('addressid'));
+
+    }
+
+    if (oldAddressId == -1) {
+      throw Error("an error occured while getting the old address id of updated user")
+    }
+
+    await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
+
+    this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
 
 

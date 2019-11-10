@@ -81,10 +81,13 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
  */
 const verifyToken = async (req: Request, res: Response) => {
   try {
+
+    console.log(req.body);
+
     const tokenU = req.body.token; //req.url
     const userEmail = req.body.email;
     const newPWhash = req.body.password;
-    const token = tokenU.substring(1)
+    const token = tokenU.substring(1);
     console.log(token);
     //const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
@@ -100,10 +103,10 @@ const verifyToken = async (req: Request, res: Response) => {
 
 
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-    console.log('gotbefore db')
-    console.log(newPWhash)
+    console.log('gotbefore db');
+    console.log(newPWhash + " " + String(userEmail));
     await dbService.resetPassword(userEmail, newPWhash);
-    console.log('got after db')
+    console.log('got after db');
     res.status(200);
     res.send('Password was successfully changed');
 
