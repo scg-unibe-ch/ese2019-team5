@@ -148,10 +148,6 @@ export class CreateServicePage implements OnInit {
     this.loading = true;
     if (this.validateInput()) {
       console.log('Input is valid');
-      this.getAvailability();
-      console.log(this.weekdays);
-
-
       const providerId = this.authService.getUserId();
       const category = this.category.value;
       const title = this.title.value;
