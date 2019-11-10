@@ -154,5 +154,11 @@ router.get("/testUpdateUser/:z", async(req: Request, res: Response) => {
   res.send(await dbService.getUserFromId(88));
 });
 
+router.get("/testDelete/:z", async(req: Request, res: Response) => {
+  dbService.deleteUser(88);
+  res.statusCode = 200;
+  res.send("Hello");
+});
+
 
 export const SqlTestController: Router = router;
