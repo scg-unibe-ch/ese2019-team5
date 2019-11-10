@@ -50,13 +50,13 @@ export class UserprofilePage implements OnInit {
 
   editForm = this.formBuilder.group({
     firstnameInput: [this.firstname, [Validators.required]],
-    lastnameInput: ['', Validators.required],
-    firmnameInput: [''],
-    streetInput: ['', Validators.required],
-    housenumberInput: ['', [Validators.required, Validators.pattern('[0-9]+')]],
-    zipInput: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]+')]],
-    cityInput: ['', Validators.required],
-    phonenumberInput: ['', [Validators.pattern('[0-9]+')]]
+    lastnameInput: [this.lastname, Validators.required],
+    firmnameInput: [this.firmname],
+    streetInput: [this.street, Validators.required],
+    housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]+')]],
+    zipInput: [this.zip, [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]+')]],
+    cityInput: [this.city, Validators.required],
+    phonenumberInput: [this.phonenumber, [Validators.pattern('[0-9]+')]]
   });
 
   get firstnameInput() {
@@ -110,8 +110,8 @@ export class UserprofilePage implements OnInit {
             this.housenumber = user.housenumber; //address.housenumber;
             this.zip = user.zip; //address.zip;
             this.city = user.city; //address.city;
-            this.firmname = user.firmname;
-            this.phonenumber = user.phonenumber;
+            if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
+            if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
             this.httpGetSuccess = true;
           },
           (error)=> {
@@ -145,6 +145,7 @@ export class UserprofilePage implements OnInit {
       id: this.userId,
       firstname: this.firstname,
       lastname: this.lastname,
+      email: this.email,
       firmname: this.firmname,
       street: this.street,
       housenumber: this.housenumber,

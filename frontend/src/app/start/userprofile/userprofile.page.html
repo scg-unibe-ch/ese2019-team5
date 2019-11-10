@@ -16,7 +16,7 @@
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
     </ion-row>
-    <ion-row [hidden]="firmname==''">
+    <ion-row [hidden]="firmname==''||firmname=='null'">
       <p>Firm name: {{firmname}}</p>
     </ion-row>
     <ion-row>
@@ -25,7 +25,7 @@
     <ion-row>
       <p>Address: {{street}} {{housenumber}} ; {{city}} {{zip}}</p>
     </ion-row>
-    <ion-row [hidden]="phonenumber==''">
+    <ion-row [hidden]="phonenumber==''||phonenumber=='null'">
       <p>Phone number: {{phonenumber}}</p>
     </ion-row>
   </ion-grid>
