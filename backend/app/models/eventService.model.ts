@@ -15,8 +15,8 @@ export class EventService {
   private _availability: string;
   private _address: Address;
   private _perimeter: string;
-  private subtype:string;
-  private requirements:string;
+  private _subtype:string;
+  private _requirements:string;
   private _capacity: string;
   private _price: string;
 
@@ -32,8 +32,8 @@ export class EventService {
     this._address= address;
     this._perimeter = perimeter;
     this._availability = availability;
-    this.requirements = requirements;
-    this.subtype = subtype;
+    this._requirements = requirements;
+    this._subtype = subtype;
     this._capacity=capacity;
     this._price=price;
 
@@ -113,17 +113,17 @@ export class EventService {
   }
 
   public setRequirements(requirements:string){
-    this.requirements=requirements;
+    this._requirements=requirements;
   }
   public getRequirements(): string {
-    return this.requirements;
+    return this._requirements;
   }
 
   public setSubtype(subtype:string){
-    this.subtype=subtype;
+    this._subtype=subtype;
   }
   public getSubtype(): string {
-    return this.subtype;
+    return this._subtype;
   }
 
   public setCapacity(capacity:string){
@@ -141,6 +141,24 @@ export class EventService {
   }
   public getPrice():string{
     return  this._price;
+
+  }
+
+  public toSimplification():any{
+    return{
+      'serviceId':this.getServiceId(),
+      'providerId':this.getProviderId(),
+      'title':this.getTitle(),
+      'category':this.getCategory(),
+      'description': this.getDescription(),
+      'address':this.getAddress(),
+      'perimeter': this.getPerimeter(),
+      'availability': this.getAvailability(),
+      'requirements': this.getRequirements(),
+      'subtype':this.getSubtype()
+
+    }
+
 
   }
 }

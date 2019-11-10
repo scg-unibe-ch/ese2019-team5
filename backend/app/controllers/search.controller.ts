@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {EventService} from "../models/eventService.model";
 
 const router: Router = Router(); // part of express needed
 
@@ -23,11 +24,13 @@ router.get('/', async (req: Request, res: Response) => {
 
     try {
       let allServicesContainer:EventServiceContainer=await dbService.getAllServices();
-      let allEventService={
-        'allServicesContainer': allServicesContainer,
-      }
+      let EventServicesArray: EventService []=allServicesContainer.getServices();
+    res.send(EventServicesArray.map(e=>e.toSimplification()));
+     // let allEventService={
+      //  'allServicesContainer': allServicesContainer,
+     // }
       res.status(200);
-      res.send(allEventService);
+      //res.send(allEventService);
 
     } catch (error) {
       res.status(404);
