@@ -160,5 +160,10 @@ router.get("/testDelete/:z", async(req: Request, res: Response) => {
   res.send("Hello");
 });
 
+router.get("/testResetPW/:z", async(req: Request, res: Response) => {
+  dbService.resetPassword("test.test@test.ch",req.params.z);
+  res.statusCode = 200;
+  res.send("Hello");
+});
 
 export const SqlTestController: Router = router;

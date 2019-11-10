@@ -182,6 +182,16 @@ export class DbServices {
     }
   }
 
+  public async resetPassword(email: string, newPW: string) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try{
+      return await this.resetPasswordDB(email, newPW, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -288,6 +298,10 @@ export class DbServices {
     for await (const row of stream){
       console.log(row.get('count'));
     }
+  }
+
+  private async resetPasswordDB(email: string, newPW: string, client: Client) {
+    await client.query('UPDATE users SET password = $1 WHERE email = $2', [newPW, email]);
   }
 
 
