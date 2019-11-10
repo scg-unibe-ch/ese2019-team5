@@ -37,7 +37,7 @@ router.post('/add', async (req: Request, res: Response) => {
     let buffer = Buffer.from(b64string,'base64');
     eventService.setImage(buffer);
     }
-
+console.log(req.body.capacity)
 
       dbService.addEventService(eventService);
 

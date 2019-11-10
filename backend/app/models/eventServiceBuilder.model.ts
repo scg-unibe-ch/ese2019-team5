@@ -31,7 +31,7 @@ export class EventServiceBuilder {
     this._title = '';
     this._description = '';
     this._address = mockAddress;
-    this._perimeter = 'zero km';
+    this._perimeter = '';
     this._availability = availability;
     this._requirments = '';
     this._subtype = '';
