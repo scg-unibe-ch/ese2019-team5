@@ -13,7 +13,7 @@ const dbService = new DbServices();
  * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async (req: Request, res: Response) => {
-
+  try {
     const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const eventService: EventService = EventServiceBuilder.eventService()
       .setProviderId(req.body.providerId)
@@ -32,7 +32,12 @@ router.post('/add', async (req: Request, res: Response) => {
     if (req.body.requirements !== undefined) {
       eventService.setRequirements(req.body.requirements);
     }
-    try {
+    if(req.body.image !== undefined){
+    let b64string=req.body.image;
+    let buffer = Buffer.from(b64string,'base64');
+    eventService.setImage(buffer);
+    }
+console.log(req.body.capacity)
 
       dbService.addEventService(eventService);
 
