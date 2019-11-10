@@ -162,14 +162,17 @@ export class EventService {
     return{
       'serviceId':this.getServiceId(),
       'providerId':this.getProviderId(),
-      'title':this.getTitle(),
       'category':this.getCategory(),
+      'title':this.getTitle(),
       'description': this.getDescription(),
       'address':this.getAddress(),
       'perimeter': this.getPerimeter(),
       'availability': this.getAvailability(),
       'requirements': this.getRequirements(),
-      'subtype':this.getSubtype()
+      'subtype':this.getSubtype(),
+      'capacity':this.getCapacity(),
+      'price':this.getPrice(),
+      'image':this.getImage()
 
     }
 
