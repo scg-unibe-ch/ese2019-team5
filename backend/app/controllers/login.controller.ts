@@ -82,7 +82,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
  */
 const verifyToken = async (req: Request, res: Response) => {
   try {
-    const tokenUrl = req.body.url;
+    const tokenUrl = req.url;
     const newPWhash = req.body.newPwHash;
 
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
