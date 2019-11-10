@@ -6,7 +6,6 @@ import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
 
 
-
 const dbService = new DbServices();
 const router: Router = Router();
 
@@ -65,7 +64,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
     res.send('reset Password sent');
 
   } catch (error) {
-    console.log('this is the error' +error)
+    console.log('this is the error' + error)
     res.statusCode = 400;
     res.send(error);
 
@@ -83,9 +82,9 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
 const verifyToken = async (req: Request, res: Response) => {
   try {
     const tokenU = req.body.token; //req.url
-    const userEmail= req.body.email;
-    const newPWhash = req.body.newPwHash;
-    const token= tokenU.substring(1)
+    const userEmail = req.body.email;
+    const newPWhash = req.body.password;
+    const token = tokenU.substring(1)
     console.log(token);
     //const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
 
@@ -100,10 +99,13 @@ const verifyToken = async (req: Request, res: Response) => {
     };
 
 
-      let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-    //  await dbService(userEmail, newPWhash); //TODO reset Password mit newPWHash Cyrill
-      res.status(200);
-      res.send('Password was successfully changed');
+    let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
+    console.log('gotbefore db')
+    console.log(newPWhash)
+    await dbService.resetPassword(userEmail, newPWhash);
+    console.log('got after db')
+    res.status(200);
+    res.send('Password was successfully changed');
 
   } catch (error) {
     if (error.name.localeCompare('TokenExpiredError')) {

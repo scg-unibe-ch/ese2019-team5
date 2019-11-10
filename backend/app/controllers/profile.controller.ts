@@ -28,7 +28,7 @@ router.post('/update', async (req: Request, res: Response) => {
       .setIsFirm(req.body.isFirm)
       .build();
 
-    //TODO ID dann noch besser machen warten auf Cyrill
+
 
     if (req.body.phoneNumber !== undefined) {
       user.setPhoneNumber(req.body.phoneNumber);

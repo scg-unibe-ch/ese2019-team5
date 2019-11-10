@@ -23,13 +23,12 @@ const dbService = new DbServices();
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
-  const isVerified: boolean = false;
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
     .setEmail(req.body.email)
     .setPwhash(req.body.pwhash)
-    .setIsVerified(isVerified)
+    .setIsVerified(false)
     .setAddress(address)
     .build();
 
