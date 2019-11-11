@@ -6,6 +6,7 @@ import {User} from "../../../../../backend/app/models/user.model";
 import {Address} from "../../../../../backend/app/models/address.model";
 import {AuthService} from "../../AuthService/auth.service";
 import {userJson} from "./userJson";
+import {EventServiceContainer} from "../../../../../backend/app/models/eventServiceContainer.model";
 
 
 @Component({
@@ -17,14 +18,11 @@ import {userJson} from "./userJson";
 
 export class UserprofilePage implements OnInit {
 
-  /* ToDo: implement function to send a full set of userinformation to backend
-     ToDo: read changed input
 
-   */
   readonly ROOT_URL = 'http://localhost:3000/profile/';
   private userId: number;
 
-  private firstname: string = '';
+  private firstname: string = 'initial';
   private lastname: string = '';
   private email:string = '';
   private street: string = '';
@@ -33,6 +31,8 @@ export class UserprofilePage implements OnInit {
   private city: string = '';
   private firmname: string = '';
   private phonenumber: string = '';
+
+  private allServicesContainer: EventServiceContainer[];
 
   httpGetSuccess:boolean;
   isEditing:boolean = false;
@@ -112,6 +112,7 @@ export class UserprofilePage implements OnInit {
             this.city = user.city; //address.city;
             if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
             if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
+            this.allServicesContainer = user.allServicesContainer;
             this.httpGetSuccess = true;
           },
           (error)=> {
@@ -132,7 +133,7 @@ export class UserprofilePage implements OnInit {
   }
 
   saveChanges(){
-    console.log(this.firmnameInput.value);
+    console.log(this.firstnameInput.value);
     this.firstname = this.firstnameInput.value;
     this.lastname = this.lastnameInput.value;
     this.street = this.streetInput.value;
@@ -141,7 +142,8 @@ export class UserprofilePage implements OnInit {
     this.city = this.cityInput.value;
     this.firmname = this.firmnameInput.value;
     this.phonenumber = this.phonenumberInput.value;
-    console.log('front here');
+    const isFirm = (this.firmname !=null && this.firmname!='null' && this.firmname!='');
+    console.log('sending update Data to backend'+ this.firstname + this.lastname + this.firmname + this.street + this. housenumber + this.zip + this.city + this.phonenumber);
     this.http.post(this.ROOT_URL+'update', {
       id: this.userId,
       firstname: this.firstname,
@@ -152,7 +154,8 @@ export class UserprofilePage implements OnInit {
       housenumber: this.housenumber,
       zip: this.zip,
       city: this.city,
-      phonenumber: this.phonenumber
+      phonenumber: this.phonenumber,
+      isFirm: isFirm
     })
       .subscribe(
         (success) => {
@@ -160,6 +163,7 @@ export class UserprofilePage implements OnInit {
         },
         (error) => {
           this.httpGetSuccess = false;
+          console.log('got bad update answer');
         }
       );
     this.getUserData();
