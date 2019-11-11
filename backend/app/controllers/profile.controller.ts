@@ -7,6 +7,7 @@ import {elementAt} from "rxjs/operators";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
+import {EventService} from "../models/eventService.model";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -17,13 +18,15 @@ router.post('/update', async (req: Request, res: Response) => {
     console.log (req.body.id);
     console.log('body'+ req.body);
     console.log("email" +req.body.email);
+    let userOnlyPW :User= await dbService.getUserFromId(req.body.id);
+    const pwHash= userOnlyPW.getPwHash();
     const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
     const user: User = UserBuilder.user()
       .setId(req.body.id)
       .setFirstname(req.body.firstname)
       .setLastname(req.body.lastname)
       .setEmail(req.body.email)
-      .setPwhash(req.body.pwhash)
+      .setPwhash(pwHash)
       .setIsVerified(true)
       .setAddress(address)
       .setIsFirm(req.body.isFirm)
@@ -40,7 +43,7 @@ router.post('/update', async (req: Request, res: Response) => {
     if(req.body.isAdmin!== undefined){
       user.setIsAdmin(true);
     }
-    console.log(req.body.firstname, req.body.street, req.body.lastname);
+    console.log('firstname'+req.body.firstname+ 'street' +req.body.street);
 
     await dbService.updateUser(user);
 
@@ -78,6 +81,8 @@ router.get('/:id', async (req: Request, res: Response) => {
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
    let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
+let EventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
+ //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
     console.log(address);
 
@@ -93,7 +98,8 @@ router.get('/:id', async (req: Request, res: Response) => {
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
-          'allServicesContainer': allServicesContainer,
+        'EventServiceArrayOfUser':  (EventServiceArrayOfUser.map(e=>e.toSimplification()))
+
         }
 
 

@@ -132,6 +132,7 @@ export class UserprofilePage implements OnInit {
   }
 
   saveChanges(){
+    console.log(this.firmnameInput.value);
     this.firstname = this.firstnameInput.value;
     this.lastname = this.lastnameInput.value;
     this.street = this.streetInput.value;

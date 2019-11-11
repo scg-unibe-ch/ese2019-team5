@@ -68,7 +68,7 @@ router.put('/update', async (req: Request, res: Response) => {
  * returns 200 if Service was deleted
  * 406 if User or Service does not exist and 400 otherwise
  */
-router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => {
+router.delete('/:serviceid', async (req: Request, res: Response) => {
   const userId = Number(req.params.providerid);
   console.log(userId);
   const serviceId = Number(req.params.serviceid);
@@ -81,10 +81,7 @@ router.delete('/:serviceid/:providerid', async (req: Request, res: Response) => 
     //dbService.deleteEventService(userId,serviceId) TODO für Cyrill zum implementieren
     res.status(200).send('Service was deleted');
     }catch (error) {
-    if(error.message.localeCompare('User does not exists')==0){ //TODO abklären genau welcher error
-      res.status(406).send('invalid UserId');
-    }
-    else if(error.message.localeCompare('Service does not exists')==0){ //TODO abklären genau welcher error
+    if(error.message.localeCompare('Service does not exists')==0){ //TODO abklären genau welcher error
       res.status(406).send('invalid ServiceId');
     }
     else {
