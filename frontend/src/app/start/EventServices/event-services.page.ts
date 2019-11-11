@@ -9,11 +9,11 @@ import {map, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-services',
-  templateUrl: './services.page.html',
-  styleUrls: ['./services.page.scss'],
+  templateUrl: './event-services.page.html',
+  styleUrls: ['./event-services.page.scss'],
 })
-export class ServicesPage implements OnInit {
-  eventList: any[] = [];
+export class EventServicesPage implements OnInit {
+  eventList: EventService[] = [];
 
 
   constructor(
@@ -21,7 +21,7 @@ export class ServicesPage implements OnInit {
     ) { }
 
   getServicesFromBackend(){
-  this.http.get<Array<any>>('http://localhost:3000/search')
+  this.http.get<Array<EventService>>('http://localhost:3000/search')
     .subscribe(
       (data)=> {
         this.eventList = data;
