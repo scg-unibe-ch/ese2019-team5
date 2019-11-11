@@ -5,7 +5,7 @@ import {userJson} from "../userprofile/userJson";
 import {HttpClient} from "@angular/common/http";
 import {forEach} from "@angular-devkit/schematics";
 import {map, tap} from "rxjs/operators";
-import {eventJson} from "./eventJson";
+//import {eventJson} from "./eventJson";
 
 @Component({
   selector: 'app-services',
