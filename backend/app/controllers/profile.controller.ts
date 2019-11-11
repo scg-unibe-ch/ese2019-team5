@@ -36,8 +36,9 @@ router.post('/update', async (req: Request, res: Response) => {
 
 
 
-    if (req.body.phoneNumber !== undefined) {
+    if (req.body.phonenumber !== undefined) {
       user.setPhoneNumber(req.body.phonenumber);
+
     }
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
@@ -45,16 +46,17 @@ router.post('/update', async (req: Request, res: Response) => {
     if(req.body.isAdmin!== undefined){
       user.setIsAdmin(true);
     }
-    console.log('firstname'+req.body.firstname+ 'street' +req.body.street);
 
     await dbService.updateUser(user);
 
-   // res.send('Profile updated');
+   res.send('Profile updated');
     res.statusCode = 200;
+
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
     console.log(error);
     res.send(error);
     res.statusCode = 400;
+
   }
 });
 
@@ -83,7 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
    let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
-let EventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
+let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
  //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
     console.log(address);
@@ -100,7 +102,7 @@ let EventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
           'isFirm': isFirm,
           'firmname': firmname,
           'phonenumber': phonenumber,
-        'EventServiceArrayOfUser':  (EventServiceArrayOfUser.map(e=>e.toSimplification()))
+        'eventServiceArrayOfUser':  (eventServiceArrayOfUser.map(e=>e.toSimplification()))
 
         }
 
