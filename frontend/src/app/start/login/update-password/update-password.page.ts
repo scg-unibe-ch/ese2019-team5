@@ -30,7 +30,7 @@ export class UpdatePasswordPage implements OnInit {
     this.loading = false;
 
     this.url = (this.activatedRoute.toString());
-    this.token = this.url.substr(24, this.url.length - 55);
+    this.token = this.url.substr(25, this.url.length - 56);
     console.log(this.token);
   }
 
