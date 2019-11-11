@@ -9,7 +9,7 @@ var jwtDecode = require('jwt-decode');
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  //publicKey = fs.readFileSync('../backend/app/services/public.key', 'utf8');
+  //publicKey = fs.readFileSync('../backend/app/EventServices/public.key', 'utf8');
   private user: Observable<User>;
 
   constructor(private httpClient: HttpClient) {}

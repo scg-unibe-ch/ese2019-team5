@@ -19,7 +19,7 @@
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> General Information</ion-title>
 
-      <!-- Category: Required for all kind of services -->
+      <!-- Category: Required for all kind of EventServices -->
       <div class="form-group">
         <ion-list>
           <ion-item>
@@ -39,7 +39,7 @@
       <!-- Details for events -->
       <div *ngIf="category.value != '' ">
 
-        <!-- Title: Required for all services -->
+        <!-- Title: Required for all EventServices -->
         <div class="form-group">
           <ion-item>
             <ion-label> Title</ion-label>
@@ -48,7 +48,7 @@
         </div>
         <br/>
 
-        <!-- Address required for all services-->
+        <!-- Address required for all EventServices-->
         <div class="form-group">
           <ion-item>
             <ion-label> Street</ion-label>
@@ -65,7 +65,7 @@
         </div>
         <br/>
 
-        <!-- Radius: Required for all services except for locations -->
+        <!-- Radius: Required for all EventServices except for locations -->
         <div class="form-group" *ngIf="category.value != 'Location' ">
           <ion-list>
             <ion-item>
@@ -84,7 +84,7 @@
         </div>
         <br/>
 
-        <!-- Capacity: Required for all services except for photography-->
+        <!-- Capacity: Required for all EventServices except for photography-->
         <div class="form-group" *ngIf="category.value != 'Photographer'">
           <ion-list>
             <ion-item>
@@ -102,7 +102,7 @@
           </ion-list>
         </div>
 
-        <!-- Availability: Required for all services -->
+        <!-- Availability: Required for all EventServices -->
         <div class="form-group">
           <ion-item>
             <ion-label> Availability</ion-label>
@@ -119,7 +119,7 @@
         </div>
         <br/>
 
-        <!-- Standard Price: Required fpr all services but for different values -->
+        <!-- Standard Price: Required fpr all EventServices but for different values -->
         <div class="form-group">
           <ion-item>
             <ion-label *ngIf="category.value == 'Location'"> Standard Price (CHF)</ion-label>
