@@ -49,7 +49,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
     await dbService.updateUser(user);
 
-   res.send('Profile updated');
+   res.json('Profile updated');
     res.statusCode = 200;
 
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
@@ -86,6 +86,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     let userDataAndServices;
    let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
 let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
+
  //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
     console.log(address);
@@ -103,8 +104,9 @@ let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
           'firmname': firmname,
           'phonenumber': phonenumber,
         'eventServiceArrayOfUser':  (eventServiceArrayOfUser.map(e=>e.toSimplification()))
-
         }
+        console.log(eventServiceArrayOfUser.map(e=>e.toSimplification()));
+        console.log(userDataAndServices);
 
 
 

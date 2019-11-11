@@ -100,7 +100,7 @@ router.post('/sendMailAgain', async (req: Request, res: Response) => {
       const userWithoutMail = await dbService.getUserFromEmail(email);
       await EmailVerificationServices.sendMailToNewUser(userWithoutMail);
       res.status(200);
-      res.send('The email was sent again please also check your spam folder. Thank you');
+      res.json('The email was sent again please also check your spam folder. Thank you');
 
     } catch (error) {
       res.status(404);
