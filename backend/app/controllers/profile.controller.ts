@@ -20,7 +20,9 @@ router.post('/update', async (req: Request, res: Response) => {
     console.log("email" +req.body.email);
     let userOnlyPW :User= await dbService.getUserFromId(req.body.id);
     const pwHash= userOnlyPW.getPwHash();
-    const address: Address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
+    const housenumber=Number(req.body.housenumber);
+    const zip=Number(req.body.zip);
+    const address: Address = new Address(req.body.street, housenumber,zip, req.body.city);
     const user: User = UserBuilder.user()
       .setId(req.body.id)
       .setFirstname(req.body.firstname)
