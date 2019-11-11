@@ -37,7 +37,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
 
     if (req.body.phoneNumber !== undefined) {
-      user.setPhoneNumber(req.body.phoneNumber);
+      user.setPhoneNumber(req.body.phonenumber);
     }
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
@@ -49,7 +49,7 @@ router.post('/update', async (req: Request, res: Response) => {
 
     await dbService.updateUser(user);
 
-    res.send('Profile updated');
+   // res.send('Profile updated');
     res.statusCode = 200;
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
     console.log(error);

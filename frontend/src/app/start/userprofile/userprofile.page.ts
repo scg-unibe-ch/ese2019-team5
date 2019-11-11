@@ -163,10 +163,10 @@ export class UserprofilePage implements OnInit {
         },
         (error) => {
           this.httpGetSuccess = false;
-          console.log('got bad update answer');
+          console.log(error);
         }
       );
-    this.getUserData();
+   // this.getUserData();
     this.isEditing = false;
   }
 
