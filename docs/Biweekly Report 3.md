@@ -2,7 +2,8 @@
 
 ###### General Issues:
 It was a bit frustrating that we did not manage to reach all goals we set as milestone 2 by 06.11.
-This is why we had to extend the deadline by one week.
+This is why we had to extend the deadline by one week. Also some of us didn't really get, that we only
+have 3 weeks to go and that handing in to deadlines we agreed on as a team is crucial for others to continue.
 What both Front and Backend struggled with was, when we couldn't compile anymore.
 Or when the compiler didn't properly work anymore. For example it was showing you data
 in the console we asked in other versions but now anymore. The solution to the first problem was just install
