@@ -1,0 +1,21 @@
+<ion-list>
+  <ion-card *ngFor="let event of services" color="light">
+    <ion-img src="assets/img/{{event.category}}.jpg"></ion-img>
+    <ion-card-header>
+      <ion-row>
+        <ion-col>
+          <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF / {{event.perimeter}} away</ion-card-subtitle>
+        </ion-col>
+        <ion-col>
+          <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-card-title>{{event.title}}</ion-card-title>
+        </ion-col>
+      </ion-row>
+      <ion-label>  </ion-label>
+    </ion-card-header>
+  </ion-card>
+</ion-list>

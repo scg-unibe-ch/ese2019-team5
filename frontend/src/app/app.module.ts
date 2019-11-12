@@ -19,6 +19,7 @@ import {UpdatePasswordPage} from "./start/login/update-password/update-password.
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
 import {EventServicesPage} from './start/EventServices/event-services.page';
 import {Camera} from '@ionic-native/camera/ngx';
+import {EventServiceCardComponent} from "./start/EventServices/event-service-card/event-service-card.component";
 
 /* import {File} from '@ionic-native/File/ngx';
 import {WebView} from '@ionic-native/ionic-webview/ngx';
@@ -30,7 +31,7 @@ import {IonicStorageModule} from '@ionic/storage'; */
   declarations: [AppComponent,
     StartPage, SignupPage, ConfirmationPage,
     LoginPage, UpdatePasswordPage,
-    UserprofilePage, CreateServicePage, EventServicesPage],
+    UserprofilePage, CreateServicePage, EventServicesPage, EventServiceCardComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule/*, IonicStorageModule.forRoot()*/],
   providers: [
@@ -38,6 +39,9 @@ import {IonicStorageModule} from '@ionic/storage'; */
     SplashScreen,
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     Camera/*, /*File, FilePath, WebView*/],
+  exports: [
+    EventServiceCardComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

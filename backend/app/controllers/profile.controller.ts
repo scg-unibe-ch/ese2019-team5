@@ -69,7 +69,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     user = await dbService.getUserFromId(userId);
     //  res.send(user.toJSONObject());
 
-    //TODO hier user daten und services anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
+    //TODO hier user daten und EventServices anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
 
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();

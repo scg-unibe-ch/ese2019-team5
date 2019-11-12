@@ -3,7 +3,7 @@
     <ion-toolbar color="primary">
       <ion-button color="#secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
       <ion-title style="color: white; position: center; text-align: center; top: 15px"> All Services </ion-title>
-      <ion-button color="#4483FF" style="position: absolute; right: 5px; top: 6px;" href="/start/start"> Logout </ion-button>
+      <ion-button color="#secondary" style="position: absolute; right: 5px; top: 6px;" href="/start" (click)="authService.logout()"> Logout </ion-button>
     </ion-toolbar>
   </ion-header>
 
@@ -13,29 +13,8 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-    <ion-list>
-      <ion-card *ngFor="let event of eventList" color="light">
-
-        <ion-img src="assets/img/{{event.category}}.jpg"></ion-img>
-        <ion-card-header>
-          <ion-row>
-            <ion-col>
-            <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF / {{event.perimeter}} away</ion-card-subtitle>
-            </ion-col>
-            <ion-col>
-              <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <ion-card-title>{{event.title}}</ion-card-title>
-            </ion-col>
-          </ion-row>
-          <ion-label>  </ion-label>
-        </ion-card-header>
-
-      </ion-card>
-    </ion-list>
+    <!-- Displays all EventCards passed to the EventCardComponent (eventList) -->
+    <event-service-card [services]="eventList"> </event-service-card>
 
   </ion-content>
 </ion-app>

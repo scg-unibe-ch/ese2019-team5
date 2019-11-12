@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService} from "../../../../../backend/app/models/eventService.model";
-import {EventServiceContainer} from "../../../../../backend/app/models/eventServiceContainer.model";
-import {userJson} from "../userprofile/userJson";
 import {HttpClient} from "@angular/common/http";
-import {forEach} from "@angular-devkit/schematics";
-import {map, tap} from "rxjs/operators";
-//import {eventJson} from "./eventJson";
+import {AuthService} from "../../AuthService/auth.service";
 
 @Component({
   selector: 'app-services',
@@ -18,8 +14,13 @@ export class EventServicesPage implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private authService: AuthService
     ) { }
 
+  /**
+   * Gets all services stored in the DB
+   * Will maybe be moved to some kind of "SearchService"
+   */
   getServicesFromBackend(){
   this.http.get<Array<EventService>>('http://localhost:3000/search')
     .subscribe(
@@ -43,33 +44,6 @@ export class EventServicesPage implements OnInit {
       event.target.complete();
     }, 1200);
   }
-
-  getIconName(category:string){
-    switch (category){
-      case 'Music': {
-        return 'musical-notes';
-      }
-      case 'Location': {
-        return 'compass';
-      }
-      case 'Food': {
-        return 'pizza';
-      }
-      case 'Gastronomy': {
-        return 'pizza';
-      }
-      case 'Entertainment': {
-        return 'game-controller-b';
-      }
-      case 'Photography': {
-        return 'camera';
-      }
-      default: {
-        return 'infinite';
-      }
-    }
-  }
-
 
 
   ngOnInit() {
