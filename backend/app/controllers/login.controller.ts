@@ -61,7 +61,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
 
 
     res.statusCode = 201;
-    res.send('reset Password sent');
+    res.json('reset Password sent');
 
   } catch (error) {
     console.log('this is the error' + error)
@@ -108,7 +108,7 @@ const verifyToken = async (req: Request, res: Response) => {
     await dbService.resetPassword(userEmail, newPWhash);
     console.log('got after db');
     res.status(200);
-    res.send('Password was successfully changed');
+    res.json('Password was successfully changed');
 
   } catch (error) {
     if (error.name.localeCompare('TokenExpiredError')) {
