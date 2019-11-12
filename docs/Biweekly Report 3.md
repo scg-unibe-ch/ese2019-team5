@@ -44,6 +44,16 @@ Instead of a CardComponent, we implemented a Card**S**Component which renders an
 This enabled code re-use from "old" EventServicePage.
 But then we realised that there was even a second benefit we did not think of: Backend returns an Array of EventServices anyways.
 
+Some problems arose when trying to access an array of objects that is nested in a json, that is being sent from backend to frontend.
+As of now this is still unsolved and we're contemplating sending the array of EventServices in a seperate Http request.
+
+Another thing that was hard to track down, was the faulty information that was delivered via the edit profile function in the userprofile.
+The source of the errors were then found to be misspelled statements in the userprofile html and the assignement of two seperate
+inputs to a single variable.
+
+On the brightside though manual testing is a whole lot easier with the database on an external server where all members of the team can read and write to.
+
+
 
 
 

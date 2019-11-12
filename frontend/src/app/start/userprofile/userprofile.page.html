@@ -84,8 +84,8 @@
     <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
   </div>
 
-  <ion-button [hidden]="isEditing" color="secondary"[routerLink]="['createService']">Create your service offer</ion-button>
-  <ion-button [hidden]="isEditing" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
+  <ion-button [hidden]="isEditing" color="secondary" [routerLink]="['createService']">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing||eventServiceArrayOfUser.length>=5" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
 
 
   <ion-list>

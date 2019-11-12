@@ -1,4 +1,5 @@
 import {EventServiceContainer} from "../../../../../backend/app/models/eventServiceContainer.model";
+import {EventService} from "../../../../../backend/app/models/eventService.model";
 
 export interface userJson{
   firstname: string;
@@ -10,5 +11,5 @@ export interface userJson{
   city: string;
   firmname: string;
   phonenumber: string;
-  allServicesContainer: EventServiceContainer[];
+  eventServiceArrayOfUser: EventService[];
 }
