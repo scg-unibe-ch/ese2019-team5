@@ -22,6 +22,14 @@ before, so my work was gone. Also I felt like walking into a wall because some t
 because the token you had there were expired. In the end I figured a way out to make the tests work as in fail and find the problem. 
 Also learnt how the HTTP delete works with more than one parameter.
 
+Considering the database there weren't any real problems. The only difficult thing was to define all the datatypes. The reason for this was that i 
+expected the data in an other format than the frontend delivered it. But as soon as we decided on one datatype the problem was solved and the database worked.
+
+Since there were quite a lot of changes to the database it was and still ist a blessing that we found a webhost for our database.
+
+One challenge this time was to update the user data. The problem was that we didn't get the correct user data from the frontend but didn't notice for quite a
+long time. This resulted in an error from our database service and we didn't know how to solve this error, but after noticing that we didn't get everything 
+I tested the database part for itself and it worked. So it really just was the missing data that caused the error which is now resolved. 
 
 ###### Frontend:
 
