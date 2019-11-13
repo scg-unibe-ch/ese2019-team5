@@ -104,7 +104,7 @@ let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
           'firmname': firmname,
           'phonenumber': phonenumber,
         'eventServiceArrayOfUser':  (eventServiceArrayOfUser.map(e=>e.toSimplification()))
-        }
+        };
         console.log(eventServiceArrayOfUser.map(e=>e.toSimplification()));
         console.log(userDataAndServices);
 

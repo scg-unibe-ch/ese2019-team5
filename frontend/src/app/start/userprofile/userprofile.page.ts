@@ -33,7 +33,7 @@ export class UserprofilePage implements OnInit {
   private firmname: string = '';
   private phonenumber: string = '';
 
-  eventServiceArrayOfUser: any = [];
+  private eventServiceArrayOfUser: EventService[]; //= new Array(5);
 
   httpGetSuccess:boolean;
   isEditing:boolean = false;
@@ -171,7 +171,7 @@ export class UserprofilePage implements OnInit {
           console.log(error);
         }
       );
-   // this.getUserData();
+    // this.getUserData();
     this.isEditing = false;
   }
 
