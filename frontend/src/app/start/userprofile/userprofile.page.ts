@@ -7,6 +7,7 @@ import {Address} from "../../../../../backend/app/models/address.model";
 import {AuthService} from "../../AuthService/auth.service";
 import {userJson} from "./userJson";
 import {EventServiceContainer} from "../../../../../backend/app/models/eventServiceContainer.model";
+import {EventService} from "../../../../../backend/app/models/eventService.model";
 
 
 @Component({
@@ -32,7 +33,7 @@ export class UserprofilePage implements OnInit {
   private firmname: string = '';
   private phonenumber: string = '';
 
-  private allServicesContainer: EventServiceContainer[];
+  private eventServiceArrayOfUser: EventService[]; //= new Array(5);
 
   httpGetSuccess:boolean;
   isEditing:boolean = false;
@@ -112,12 +113,14 @@ export class UserprofilePage implements OnInit {
             this.city = user.city; //address.city;
             if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
             if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
-            this.allServicesContainer = user.allServicesContainer;
+            this.eventServiceArrayOfUser = user.eventServiceArrayOfUser;
+            console.log(user.eventServiceArrayOfUser);
+            console.log('this is what I got');
             this.httpGetSuccess = true;
           },
           (error)=> {
             this.httpGetSuccess = false;
-            console.log(error());
+            console.log(error);
           });
 
 
@@ -126,6 +129,8 @@ export class UserprofilePage implements OnInit {
       this.httpGetSuccess = false;
       console.log(e);
     }
+    console.log(this.eventServiceArrayOfUser);
+    console.log('this is what I saved');
   }
 
   enableEditing(){
@@ -166,7 +171,7 @@ export class UserprofilePage implements OnInit {
           console.log(error);
         }
       );
-   // this.getUserData();
+    // this.getUserData();
     this.isEditing = false;
   }
 

@@ -12,7 +12,7 @@
 
 
 <ion-content>
-  <ion-grid [hidden]="!httpGetSuccess||isEditing">
+  <ion-grid [hidden]="!httpGetSuccess||isEditing" align-items-center>
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
     </ion-row>
@@ -84,11 +84,13 @@
     <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
   </div>
 
-  <ion-button [hidden]="isEditing" color="secondary"[routerLink]="['createService']">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing" color="secondary" [routerLink]="['createService']">Create your service offer</ion-button>
   <ion-button [hidden]="isEditing" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
 
-
+  <ion-row style="height: 12px"></ion-row>
+  <ion-title>My services</ion-title>
   <ion-list>
+    <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
     <!-- Use service component here with NgFor-->
   </ion-list>
 </ion-content>

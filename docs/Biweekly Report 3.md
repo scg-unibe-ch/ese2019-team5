@@ -4,6 +4,7 @@
 It was a bit frustrating that we did not manage to reach all goals we set as milestone 2 by 06.11.
 This is why we had to extend the deadline by one week. Also some of us didn't really get, that we only
 have 3 weeks to go and that handing in to deadlines we agreed on as a team is crucial for others to continue.
+Also, we feel high pressure as there is still a lot to do.
 What both Front and Backend struggled with was, when we couldn't compile anymore.
 Or when the compiler didn't properly work anymore. For example it was showing you data
 in the console we asked in other versions but now anymore. The solution to the first problem was just install
@@ -32,6 +33,29 @@ long time. This resulted in an error from our database service and we didn't kno
 I tested the database part for itself and it worked. So it really just was the missing data that caused the error which is now resolved. 
 
 ###### Frontend:
+One struggle was to access methods and data from objects returned by backend when posting a "get" http request.
+It doesn't seem possible to send objects through HTTP to the frontend because if we do so, the received obejct has indeed
+the attributes of our object but it really isn't a instance of our so we cannot get access to its methods. The solution is to simplify 
+our object to a JSON where all attributes are made of strings.
+
+Another struggle was to create the EventServiceCardComponent or, to be more precise, to display it in other pages.
+First we wanted to render each EventServiceCard by itself but this was a bit complicated. 
+A lot of errors occurred and the EventServicePage did not work anymore.
+But as time was running out, we had to comspromise.
+Instead of a CardComponent, we implemented a Card**S**Component which renders an Array of EventServices.
+This enabled code re-use from "old" EventServicePage.
+But then we realised that there was even a second benefit we did not think of: Backend returns an Array of EventServices anyways.
+
+Some problems arose when trying to access an array of objects that is nested in a json, that is being sent from backend to frontend.
+As of now this is still unsolved and we're contemplating sending the array of EventServices in a seperate Http request.
+
+Another thing that was hard to track down, was the faulty information that was delivered via the edit profile function in the userprofile.
+The source of the errors were then found to be misspelled statements in the userprofile html and the assignement of two seperate
+inputs to a single variable.
+
+On the brightside though manual testing is a whole lot easier with the database on an external server where all members of the team can read and write to.
+
+
 
 
 
