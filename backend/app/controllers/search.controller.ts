@@ -42,4 +42,17 @@ router.get('/', async (req: Request, res: Response) => {
 );
 
 
+router .get('/:filter',async (req: Request, res: Response) => {
+
+
+  try {
+
+  } catch (error) {
+      res.status(404);
+      res.send('error in backend' + error.message);
+      console.log(error);
+    }
+  })
+
+
 export const SearchController: Router = router;
