@@ -34,7 +34,9 @@ I tested the database part for itself and it worked. So it really just was the m
 
 ###### Frontend:
 One struggle was to access methods and data from objects returned by backend when posting a "get" http request.
-
+It doesn't seem possible to send objects through HTTP to the frontend because if we do so, the received obejct has indeed
+the attributes of our object but it really isn't a instance of our so we cannot get access to its methods. The solution is to simplify 
+our object to a JSON where all attributes are made of strings.
 
 Another struggle was to create the EventServiceCardComponent or, to be more precise, to display it in other pages.
 First we wanted to render each EventServiceCard by itself but this was a bit complicated. 
