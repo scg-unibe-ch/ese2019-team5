@@ -455,14 +455,19 @@ export class DbServices {
 
     let flag = false;
     for(const filter of filterArray) {
-      if(flag){
+      if (flag) {
         query = query + " AND ";
       } else {
         query = query + " WHERE ";
       }
 
-      if(filter.getType() == FilterCategories.textSerach) {
+      if (filter.getType() == FilterCategories.textSerach) {
         query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
+      } if (filter.getType() == FilterCategories.city) {
+        //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
+        query = query + "addressid IN (Select id From address Where city = $" + qCount + ")";
+        qArray.push(filter.getValue());
+        qCount++;
       } else {
         query = query + filter.getType() + " = $" + qCount;
 
