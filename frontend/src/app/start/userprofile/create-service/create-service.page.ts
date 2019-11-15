@@ -98,7 +98,7 @@ export class CreateServicePage implements OnInit {
     return this.serviceForm.get('description');
   }
   get picture() {
-    return 'data:image/jpeg;base64,' + this.serviceForm.get('picture');
+    return this.serviceForm.get('picture');
   }
 
   /*accessCamera() {
@@ -169,7 +169,8 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.picture;
+      const image = this.uploadImage();
+      console.log(image);
 
       console.log('Params set. Starting http request');
 
@@ -239,6 +240,43 @@ export class CreateServicePage implements OnInit {
         // Location or Photographer (or none)
         return [''];
     }
+  }
+
+  previewFiles() {
+    var preview = document.querySelector('#preview');
+    var files   = document.querySelector('input[type=file]').files;
+
+    function readAndPreview(file) {
+
+      // Make sure `file.name` matches our extensions criteria
+      if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+        var reader = new FileReader();
+
+        reader.addEventListener("load", function () {
+          var image = new Image();
+          image.height = 100;
+          image.title = file.name;
+          image.src = this.result.toString();
+          preview.appendChild( image );
+        }, false);
+
+        reader.readAsDataURL(file);
+        console.log(reader.result);
+      }
+
+    }
+    if (files) {
+      [].forEach.call(files, readAndPreview);
+    }
+  }
+
+  private uploadImage(): string {
+    if (this.picture.value) {
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(this.picture.value);
+      return fileReader.result.toString();
+    } else
+      return '';
   }
 
 
