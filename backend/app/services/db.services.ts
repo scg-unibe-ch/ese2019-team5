@@ -8,10 +8,10 @@ import {EventService} from "../models/eventService.model";
 import {FileHandlerService} from "./fileHandler.service";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
-import {Categories} from "../categories";
 
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
+import {FilterCategories} from "../models/filterCategories.enum";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -303,11 +303,19 @@ export class DbServices {
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
-    let stream = await client.query('SELECT COUNT(id) FROM users');
-    console.log(stream);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[userId]);
+    let oldAddressId = -1;
     for await (const row of stream){
-      console.log(row.get('count'));
+      oldAddressId = Number(row.get('addressid'));
     }
+
+    if (oldAddressId == -1) {
+      throw Error("an error occured while getting the old address id of updated user")
+    }
+
+    await client.query('DELETE FROM users WHERE id = $1', [userId]);
+
+    await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
 
   private async resetPasswordDB(email: string, newPW: string, client: Client) {
@@ -400,9 +408,9 @@ export class DbServices {
   }
 
   private async searchForAddressUsageAndDelete(addressId: number, client: Client){
-    const rows = await client.query('Select id FROM users WHERE addressid=$1',[addressId]).rows;
-    if (rows == null){
-      client.query('DELETE FROM address WHERE id=$1',[addressId]);
+    const stream = await client.query('Select users.id FROM users WHERE addressid=$1 UNION SELECT service.id FROM service WHERE addressid=$1',[addressId]);
+    if (stream.rows.length == 0){
+      await client.query('Delete From address Where id = $1', [addressId])
     }
   }
 
@@ -452,10 +460,17 @@ export class DbServices {
       } else {
         query = query + " WHERE ";
       }
-      query = query + filter.getType() + " = $" + qCount;
+
+      if(filter.getType() == FilterCategories.textSerach) {
+        query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
+      } else {
+        query = query + filter.getType() + " = $" + qCount;
+
+        qArray.push(filter.getValue());
+        qCount++;
+      }
       flag = true;
-      qArray.push(filter.getValue());
-      qCount++;
+
     }
 
     const stream = client.query(query,qArray);
@@ -487,7 +502,6 @@ export class DbServices {
   }
 
   private async deleteServiceFromDB (serviceId: number, client: Client) {
-
     const stream = client.query('SELECT addressid FROM service WHERE id=$1',[serviceId]);
     let oldAddressId = -1;
     for await (const row of stream){
@@ -501,7 +515,7 @@ export class DbServices {
 
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
 
-    this.searchForAddressUsageAndDelete(oldAddressId, client);
+    await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
 
 

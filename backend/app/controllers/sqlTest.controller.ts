@@ -126,10 +126,10 @@ router.get("/tryService/:z", async(req: Request, res: Response) => {
 
 router.get("/testFilter/:z", async(req: Request, res: Response) => {
   const id: number = 88;
-  const filters = [new EventServiceFilter(FilterCategories.user,id), new EventServiceFilter(FilterCategories.category, 'Location')];
+  const filters = [new EventServiceFilter(FilterCategories.textSerach,"Barn")];
 
   const filters2: EventServiceFilter[] = [];
-  const services = await dbService.getServiceFilter(filters2);
+  const services = await dbService.getServiceFilter(filters);
   res.statusCode = 200;
   res.send(services);
 });
@@ -155,13 +155,13 @@ router.get("/testUpdateUser/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/testDelete/:z", async(req: Request, res: Response) => {
-  dbService.deleteUser(88);
+  dbService.deleteUser(102);
   res.statusCode = 200;
   res.send("Hello");
 });
 
 router.get("/testDeleteService/:z", async(req: Request, res: Response) => {
-  dbService.deleteService(15);
+  dbService.deleteService(31);
   res.statusCode = 200;
   res.send("Hello");
 });
