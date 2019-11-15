@@ -13,6 +13,7 @@
 
 <!-- Content -->
 <ion-content>
+
   <!-- Form asking for all important information to create a new Service -->
   <!-- Only displayed if the User is logged in -->
   <div class="container fluid" *ngIf="authService.isLoggedIn()">
@@ -72,12 +73,12 @@
               <ion-label> Max. distance</ion-label>
               <ion-select class="customSelect" formControlName="distance" placeholder="Select...">
                 <ion-select-option value="0" *ngIf="category.value=='Gastronomy'"> 0km</ion-select-option>
-                <ion-select-option value="-5"> 5km</ion-select-option>
-                <ion-select-option value="-10"> 10km</ion-select-option>
-                <ion-select-option value="-25"> 25km</ion-select-option>
-                <ion-select-option value="-50"> 50km</ion-select-option>
-                <ion-select-option value="-100"> 100km</ion-select-option>
-                <ion-select-option value="100+"> > 100km</ion-select-option>
+                <ion-select-option value="5"> 5km</ion-select-option>
+                <ion-select-option value="10"> 10km</ion-select-option>
+                <ion-select-option value="25"> 25km</ion-select-option>
+                <ion-select-option value="50"> 50km</ion-select-option>
+                <ion-select-option value="100"> 100km</ion-select-option>
+                <ion-select-option value="1000000"> > 100km</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -91,12 +92,12 @@
               <ion-label> Max. number of people served</ion-label>
               <ion-select class="customSelect" formControlName="capacity" placeholder="Select...">
                 <ion-select-option value="20"> 20</ion-select-option>
-                <ion-select-option value="-50"> 50</ion-select-option>
-                <ion-select-option value="-75"> 75</ion-select-option>
-                <ion-select-option value="-100"> 100</ion-select-option>
-                <ion-select-option value="-150"> 150</ion-select-option>
-                <ion-select-option value="-200"> 200</ion-select-option>
-                <ion-select-option value="200+"> > 200</ion-select-option>
+                <ion-select-option value="50"> 50</ion-select-option>
+                <ion-select-option value="75"> 75</ion-select-option>
+                <ion-select-option value="100"> 100</ion-select-option>
+                <ion-select-option value="150"> 150</ion-select-option>
+                <ion-select-option value="200"> 200</ion-select-option>
+                <ion-select-option value="1000000"> 200+ </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -126,7 +127,7 @@
             <ion-label *ngIf="category.value == 'Gastronomy'"> Price per Person (CHF)</ion-label>
             <ion-label *ngIf="category.value != 'Location' && category.value != 'Gastronomy'"> Price per Hour (CHF)
             </ion-label>
-            <ion-input class="formControl" type="text" formControlName="price"></ion-input>
+            <ion-input class="formControl" type="number" formControlName="price"></ion-input>
           </ion-item>
         </div>
         <br/>
@@ -204,6 +205,7 @@
         <br/>
 
         <ion-title> Upload a picture</ion-title>
+        <!-- Optimization for Apps
         <div>
           <ion-grid>
             <ion-row>
@@ -231,6 +233,10 @@
             <ion-img [src]="image" *ngIf="image"></ion-img>
           </ion-grid>
         </div>
+        -->
+        <ion-item>
+          <ion-input type="file" accept="image/*" formControlName="picture"> </ion-input>
+        </ion-item>
 
 
         <!-- Button to submit the form -->

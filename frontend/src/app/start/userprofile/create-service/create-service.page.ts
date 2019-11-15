@@ -18,9 +18,7 @@ import {AuthService} from "../../../AuthService/auth.service";
 
 export class CreateServicePage implements OnInit {
 
-
   image: string;
-  picture: any;
 
   //Some properties used for user feedback
   loading: boolean;
@@ -51,12 +49,13 @@ export class CreateServicePage implements OnInit {
     zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
     city: ['', Validators.required],
     distance: ['0', Validators.required],
-    capacity: ['200+', Validators.required],
+    capacity: ['1000000', Validators.required],
     availability: ['', Validators.required],
     price: ['', Validators.required],
     type: ['', Validators.required],
     requirements: [''],
-    description: ['', Validators.maxLength(140)]
+    description: ['', Validators.maxLength(140)],
+    picture: ['']
   });
 
   get category() {
@@ -98,8 +97,11 @@ export class CreateServicePage implements OnInit {
   get description() {
     return this.serviceForm.get('description');
   }
+  get picture() {
+    return 'data:image/jpeg;base64,' + this.serviceForm.get('picture');
+  }
 
-  accessCamera() {
+  /*accessCamera() {
     this.camera.getPicture({
       targetWidth: 512,
       targetHeight: 512,
@@ -128,7 +130,7 @@ export class CreateServicePage implements OnInit {
       (error) => {
         console.log(error);
       });
-  }
+  }*/
 
   //ToDo: Test whether this works with backend
   /**
@@ -155,19 +157,19 @@ export class CreateServicePage implements OnInit {
       const housenumber = this.housenumber.value;
       const zip = this.zip.value;
       const city = this.city.value;
-      const capacity = this.capacity.value;
+      const capacity = 0 + this.capacity.value;
       console.log(capacity);
-      const perimeter = this.distance.value;
+      const perimeter = 0 + this.distance.value;
       const availability = JSON.stringify(this.availability.value);
       console.log(availability);
-      const price = this.price.value;
+      const price = 0 + this.price.value;
       console.log(price);
       const subtype = JSON.stringify(this.setType());
       console.log(subtype);
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.image;
+      const image = this.picture;
 
       console.log('Params set. Starting http request');
 
