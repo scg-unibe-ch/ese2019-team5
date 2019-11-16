@@ -493,12 +493,12 @@ export class DbServices {
           .setTitle(String(row.get('title')))
           .setDescription(String(row.get('description')))
           .setAddress(address)
-          .setPerimeter(String(row.get('radius')))
+          .setPerimeter(Number(row.get('radius')))
           .setAvailability(String(row.get('availability')))
           .setRequirments(String(row.get('requirements')))
           .setSubtype(String(row.get('subtype')))
-          .setCapacity(String(row.get('capacity')))
-          .setPrice(String(row.get('price')))
+          .setCapacity(Number(row.get('capacity')))
+          .setPrice(Number(row.get('price')))
           .build()
       );
 
