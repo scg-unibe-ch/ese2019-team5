@@ -14,7 +14,7 @@ export class EventServiceBuilder {
   private _title: string;
   private _description: string;
   private _address: Address;
-  private _perimeter: string;
+  private _perimeter: number;
   private _availability: string;
   private _requirments: string;
   private _subtype: string;
@@ -31,7 +31,7 @@ export class EventServiceBuilder {
     this._title = '';
     this._description = '';
     this._address = mockAddress;
-    this._perimeter = '';
+    this._perimeter = 0;
     this._availability = availability;
     this._requirments = '';
     this._subtype = '';
@@ -75,7 +75,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setPerimeter(perimeter: string): EventServiceBuilder {
+  public setPerimeter(perimeter: number): EventServiceBuilder {
     this._perimeter = perimeter;
     return this;
   }

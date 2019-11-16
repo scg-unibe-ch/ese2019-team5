@@ -14,7 +14,7 @@ export class EventService {
   private _description: string;
   private _availability: string;
   private _address: Address;
-  private _perimeter: string;
+  private _perimeter: number;
   private _subtype:string;
   private _requirements:string;
   private _capacity: number;
@@ -24,7 +24,7 @@ export class EventService {
   private pictureIds: File[]; // TODO Fotos werden wahrscheinlich als file array übergeben un dann abgespeichert
 
 
-  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:number, price:number,image:Buffer){
+  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : number, availability: string, requirements: string, subtype: string, capacity:number, price:number,image:Buffer){
     this.serviceId = serviceId;
     this._providerId= providerId;
     this._category = category;
@@ -96,11 +96,11 @@ export class EventService {
 
   }
 
-  public setPerimeter(perimeter:string){
+  public setPerimeter(perimeter:number){
     this._perimeter= perimeter;
     return this;
   }
-  public getPerimeter():string{
+  public getPerimeter():number{
     return this._perimeter;
 
   }
