@@ -463,7 +463,9 @@ export class DbServices {
 
       if (filter.getType() == FilterCategories.textSerach) {
         query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
-      } if (filter.getType() == FilterCategories.city) {
+      }
+
+      else if (filter.getType() == FilterCategories.city) {
         //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
         query = query + "addressid IN (Select id From address Where city = $" + qCount + ")";
         qArray.push(filter.getValue());
@@ -477,6 +479,8 @@ export class DbServices {
       flag = true;
 
     }
+
+    console.log(query);
 
     const stream = client.query(query,qArray);
 
