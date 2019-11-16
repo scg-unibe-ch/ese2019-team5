@@ -37,8 +37,10 @@ router.get('/', async (req: Request, res: Response) => {
 );
 
 
-router.get('/filter/:category?/:subtype?/:city?/:price?/:people?/:availability?/:string', async (req: Request, res: Response) => {
+router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availability?', async (req: Request, res: Response) => {
   try {
+  // let textSearch:string= req.query.textSearch;
+    let textSearch= req.query.text;
     let category: string = req.query.category;
     let subtype:string= req.query.subtype;
     let city: string = req.query.city;
@@ -46,23 +48,33 @@ router.get('/filter/:category?/:subtype?/:city?/:price?/:people?/:availability?/
     let people:Number= req.query.people;
     let availability:string= req.query.availability;
     console.log('got here');
-    console.log(city);
+    console.log('textSearch'+ textSearch);
 
-    console.log(category);
+
     let EventServiceFilterArray:EventServiceFilter[]= [];
+    if( textSearch!==undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSerach, textSearch))
+    }
     if( category!==undefined){
       EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
     }
+    if( subtype!==undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.subtype, subtype))
+    }
+    if( city!==undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
+    }
 
-    await dbService.getServiceFilter(EventServiceFilterArray);
-  //  let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.category, category)]);
-  //  let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
-   // res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
+console.log(EventServiceFilterArray);
+ let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter(EventServiceFilterArray);
+ console.log('ServiceCFittingREquest'+ serviceCFittingRequest);
+   let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
+    res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
 
-   // console.log(serviceAOfFittingRequest);
+   console.log(serviceAOfFittingRequest);
   } catch (error) {
     res.status(404);
-    res.send('error in backend' + error.message);
+    res.send('error in backend ' + error.message);
     console.log(error);
 
   }

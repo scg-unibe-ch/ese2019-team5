@@ -45,3 +45,25 @@ client.test("getting user information for profile, user does not exist", functio
 %}
 
 ###
+DELETE http://localhost:3000/profile/95
+Content-Type: application/json
+
+> {%
+client.test("user was deleted no exception", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+DELETE http://localhost:3000/profile/95
+Content-Type: application/json
+
+> {%
+client.test("user was deleted user exception", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

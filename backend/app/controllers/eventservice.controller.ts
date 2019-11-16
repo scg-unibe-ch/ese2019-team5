@@ -71,10 +71,11 @@ router.put('/update', async (req: Request, res: Response) => {
  * returns 200 if Service was deleted
  * 406 if User or Service does not exist and 400 otherwise
  */
-router.delete('/:serviceid', async (req: Request, res: Response) => {
-  const serviceId: number = Number(req.params.serviceId);
-  console.log(serviceId);
-
+router.delete('/:serviceId', async (req: Request, res: Response) => {
+  const serviceId:number = Number(req.params.serviceId);
+  //onst serId:number= Number(req.query.serviceId);
+  console.log( "serviceId " +serviceId);
+  //console.log( "serviceId query " +serId);
   try{
 
 
@@ -85,7 +86,7 @@ router.delete('/:serviceid', async (req: Request, res: Response) => {
       res.status(406).send('invalid ServiceId');
     }
     else {
-      res.status(400).send('Service could not be deleted');
+      res.status(400).send('Service could not be deleted'); //TODO wie hier hin kommen
     }
 
   }
