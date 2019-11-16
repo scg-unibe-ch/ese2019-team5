@@ -18,15 +18,9 @@ export class EmailOrderEventServiceCreatorService{
   }
 
   getEmailOrderConfirmation(serviceTitle: string, date: string, time:string, message:string): string {  //TODO
-    return '<body>'+
-      "<div align=center style='font-size:24.0pt;font-family:\"Arial Black\",sans-serif'>Your Eventdoo Order Confirmation<\div>" +
-      "<div align=center style='font-size:14.0pt;font-family:\"Arial\",sans-serif'>"+
-      "<p>Thank you very much for ordering the following Event</p>"+
-
-      "<ref="+ serviceTitle+ ">${serviceTitle}</ref>"+
-      "<ref="+ date+ ">Date: ${date}</ref>"+
-      "<ref="+ + ">${serviceTitle}</ref>"+
-      "<p>Have fun planning your event or finding new opportunities to offer your services</p>"+
+    return `<body><div align=center style='font-size:24.0pt;font-family:"Arial Black",sans-serif'>Your Eventdoo Order Confirmation<div><div align=center style='font-size:14.0pt;font-family:"Arial",sans-serif'><p>Thank you very much for ordering the following Event</p><ref=${serviceTitle}>${serviceTitle}</ref>`+
+     "<p></p>"+
+      `<p>Your prefered date: <ref=${date}>${date}</ref><br><ref=${time}>${time}</ref> <br> <ref=${message}>${message}</ref></p>`+
       "<p><b><i>Your Eventdoo Team</i></b></p>"+
       "</div>"+
       "<div align=center style='font-size:10.0pt;font-family:\"Arial\",sans-serif'>"+
@@ -34,5 +28,24 @@ export class EmailOrderEventServiceCreatorService{
       "</div>"+
       "</body>";
   }
+
+
+/*
+  "<div align=center style='font-size:24.0pt;font-family:\"Arial Black\",sans-serif'>Your Eventdoo Order Confirmation<\div>" +
+  "<div align=center style='font-size:14.0pt;font-family:\"Arial\",sans-serif'>"+
+  "<p>Thank you very much for ordering the following Event</p>"+
+
+  "<ref="+ serviceTitle+ ">#{serviceTitle}</ref>"+
+
+  "<script>"+ function printServicetitle():string{ return serviceTitle;} + document.getElementById("body").innerHTML= printServicetitle()+
+    "</script>"+
+    "<ref="+ + ">${serviceTitle}</ref>"+
+    "<p>Have fun planning your event or finding new opportunities to offer your services</p>"+
+    "<p><b><i>Your Eventdoo Team</i></b></p>"+
+    "</div>"+
+    "<div align=center style='font-size:10.0pt;font-family:\"Arial\",sans-serif'>"+
+    "<p>In case it wasn't you requesting the password reset, you can simply ignore this email.</p>"+
+    "</div>"+
+    "</body>";*/
 }
 

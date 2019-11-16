@@ -70,16 +70,13 @@ router.put('/update', async (req: Request, res: Response) => {
  * 406 if User or Service does not exist and 400 otherwise
  */
 router.delete('/:serviceid', async (req: Request, res: Response) => {
-  const userId = Number(req.params.providerid);
-  console.log(userId);
-  const serviceId = Number(req.params.serviceid);
+  const serviceId: number = Number(req.params.serviceId);
   console.log(serviceId);
-  let user: User;
-  let eventService: EventService;
-  try{
-  user = await dbService.getUserFromId(userId);
 
-    dbService.deleteService(serviceId)
+  try{
+
+
+    await dbService.deleteService(serviceId)
     res.status(200).send('Service was deleted');
     }catch (error) {
     if(error.message.localeCompare('an error occured while getting the old address id of updated user')==0){ //TODO abklären genau welcher error

@@ -15,14 +15,14 @@ const dbService = new DbServices();
 router.post('/update', async (req: Request, res: Response) => {
   try {
 
-    console.log (req.body.id);
-    console.log('body'+ req.body);
-    console.log("email" +req.body.email);
-    let userOnlyPW :User= await dbService.getUserFromId(req.body.id);
-    const pwHash= userOnlyPW.getPwHash();
-    const housenumber=Number(req.body.housenumber);
-    const zip=Number(req.body.zip);
-    const address: Address = new Address(req.body.street, housenumber,zip, req.body.city);
+    console.log(req.body.id);
+    console.log('body' + req.body);
+    console.log("email" + req.body.email);
+    let userOnlyPW: User = await dbService.getUserFromId(req.body.id);
+    const pwHash = userOnlyPW.getPwHash();
+    const housenumber = Number(req.body.housenumber);
+    const zip = Number(req.body.zip);
+    const address: Address = new Address(req.body.street, housenumber, zip, req.body.city);
     const user: User = UserBuilder.user()
       .setId(req.body.id)
       .setFirstname(req.body.firstname)
@@ -35,7 +35,6 @@ router.post('/update', async (req: Request, res: Response) => {
       .build();
 
 
-
     if (req.body.phonenumber !== undefined) {
       user.setPhoneNumber(req.body.phonenumber);
 
@@ -43,13 +42,13 @@ router.post('/update', async (req: Request, res: Response) => {
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
     }
-    if(req.body.isAdmin!== undefined){
+    if (req.body.isAdmin !== undefined) {
       user.setIsAdmin(true);
     }
 
     await dbService.updateUser(user);
 
-   res.json('Profile updated');
+    res.json('Profile updated');
     res.statusCode = 200;
 
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
@@ -74,40 +73,39 @@ router.get('/:id', async (req: Request, res: Response) => {
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
-    const pwHash:string= user.getPwHash();
+    const pwHash: string = user.getPwHash();
     const address = user.getAddress();
-    const street:string =address.street;
-    const housenumber:number =address.housenumber;
-    const zip :number =address.zip;
-    const city:string =address.city;
+    const street: string = address.street;
+    const housenumber: number = address.housenumber;
+    const zip: number = address.zip;
+    const city: string = address.city;
     const isFirm: boolean = user.getIsFirm();
     const firmname: string = user.getFirmname();
     const phonenumber: string = user.getPhoneNumber();
     let userDataAndServices;
-   let allServicesContainer:EventServiceContainer=await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
-let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
+    let allServicesContainer: EventServiceContainer = await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
+    let eventServiceArrayOfUser: EventService[] = allServicesContainer.getServices();
 
- //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
+    //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
     console.log(address);
 
-        userDataAndServices = {
-          'firstname': firstname,
-          'lastname': lastname,
-          'email': email,
-          'pwHash': pwHash,
-          'street': street,
-          'housenumber': housenumber,
-          'zip': zip,
-          'city': city,
-          'isFirm': isFirm,
-          'firmname': firmname,
-          'phonenumber': phonenumber,
-        'eventServiceArrayOfUser':  (eventServiceArrayOfUser.map(e=>e.toSimplification()))
-        };
-        console.log(eventServiceArrayOfUser.map(e=>e.toSimplification()));
-        console.log(userDataAndServices);
-
+    userDataAndServices = {
+      'firstname': firstname,
+      'lastname': lastname,
+      'email': email,
+      'pwHash': pwHash,
+      'street': street,
+      'housenumber': housenumber,
+      'zip': zip,
+      'city': city,
+      'isFirm': isFirm,
+      'firmname': firmname,
+      'phonenumber': phonenumber,
+      'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification()))
+    };
+    console.log(eventServiceArrayOfUser.map(e => e.toSimplification()));
+    console.log(userDataAndServices);
 
 
     res.send(userDataAndServices);
@@ -118,7 +116,6 @@ let eventServiceArrayOfUser:EventService[]=allServicesContainer.getServices();
   }
 
 });
-
 
 
 router.put('/changepassword', async (req: Request, res: Response) => {
@@ -134,6 +131,18 @@ router.put('/changepassword', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/:userId', async (req: Request, res: Response) => {
+    try {
+      let userId: number = Number(req.params.userId);
+      await dbService.deleteUser(userId);
+      res.status(200).send('User was deleted');
+
+    } catch (error) {
+      res.statusCode = 400;//TODO welche Error?
+      res.send(error);
+    }
+  }
+)
 
 
 export const ProfileController: Router = router;
