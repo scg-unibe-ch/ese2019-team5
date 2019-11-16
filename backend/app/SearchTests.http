@@ -21,7 +21,7 @@ client.test("get filtered gastronomy and city services", function() {
 %}
 
 ###
-GET http://localhost:3000/search/filter/:category/:city?category=Gastronomy&price=124
+GET http://localhost:3000/search/filter/:category/:city/:price?category=Gastronomy&price=124
 
 Content-Type: application/json
 

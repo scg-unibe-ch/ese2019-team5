@@ -40,8 +40,10 @@ router.post('/', async (req: Request, res: Response) => {
       // res.status(404).send(error.message);
       res.status(406);
       res.send('Verification error');
+      console.log(error)
     } else {
       res.status(404).send('Password error');
+      console.log(error)
     }
 
   }

@@ -17,14 +17,14 @@ export class EventService {
   private _perimeter: string;
   private _subtype:string;
   private _requirements:string;
-  private _capacity: string;
-  private _price: string;
+  private _capacity: number;
+  private _price: number;
   private _image:Buffer;
 
   private pictureIds: File[]; // TODO Fotos werden wahrscheinlich als file array übergeben un dann abgespeichert
 
 
-  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:string, price:string,image:Buffer){
+  constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : string, availability: string, requirements: string, subtype: string, capacity:number, price:number,image:Buffer){
     this.serviceId = serviceId;
     this._providerId= providerId;
     this._category = category;
@@ -128,20 +128,20 @@ export class EventService {
     return this._subtype;
   }
 
-  public setCapacity(capacity:string){
+  public setCapacity(capacity:number){
    this._capacity= capacity;
    return this;
   }
-  public getCapacity():string{
+  public getCapacity():number{
     return  this._capacity;
 
   }
 
-  public setPrice(price:string){
+  public setPrice(price:number){
     this._price= price;
     return this;
   }
-  public getPrice():string{
+  public getPrice():number{
     return  this._price;
 
   }

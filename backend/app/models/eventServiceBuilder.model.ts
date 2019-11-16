@@ -18,8 +18,8 @@ export class EventServiceBuilder {
   private _availability: string;
   private _requirments: string;
   private _subtype: string;
-  private _capacity: string;
-  private _price: string;
+  private _capacity: number;
+  private _price: number;
   private _image: Buffer;
 
 
@@ -35,8 +35,8 @@ export class EventServiceBuilder {
     this._availability = availability;
     this._requirments = '';
     this._subtype = '';
-    this._capacity = '0';
-    this._price = '0';
+    this._capacity = -1;
+    this._price = -1;
     this._image = Buffer.from('');
 
   }
@@ -95,12 +95,12 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setCapacity(capacity: string): EventServiceBuilder {
+  public setCapacity(capacity: number): EventServiceBuilder {
     this._capacity = capacity;
     return this;
   }
 
-  public setPrice(price: string): EventServiceBuilder {
+  public setPrice(price: number): EventServiceBuilder {
     this._price = price;
     return this;
   }

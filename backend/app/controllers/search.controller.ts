@@ -1,16 +1,11 @@
-import {Router, Request, Response} from 'express';
-import {User} from '../models/user.model';
-import {Address} from "../models/address.model";
-import {EmailVerificationServices} from '../services/emailVerification.services';
+import {Request, Response, Router} from 'express';
 import {DbServices} from '../services/db.services';
-
-var jwt = require('jsonwebtoken');
-import * as fs from 'fs';
-import {UserBuilder} from "../models/userBuilder.model";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventService} from "../models/eventService.model";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
+
+var jwt = require('jsonwebtoken');
 
 const router: Router = Router(); // part of express needed
 
@@ -31,7 +26,7 @@ router.get('/', async (req: Request, res: Response) => {
       // }
       res.status(200);
       //res.send(allEventService);
- console.log('not really where you want to be');
+
     } catch (error) {
       res.status(404);
       res.send('error in backend' + error.message);
@@ -42,23 +37,34 @@ router.get('/', async (req: Request, res: Response) => {
 );
 
 
-router.get('/filter/:category/:city?/:price?', async (req: Request, res: Response) => {
+router.get('/filter/:category?/:subtype?/:city?/:price?/:people?/:availability?/:string', async (req: Request, res: Response) => {
   try {
     let category: string = req.query.category;
-    let city: string = req.query.city
+    let subtype:string= req.query.subtype;
+    let city: string = req.query.city;
+    let price:Number= req.query.price;
+    let people:Number= req.query.people;
+    let availability:string= req.query.availability;
     console.log('got here');
     console.log(city);
 
     console.log(category);
-    let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.category, category)]);
-    let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
-    res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
+    let EventServiceFilterArray:EventServiceFilter[]= [];
+    if( category!==undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
+    }
 
-    console.log(serviceAOfFittingRequest);
+    await dbService.getServiceFilter(EventServiceFilterArray);
+  //  let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.category, category)]);
+  //  let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
+   // res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
+
+   // console.log(serviceAOfFittingRequest);
   } catch (error) {
     res.status(404);
     res.send('error in backend' + error.message);
     console.log(error);
+
   }
 })
 

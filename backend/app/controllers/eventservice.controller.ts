@@ -4,6 +4,7 @@ import {EventService} from "../models/eventService.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
+import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -91,6 +92,32 @@ router.delete('/:serviceid', async (req: Request, res: Response) => {
   }
   }
 )
+
+
+router.post('/order',async (req: Request, res: Response) => {
+  try {
+    let serviceId: number= req.body.serviceId;
+    let customerId: number=req.body.userId; //TODO wie definieret haben wollen?
+    let message: string= req.body.message;
+    let date: string=req.body.date; //TODO String version?
+    let time: string= req.body.time;
+
+   //const providerEmail = await dbService. //TODO warten auf Cyrill
+    const customerEmail= await dbService.getUserFromId(customerId)
+    const providerEmail= 'gillian.cathomas@gmx.ch'; //TODO löschen
+    await EmailOrderEventService.sendMailToProvider(providerEmail);
+    await EmailOrderEventService.sendMailToCustomer()
+    res.status(200);
+    res.json('The email was sent again please also check your spam folder. Thank you');
+
+  } catch (error) {
+    res.status(404);
+    res.send(error + 'unknown email-address. Please check or sign up.');
+    console.log(error);
+  }
+
+
+})
 
 
 export const EventserviceController: Router = router;
