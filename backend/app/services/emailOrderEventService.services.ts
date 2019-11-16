@@ -58,7 +58,7 @@ export class EmailOrderEventService {
     }
   }
 
-  static async sendMailToCustomer(customerEmail: string,serviceTitle: string,date: string, time:string, message:string)  {
+  static async sendMailToCustomer(providerName: string,customerEmail: string,serviceTitle: string,date: string, time:string, message:string)  {
 
 
     var transporter = nodemailer.createTransport({
@@ -83,7 +83,7 @@ export class EmailOrderEventService {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: customerEmail,
         subject: 'Your Eventdoo Order Confirmation',
-        html:emailService.getEmailOrderConfirmation(serviceTitle,date,time,message)
+        html:emailService.getEmailOrderConfirmation(providerName,serviceTitle,date,time,message)
       };
 
       transporter.sendMail(mailOptions, function (err, info) {

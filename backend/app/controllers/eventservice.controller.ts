@@ -5,6 +5,8 @@ import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
+import {EventServiceFilter} from "../models/eventServiceFilter.model";
+import {FilterCategories} from "../models/filterCategories.enum";
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -98,16 +100,18 @@ router.post('/order',async (req: Request, res: Response) => {
     let message: string= req.body.message;
     let date: string=req.body.date; //TODO String version?
     let time: string= req.body.time;
-
+    //let oderedEventService:EventService= dbService.getServiceFilter([new EventServiceFilter(FilterCategories.,)]))
    //const providerEmail = await dbService. //TODO warten auf Cyrill Frage ist soll ich title und providerId erfragen oder soll ich eine
     //const serviceTitle= await dbService.
     let serviceTitle: string;
+
     serviceTitle= 'Cupcakes Forever';//TODO löschen
     const customer: User= await dbService.getUserFromId(customerId);
     let customerEmail: string= customer.getEmail();
-    const providerEmail= 'gillian.cathomas@gmx.ch'; //TODO löschen
+    const providerEmail= 'will123459@gmail.com'; //TODO löschen
+    const providerName: string='Hans Muster';
     await EmailOrderEventService.sendMailToProvider(providerEmail,customerEmail,serviceTitle,date,time,message);
-    await EmailOrderEventService.sendMailToCustomer(customerEmail,serviceTitle,date,time,message);
+    await EmailOrderEventService.sendMailToCustomer(providerName,customerEmail,serviceTitle,date,time,message);
     res.status(200);
     res.json('The emails were sent ');
 
