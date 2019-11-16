@@ -28,7 +28,7 @@ router.post('/add', async (req: Request, res: Response) => {
       .setCapacity(req.body.capacity)
       .setPrice(req.body.price)
       .setAddress(address)
-      .setPerimeter(req.body.perimeter)
+      .setPerimeter(Number(req.body.perimeter))
       .build();
     if (req.body.subtype !== undefined) {
       eventService.setSubtype(req.body.subtype);
