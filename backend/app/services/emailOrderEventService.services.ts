@@ -20,7 +20,7 @@ export class EmailOrderEventService {
    * @param user that just signed up
    * is called in SignUp controller POST Event listener
    */
-  static async sendMailToProvider(email: string) {
+  static async sendMailToProvider(providerEmail: string,customerEmail: string,serviceTitle: string,date: string, time:string, message:string) {
 
     var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
@@ -40,9 +40,9 @@ export class EmailOrderEventService {
     try{
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
-        to: email,
+        to: providerEmail,
         subject: 'Your Event just got ordered',
-        html: emailService.getEmailOrderEventService()
+        html: emailService.getEmailOrderEventService(customerEmail,serviceTitle,date,time,message)
       };
   console.log('got before transporter');
       transporter.sendMail(mailOptions, function (err, info) {
@@ -58,7 +58,8 @@ export class EmailOrderEventService {
     }
   }
 
-  static async sendMailToCustomer(email: string) {
+  static async sendMailToCustomer(customerEmail: string,serviceTitle: string,date: string, time:string, message:string)  {
+
 
     var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
@@ -76,13 +77,15 @@ export class EmailOrderEventService {
 
 // send mail with defined transport object
     try{
+      //if(time == ''){ //TODO wie genau machen mit time and message?
+
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
-        to: email,
-        subject: 'Your Event just got ordered',
-        html: emailService.getEmailOrderConfirmation()
+        to: customerEmail,
+        subject: 'Your Eventdoo Order Confirmation',
+        html:emailService.getEmailOrderConfirmation(serviceTitle,date,time,message)
       };
-      console.log('got before transporter');
+
       transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
           console.log(err);

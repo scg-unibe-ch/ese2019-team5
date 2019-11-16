@@ -79,10 +79,10 @@ router.delete('/:serviceid', async (req: Request, res: Response) => {
   try{
   user = await dbService.getUserFromId(userId);
 
-    //dbService.deleteEventService(userId,serviceId) TODO für Cyrill zum implementieren
+    dbService.deleteService(serviceId)
     res.status(200).send('Service was deleted');
     }catch (error) {
-    if(error.message.localeCompare('Service does not exists')==0){ //TODO abklären genau welcher error
+    if(error.message.localeCompare('an error occured while getting the old address id of updated user')==0){ //TODO abklären genau welcher error
       res.status(406).send('invalid ServiceId');
     }
     else {
@@ -97,18 +97,22 @@ router.delete('/:serviceid', async (req: Request, res: Response) => {
 router.post('/order',async (req: Request, res: Response) => {
   try {
     let serviceId: number= req.body.serviceId;
-    let customerId: number=req.body.userId; //TODO wie definieret haben wollen?
+    let customerId: number=req.body.customerId; //TODO wie definieret haben wollen?
     let message: string= req.body.message;
     let date: string=req.body.date; //TODO String version?
     let time: string= req.body.time;
 
-   //const providerEmail = await dbService. //TODO warten auf Cyrill
-    const customerEmail= await dbService.getUserFromId(customerId)
+   //const providerEmail = await dbService. //TODO warten auf Cyrill Frage ist soll ich title und providerId erfragen oder soll ich eine
+    //const serviceTitle= await dbService.
+    let serviceTitle: string;
+    serviceTitle= 'Cupcakes Forever';//TODO löschen
+    const customer: User= await dbService.getUserFromId(customerId);
+    let customerEmail: string= customer.getEmail();
     const providerEmail= 'gillian.cathomas@gmx.ch'; //TODO löschen
-    await EmailOrderEventService.sendMailToProvider(providerEmail);
-    await EmailOrderEventService.sendMailToCustomer()
+    await EmailOrderEventService.sendMailToProvider(providerEmail,customerEmail,serviceTitle,date,time,message);
+    await EmailOrderEventService.sendMailToCustomer(customerEmail,serviceTitle,date,time,message);
     res.status(200);
-    res.json('The email was sent again please also check your spam folder. Thank you');
+    res.json('The emails were sent ');
 
   } catch (error) {
     res.status(404);

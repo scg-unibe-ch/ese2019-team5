@@ -144,3 +144,24 @@ client.test("deleting one service, service could not be deleted", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+###
+
+POST http://localhost:3000/eventservice/order
+Content-Type: application/json
+
+{
+  "serviceId":28,
+  "customerId": 104,
+ "message": "blablabal",
+  "date": "The perfect piano musician",
+  "time": "tdkdk"
+
+}
+> {%
+client.test("sending email", function() {
+  client.assert(response.status === 400, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
