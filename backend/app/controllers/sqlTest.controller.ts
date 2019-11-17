@@ -126,7 +126,7 @@ router.get("/tryService/:z", async(req: Request, res: Response) => {
 
 router.get("/testFilter/:z", async(req: Request, res: Response) => {
   const id: number = 88;
-  const filters = [new EventServiceFilter(FilterCategories.textSerach,"Cupcake"), new EventServiceFilter(FilterCategories.city, "New York")];
+  const filters = [new EventServiceFilter(FilterCategories.textSearch,"Cupcake"), new EventServiceFilter(FilterCategories.city, "New York")];
 
   const filters2: EventServiceFilter[] = [];
   const services = await dbService.getServiceFilter(filters);
