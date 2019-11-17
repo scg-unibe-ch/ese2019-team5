@@ -7,7 +7,6 @@ import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
 const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
 const emailService = new EmailForgotPWCreatorService();
  let token: string;
-
 /**
  * creates a jwt token for the email using payload and email
  * @param payload that will be part of the jwt token
@@ -15,10 +14,10 @@ const emailService = new EmailForgotPWCreatorService();
  * @return emailURL that will be sent to user by sendMailToNewUser Method
  * is called from sendMailToNewUser
  */
-function makeToken(payload: any, email: string) {
+function makeToken(payload: any, email: string):string {
   var signOptions = {
     issuer: 'Eventdoo',
-     subject: email,
+    subject: email,
     audience: email,
     expiresIn: '24h',
     algorithm: 'RS256'};
@@ -68,7 +67,7 @@ export class EmailForgotPWServices {
         subject: 'Password Reset',
         html: emailService.getEmailForgotPWText(emailURL)
       };
-  console.log('got before transporter');
+
       transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
           console.log(err);

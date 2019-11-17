@@ -126,7 +126,7 @@ router.get("/tryService/:z", async(req: Request, res: Response) => {
 
 router.get("/testFilter/:z", async(req: Request, res: Response) => {
   const id: number = 88;
-  const filters = [new EventServiceFilter(FilterCategories.city,"Bern")];
+  const filters = [new EventServiceFilter(FilterCategories.availability,"Friday")];
 
   const filters2: EventServiceFilter[] = [];
   const services = await dbService.getServiceFilter(filters);
@@ -170,6 +170,11 @@ router.get("/testResetPW/:z", async(req: Request, res: Response) => {
   dbService.resetPassword("test.test@test.ch",req.params.z);
   res.statusCode = 200;
   res.send("Hello");
+});
+
+router.get("/getServiceFromId/:id", async(req: Request, res: Response) => {
+  res.statusCode = 200;
+  res.send(await dbService.getServiceFromId(Number(req.params.id)));
 });
 
 export const SqlTestController: Router = router;

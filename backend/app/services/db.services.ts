@@ -172,6 +172,16 @@ export class DbServices {
     }
   }
 
+  public async getServiceFromId(serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getServiceFromDB([new EventServiceFilter(FilterCategories.serviceId, serviceId)], localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   public async deleteUser(userId: number){
     const localClient = this.getClient();
     await localClient.connect();
@@ -461,21 +471,32 @@ export class DbServices {
         query = query + " WHERE ";
       }
 
-      if (filter.getType() == FilterCategories.textSerach) {
-        query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
-      }
+      query = query + "(";
 
-      else if (filter.getType() == FilterCategories.city) {
+      if (filter.getType() == FilterCategories.textSearch) {
+        query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
+      } else if (filter.getType() == FilterCategories.availability) {
+        query = query + "Lower(availability) LIKE Lower('%" + filter.getValue() + "%')"
+      } else if (filter.getType() == FilterCategories.city) {
         //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
         query = query + "addressid IN (Select id From address Where city = $" + qCount + ")";
         qArray.push(filter.getValue());
         qCount++;
-      } else {
+      } else if (filter.getType() == FilterCategories.capacity) {
+        query = query + filter.getType() + " >= $" + qCount;
+        qArray.push(filter.getValue());
+        qCount++;
+      } else if (filter.getType() == FilterCategories.price) {
+        query = query + filter.getType() + " <= $" + qCount;
+        qArray.push(filter.getValue());
+        qCount++;
+      }  else {
         query = query + filter.getType() + " = $" + qCount;
 
         qArray.push(filter.getValue());
         qCount++;
       }
+      query = query + ")";
       flag = true;
 
     }

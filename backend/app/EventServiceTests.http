@@ -14,7 +14,7 @@ Content-Type: application/json
   "housenumber": 0,
   "zip": 1010,
   "city": "FarFarAway",
-  "perimeter": "20km"
+  "perimeter": "20"
 }
 > {%
 client.test("Adding eventServices without subtype and requirements", function() {
@@ -39,7 +39,7 @@ Content-Type: application/json
   "housenumber": 12343,
   "zip": 49494,
   "city": "New York",
-  "perimeter": "50km",
+  "perimeter": "100",
   "subtype": "Sweets & Desserts"
 }
 > {%
@@ -66,7 +66,7 @@ Content-Type: application/json
   "housenumber": 12,
   "zip": 6000,
   "city": "Luzern",
-  "perimeter": "5km",
+  "perimeter": "5",
   "subtype": "Sweets & Desserts",
   "requirements": "glutenfree is not possible yet"
 }
@@ -93,7 +93,7 @@ Content-Type: application/json
   "housenumber": 0,
   "zip": 3000,
   "city": "Bern",
-  "perimeter": "50km",
+  "perimeter": "50",
   "requirements": "places that are too humid are not possible"
 }
 > {%
@@ -150,8 +150,8 @@ POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId":28,
-  "customerId": 94,
+  "serviceId":44,
+  "customerId": 104,
  "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"
@@ -159,7 +159,18 @@ Content-Type: application/json
 }
 > {%
 client.test("sending email", function() {
-  client.assert(response.status === 400, "Response status is 400");
+  client.assert(response.status === 200, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/eventservice/46
+Content-Type: application/json
+
+> {%
+client.test("getting one EventService", function() {
+  client.assert(response.status === 200, "Response status is 400");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}

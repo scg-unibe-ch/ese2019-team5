@@ -37,9 +37,11 @@ router.get('/', async (req: Request, res: Response) => {
 );
 
 
+
+
 router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availability?', async (req: Request, res: Response) => {
   try {
-  // let textSearch:string= req.query.textSearch;
+
     let textSearch= req.query.text;
     let category: string = req.query.category;
     let subtype:string= req.query.subtype;
@@ -51,24 +53,34 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     console.log('textSearch'+ textSearch);
 
 
-    let EventServiceFilterArray:EventServiceFilter[]= [];
+    let eventServiceFilterArray:EventServiceFilter[]= [];
     if( textSearch!==undefined){
-      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSerach, textSearch))
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSearch, textSearch))
     }
     if( category!==undefined){
-      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
     }
     if( subtype!==undefined){
-      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.subtype, subtype))
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.subtype, subtype))
     }
     if( city!==undefined){
-      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
+      console.log('got here city');
     }
+    /*if(price!==undefined){
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.price, price))
+    }
+    if(people!== undefined){
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.people, people))
+    }
+    if (availability!== undefined){
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.availability, availability))
+    }*/
 
-console.log(EventServiceFilterArray);
- let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter(EventServiceFilterArray);
- console.log('ServiceCFittingREquest'+ serviceCFittingRequest);
-   let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
+console.log(eventServiceFilterArray);
+ let servicesFittingRequest: EventServiceContainer = await dbService.getServiceFilter(eventServiceFilterArray);
+ console.log('ServiceCFittingREquest'+ servicesFittingRequest);
+   let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
     res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
 
    console.log(serviceAOfFittingRequest);
