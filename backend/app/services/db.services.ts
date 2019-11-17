@@ -473,7 +473,7 @@ export class DbServices {
 
       query = query + "(";
 
-      if (filter.getType() == FilterCategories.textSerach) {
+      if (filter.getType() == FilterCategories.textSearch) {
         query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
       }
 
