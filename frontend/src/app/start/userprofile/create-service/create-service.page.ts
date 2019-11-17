@@ -253,7 +253,7 @@ export class CreateServicePage implements OnInit {
    var files   = document.querySelector('input[type=file]').files;
 
     function readAndPreview(file) : string {
-      var base64;
+    var base64;
 
       // Make sure `file.name` matches our extensions criteria
       if ( /\.(jpe?g|png)$/i.test(file.name) ) {

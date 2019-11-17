@@ -95,13 +95,11 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
 
 
 router.get('/:serviceId', async (req: Request, res: Response) => {
-
-
     try {
       const serviceId:number = Number(req.params.serviceId);
-      //let ServicesContainer: EventServiceContainer = await dbService.getServiceFilter();
-     /* let EventServicesArray: EventService [] =ServicesContainer.getServices();
-      res.send(EventServicesArray.map(e => e.toSimplification()));*/
+      let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
+      let eventServicesArray: EventService [] =servicesContainer.getServices();
+      res.send(eventServicesArray.map(e => e.toSimplification()));
       res.status(200);
     } catch (error) {
       res.status(404);
