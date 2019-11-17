@@ -3,7 +3,8 @@ export enum FilterCategories {
   category = "category",
   subtype = "subtype",
   textSearch = "search",
-  //price = "price",
+  capacity = "capacity",
+  price = "price",
   city = "city",
   //availability = "availability"
   serviceId = "id"

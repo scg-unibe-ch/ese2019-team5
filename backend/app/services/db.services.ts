@@ -476,10 +476,17 @@ export class DbServices {
       if (filter.getType() == FilterCategories.textSearch) {
         query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
       }
-
       else if (filter.getType() == FilterCategories.city) {
         //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
         query = query + "addressid IN (Select id From address Where city = $" + qCount + ")";
+        qArray.push(filter.getValue());
+        qCount++;
+      } else if (filter.getType() == FilterCategories.capacity) {
+        query = query + filter.getType() + " >= $" + qCount;
+        qArray.push(filter.getValue());
+        qCount++;
+      } else if (filter.getType() == FilterCategories.price) {
+        query = query + filter.getType() + " <= $" + qCount;
         qArray.push(filter.getValue());
         qCount++;
       } else {
