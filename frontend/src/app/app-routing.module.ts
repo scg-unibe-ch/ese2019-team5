@@ -31,9 +31,15 @@ const routes: Routes = [
       },
       {
         path: 'services', children: [
-          {path: '', component: EventServicesPage}]
+          {
+            path: '', component: EventServicesPage
+          },
+          {path: ':serviceId',
+            loadChildren: './start/EventServices/event-service-detail/event-service-detail.module#EventServiceDetailPageModule'
+          }]
       }]
-  }
+  },
+
 ];
 
 

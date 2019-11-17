@@ -1,0 +1,13 @@
+<ion-header >
+  <ion-toolbar color="primary">
+    <ion-title style="color: white; position: center; text-align: center; top: 15px">event-service-detail</ion-title>
+    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start/services"> </ion-back-button></ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="serviceId==null||loadedEventService==null">
+    <p>{{loadedEventService.title}}</p>
+  </div>
+
+</ion-content>
