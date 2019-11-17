@@ -1,0 +1,41 @@
+<ion-header >
+  <ion-toolbar color="primary">
+    <ion-title style="color: white; position: center; text-align: center; top: 15px">event-service-detail</ion-title>
+    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start/services"> </ion-back-button></ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="serviceId==null||loadedEventService==null">
+    <p>{{loadedEventService}}</p>
+  </div>
+
+  <ion-button [hidden]="isInputing" (click)="showOfferInput()">Get Offer</ion-button>
+
+  <div [hidden]="!isInputing">
+
+    <form [formGroup]="orderInfoForm">
+
+      <div class="container-fluid">
+        <ion-item>
+          <ion-label >Message: </ion-label>
+          <ion-input formControlName="messageInput"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="container-fluid">
+        <ion-item>
+        <ion-label >Date: </ion-label>
+        <ion-input formControlName="dateInput"></ion-input>
+       </ion-item>
+        <ion-item>
+          <ion-label >Time: </ion-label>
+          <ion-input formControlName="timeInput"></ion-input>
+        </ion-item>
+      </div>
+    </form>
+
+    <ion-button (click)="sendOffer()">Get offer</ion-button>
+  </div>
+
+</ion-content>

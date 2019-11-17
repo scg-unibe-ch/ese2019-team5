@@ -1,21 +1,31 @@
-<ion-list>
-  <ion-card *ngFor="let event of services" color="light">
-    <ion-img src="assets/img/{{event.category}}.jpg"></ion-img>
-    <ion-card-header>
-      <ion-row>
-        <ion-col>
-          <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF / {{event.perimeter}} away</ion-card-subtitle>
-        </ion-col>
-        <ion-col>
-          <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-card-title>{{event.title}}</ion-card-title>
-        </ion-col>
-      </ion-row>
-      <ion-label>  </ion-label>
-    </ion-card-header>
-  </ion-card>
-</ion-list>
+<ion-grid>
+  <ion-row>
+    <ion-col *ngFor="let event of services" size="4">
+      <ion-card  color="light" padding="2">
+        <ion-header>
+          <ion-button [hidden]="auth.getUserId()!=event.serviceId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-header>
+        <ion-img src="assets/img/{{event.category}}.jpg" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+        <ion-card-header>
+          <ion-row>
+            <ion-col>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF / {{event.perimeter}} away</ion-card-subtitle>
+            </ion-col>
+            <ion-col>
+              <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>{{event.title}}</ion-card-title>
+            </ion-col>
+          </ion-row>
+          <ion-label>  </ion-label>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>
