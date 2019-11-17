@@ -150,8 +150,8 @@ POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId":28,
-  "customerId": 94,
+  "serviceId":44,
+  "customerId": 104,
  "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"
@@ -159,7 +159,18 @@ Content-Type: application/json
 }
 > {%
 client.test("sending email", function() {
-  client.assert(response.status === 400, "Response status is 400");
+  client.assert(response.status === 200, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/eventservice/46
+Content-Type: application/json
+
+> {%
+client.test("getting one EventService", function() {
+  client.assert(response.status === 200, "Response status is 400");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
