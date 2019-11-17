@@ -6,7 +6,7 @@ export enum FilterCategories {
   capacity = "capacity",
   price = "price",
   city = "city",
-  //availability = "availability"
-  serviceId = "id"
+  availability = "availability",
+  serviceId = "id",
 
 }

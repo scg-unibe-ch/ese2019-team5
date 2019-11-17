@@ -126,7 +126,7 @@ router.get("/tryService/:z", async(req: Request, res: Response) => {
 
 router.get("/testFilter/:z", async(req: Request, res: Response) => {
   const id: number = 88;
-  const filters = [new EventServiceFilter(FilterCategories.price,1200)];
+  const filters = [new EventServiceFilter(FilterCategories.availability,"Friday")];
 
   const filters2: EventServiceFilter[] = [];
   const services = await dbService.getServiceFilter(filters);
