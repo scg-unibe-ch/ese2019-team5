@@ -37,7 +37,7 @@ export class EventService {
     this._subtype = subtype;
     this._capacity=capacity;
     this._price=price;
-    this._image=image
+    this._image=image;
 
 
     this.pictureIds = []; // provisorisch

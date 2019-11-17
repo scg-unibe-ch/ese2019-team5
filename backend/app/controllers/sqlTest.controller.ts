@@ -177,4 +177,11 @@ router.get("/getServiceFromId/:id", async(req: Request, res: Response) => {
   res.send(await dbService.getServiceFromId(Number(req.params.id)));
 });
 
+router.get("/testImage/:id", async(req: Request, res: Response) => {
+  const handler = new FileHandlerService();
+
+  res.statusCode = 200;
+  res.send(handler.test(100));
+});
+
 export const SqlTestController: Router = router;

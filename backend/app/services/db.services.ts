@@ -46,7 +46,7 @@ export class DbServices {
 
     try{
       const serviceId = await this.addServiceToDB(service, localClient);
-      //fileHandler.safeServicePictures(service.getPictures(),serviceId)
+      fileHandler.safeServicePictures(service.getImage(),serviceId);
     } finally{
       await localClient.end()
     }
@@ -505,14 +505,24 @@ export class DbServices {
 
     const stream = client.query(query,qArray);
 
+    const fileHandler = new FileHandlerService();
+
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
+      const serviceId = Number(row.get('id'));
+
+      const imageString = fileHandler.getPictureFromServiceId(serviceId);
+
+
 
 
       let serviceBuilder = new EventServiceBuilder();
+
+
+
       container.addService(
-        serviceBuilder.setServiceId(Number(row.get('id')))
+        serviceBuilder.setServiceId(serviceId)
           .setProviderId(Number(row.get('userid')))
           .setCategory(String(row.get('category')))
           .setTitle(String(row.get('title')))
@@ -524,6 +534,7 @@ export class DbServices {
           .setSubtype(String(row.get('subtype')))
           .setCapacity(Number(row.get('capacity')))
           .setPrice(Number(row.get('price')))
+          .setImage(imageString)
           .build()
       );
 
