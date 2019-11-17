@@ -38,8 +38,7 @@ router.post('/add', async (req: Request, res: Response) => {
       }
       if (req.body.image !== undefined) {
         let b64string = req.body.image;
-        let buffer = Buffer.from(b64string, 'base64');
-        eventService.setImage(buffer);
+        eventService.setImage(b64string);
       }
       console.log(req.body.capacity)
       console.log(eventService)
@@ -135,6 +134,7 @@ router.post('/order', async (req: Request, res: Response) => {
     await EmailOrderEventService.sendMailToCustomer(providerName, customerEmail, serviceTitle, date, time, message);
     res.status(200);
     res.json('The emails were sent ');
+
 
   } catch (error) {
     res.status(404);

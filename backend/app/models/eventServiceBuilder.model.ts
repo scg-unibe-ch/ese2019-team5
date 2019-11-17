@@ -20,7 +20,7 @@ export class EventServiceBuilder {
   private _subtype: string;
   private _capacity: number;
   private _price: number;
-  private _image: Buffer;
+  private _image: string;
 
 
   constructor() {
@@ -37,7 +37,7 @@ export class EventServiceBuilder {
     this._subtype = '';
     this._capacity = -1;
     this._price = -1;
-    this._image = Buffer.from('');
+    this._image = '';
 
   }
 
@@ -105,7 +105,7 @@ export class EventServiceBuilder {
     return this;
   }
 
-  public setImage(image: Buffer): EventServiceBuilder {
+  public setImage(image: string): EventServiceBuilder {
     this._image = image
     return this;
   }
