@@ -172,6 +172,16 @@ export class DbServices {
     }
   }
 
+  public async getServiceFromId(serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getServiceFromDB([new EventServiceFilter(FilterCategories.serviceId, serviceId)], localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   public async deleteUser(userId: number){
     const localClient = this.getClient();
     await localClient.connect();
@@ -461,6 +471,8 @@ export class DbServices {
         query = query + " WHERE ";
       }
 
+      query = query + "(";
+
       if (filter.getType() == FilterCategories.textSerach) {
         query = query + "Lower(description) LIKE Lower('%" + filter.getValue() + "%') OR Lower(title) LIKE Lower('%" + filter.getValue() + "%')"
       }
@@ -476,6 +488,7 @@ export class DbServices {
         qArray.push(filter.getValue());
         qCount++;
       }
+      query = query + ")";
       flag = true;
 
     }
