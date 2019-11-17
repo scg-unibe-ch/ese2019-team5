@@ -55,7 +55,7 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
 
     let eventServiceFilterArray:EventServiceFilter[]= [];
     if( textSearch!==undefined){
-      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSerach, textSearch))
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSearch, textSearch))
     }
     if( category!==undefined){
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
