@@ -6,5 +6,6 @@ export enum FilterCategories {
   //price = "price",
   city = "city",
   //availability = "availability"
+  serviceId = "id"
 
 }
