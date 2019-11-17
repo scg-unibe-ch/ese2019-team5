@@ -43,3 +43,25 @@ client.test("get filtered text = cupcake", function() {
 %}
 
 ###
+GET http://localhost:3000/search/filter/:text?text=Piano
+Content-Type: application/json
+
+> {%
+client.test("get filtered text = piano", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:text?text=Cupcake&city=Bern
+Content-Type: application/json
+
+> {%
+client.test("get filtered text = piano", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

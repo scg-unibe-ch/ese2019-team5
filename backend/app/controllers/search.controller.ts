@@ -37,9 +37,11 @@ router.get('/', async (req: Request, res: Response) => {
 );
 
 
+
+
 router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availability?', async (req: Request, res: Response) => {
   try {
-  // let textSearch:string= req.query.textSearch;
+
     let textSearch= req.query.text;
     let category: string = req.query.category;
     let subtype:string= req.query.subtype;
@@ -63,12 +65,22 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     }
     if( city!==undefined){
       EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
+      console.log('got here city');
     }
+    /*if(price!==undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.price, price))
+    }
+    if(people!== undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.people, people))
+    }
+    if (availability!== undefined){
+      EventServiceFilterArray.push(new EventServiceFilter(FilterCategories.availability, availability))
+    }*/
 
 console.log(EventServiceFilterArray);
- let serviceCFittingRequest: EventServiceContainer = await dbService.getServiceFilter(EventServiceFilterArray);
- console.log('ServiceCFittingREquest'+ serviceCFittingRequest);
-   let serviceAOfFittingRequest: EventService[] = serviceCFittingRequest.getServices();
+ let servicesFittingRequest: EventServiceContainer = await dbService.getServiceFilter(EventServiceFilterArray);
+ console.log('ServiceCFittingREquest'+ servicesFittingRequest);
+   let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
     res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
 
    console.log(serviceAOfFittingRequest);

@@ -5,8 +5,8 @@ import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
-import {EventServiceFilter} from "../models/eventServiceFilter.model";
-import {FilterCategories} from "../models/filterCategories.enum";
+import {EventServiceContainer} from "../models/eventServiceContainer.model";
+
 
 const router: Router = Router(); // part of express needed
 const dbService = new DbServices();
@@ -92,6 +92,25 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
   }
   }
 )
+
+
+router.get('/:serviceId', async (req: Request, res: Response) => {
+
+
+    try {
+      const serviceId:number = Number(req.params.serviceId);
+      //let ServicesContainer: EventServiceContainer = await dbService.getServiceFilter();
+     /* let EventServicesArray: EventService [] =ServicesContainer.getServices();
+      res.send(EventServicesArray.map(e => e.toSimplification()));*/
+      res.status(200);
+    } catch (error) {
+      res.status(404);
+      res.send('error in backend' + error.message);
+      console.log(error);
+    }
+
+  }
+);
 
 
 router.post('/order',async (req: Request, res: Response) => {
