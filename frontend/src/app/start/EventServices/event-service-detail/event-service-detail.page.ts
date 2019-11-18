@@ -78,11 +78,10 @@ export class EventServiceDetailPage implements OnInit {
   }
 
   async sendOffer() {
-    var success: boolean = false;
     const message: string = this.messageInput.value;
     const date: string = this.dateInput.value;
     const time: string = this.timeInput.value;
-    this.http.post('http://localhost:3000/eventservice/order', {
+    await this.http.post('http://localhost:3000/eventservice/order', {
       message: message,
       date: date,
       time: time,
@@ -91,14 +90,18 @@ export class EventServiceDetailPage implements OnInit {
     }).subscribe(
     (res)=>{
       console.log('successfully ordered');
-      success = true;
+      this.presentOrderFeedback(true);
     },
       (error)=>{
       console.log(error);
-      success = false;
+      this.presentOrderFeedback(false);
       }
     );
-    var toast: any;
+  }
+
+
+  private async presentOrderFeedback(success: boolean) {
+    let toast: any;
     if(success){
       this.isInputing = false;
       toast = await this.toast.create({

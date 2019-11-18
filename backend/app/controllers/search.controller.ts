@@ -46,8 +46,8 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     let category: string = req.query.category;
     let subtype:string= req.query.subtype;
     let city: string = req.query.city;
-    let price:Number= req.query.price;
-    let people:Number= req.query.people;
+    let price:number= req.query.price;
+    let capacity:number= req.query.capacity;
     let availability:string= req.query.availability;
     console.log('got here');
     console.log('textSearch'+ textSearch);
@@ -67,15 +67,15 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
       console.log('got here city');
     }
-    /*if(price!==undefined){
+    if(price!==undefined){
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.price, price))
     }
-    if(people!== undefined){
-      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.people, people))
+    if(capacity!== undefined){
+      eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.capacity, capacity))
     }
     if (availability!== undefined){
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.availability, availability))
-    }*/
+    }
 
 console.log(eventServiceFilterArray);
  let servicesFittingRequest: EventServiceContainer = await dbService.getServiceFilter(eventServiceFilterArray);
