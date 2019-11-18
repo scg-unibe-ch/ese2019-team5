@@ -32,6 +32,7 @@ export class UserprofilePage implements OnInit {
   private city: string = '';
   private firmname: string = '';
   private phonenumber: string = '';
+  private numberOfServices: number = 0;
 
   private eventServiceArrayOfUser: EventService[]; //= new Array(5);
 
@@ -111,6 +112,7 @@ export class UserprofilePage implements OnInit {
             this.housenumber = user.housenumber; //address.housenumber;
             this.zip = user.zip; //address.zip;
             this.city = user.city; //address.city;
+            this.numberOfServices = user.size;
             if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
             if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
             this.eventServiceArrayOfUser = user.eventServiceArrayOfUser;

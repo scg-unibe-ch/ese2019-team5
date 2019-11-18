@@ -3,7 +3,7 @@
     <ion-col *ngFor="let event of services" size="4">
       <ion-card  color="light" padding="2">
         <ion-header>
-          <ion-button [hidden]="auth.getUserId()!=event.serviceId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
+          <ion-button [hidden]="auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
             <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-header>

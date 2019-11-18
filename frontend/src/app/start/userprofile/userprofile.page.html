@@ -84,13 +84,14 @@
     <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
   </div>
 
-  <ion-button [hidden]="isEditing" color="secondary" [routerLink]="['createService']">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5" color="secondary" [routerLink]="['createService']">Create your service offer</ion-button>
   <ion-button [hidden]="isEditing" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
+  <ion-row></ion-row>
+  <ion-note [hidden]="numberOfServices<5">You can only offer 5 services at once</ion-note>
 
   <ion-row style="height: 12px"></ion-row>
   <ion-title>My services</ion-title>
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
-    <!-- Use service component here with NgFor-->
   </ion-list>
 </ion-content>

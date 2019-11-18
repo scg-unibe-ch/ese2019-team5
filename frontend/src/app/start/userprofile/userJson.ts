@@ -12,4 +12,5 @@ export interface userJson{
   firmname: string;
   phonenumber: string;
   eventServiceArrayOfUser: EventService[];
+  size: number;
 }
