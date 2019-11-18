@@ -19,7 +19,7 @@ import {AuthService} from "../../../AuthService/auth.service";
 export class CreateServicePage implements OnInit {
 
   image: string;
-  base64: any; //:string;
+  base64: any;
 
   //Some properties used for user feedback
   loading: boolean;
@@ -40,6 +40,7 @@ export class CreateServicePage implements OnInit {
   ngOnInit() {
     this.loading = false;
     this.error = '';
+    this.base64 = '';
   }
 
   serviceForm = this.formBuilder.group({
@@ -133,7 +134,6 @@ export class CreateServicePage implements OnInit {
       });
   }*/
 
-  //ToDo: Test whether this works with backend
   /**
    * Called by the user by pushing the correspondent button
    * Sets the body-params and makes a http-request to the backend
@@ -170,7 +170,7 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.base64.substring(this.base64.indexOf(','), this.base64.length);
+      const image = this.base64;
       console.log(image);
 
       console.log('Params set. Starting http request');
@@ -196,10 +196,6 @@ export class CreateServicePage implements OnInit {
     }
   }
 
-  loadAndStore() {
-    this.base64 = this.previewFiles();
-    console.log(this.base64);
-  }
   /**
    * ConfirmationPopUp
    * Called by {@link createService} when creating a service was successful
@@ -247,22 +243,20 @@ export class CreateServicePage implements OnInit {
     }
   }
 
- async previewFiles()  {
+ previewFiles()  {
     var preview = document.querySelector('#preview');
     // @ts-ignore
    var files   = document.querySelector('input[type=file]').files;
 
-    function readAndPreview(file) : string {
-    var base64;
+    function readAndPreview(file) : any {
 
-      // Make sure `file.name` matches our extensions criteria
       if ( /\.(jpe?g|png)$/i.test(file.name) ) {
+        return new Promise(function(resolve) {
         var reader = new FileReader();
 
         reader.onloadend = function () {
           console.log(reader.result); // this works
-          const base64 = reader.result;
-          console.log(base64); // this works
+          resolve(reader.result);
         };
 
         reader.addEventListener("load", function () {
@@ -274,16 +268,14 @@ export class CreateServicePage implements OnInit {
         }, false);
 
         reader.readAsDataURL(file);
-        console.log(base64); //ToDo: This does not work - why?
-        return base64;
+        });
       } else
         return '';
     }
 
     if (files) {
-     return [].forEach.call(files, readAndPreview);
-    } else
-      return '';
+     this.base64 = [].forEach.call(files, readAndPreview);
+    }
   }
 
 
