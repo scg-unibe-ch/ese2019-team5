@@ -34,7 +34,6 @@ protected static makeToken(payload: any, email: string):string{
 
      const emailURL= this.makeToken(payload, user.getEmail());
 
-
     try{
       var mailOptions = this.getMailOptions();
 

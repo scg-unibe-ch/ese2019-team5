@@ -85,6 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     let userDataAndServices;
     let allServicesContainer: EventServiceContainer = await dbService.getServiceFilter([new EventServiceFilter(FilterCategories.user, userId)]);
     let eventServiceArrayOfUser: EventService[] = allServicesContainer.getServices();
+    let size= eventServiceArrayOfUser.length;
 
     //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
@@ -102,7 +103,8 @@ router.get('/:id', async (req: Request, res: Response) => {
       'isFirm': isFirm,
       'firmname': firmname,
       'phonenumber': phonenumber,
-      'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification()))
+      'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification())),
+      'size':size
     };
     console.log(eventServiceArrayOfUser.map(e => e.toSimplification()));
     console.log(userDataAndServices);

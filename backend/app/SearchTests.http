@@ -1,0 +1,67 @@
+###Funktionierendes erstellen von Eventservices
+GET http://localhost:3000/search
+Content-Type: application/json
+
+> {%
+client.test("get all Services", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:textsearch?category=Gastronomy&city=Bern
+Content-Type: application/json
+
+> {%
+client.test("get filtered gastronomy and city services", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:textsearch?city=Bern
+Content-Type: application/json
+
+> {%
+client.test("get filtered city", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:text?text=Cupcake
+Content-Type: application/json
+
+> {%
+client.test("get filtered text = cupcake", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:text?text=Piano
+Content-Type: application/json
+
+> {%
+client.test("get filtered text = piano", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/search/filter/:text?text=Piano&city=Bern
+Content-Type: application/json
+
+> {%
+client.test("get filtered text = piano", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
