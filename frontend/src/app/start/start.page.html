@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content style="position: absolute; top:65px; bottom: 0px;">
   <!-- Form to set search params -->
   <form [formGroup]="searchForm">
     <ion-toolbar color="primary" style="position: absolute; top: 5px;">
@@ -29,9 +29,9 @@
             <ion-title> Search services </ion-title>
           </ion-col>
         </ion-row>
+
         <ion-row>
           <ion-col>
-            <div class="form-group">
               <ion-select class="customSelect" placeholder="Category" formControlName="category">
                 <ion-select-option value="Location"> Location </ion-select-option>
                 <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
@@ -39,10 +39,9 @@
                 <ion-select-option value="Entertainment"> Entertainment </ion-select-option>
                 <ion-select-option value="Photography"> Photography </ion-select-option>
               </ion-select>
-            </div>
           </ion-col>
+
           <ion-col>
-            <div class="from-group">
               <ion-select *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment' "
                           class="customSelect" placeholder="Subtype" formControlName="subtype">
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
@@ -78,9 +77,21 @@
                 <ion-select-option *ngIf="category.value == 'Entertainment'" value="pyro"> Pyrotechnics</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Entertainment'" value="theatre"> Theatre </ion-select-option>
               </ion-select>
-            </div>
           </ion-col>
+
+            <ion-col>
+              <ion-select class="customSelect" placeholder="Day..." formControlName="weekday">
+                <ion-select-option value="Monday"> Monday </ion-select-option>
+                <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
+                <ion-select-option value="Wednesday"> Wednesday </ion-select-option>
+                <ion-select-option value="Thursday"> Thursday </ion-select-option>
+                <ion-select-option value="Friday"> Friday </ion-select-option>
+                <ion-select-option value="Saturday"> Saturday </ion-select-option>
+                <ion-select-option value="Sunday"> Sunday </ion-select-option>
+              </ion-select>
+            </ion-col>
         </ion-row>
+
         <ion-row>
           <ion-col>
             <ion-item>
@@ -98,6 +109,7 @@
             </ion-item>
           </ion-col>
         </ion-row>
+
         <ion-row>
           <ion-col>
             <ion-item>

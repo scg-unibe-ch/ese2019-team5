@@ -8,16 +8,14 @@
   </ion-header>
 
   <ion-content fullscreen>
-    <!-- Loading animation while services are loaded from database-->
-    <p *ngIf="loading"> Trying to verify your email address </p>
-    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
     <!-- Displays all EventCards passed to the EventCardComponent (eventList) -->
-    <event-service-card [services]="eventList"> </event-service-card>
+    <event-service-card [services]="eventList" style="position: absolute; top: 250px;"> </event-service-card>
 
   </ion-content>
 </ion-app>

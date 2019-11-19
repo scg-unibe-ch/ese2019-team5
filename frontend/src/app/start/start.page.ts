@@ -28,6 +28,7 @@ export class StartPage implements OnInit {
   searchForm = this.formBuilder.group({
       category: [''],
       subtype: [''],
+      weekday: [''],
       city: [''],
       price: [''],
       persons: [''],
@@ -40,19 +41,24 @@ export class StartPage implements OnInit {
   get subtype() {
     return this.searchForm.get('subtype');
   }
+  get weekdays() {
+    return this.searchForm.get('weekday');
+  }
   get city() {
     return this.searchForm.get('city');
   }
   get price() {
     return this.searchForm.get('price');
   }
+  get persons() {
+    return this.searchForm.get('persons');
+  }
   get text() {
     return this.searchForm.get('text');
   }
 
-  search() {
 
-  }
+
 
  ngOnInit() {
     this.loading = true;
@@ -66,5 +72,49 @@ export class StartPage implements OnInit {
     this.loading = false;
 
   }
+
+  search() {
+    let url = this.getUrl()
+    this.http.get<Array<EventService>>(url).subscribe(
+      (data) => {
+        this.services = data;
+      },
+    (err) => {
+        console.log(err.message)
+    }
+    );
+  }
+
+  private getUrl() {
+    let result = 'http://localhost:3000/search/filter/';
+
+    if (this.text.value == '')
+      result += ':textsearch?';
+    else
+      result += (':text?text=' + this.text.value + '&');
+
+    if (this.category.value != '')
+      result += ('category=' + this.category.value + '&');
+    if (this.subtype.value != '')
+      result += ('subtype=' + this.subtype.value + '&');
+    if (this.city.value != '')
+      result += ('city=' + this.city.value + '&');
+    if (this.price.value != '')
+      result += ('price=' + this.price.value + '&');
+    if (this.persons.value != '')
+      result += ('people=' + this.persons.value + '&');
+    if (this.weekdays.value != '')
+      result += ('availability=' + this.weekdays.value + '&');
+
+    if (result.charAt(result.length - 1) == '&') {
+      console.log(result.substr(0, result.length - 1));
+      return (result.substr(0, result.length - 1));
+    } else {
+      console.log(result);
+      return result;
+    }
+  }
+
+
 
 }
