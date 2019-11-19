@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../AuthService/auth.service";
 import {EventService} from "../../../../backend/app/models/eventService.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 
 
@@ -33,6 +33,7 @@ export class StartPage implements OnInit {
       text: ['']
     });
 
+  /* Get-methods searchForm */
   get category () {
     return this.searchForm.get('category');
   }
@@ -56,8 +57,10 @@ export class StartPage implements OnInit {
   }
 
 
-
-
+  /**
+   * Gets all EventServices from backend
+   * Assigns them to services so they are displayed
+   */
  ngOnInit() {
     this.loading = true;
     this.http.get<Array<EventService>>('http://localhost:3000/search')
@@ -71,18 +74,31 @@ export class StartPage implements OnInit {
 
   }
 
+  /**
+   * Called by the user by pushing the search button
+   * Posts a get-request to backend asking for all services matching the search params entered by the user
+   * Updates "services" which leads to an updated page only displaying the matching services
+   */
   search() {
-    let url = this.getUrl()
+    this.loading = true;
+    let url = this.getUrl();
     this.http.get<Array<EventService>>(url).subscribe(
       (data) => {
         this.services = data;
+        this.loading = false;
       },
     (err) => {
-        console.log(err.message)
+        console.log(err.message);
+        this.loading = false;
     }
     );
   }
 
+  /**
+   * Called by {@link search}
+   * Generates the URL the search request has to be pushed to
+   * and returns it.
+   */
   private getUrl() {
     let result = 'http://localhost:3000/search/filter/';
 
