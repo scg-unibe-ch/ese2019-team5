@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../AuthService/auth.service";
 import {EventService} from "../../../../backend/app/models/eventService.model";
-import {SearchService} from "../SearchService/search.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 
@@ -21,7 +20,6 @@ export class StartPage implements OnInit {
   constructor(
     private authService: AuthService,
     private http: HttpClient,
-    private searchService: SearchService,
     private formBuilder: FormBuilder
   ) {}
 
