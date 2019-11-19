@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {Camera} from "@ionic-native/camera/ngx";
 
 import {AuthService} from "../../../AuthService/auth.service";
+import {Observable, Subject} from "rxjs";
 
 
 
@@ -243,39 +244,37 @@ export class CreateServicePage implements OnInit {
     }
   }
 
- previewFiles()  {
-    var preview = document.querySelector('#preview');
+ async previewFiles() {
     // @ts-ignore
-   var files   = document.querySelector('input[type=file]').files;
+   var file   = document.querySelector('input[type=file]').files[0];
 
-    function readAndPreview(file) : any {
+   //console.log("hello");
+   //console.log(file);
 
-      if ( /\.(jpe?g|png)$/i.test(file.name) ) {
-        return new Promise(function(resolve) {
-        var reader = new FileReader();
+  console.log("old: "+ this.base64);
 
-        reader.onloadend = function () {
-          console.log(reader.result); // this works
-          resolve(reader.result);
-        };
+   this.base64 = this.getB64String(file).subscribe((output) => {
+     console.log("out: " + output);
+     this.base64 = output;
+     console.log("this2: " + this.base64);
+   });
 
-        reader.addEventListener("load", function () {
-          var image = new Image();
-          image.height = 100;
-          image.title = file.name;
-          image.src = this.result.toString();
-          preview.appendChild( image );
-        }, false);
+  }
 
-        reader.readAsDataURL(file);
-        });
-      } else
-        return '';
-    }
+  private getB64String(file: File): Observable<string> {
+    const sub = new Subject<string>();
+    var reader = new FileReader();
 
-    if (files) {
-     this.base64 = [].forEach.call(files, readAndPreview);
-    }
+    reader.onload = (function () {
+      //console.log(reader.result.toString().split(',')[1]);
+
+      const content: string = reader.result.toString().split(',')[1];
+      sub.next(content);
+      sub.complete();
+    });
+    reader.readAsDataURL(file);
+    return sub.asObservable();
+
   }
 
 

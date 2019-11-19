@@ -28,10 +28,11 @@ export class FileHandlerService {
 
   public safeServicePictures(base64Data: string, eventServiceId: number){
     const path = this.createFolder(eventServiceId);
+    console.log(path);
+    //console.log(base64Data);
 
     fs.writeFile(path + "/" + String(eventServiceId) +".png", base64Data, 'base64', function(err) {
       console.log(err);
-      throw Error("error while creating image: " + err);
     });
   }
 

@@ -559,6 +559,10 @@ export class DbServices {
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
 
+  private async updateServiceDB (service: EventService, client: Client) {
+    
+  }
+
 
 
 

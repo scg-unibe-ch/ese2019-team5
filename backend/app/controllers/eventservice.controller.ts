@@ -37,11 +37,12 @@ router.post('/add', async (req: Request, res: Response) => {
         eventService.setRequirements(req.body.requirements);
       }
       if (req.body.image !== undefined) {
+        console.log("image got to backend");
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
       console.log(req.body.capacity)
-      console.log(eventService)
+      //console.log(eventService)
 
       dbService.addEventService(eventService);
 
