@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express';
-import bodyParser from 'body-parser';
+//import bodyParser from 'body-parser';
 import exphbs from 'express-handlebars';
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
@@ -23,23 +23,23 @@ const sequelize =  new Sequelize({
 });
 
 
-
+var bodyParser = require('body-parser');
 
 // cors to make request between differen ports
 const cors = require('cors');
 // create a new express application instance
 const app: express.Application = express();
 
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+
 app.use(cors());
 
 app.engine('handlebars', exphbs());
 app.set( 'view engine', 'handlebars');
 
-// Body Parser Middleware
-app.use(bodyParser.urlencoded({extended: false}));
-// parse application/json
-app.use(bodyParser.json());
+app.use(bodyParser({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb'}));
+app.use(bodyParser());
 
 
 var port = 3000;
