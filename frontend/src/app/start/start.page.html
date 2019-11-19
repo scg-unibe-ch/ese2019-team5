@@ -16,14 +16,108 @@
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
       Your Profile
     </ion-button>
-    <ion-button color="secondary" style="position: absolute; right: 261px; top: 6px"
-                [hidden]="authService.isLoggedOut()" [routerLink]="['services']">
-      All Services
-    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- To show that login was successful-->
-  <p *ngIf="isLoggedIn()"> Login was successful! </p>
+  <!-- Form to set search params -->
+  <form [formGroup]="searchForm">
+    <ion-toolbar color="primary" style="position: absolute; top: 5px;">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-title> Search services </ion-title>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <div class="form-group">
+              <ion-select class="customSelect" placeholder="Category" formControlName="category">
+                <ion-select-option value="Location"> Location </ion-select-option>
+                <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
+                <ion-select-option value="Music"> Music </ion-select-option>
+                <ion-select-option value="Entertainment"> Entertainment </ion-select-option>
+                <ion-select-option value="Photography"> Photography </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="from-group">
+              <ion-select *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment' "
+                          class="customSelect" placeholder="Subtype" formControlName="subtype">
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="asian"> Asian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="fingerFood"> Finger Food </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="greek"> Greek</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="indian"> Indian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="italian"> Italian</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="japanese"> Japanese</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="mexican"> Mexican</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="oriental"> Oriental</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="sweets"> Sweets & Dessert </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="vegan"> Vegan</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Gastronomy'" value="vegetarian"> Vegetarian </ion-select-option>
+
+                <ion-select-option *ngIf="category.value == 'Music'" value="classical"> Classical</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="electro"> Electronic Music </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="dj"> DJ</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="folk"> Folk</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="hiphop"> Hip Hop / Rap</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="jazz"> Jazz</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="latin"> Latin</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="oldie"> Golden Oldies</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="pop"> Pop/Rock</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="schlager"> Schlager</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="unplugged"> Unplugged</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Music'" value="world"> World Music</ion-select-option>
+
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="cabaret"> Cabaret </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="comedy"> Comedy</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="dance"> Dance</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="magic"> Magic</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="pyro"> Pyrotechnics</ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="theatre"> Theatre </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-input placeholder="City" formControlName="city" type="text"> </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-input placeholder="Price (CHF)" formControlName="price" type="number"> </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-input placeholder="Number of Persons" formControlName="persons"> </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-input placeholder="Search..." formControlName="text" type="text"> </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-button color="secondary" (click)="search()"> <ion-icon name="search"> </ion-icon> </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-toolbar>
+  </form>
+
+  <!-- Display Event Services matching the params -->
+  <event-service-card [services]="services" style="position: absolute; top: 200px;"> </event-service-card>
+
+
+  <!-- Loading animation while services are loaded from database-->
+  <p *ngIf="loading"> Looking for services... </p>
+  <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
 </ion-content>
