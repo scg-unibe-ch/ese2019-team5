@@ -6,7 +6,6 @@ import {Categories} from "../categories";
 const mockAddress: Address = new Address('', 0, 1234, '');
 
 
-//TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
 export class EventServiceBuilder {
   private _serviceId: number;
   private _providerId: number;

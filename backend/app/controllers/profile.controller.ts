@@ -106,8 +106,8 @@ router.get('/:id', async (req: Request, res: Response) => {
       'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification())),
       'size':size
     };
-    console.log(eventServiceArrayOfUser.map(e => e.toSimplification()));
-    console.log(userDataAndServices);
+    //console.log(eventServiceArrayOfUser.map(e => e.toSimplification()));
+    //console.log(userDataAndServices);
 
 
     res.send(userDataAndServices);

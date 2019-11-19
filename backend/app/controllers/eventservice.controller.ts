@@ -16,7 +16,7 @@ const dbService = new DbServices();
  * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async (req: Request, res: Response) => {
-    console.log('got here')
+    console.log('got here');
     try {
       const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
       const eventService: EventService = EventServiceBuilder.eventService()
@@ -41,14 +41,15 @@ router.post('/add', async (req: Request, res: Response) => {
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
-      console.log(req.body.capacity)
-      //console.log(eventService)
+      console.log(req.body.capacity);
 
-      dbService.addEventService(eventService);
+      await dbService.addEventService(eventService);
 
+      console.log("ok");
       res.statusCode = 200;
       res.send('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
+      console.log(error);
       res.send(error);
       res.statusCode = 400;
 
@@ -62,7 +63,7 @@ router.put('/update', async (req: Request, res: Response) => {
   // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
 
 
-})
+});
 
 /**
  *  listens to HTTP events Delete with userId and ServiceId given in URL
@@ -98,11 +99,11 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
      let serviceId: number = Number(req.params.serviceid);
       console.log('ServiceId'+ serviceId);
       let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
-      console.log(servicesContainer);
+      //console.log(servicesContainer);
       let eventServicesArray: EventService[] = servicesContainer.getServices();
       res.send(eventServicesArray.map(e => e.toSimplification()));
       res.status(200);
-      console.log(eventServicesArray.map(e => e.toSimplification()));
+      //console.log(eventServicesArray.map(e => e.toSimplification()));
     } catch (error) {
       res.status(404);
       res.send('error in backend' + error.message);//TODO Cyrill weli gnau?
