@@ -21,8 +21,6 @@ export class EventService {
   private _price: number;
   private _image:string;
 
-  private pictureIds: File[]; // TODO Fotos werden wahrscheinlich als file array übergeben un dann abgespeichert
-
 
   constructor(serviceId: number, providerId: number, category: string, title: string, description: string, address: Address, perimeter : number, availability: string, requirements: string, subtype: string, capacity:number, price:number,image:string){
     this.serviceId = serviceId;
@@ -38,9 +36,6 @@ export class EventService {
     this._capacity=capacity;
     this._price=price;
     this._image=image;
-
-
-    this.pictureIds = []; // provisorisch
   }
 
   public setServiceId(serviceId: number){

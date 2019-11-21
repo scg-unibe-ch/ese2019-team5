@@ -20,6 +20,8 @@ import {CreateServicePage} from "./start/userprofile/create-service/create-servi
 import {EventServicesPage} from './start/EventServices/event-services.page';
 import {Camera} from '@ionic-native/camera/ngx';
 import {EventServiceCardComponent} from "./start/EventServices/event-service-card/event-service-card.component";
+import {InfoFooterComponent} from "./info-footer/info-footer.component";
+import {AboutEventdooPage} from "./start/about-eventdoo/about-eventdoo.page";
 
 /* import {File} from '@ionic-native/File/ngx';
 import {WebView} from '@ionic-native/ionic-webview/ngx';
@@ -31,7 +33,7 @@ import {IonicStorageModule} from '@ionic/storage'; */
   declarations: [AppComponent,
     StartPage, SignupPage, ConfirmationPage,
     LoginPage, UpdatePasswordPage,
-    UserprofilePage, CreateServicePage, EventServicesPage, EventServiceCardComponent],
+    UserprofilePage, CreateServicePage, EventServicesPage, AboutEventdooPage, EventServiceCardComponent, InfoFooterComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule/*, IonicStorageModule.forRoot()*/],
   providers: [
@@ -40,7 +42,8 @@ import {IonicStorageModule} from '@ionic/storage'; */
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     Camera/*, /*File, FilePath, WebView*/],
   exports: [
-    EventServiceCardComponent
+    EventServiceCardComponent,
+    InfoFooterComponent
   ],
   bootstrap: [AppComponent]
 })
