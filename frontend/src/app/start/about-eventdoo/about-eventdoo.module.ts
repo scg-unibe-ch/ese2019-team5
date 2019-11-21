@@ -4,15 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-import { AlertController } from '@ionic/angular';
 
-import { SignupPage } from './signup.page';
-import {AppModule} from "../../app.module";
+import { AboutEventdooPage } from './about-eventdoo.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SignupPage
+    component: AboutEventdooPage
   }
 ];
 
@@ -21,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    AppModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [SignupPage]
+  declarations: [AboutEventdooPage]
 })
-export class SignupPageModule {}
+export class AboutEventdooPageModule {}

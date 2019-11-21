@@ -11,7 +11,7 @@
 <!-- ToDo: Let them create their service offers-->
 
 
-<ion-content>
+<ion-content fullscreen="true">
   <ion-grid [hidden]="!httpGetSuccess||isEditing" align-items-center>
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
@@ -94,4 +94,8 @@
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
   </ion-list>
+
 </ion-content>
+
+<app-info-footer></app-info-footer>
+
