@@ -16,7 +16,7 @@ const dbService = new DbServices();
  * creates an Address and an EventService from the given requestbody and adds it to the database
  */
 router.post('/add', async (req: Request, res: Response) => {
-    console.log('got here')
+    console.log('got here');
     try {
       const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
       const eventService: EventService = EventServiceBuilder.eventService()
@@ -47,7 +47,7 @@ router.post('/add', async (req: Request, res: Response) => {
       dbService.addEventService(eventService);
 
       res.statusCode = 200;
-      res.send('Service was created and saved')
+      res.json('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
       res.send(error);
       res.statusCode = 400;
