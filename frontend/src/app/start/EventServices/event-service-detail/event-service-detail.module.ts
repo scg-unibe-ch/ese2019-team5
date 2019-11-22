@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EventServiceDetailPage } from './event-service-detail.page';
+import {AppModule} from "../../../app.module";
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [EventServiceDetailPage]
 })

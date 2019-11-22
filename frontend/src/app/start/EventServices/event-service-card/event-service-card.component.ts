@@ -75,12 +75,13 @@ export class EventServiceCardComponent implements OnInit {
     await alert.present();
   }
 
-  deleteEventService(eventId: string){
-      this.http.delete('http://localhost:3000/eventservice/'+eventId)
+  async deleteEventService(eventId: string){
+      await this.http.delete('http://localhost:3000/eventservice/'+eventId)
         .subscribe(
           (res)=> {console.log('delete success')},
           (error)=>{ console.log(error)}
         );
+      location.reload();
   }
 
   redirectToDetailPage(serviceId: string) {
