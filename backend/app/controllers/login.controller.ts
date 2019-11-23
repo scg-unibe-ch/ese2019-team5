@@ -2,9 +2,11 @@ import {Router, Request, Response} from 'express';
 import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
 //import {EmailForgotPWServices} from '../services/emailForgotPW.services';
-import {EmailService} from "../services/Email.service";
+
 import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
+import {EmailVerificationServices} from "../services/emailVerification.services";
+import {EmailForgotPWServices} from "../services/emailForgotPW.services";
 
 
 const dbService = new DbServices();
@@ -60,7 +62,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
   console.log('got to forgot password');
   try {
     let user: User = await dbService.getUserFromEmail(email);
-    await EmailService.sendMailToUser(user);
+    await EmailForgotPWServices.sendMailToUser(user);
 
 
     res.statusCode = 201;
