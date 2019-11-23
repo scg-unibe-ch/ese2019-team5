@@ -77,8 +77,6 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
     console.log("serviceId " + serviceId);
     //console.log( "serviceId query " +serId);
     try {
-
-
       await dbService.deleteService(serviceId)
       res.status(200).send('Service was deleted');
     } catch (error) {

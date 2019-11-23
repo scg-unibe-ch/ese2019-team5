@@ -87,6 +87,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     let eventServiceArrayOfUser: EventService[] = allServicesContainer.getServices();
     let size= eventServiceArrayOfUser.length;
 
+
     //   (EventServiceArrayOfUser.map(e=>e.toSimplification()));
 
     console.log(address);
