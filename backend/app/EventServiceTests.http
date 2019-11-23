@@ -113,6 +113,7 @@ client.test("deleting one service, normal", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+
 ###
 
 DELETE http://localhost:3000/eventservice/12
@@ -124,6 +125,7 @@ client.test("deleting one service, user does not exist", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+
 ###
 DELETE http://localhost:3000/eventservice/26
 Content-Type: application/json
@@ -134,6 +136,7 @@ client.test("deleting one service, service does not exist", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+
 ###
 DELETE http://localhost:3000/eventservice/333
 Content-Type: application/json
@@ -144,18 +147,18 @@ client.test("deleting one service, service could not be deleted", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+
 ###
 
 POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId":44,
+  "serviceId": 44,
   "customerId": 104,
- "message": "dsadf",
+  "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"
-
 }
 > {%
 client.test("sending email", function() {
@@ -170,6 +173,22 @@ Content-Type: application/json
 
 > {%
 client.test("getting one EventService", function() {
+  client.assert(response.status === 200, "Response status is 400");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST  http://localhost:3000/eventservice/report
+Content-Type: application/json
+
+{
+  "serviceId": 44,
+  "userId": 104
+}
+
+> {%
+client.test("report one eventservice" , function() {
   client.assert(response.status === 200, "Response status is 400");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });

@@ -6,6 +6,11 @@ import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {EmailVerificationServices} from "../services/emailVerification.services";
+import nodemailer from "nodemailer";
+import {EmailForgotPWCreatorService} from "../services/emailForgotPWCreator.service";
+import {user} from "ts-postgres/dist/src/defaults";
+import {EmailReportServiceServices} from "../services/emailReportService.services";
 
 
 const router: Router = Router(); // part of express needed
@@ -143,6 +148,22 @@ router.post('/order', async (req: Request, res: Response) => {
   }
 
 
+});
+
+router.post('/report', async (req: Request, res: Response) => {
+  let serviceId= req.body.serviceId;
+  let userId= req.body.userId;
+ try {
+
+    EmailReportServiceServices.sendReportMail(serviceId, userId);
+    res.statusCode = 200;
+    res.json('service got reported to email');
+
+  } catch (error) {
+    console.log(error.message);
+    res.statusCode = 400;
+    res.send(error);
+}
 });
 
 
