@@ -1,13 +1,25 @@
 <ion-header >
   <ion-toolbar color="primary">
-    <ion-title style="color: white; position: center; text-align: center; top: 15px">event-service-detail</ion-title>
-    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start/services"> </ion-back-button></ion-button>
+    <ion-title style="color: white; position: center; text-align: center; top: 15px">{{title}}</ion-title>
+    <ion-button color="secondary" style="position: absolute; left: 5px; top: 6px" href="/start"><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div [hidden]="serviceId==null||loadedEventService==null">
-    <p>{{loadedEventService}}</p>
+  <div [hidden]="serviceId==null">
+    <ion-img></ion-img>
+    <ion-grid>
+      <ion-label>Description</ion-label>
+      <ion-item>{{description}}</ion-item>
+      <ion-label>Price</ion-label>
+      <ion-item>{{price}} CHF {{getPriceFormat()}}</ion-item>
+      <ion-label>Available on</ion-label>
+      <ion-item>{{availability}}</ion-item>
+      <ion-label>Location</ion-label>
+      <ion-item>Within {{perimeter}} km of {{city}}</ion-item>
+      <ion-label [hidden]="requirements==''||requirements=='null'">Special requirements</ion-label>
+      <ion-item [hidden]="requirements==''||requirements=='null'">{{requirements}}</ion-item>
+    </ion-grid>
   </div>
 
   <ion-button [hidden]="isInputing" (click)="showOfferInput()">Get Offer</ion-button>

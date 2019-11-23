@@ -99,7 +99,7 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
       let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
       //console.log(servicesContainer);
       let eventServicesArray: EventService[] = servicesContainer.getServices();
-      res.send(eventServicesArray.map(e => e.toSimplification()));
+      res.send(eventServicesArray[0].toSimplification());
       res.status(200);
       //console.log(eventServicesArray.map(e => e.toSimplification()));
     } catch (error) {
