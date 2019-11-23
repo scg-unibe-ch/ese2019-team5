@@ -97,6 +97,7 @@ export class EmailVerificationServices extends EmailService{
       subject: 'E-Mail Verification for your Eventdoo Account',
       html: EmailForSignUpCreatorService.getEmailSignUpText(emailURL)
     };
+    return mailOptions;
   }
 
   static makeToken(payload: any, email: string): string {

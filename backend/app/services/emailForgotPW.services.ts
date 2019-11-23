@@ -1,11 +1,10 @@
 import * as fs from 'fs';
 import {User} from '../models/user.model';
 import * as jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
+
 import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
 import {EmailService} from "./Email.service";
-//import {EmailService} from "./Email.service";
-//TODO interface or abstract class because code is used more than once
+
 const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
 const emailService = new EmailForgotPWCreatorService();
 let token: string;
@@ -16,7 +15,7 @@ let token: string;
  * @param email needed vor subject and audience
  * @return emailURL that will be sent to user by sendMailToNewUser Method
  * is called from sendMailToNewUser
- */
+/* *!/
 function makeToken(payload: any, email: string): string {
   var signOptions = {
     issuer: 'Eventdoo',
@@ -29,7 +28,7 @@ function makeToken(payload: any, email: string): string {
   const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;
   token = emailToken;
   return emailUrl;
-}
+}*/
 
 /**
  * creates an jwt token that is is part of url which is send to user by using {nodemailer}
