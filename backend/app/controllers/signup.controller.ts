@@ -1,7 +1,8 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Address} from "../models/address.model";
-import {EmailVerificationServices} from '../services/emailVerification.services';
+//import {EmailVerificationServices} from '../services/emailVerification.services';
+import {EmailService} from "../services/Email.service";
 import {DbServices} from '../services/db.services';
 
 var jwt = require('jsonwebtoken');
@@ -34,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
 
   try {
     await dbService.signUp(user);
-    EmailVerificationServices.sendMailToNewUser(user);
+    EmailService.sendMailToUser(user);
     res.statusCode = 201;
     res.json('sign up success');
 
@@ -98,7 +99,7 @@ router.post('/sendMailAgain', async (req: Request, res: Response) => {
 
     try {
       const userWithoutMail = await dbService.getUserFromEmail(email);
-      await EmailVerificationServices.sendMailToNewUser(userWithoutMail);
+      await EmailService.sendMailToUser(userWithoutMail);
       res.status(200);
       res.json('The email was sent again please also check your spam folder. Thank you');
 

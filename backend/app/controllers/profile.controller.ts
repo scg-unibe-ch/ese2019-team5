@@ -138,7 +138,7 @@ router.delete('/:userId', async (req: Request, res: Response) => {
     try {
       let userId: number = Number(req.params.userId);
       await dbService.deleteUser(userId);
-      res.status(200).send('User was deleted');
+      res.status(200).json('User was deleted');
 
     } catch (error) {
       res.statusCode = 400;//TODO welche Error?
