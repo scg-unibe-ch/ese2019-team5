@@ -244,6 +244,10 @@ export class CreateServicePage implements OnInit {
     }
   }
 
+  /**
+   * Called whenever a user selects an image to upload for his/her service
+   * Creates a preview of the image and stores the base64String
+   */
  async previewFiles() {
     // @ts-ignore
    var file   = document.querySelector('input[type=file]').files[0];
@@ -262,6 +266,11 @@ export class CreateServicePage implements OnInit {
    });
   }
 
+  /**
+   * Called by {@link previewFiles}
+   * Used to get the base64String when uploading an image
+   * @param file
+   */
   private getB64String(file: File): Observable<string> {
     const sub = new Subject<string>();
     var reader = new FileReader();
