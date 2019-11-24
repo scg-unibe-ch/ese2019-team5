@@ -1,8 +1,8 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title style="color: darkgreen"> Welcome </ion-title>
-    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
-                (click)="authService.logout()" [hidden]="authService.isLoggedOut()"> Log out
+<ion-header style="height: 70px" >
+  <ion-nav>
+    <ion-img src="assets/logo.png" style="height: 60px; position: fixed; left: 15px; top: 15px;"></ion-img>
+    <ion-button size = "large" class="without-shadow" color="light" style="position: absolute; right: 5px; top: 10px; color: black"
+                (click)="authService.logout()" [hidden]="authService.isLoggedOut()"> <ion-icon name="log-out"></ion-icon>
     </ion-button>
     <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
                 [hidden]="authService.isLoggedIn()" [routerLink]="['login']">
@@ -12,24 +12,18 @@
                 [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
       Sign Up
     </ion-button>
-    <ion-button color="secondary" style="position: absolute; right: 110px; top: 6px"
+    <ion-button size = "large" class="without-shadow" color="light" style="position: absolute; right: 110px; top: 10px; color: black; border-bottom-color: white; box-shadow: white"
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
-      Your Profile
+      <ion-icon name="body"></ion-icon>
     </ion-button>
-  </ion-toolbar>
+  </ion-nav>
 </ion-header>
 
-<ion-content style="position: absolute; top:65px; bottom: 0px;">
+<ion-content style="position: absolute; top:85px; bottom: 0">
   <!-- Form to set search params -->
   <form [formGroup]="searchForm">
-    <ion-toolbar color="primary" style="position: absolute; top: 5px;">
+    <ion-toolbar color="#fafafa" style="position: absolute; top: 5px;">
       <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-title> Look for Services </ion-title>
-          </ion-col>
-        </ion-row>
-
         <ion-row>
           <ion-col>
               <ion-select class="customSelect" placeholder="Category" formControlName="category">
@@ -93,7 +87,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col>
+          <ion-col >
             <ion-item>
               <ion-input placeholder="City" formControlName="city" type="text"> </ion-input>
             </ion-item>
@@ -117,7 +111,7 @@
             </ion-item>
           </ion-col>
           <ion-col>
-            <ion-button color="secondary" (click)="search()"> <ion-icon name="search"> </ion-icon> </ion-button>
+            <ion-button color="primary" (click)="search()" style="width: 100px; height: 43px"> <ion-icon color="light" name="search"> </ion-icon> </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -131,7 +125,6 @@
   <!-- Loading animation while services are loaded from database-->
   <p *ngIf="loading"> Looking for services... </p>
   <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
-
 </ion-content>
 
 <app-info-footer></app-info-footer>
