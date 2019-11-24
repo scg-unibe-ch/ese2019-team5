@@ -171,7 +171,7 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.base64;
+      const image = this.base64.split(',')[1];
       console.log(image);
 
       console.log('Params set. Starting http request');
@@ -247,18 +247,19 @@ export class CreateServicePage implements OnInit {
  async previewFiles() {
     // @ts-ignore
    var file   = document.querySelector('input[type=file]').files[0];
-
-   //console.log("hello");
-   //console.log(file);
+   var preview = document.querySelector('#preview');
 
   console.log("old: "+ this.base64);
-
    this.base64 = this.getB64String(file).subscribe((output) => {
      console.log("out: " + output);
      this.base64 = output;
      console.log("this2: " + this.base64);
+     var image = new Image();
+     image.height = 100;
+     image.title = file.name;
+     image.src = this.base64;
+     preview.appendChild(image);
    });
-
   }
 
   private getB64String(file: File): Observable<string> {
@@ -268,7 +269,7 @@ export class CreateServicePage implements OnInit {
     reader.onload = (function () {
       //console.log(reader.result.toString().split(',')[1]);
 
-      const content: string = reader.result.toString().split(',')[1];
+      const content: string = reader.result.toString();
       sub.next(content);
       sub.complete();
     });

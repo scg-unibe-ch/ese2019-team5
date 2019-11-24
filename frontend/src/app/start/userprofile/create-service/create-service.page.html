@@ -180,10 +180,9 @@
                 <ion-select-option *ngIf="category.value == 'Entertainment'" value="comedy"> Comedy</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Entertainment'" value="dance"> Dance</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Entertainment'" value="magic"> Magic</ion-select-option>
-                <ion-select-option *ngIf="category.value == 'Entertainment'" value="pyro"> Pyrotechnics
-                </ion-select-option>
-                <ion-select-option *ngIf="category.value == 'Entertainment'" value="theatre"> Theatre
-                </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="pyrotechnics"> Pyrotechnics </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="theatre"> Theatre </ion-select-option>
+                <ion-select-option *ngIf="category.value == 'Entertainment'" value="other"> Other </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -205,7 +204,8 @@
         <br/>
 
         <ion-title> Upload a picture</ion-title>
-        <!-- Optimization for Apps
+        <!-- Optimization for Apps -->
+        <!--
         <div>
           <ion-grid>
             <ion-row>
@@ -243,7 +243,7 @@
 
 
         <!-- Button to submit the form -->
-        <ion-button color="secondary" (click)="createService()"> Create Service</ion-button>
+        <ion-button color="secondary" (click)="createService()"> Create Service </ion-button>
       </div>
     </form>
 
