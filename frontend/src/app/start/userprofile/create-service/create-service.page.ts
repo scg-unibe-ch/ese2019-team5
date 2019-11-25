@@ -248,7 +248,7 @@ export class CreateServicePage implements OnInit {
    * Called whenever a user selects an image to upload for his/her service
    * Creates a preview of the image and stores the base64String
    */
- async previewFiles() {
+ previewFiles() {
     // @ts-ignore
    var file   = document.querySelector('input[type=file]').files[0];
    var preview = document.querySelector('#preview');
