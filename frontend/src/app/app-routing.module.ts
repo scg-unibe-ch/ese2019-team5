@@ -7,7 +7,6 @@ import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 import {UserprofilePage} from "./start/userprofile/userprofile.page";
 import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
-import {EventServicesPage} from './start/EventServices/event-services.page';
 import {AboutEventdooPage} from "./start/about-eventdoo/about-eventdoo.page";
 
 
@@ -36,9 +35,6 @@ const routes: Routes = [
       },
       {
         path: 'services', children: [
-          {
-            path: '', component: EventServicesPage
-          },
           {path: ':serviceId',
             loadChildren: './start/EventServices/event-service-detail/event-service-detail.module#EventServiceDetailPageModule'
           }]
