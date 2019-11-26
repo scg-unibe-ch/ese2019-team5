@@ -137,7 +137,7 @@ export class EventServiceDetailPage implements OnInit {
         this.requirements = data.requirements;
         this.perimeter = data.perimeter;
         this.image = data.image;
-        this.capacity = data.capacity;
+        this.capacity = (data.capacity=='1000000')? 'no limit': data.capacity;
         this.subtype = data.subtype;
         this.price = data.price;
         console.log(data.image);
