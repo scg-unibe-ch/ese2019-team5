@@ -21,6 +21,7 @@ router.get('/', async (req: Request, res: Response) => {
       let allServicesContainer: EventServiceContainer = await dbService.getAllServices();
       let EventServicesArray: EventService [] = allServicesContainer.getServices();
       res.send(EventServicesArray.map(e => e.toSimplification()));
+     // § console.log(EventServicesArray.map(e=>e.toSimplification()));
 
       res.status(200);
     } catch (error) {
@@ -79,7 +80,7 @@ console.log(eventServiceFilterArray);
    let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
     res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
 
-   console.log(serviceAOfFittingRequest);
+   console.log(serviceAOfFittingRequest.map(e => e.toSimplification()));
   } catch (error) {
     res.status(404);
     res.send('error in backend ' + error.message);
