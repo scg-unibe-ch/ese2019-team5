@@ -5,6 +5,8 @@ import {EventService} from "../../../../../../backend/app/models/eventService.mo
 import {FormBuilder, Validators} from "@angular/forms";
 import {ToastController} from "@ionic/angular";
 import {AuthService} from "../../../AuthService/auth.service";
+import {EventServiceJson} from "../../userprofile/EventServiceJson";
+import {Observable, Subject, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-event-service-detail',
@@ -42,11 +44,22 @@ export class EventServiceDetailPage implements OnInit {
 
 
   private serviceId: string;
-  private loadedEventService: EventService;
   private isInputing: boolean = false;
 
-  private title: string;
-  private description: string;
+  private category:string;
+  private title:string;
+  private description:string;
+  private city:string;
+  private zip:string;
+  private housenumber:string;
+  private street:string;
+  private perimeter:string;
+  private availability:string;
+  private requirements:string;
+  private subtype:string;
+  private capacity:string;
+  private price:string;
+  private image:string;
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(paramMap => {
@@ -58,20 +71,9 @@ export class EventServiceDetailPage implements OnInit {
       console.log(this.serviceId);
     });
     //const params = new HttpParams().set('serviceId', this.serviceId);
-    this.http.get<EventService>('http://localhost:3000/eventservice/'+this.serviceId).subscribe(
-    (data)=>{
-      this.loadedEventService = data;
-      this.assignInfos();
-    },
-    (error)=>{
-      console.log(error);
-    }
-    )
+   this.getEventServiceJson();
   }
 
-  private assignInfos() {
-    //this.description = this.loadedEventService);
-  }
 
   showOfferInput() {
     this.isInputing = true;
@@ -117,4 +119,44 @@ export class EventServiceDetailPage implements OnInit {
     }
     await toast.present();
   }
+
+  private getEventServiceJson() {
+    this.http.get<EventServiceJson>('http://localhost:3000/eventservice/'+this.serviceId).subscribe(
+      (data)=>{
+        this.title = data.title;
+        this.category = data.category;
+        this.zip = data.zip;
+        this.housenumber = data.housenumber;
+        this.city = data.city;
+        this.street = data.street;
+        this.availability = data.availability;
+        this.description = data.description;
+        this.requirements = data.requirements;
+        this.perimeter = data.perimeter;
+        this.image = data.image;
+        this.capacity = data.image;
+        this.subtype = data.subtype;
+        this.price = data.price;
+        console.log(data.street);
+        console.log(this.street);
+      },
+      (error)=>{
+        console.log(error);
+      }
+    );
+  }
+
+  private getPriceFormat():string {
+    let priceFormat:string;
+    switch(this.category){
+      case 'Location': {priceFormat = 'per Day'; break;}
+      case 'Music': {priceFormat = 'per Day'; break;}
+      case 'Food': {priceFormat = 'per Person'; break;}
+      case 'Gastronomy': {priceFormat = 'per Person'; break;}
+      case 'Entertainment': {priceFormat = 'per Day'; break;}
+      case 'Photography': {priceFormat = 'per Day'; break;}
+      default: {priceFormat = 'per event';}
+    };
+    return priceFormat;
+  };
 }

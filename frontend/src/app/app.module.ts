@@ -17,7 +17,6 @@ import {ConfirmationPage} from "./start/confirmation/confirmation.page";
 import {UserprofilePage} from "./start/userprofile/userprofile.page";
 import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
-import {EventServicesPage} from './start/EventServices/event-services.page';
 import {Camera} from '@ionic-native/camera/ngx';
 import {EventServiceCardComponent} from "./start/EventServices/event-service-card/event-service-card.component";
 import {InfoFooterComponent} from "./info-footer/info-footer.component";
@@ -33,7 +32,7 @@ import {IonicStorageModule} from '@ionic/storage'; */
   declarations: [AppComponent,
     StartPage, SignupPage, ConfirmationPage,
     LoginPage, UpdatePasswordPage,
-    UserprofilePage, CreateServicePage, EventServicesPage, AboutEventdooPage, EventServiceCardComponent, InfoFooterComponent],
+    UserprofilePage, CreateServicePage, AboutEventdooPage, EventServiceCardComponent, InfoFooterComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule/*, IonicStorageModule.forRoot()*/],
   providers: [

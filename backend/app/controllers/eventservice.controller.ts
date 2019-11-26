@@ -6,6 +6,11 @@ import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
+import {EmailVerificationServices} from "../services/emailVerification.services";
+import nodemailer from "nodemailer";
+import {EmailForgotPWCreatorService} from "../services/emailForgotPWCreator.service";
+import {user} from "ts-postgres/dist/src/defaults";
+import {EmailReportServiceServices} from "../services/emailReportService.services";
 
 
 const router: Router = Router(); // part of express needed
@@ -37,11 +42,11 @@ router.post('/add', async (req: Request, res: Response) => {
         eventService.setRequirements(req.body.requirements);
       }
       if (req.body.image !== undefined) {
-        console.log("image got to backend");
+       console.log("image got to backend");
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
-      console.log(req.body.capacity);
+     // console.log(req.body.capacity);
 
       await dbService.addEventService(eventService);
 
@@ -77,8 +82,6 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
     console.log("serviceId " + serviceId);
     //console.log( "serviceId query " +serId);
     try {
-
-
       await dbService.deleteService(serviceId)
       res.status(200).send('Service was deleted');
     } catch (error) {
@@ -101,7 +104,7 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
       let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
       //console.log(servicesContainer);
       let eventServicesArray: EventService[] = servicesContainer.getServices();
-      res.send(eventServicesArray.map(e => e.toSimplification()));
+      res.send(eventServicesArray[0].toSimplification());
       res.status(200);
       //console.log(eventServicesArray.map(e => e.toSimplification()));
     } catch (error) {
@@ -145,6 +148,22 @@ router.post('/order', async (req: Request, res: Response) => {
   }
 
 
+});
+
+router.post('/report', async (req: Request, res: Response) => {
+  let serviceId= req.body.serviceId;
+  let userId= req.body.userId;
+ try {
+
+    EmailReportServiceServices.sendReportMail(serviceId, userId);
+    res.statusCode = 200;
+    res.json('service got reported to email');
+
+  } catch (error) {
+    console.log(error.message);
+    res.statusCode = 400;
+    res.send(error);
+}
 });
 
 

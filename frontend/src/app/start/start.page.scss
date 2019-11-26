@@ -1,0 +1,19 @@
+.without-shadow{
+  --box-shadow:none;
+}
+
+ion-header::after {
+  background-image: none;
+}
+
+.customSelect{
+  background-color: #ffffff;
+}
+
+ion-content{
+  --ion-background-color:#fafafa;
+}
+
+ion-item{
+  --ion-background-color:#ffffff;
+}

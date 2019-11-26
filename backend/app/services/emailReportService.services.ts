@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 
 import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
 import {EmailService} from "./Email.service";
+import {EmailReportServiceCreatorService} from "./EmailReportServiceCreator.service";
 
 const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
 const emailService = new EmailForgotPWCreatorService();
@@ -35,12 +36,9 @@ function makeToken(payload: any, email: string): string {
  * User needs to verify email by clicking on URL to login
  */
 
-export class EmailForgotPWServices extends EmailService {
+export class EmailReportServiceServices extends EmailService {
 
 
-  public static async sendMailToUser(user: User) {
-    super.sendMailToUser(user);
-  }
 
   /**
    * sends a email using nodemailer to a new sign up user
@@ -70,45 +68,42 @@ export class EmailForgotPWServices extends EmailService {
 
 // send mail with defined transport object
 
-  static getMailOptions(email: string, emailURL: string): any {
+  static getMailOptions(userIdParam: string, serviceIdParam:string): any {
     console.log('got to mail Options');
+    let userId: number= parseInt(userIdParam);
+    let serviceId: number= parseInt(serviceIdParam);
+
     var mailOptions = {
       from: '"Eventdoo" <ESEteam5@gmx.de>',
-      to: email,
-      subject: 'Password Reset',
-      html: EmailForgotPWCreatorService.getEmailForgotPWText(emailURL)
+      to: 'rorik.yovanny@iiron.us',
+      subject: 'Reported Service',
+      html: EmailReportServiceCreatorService.getEmailReportService(serviceId,userId)
     };
     return mailOptions;
   }
 
-  static makeToken(payload: any, email: string): string {
-    var signOptions = {
-      issuer: 'Eventdoo',
-      subject: email,
-      audience: email,
-      expiresIn: '24h',
-      algorithm: 'RS256'
-    };
-  //  const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
-    var emailToken = jwt.sign(payload, privateKey, signOptions);
-    const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;
-    return emailUrl;
+
+
+
+static sendReportMail(serviceId: string, userThatReportedId: string)
+{
+  try {
+    let transporter=super.getTransporter();
+
+    transporter.sendMail(this.getMailOptions(serviceId,userThatReportedId), function (err:any, info:any) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Email sent' + info.response);
+      }
+    })
+
+  }catch (e) {
+    console.log(e);
   }
-
-  /*transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Email sent' + info.response);
-    }
-  });
-
-}catch (e) {
-  console.log(e);
 }
-}*/
-
 }
+
 
 
 
