@@ -65,7 +65,7 @@ client.test("get filtered text = piano", function() {
 %}
 
 ###
-GET http://localhost:3000/search/filter/:text?category=Entertainment&subtype=Comedy
+GET http://localhost:3000/search/filter/:text?category=Entertainment&subtype=comedy
 Content-Type: application/json
 
 > {%
