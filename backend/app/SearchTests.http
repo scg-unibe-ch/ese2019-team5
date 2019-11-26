@@ -65,3 +65,14 @@ client.test("get filtered text = piano", function() {
 %}
 
 ###
+GET http://localhost:3000/search/filter/:text?category=Entertainment&subtype=Comedy
+Content-Type: application/json
+
+> {%
+client.test("get filtered category = entertainment", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
