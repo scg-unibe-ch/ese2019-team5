@@ -490,7 +490,9 @@ export class DbServices {
         query = query + filter.getType() + " <= $" + qCount;
         qArray.push(filter.getValue());
         qCount++;
-      }  else {
+      }  else if (filter.getType() == FilterCategories.subtype)  {
+        query = query + filter.getType() + " = " + "'[\"" + filter.getValue() + "\"]'";
+      } else {
         query = query + filter.getType() + " = $" + qCount;
 
         qArray.push(filter.getValue());
@@ -502,6 +504,7 @@ export class DbServices {
     }
 
     console.log(query);
+    console.log(qArray);
 
     const stream = client.query(query,qArray);
 
@@ -560,7 +563,7 @@ export class DbServices {
   }
 
   private async updateServiceDB (service: EventService, client: Client) {
-    
+
   }
 
 
