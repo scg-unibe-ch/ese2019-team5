@@ -2,7 +2,7 @@
   <ion-row>
     <ion-col *ngFor="let event of services" size="4">
       <ion-card  color="light" padding="2" style="box-shadow: none !important;">
-        <ion-img src="data:image/jpg;base64,{{event.image}}" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+        <ion-img [src]=" 'data:image/jpg;base64,' + event.image" (click)="redirectToDetailPage(event.serviceId)" style="cursor:pointer"></ion-img>
         <ion-card-header>
           <ion-row>
             <ion-col>
@@ -15,7 +15,7 @@
 
           <ion-row>
             <ion-col>
-              <ion-card-title>{{event.title}}</ion-card-title>
+              <ion-card-title (click)="redirectToDetailPage(event.serviceId)" style="cursor:pointer">{{event.title}}</ion-card-title>
             </ion-col>
             <ion-col>
               <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">

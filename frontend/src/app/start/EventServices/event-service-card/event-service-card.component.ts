@@ -4,6 +4,7 @@ import {Address} from "../../../../../../backend/app/models/address.model";
 import {AuthService} from "../../../AuthService/auth.service";
 import {AlertController, ToastController} from "@ionic/angular";
 import {HttpClient} from "@angular/common/http";
+import {Observable, Subject} from "rxjs";
 
 @Component({
   selector: 'event-service-card',
@@ -22,9 +23,7 @@ export class EventServiceCardComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-    console.log();
-  }
+  ngOnInit() {}
 
   getIconName(category:string){
     switch (category){
