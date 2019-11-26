@@ -94,7 +94,8 @@
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
   </ion-list>
-
+  <ion-button (click)="showDeleteProfileConfirm()" style="position: page; right: 20px; bottom: 10px" >Delete My Profile</ion-button>
+  <ion-row style="height:100px"></ion-row>
 </ion-content>
 
 <app-info-footer></app-info-footer>
