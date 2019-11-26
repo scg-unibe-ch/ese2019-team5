@@ -38,7 +38,6 @@ So far, all pictures are stored as .png-files in a folder in our project.
 Some of them cannot be displayed (when opening them with any software).
 But is a jpg file converted to a base64 String in a different way than a png file?
 And can base64 Strings from jpg files be read as png files?
-I doubt it.
 
 
 
