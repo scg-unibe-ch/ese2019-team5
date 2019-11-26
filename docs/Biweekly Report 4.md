@@ -37,12 +37,16 @@ This was not as easy as we thought.
 First, we implemented a preview of the images when creating a service. 
 It was not easy, but it worked after a while.
 We had to adapt some of Cyrill's implementation so the entire base64-String was stored in our variable.
-Then we tried to implement to display the image on the card and we are still a bit stucked with it.
+Then we tried to implement to display the image on the card and we are still a bit stuck with it.
 We suspect that the issues are related to different file types (png/jpg etc.).
 So far, all pictures are stored as .png-files in a folder in our project.
 Some of them cannot be displayed (when opening them with any software).
 But is a jpg file converted to a base64 String in a different way than a png file?
 And can base64 Strings from jpg files be read as png files?
+
+The troubles of sending objects through http was worked around by encapsulating the data in json files that are easier to handle.
+Still a considerable amount of time went into trying to make this work.
+
 
 
 
