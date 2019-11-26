@@ -42,7 +42,7 @@ router.post('/add', async (req: Request, res: Response) => {
         eventService.setRequirements(req.body.requirements);
       }
       if (req.body.image !== undefined) {
-       console.log("image got to backend");
+      //console.log("image got to backend");
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
@@ -50,7 +50,7 @@ router.post('/add', async (req: Request, res: Response) => {
 
       await dbService.addEventService(eventService);
 
-      console.log("ok");
+      //console.log("ok");
       res.statusCode = 200;
       res.json('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
