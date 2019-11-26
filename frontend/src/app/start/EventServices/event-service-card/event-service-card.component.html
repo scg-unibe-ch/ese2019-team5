@@ -1,13 +1,13 @@
 <ion-grid>
   <ion-row>
-    <ion-col *ngFor="let event of services" size="4">
-      <ion-card  color="light" padding="2">
+    <ion-col *ngFor="let event of services" size-md="4">
+      <ion-card  color="light" padding="2" style="min-width:250px;">
         <ion-header>
           <ion-button [hidden]="auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
             <ion-icon name="trash"></ion-icon>
           </ion-button>
         </ion-header>
-        <ion-img src="assets/img/{{event.category}}.jpg" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+        <ion-img style="height:75%; object-fit: scale-down" src="assets/img/{{event.category}}.jpg" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
         <ion-card-header>
           <ion-row>
             <ion-col>
