@@ -2,7 +2,7 @@
   <ion-row>
     <ion-col *ngFor="let event of services" size="4">
       <ion-card  color="light" padding="2" style="box-shadow: none !important;">
-        <ion-img src="data:image/jpg;base64,{{event.image}}" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+        <ion-img [src]=" 'data:image/jpg;base64,' + event.image" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
         <ion-card-header>
           <ion-row>
             <ion-col>
