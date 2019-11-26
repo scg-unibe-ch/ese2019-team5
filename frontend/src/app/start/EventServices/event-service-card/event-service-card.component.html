@@ -1,27 +1,29 @@
 <ion-grid>
   <ion-row>
-    <ion-col *ngFor="let event of services" size-md="4">
-      <ion-card  color="light" padding="2" style="min-width:250px; box-shadow: none !important;">
-        <ion-header>
-          <ion-button [hidden]="auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </ion-header>
-        <ion-img style="height:75%; object-fit: scale-down" src="assets/img/{{event.category}}.jpg" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+    <ion-col *ngFor="let event of services" size="4">
+      <ion-card  color="light" padding="2" style="box-shadow: none !important;">
+        <ion-img src="data:image/jpg;base64,{{event.image}}" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
         <ion-card-header>
           <ion-row>
             <ion-col>
-              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF / {{event.perimeter}} away</ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF </ion-card-subtitle>
             </ion-col>
             <ion-col>
               <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
             </ion-col>
           </ion-row>
+
           <ion-row>
             <ion-col>
               <ion-card-title>{{event.title}}</ion-card-title>
             </ion-col>
+            <ion-col>
+              <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
+                <ion-icon name="trash"></ion-icon>
+              </ion-button>
+            </ion-col>
           </ion-row>
+
           <ion-label>  </ion-label>
         </ion-card-header>
       </ion-card>

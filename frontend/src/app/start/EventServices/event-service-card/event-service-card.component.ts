@@ -22,7 +22,9 @@ export class EventServiceCardComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log();
+  }
 
   getIconName(category:string){
     switch (category){

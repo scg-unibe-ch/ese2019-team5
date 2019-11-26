@@ -171,7 +171,7 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.base64.split(',')[1];
+      const image = this.base64;
       console.log(image);
 
       console.log('Params set. Starting http request');
