@@ -39,14 +39,14 @@ export class DbServices {
   }
 
   public async addEventService(service: EventService){
-    const fileHandler = new FileHandlerService();
+    //const fileHandler = new FileHandlerService();
 
     const localClient = this.getClient();
     await localClient.connect();
 
     try{
       const serviceId = await this.addServiceToDB(service, localClient);
-      fileHandler.safeServicePictures(service.getImage(),serviceId);
+      //fileHandler.safeServicePictures(service.getImage(),serviceId);
     } finally{
       await localClient.end()
     }
@@ -433,7 +433,7 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) Returning id',[
+    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price, image) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) Returning id',[
       service.getProviderId(),
       service.getCategory(),
       service.getTitle(),
@@ -444,7 +444,8 @@ export class DbServices {
       service.getRequirements(),
       service.getSubtype(),
       service.getCapacity(),
-      service.getPrice()
+      service.getPrice(),
+      service.getImage()
     ]);
 
     for await (const row of stream) {
@@ -491,7 +492,7 @@ export class DbServices {
         qArray.push(filter.getValue());
         qCount++;
       }  else if (filter.getType() == FilterCategories.subtype)  {
-        query = query + filter.getType() + " = " + "'[\"" + filter.getValue() + "\"]'";
+        query = query + "Lower(subtype) LIKE Lower('%" + filter.getValue() + "%')"
       } else {
         query = query + filter.getType() + " = $" + qCount;
 
@@ -508,14 +509,14 @@ export class DbServices {
 
     const stream = client.query(query,qArray);
 
-    const fileHandler = new FileHandlerService();
+    //const fileHandler = new FileHandlerService();
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
       const serviceId = Number(row.get('id'));
 
-      const imageString = fileHandler.getPictureFromServiceId(serviceId);
+      //const imageString = fileHandler.getPictureFromServiceId(serviceId);
 
 
 
@@ -537,7 +538,7 @@ export class DbServices {
           .setSubtype(String(row.get('subtype')))
           .setCapacity(Number(row.get('capacity')))
           .setPrice(Number(row.get('price')))
-          .setImage(imageString)
+          .setImage(String(row.get('image')))
           .build()
       );
 

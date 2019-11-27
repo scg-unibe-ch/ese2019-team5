@@ -6,7 +6,7 @@
 <ion-content>
   <ion-title style="color: black; position: center; text-align: center; top: 25px; left: 50px">{{title}}</ion-title>
   <div [hidden]="serviceId==null">
-    <ion-img [src]="'data:image/jpeg;base64,'+image" style="height:30vmax"></ion-img>
+    <ion-img [src]="image" style="height:30vmax"></ion-img>
     <ion-grid>
       <ion-label>Description</ion-label>
       <ion-item>{{description}}</ion-item>
