@@ -1,11 +1,8 @@
 import {Router, Request, Response} from 'express';
 import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
-//import {EmailForgotPWServices} from '../services/emailForgotPW.services';
-
 import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import * as fs from 'fs';
-import {EmailVerificationServices} from "../services/emailVerification.services";
 import {EmailForgotPWServices} from "../services/emailForgotPW.services";
 
 

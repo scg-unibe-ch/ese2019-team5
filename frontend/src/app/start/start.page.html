@@ -25,6 +25,7 @@
         <ion-row>
           <ion-col>
               <ion-select class="whiteBR" placeholder="Category" formControlName="category">
+                <ion-select-option value=""> All Categories </ion-select-option>
                 <ion-select-option value="Location"> Location </ion-select-option>
                 <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
                 <ion-select-option value="Music"> Music </ion-select-option>
@@ -36,6 +37,7 @@
           <ion-col>
               <ion-select *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment' "
                           class="whiteBR" placeholder="Subtype" formControlName="subtype">
+                <ion-select-option value=""> All Types </ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="asian"> Asian</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="fingerFood"> Finger Food </ion-select-option>
@@ -73,6 +75,7 @@
 
             <ion-col>
               <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday">
+                <ion-select-option value=""> </ion-select-option>
                 <ion-select-option value="Monday"> Monday </ion-select-option>
                 <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
                 <ion-select-option value="Wednesday"> Wednesday </ion-select-option>
@@ -117,7 +120,7 @@
   </form>
 
   <!-- Display Event Services matching the params -->
-  <event-service-card [services]="services" style="position: absolute; top: 200px;"> </event-service-card>
+  <event-service-card [services]="services" style="position: absolute; top: 200px; bottom: 200px;"> </event-service-card>
 
 
   <!-- Loading animation while services are loaded from database-->

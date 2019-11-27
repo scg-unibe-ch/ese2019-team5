@@ -8,6 +8,7 @@ import {Camera} from "@ionic-native/camera/ngx";
 
 import {AuthService} from "../../../AuthService/auth.service";
 import {Observable, Subject} from "rxjs";
+import {userJson} from "../userJson";
 
 
 
@@ -25,6 +26,7 @@ export class CreateServicePage implements OnInit {
   //Some properties used for user feedback
   loading: boolean;
   error: string;
+  numberOfServices: number = 0;
 
 
 
@@ -42,6 +44,11 @@ export class CreateServicePage implements OnInit {
     this.loading = false;
     this.error = '';
     this.base64 = '';
+    this.http.get<userJson>('http://localhost:3000/profile/' + this.authService.getUserId())
+      .subscribe(
+        (user)=> {
+          this.numberOfServices = user.size;
+        });
   }
 
   serviceForm = this.formBuilder.group({
@@ -171,7 +178,7 @@ export class CreateServicePage implements OnInit {
       const requirements = this.requirements.value;
       console.log(requirements);
       const description = this.description.value;
-      const image = this.base64.split(',')[1];
+      const image = this.base64;
       console.log(image);
 
       console.log('Params set. Starting http request');

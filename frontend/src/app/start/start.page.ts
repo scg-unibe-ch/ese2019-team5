@@ -84,6 +84,7 @@ export class StartPage implements OnInit {
     let url = this.getUrl();
     this.http.get<Array<EventService>>(url).subscribe(
       (data) => {
+        console.log(data);
         this.services = data;
         this.loading = false;
       },

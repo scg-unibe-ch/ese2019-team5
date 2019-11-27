@@ -16,7 +16,7 @@
 
   <!-- Form asking for all important information to create a new Service -->
   <!-- Only displayed if the User is logged in -->
-  <div class="container fluid" *ngIf="authService.isLoggedIn()">
+  <div class="container fluid" *ngIf="authService.isLoggedIn()||numberOfServices<=4">
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> General Information</ion-title>
 
@@ -263,5 +263,8 @@
       Please <a href="../../../start/signup"> sign up </a> or <a href="../../../start/login"> log in </a> to provide
       services.
     </p>
+  </div>
+  <div *ngIf="numberOfServices>=5">
+    <p> You already offer the maximum amount of services: {{numberOfServices}}</p>
   </div>
 </ion-content>

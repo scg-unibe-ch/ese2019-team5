@@ -44,7 +44,8 @@ export class UserprofilePage implements OnInit {
     private alertCtrl: AlertController,
     private formBuilder: FormBuilder,
     private http: HttpClient,
-    private authservice:AuthService) { }
+    private authservice:AuthService,
+    private alert: AlertController) { }
 
   ngOnInit() {
     this.getUserData();
@@ -177,5 +178,34 @@ export class UserprofilePage implements OnInit {
     this.isEditing = false;
   }
 
+  async showDeleteProfileConfirm(){
+    const alert = await this.alert.create({
+      header: 'Confirm Delete',
+      message: 'Do you really want to delete your Profile? You cannot undo this action',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
+          handler: ()=>{
+            this.deleteUserProfile(this.userId);
+            }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  private async deleteUserProfile(userId: number) {
+    await this.http.delete('http://localhost:3000/profile/'+userId)
+      .subscribe(
+        (res)=> {console.log('delete success')},
+        (error)=>{ console.log(error)}
+      );
+    this.authservice.logout();
+    document.location.href = 'http://localhost:4200/start/';
+  }
 
 }
