@@ -1,15 +1,14 @@
 <ion-header style="height: 85px; background-color: white">
   <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
-  <ion-title style="color: darkgreen"> Verification</ion-title>
-    <ion-button color="primary" style="position: absolute; right: 5px; top: 6px"
+    <ion-button color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedOut()" (click)="authService.logout()">
-      Log out
+      <ion-icon name="log-out"></ion-icon>
       </ion-button>
-    <ion-button color="primary" style="position: absolute; right: 5px; top: 6px"
+    <ion-button color="light" style="position: absolute; right: 20px; top: 18px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" href="start/login">
       Log in
       </ion-button>
-    <ion-button color="primary" style="position: absolute; right: 95px; top: 6px"
+    <ion-button color="light" style="position: absolute; right: 120px; top: 18px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" href="start/signup">
       Sign Up
       </ion-button>
@@ -18,7 +17,9 @@
 <ion-content>
   <p *ngIf="loading"> Trying to verify your email address </p>
   <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
-  <h3 *ngIf="verified"> Thank you for verifying your email address. You can <a href="/start/login"> log
-    in </a> now. </h3>
+  <h3 *ngIf="verified" padding="20px"> Thank you for verifying your email address. You can <a href="/start/login"> log
+    in</a> now. </h3>
   <h3 *ngIf="!verified && !loading"> An unexpected error occurred: {{error}}. </h3>
 </ion-content>
+
+<app-info-footer></app-info-footer>
