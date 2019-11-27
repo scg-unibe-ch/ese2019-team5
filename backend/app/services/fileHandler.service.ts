@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import {DBServiceError} from "../models/DBService.error";
 
 const pathToServicePictures = "../pictures/services";
 
@@ -33,6 +34,7 @@ export class FileHandlerService {
 
     fs.writeFile(path + "/" + String(eventServiceId) +".png", base64Data, 'base64', function(err) {
       console.log(err);
+      throw new DBServiceError("There was an Error while saving your picture on our server. Please Try again.",902)
     });
   }
 
@@ -44,7 +46,7 @@ export class FileHandlerService {
       try{
         fs.mkdirSync(path);
       } catch (e) {
-        throw Error("couldn't create folder for pictures");
+        throw new DBServiceError("There was an Error while saving your picture on our server. Please Try again.",901);
       }
     }
 

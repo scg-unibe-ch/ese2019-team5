@@ -1,4 +1,4 @@
-import {Client, ResultIterator} from 'ts-postgres';
+import {Client, DatabaseError, ResultIterator} from 'ts-postgres';
 import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
@@ -8,7 +8,7 @@ import {EventService} from "../models/eventService.model";
 import {FileHandlerService} from "./fileHandler.service";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
-
+import {DBServiceError} from "../models/DBService.error";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
@@ -97,10 +97,10 @@ export class DbServices {
       if (this.isUserVerified(user)) {
         return new LoginResult(user,this.generateJWT(email, user.getId()));
       } else {
-        throw Error('To login, please verify your email-address');
+        throw new DBServiceError("To login, please verify your email-address.",931);
       }
     } else {
-      throw Error('Invalid email-address or password');
+      throw new DBServiceError("Invalid email-address or password.",934);
     }
   }
 
@@ -118,7 +118,7 @@ export class DbServices {
           id = Number(await this.creatUserInDB(user, localClient));
           user.setId(id);
         } else {
-          throw Error('The email address already exists in the database');
+          throw new DBServiceError("The email address you enterd is already used with an other account.",926);
         }
       } finally {
         await localClient.end();
@@ -244,7 +244,7 @@ export class DbServices {
 
     }
     if(id == -1) {
-      console.log("hello");
+      throw new DBServiceError("There was an unknown  Error while saving your account in the database",920);
       throw Error('An error occured while creating the DB entry');
     }
 
@@ -263,7 +263,7 @@ export class DbServices {
     }
 
     if (oldAddressId == -1) {
-      throw Error("An error occured while getting the old address id of updated user")
+      throw new DBServiceError("There was an Error while updating your user.",911);
     }
 
     await client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6 WHERE id=$7',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname(), user.getId()]);
@@ -286,9 +286,9 @@ export class DbServices {
 
     for await(const row of stream) {
       if (stream.rows == null) {
-        throw new Error('no user with this email found');
+        throw new DBServiceError("No user with this email address found in the database.",924);
       } else if (stream.rows.length !== 1) {
-        throw new Error('this email isnt unique in the database');
+        throw new DBServiceError("This email address isnt unique.",925);
       } else {
 
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
@@ -309,7 +309,7 @@ export class DbServices {
         return user;
       }
     }
-    throw new Error('no user with this email found');
+    throw new DBServiceError("No user with this email address found in the database.",924);
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
@@ -320,7 +320,7 @@ export class DbServices {
     }
 
     if (oldAddressId == -1) {
-      throw Error("an error occured while getting the old address id of updated user")
+      throw new DBServiceError("There was an Error while deleting your user.",911);
     }
 
     await client.query('DELETE FROM users WHERE id = $1', [userId]);
@@ -398,7 +398,7 @@ export class DbServices {
         return address;
       }
     }
-    throw new Error('no address with this id found');
+    throw new DBServiceError("No address with this id found.",914);
   }
 
   private async checkIfAddressExistsAndCreate(street: string, number:number, zip: number, city: string, client: Client): Promise<Number> {
@@ -414,7 +414,7 @@ export class DbServices {
       return Number(row.get('id'));
     }
 
-    throw Error('address not found and error while inserting');
+    throw new DBServiceError("There was an Error while saving the address.",912);
   }
 
   private async searchForAddressUsageAndDelete(addressId: number, client: Client){
@@ -452,7 +452,7 @@ export class DbServices {
       return Number(row.get('id'));
     }
 
-    throw Error ('an unknown error occured while creating the database entry of the eventService');
+    throw new DBServiceError("There was an unknown Error while creating your service. Please try again later.",900);
   }
 
 
@@ -551,7 +551,7 @@ export class DbServices {
     }
 
     if (oldAddressId == -1) {
-      throw Error("an error occured while getting the old address id of updated user")
+      throw new DBServiceError("There was an Error while deleting your service.", 911);
     }
 
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
@@ -560,7 +560,7 @@ export class DbServices {
   }
 
   private async updateServiceDB (service: EventService, client: Client) {
-    
+
   }
 
 
