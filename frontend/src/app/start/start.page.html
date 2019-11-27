@@ -1,22 +1,20 @@
-<ion-header style="height: 70px" >
-  <ion-nav>
+<ion-header style="height: 85px; background-color: white">
     <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
-    <ion-button size = "large" class="without-shadow" color="light" style="position: absolute; right: 5px; top: 10px; color: black"
+    <ion-button size = "large" color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
                 (click)="authService.logout()" [hidden]="authService.isLoggedOut()"> <ion-icon name="log-out"></ion-icon>
     </ion-button>
-    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px"
+    <ion-button color="light" style="position: absolute; right: 20px; top: 18px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" [routerLink]="['login']">
       Log in
     </ion-button>
-    <ion-button color="secondary" style="position: absolute; right: 95px; top: 6px"
+    <ion-button color="light" style="position: absolute; right: 120px; top: 18px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
       Sign Up
     </ion-button>
-    <ion-button size = "large" class="without-shadow" color="light" style="position: absolute; right: 110px; top: 10px; color: black; border-bottom-color: white; box-shadow: white"
+    <ion-button size="large" color="light" style="position: absolute; right: 120px; top: 10px; color: black; border-bottom-color: white; --box-shadow:none"
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
       <ion-icon name="body"></ion-icon>
     </ion-button>
-  </ion-nav>
 </ion-header>
 
 <ion-content style="position: absolute; top:85px; bottom: 0">
@@ -26,7 +24,8 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-              <ion-select class="customSelect" placeholder="Category" formControlName="category">
+              <ion-select class="whiteBR" placeholder="Category" formControlName="category">
+                <ion-select-option value=""> All Categories </ion-select-option>
                 <ion-select-option value="Location"> Location </ion-select-option>
                 <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
                 <ion-select-option value="Music"> Music </ion-select-option>
@@ -37,7 +36,8 @@
 
           <ion-col>
               <ion-select *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment' "
-                          class="customSelect" placeholder="Subtype" formControlName="subtype">
+                          class="whiteBR" placeholder="Subtype" formControlName="subtype">
+                <ion-select-option value=""> All Types </ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="asian"> Asian</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="fingerFood"> Finger Food </ion-select-option>
@@ -74,7 +74,8 @@
           </ion-col>
 
             <ion-col>
-              <ion-select class="customSelect" placeholder="Day..." formControlName="weekday">
+              <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday">
+                <ion-select-option value=""> </ion-select-option>
                 <ion-select-option value="Monday"> Monday </ion-select-option>
                 <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
                 <ion-select-option value="Wednesday"> Wednesday </ion-select-option>
@@ -119,7 +120,7 @@
   </form>
 
   <!-- Display Event Services matching the params -->
-  <event-service-card [services]="services" style="position: absolute; top: 200px;"> </event-service-card>
+  <event-service-card [services]="services" style="position: absolute; top: 200px; bottom: 200px;"> </event-service-card>
 
 
   <!-- Loading animation while services are loaded from database-->

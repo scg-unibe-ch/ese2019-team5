@@ -7,20 +7,18 @@
 <!-- 2) Page title -->
 <!-- 3) Login-Button which doesn't do anything  -->
 <!-- 4) SignUp Button to change to SignupPage -->
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-button href = "/start" color="secondary" style="position: absolute; left: 5px; top: 6px ">
-      <ion-back-button defaultHref="/start" style="size: 20px"></ion-back-button>
+<ion-header style="height: 85px; background-color: white">
+  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
+  <ion-button size="large" color="light" href = "start" style="position: absolute; right: 220px; top: 10px; border-bottom-color: white; --box-shadow:none" >
+      <ion-back-button defaultHref="/start" style="size: 20px; color:black;"></ion-back-button>
     </ion-button>
-    <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Log in </ion-title>
-    <ion-button color="medium"  style="position: absolute; right: 5px; top: 6px;" > Log In </ion-button>
-    <ion-button color="secondary" style="position: absolute; right: 95px; top: 6px" href="/start/signup"> Sign Up
+    <ion-button color="medium"  style="position: absolute; right: 20px; top: 20px;" > Log In </ion-button>
+    <ion-button color="light" style="position: absolute; right: 120px; top: 20px; --box-shadow:none" href="/start/signup" > Sign Up
     </ion-button>
-  </ion-toolbar>
 </ion-header>
 
 
-<ion-infinite-scroll-content style="position: absolute; top: 60px; left: 10px; right: 10px">
+<ion-infinite-scroll-content style="position: absolute; top: 85px; left: 10px; right: 10px">
   <form #loginForm ="ngForm">
     <div class="form-group">
       <ion-item>
@@ -38,7 +36,7 @@
     </div>
   </form>
 
-  <ion-button color="secondary" [hidden]="loading" (click)="logIn()"> Log In</ion-button>
+  <ion-button color="primary" [hidden]="loading" (click)="logIn()"> Log In</ion-button>
 
   <!-- User feedback while trying to log in -->
   <div>

@@ -8,16 +8,14 @@
 <!-- 2) Page title -->
 <!-- 3) Login-Button to change to LoginPage  -->
 <!-- 4) SignUp Button which doesn't change anything -->
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-button href = "/start" color="secondary" style="position: absolute; left: 5px; top: 6px">
-      <ion-back-button defaultHref="/start"></ion-back-button>
+<ion-header style="height: 85px; background-color: white">
+  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
+  <ion-button size="large" color="light" href = "start" style="position: absolute; right: 220px; top: 10px; border-bottom-color: white; --box-shadow:none" >
+      <ion-back-button defaultHref="/start" style="color: black"></ion-back-button>
     </ion-button>
-    <ion-title style="color: darkgreen; position: absolute; left: 80px; top: 15px"> Sign Up </ion-title>
-    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px;" href="/start/login"> Log in
+    <ion-button color="light" style="position: absolute; right: 20px; top: 20px; --box-shadow:none" href="/start/login"> Log in
     </ion-button>
-    <ion-button color="medium" style="position: absolute; right: 95px; top: 6px"> Sign Up </ion-button>
-  </ion-toolbar>
+    <ion-button color="medium" style="position: absolute; right: 120px; top: 20px; --box-shadow:none"> Sign Up </ion-button>
 </ion-header>
 
 <!-- Content contains a simple SignUp-Form  -->
@@ -102,7 +100,7 @@
   </div>
 
   <div>
-    <ion-button color="secondary" (click)="saveUser()"> Sign Up</ion-button>
+    <ion-button color="primary" (click)="saveUser()"> Sign Up</ion-button>
   </div>
 
   <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->

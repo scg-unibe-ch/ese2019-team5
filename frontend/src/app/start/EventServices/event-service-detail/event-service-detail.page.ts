@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, DoCheck, OnInit} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {ActivatedRoute} from "@angular/router";
 import {EventService} from "../../../../../../backend/app/models/eventService.model";
@@ -61,6 +61,7 @@ export class EventServiceDetailPage implements OnInit {
   private price:string;
   private image:string;
 
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(paramMap => {
       if(!paramMap.has('serviceId')){
@@ -72,7 +73,9 @@ export class EventServiceDetailPage implements OnInit {
     });
     //const params = new HttpParams().set('serviceId', this.serviceId);
    this.getEventServiceJson();
+   //this.loadPhoto()
   }
+
 
 
   showOfferInput() {
@@ -134,11 +137,11 @@ export class EventServiceDetailPage implements OnInit {
         this.requirements = data.requirements;
         this.perimeter = data.perimeter;
         this.image = data.image;
-        this.capacity = data.image;
+        this.capacity = (data.capacity=='1000000')? 'no limit': data.capacity;
         this.subtype = data.subtype;
         this.price = data.price;
-        console.log(data.street);
-        console.log(this.street);
+        console.log(data.image);
+        console.log(this.description);
       },
       (error)=>{
         console.log(error);
@@ -159,4 +162,5 @@ export class EventServiceDetailPage implements OnInit {
     };
     return priceFormat;
   };
+
 }

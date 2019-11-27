@@ -6,10 +6,6 @@ import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
-import {EmailVerificationServices} from "../services/emailVerification.services";
-import nodemailer from "nodemailer";
-import {EmailForgotPWCreatorService} from "../services/emailForgotPWCreator.service";
-import {user} from "ts-postgres/dist/src/defaults";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
 
 
@@ -19,6 +15,8 @@ const dbService = new DbServices();
 /**
  * listens to HTTP events Post with add
  * creates an Address and an EventService from the given requestbody and adds it to the database
+ * depending on whether there is a subtype, requirments or image it gets added.
+ * answers with 201 if service got created and saved otherwise with 400
  */
 router.post('/add', async (req: Request, res: Response) => {
     console.log('got here');
@@ -42,16 +40,16 @@ router.post('/add', async (req: Request, res: Response) => {
         eventService.setRequirements(req.body.requirements);
       }
       if (req.body.image !== undefined) {
-        console.log("image got to backend");
+      //console.log("image got to backend");
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
-      console.log(req.body.capacity);
+     // console.log(req.body.capacity);
 
       await dbService.addEventService(eventService);
 
-      console.log("ok");
-      res.statusCode = 200;
+      //console.log("ok");
+      res.statusCode = 201;
       res.json('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
       console.log(error);
@@ -71,16 +69,16 @@ router.put('/update', async (req: Request, res: Response) => {
 });
 
 /**
- *  listens to HTTP events Delete with userId and ServiceId given in URL
+ *  listens to HTTP events Delete with serviceId given in URL
  * deletes a certain Service of a certain provider
  * returns 200 if Service was deleted
  * 406 if User or Service does not exist and 400 otherwise
  */
 router.delete('/:serviceId', async (req: Request, res: Response) => {
     const serviceId: number = Number(req.params.serviceId);
-    //onst serId:number= Number(req.query.serviceId);
+
     console.log("serviceId " + serviceId);
-    //console.log( "serviceId query " +serId);
+
     try {
       await dbService.deleteService(serviceId)
       res.status(200).send('Service was deleted');
@@ -95,18 +93,20 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
   }
 )
 
-
+/**
+ *   listens to HTTP events get with serviceId given in URL
+ *   receives a services container form the DB
+ *   extracts the array and sens the first event simplified to the front
+ *   answers with 200 if ok otherwise with 404
+ */
 router.get('/:serviceid', async (req: Request, res: Response) => {
 
   try {
      let serviceId: number = Number(req.params.serviceid);
-      console.log('ServiceId'+ serviceId);
       let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
-      //console.log(servicesContainer);
       let eventServicesArray: EventService[] = servicesContainer.getServices();
       res.send(eventServicesArray[0].toSimplification());
       res.status(200);
-      //console.log(eventServicesArray.map(e => e.toSimplification()));
     } catch (error) {
       res.status(404);
       res.send('error in backend' + error.message);//TODO Cyrill weli gnau?
@@ -116,7 +116,11 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
   }
 );
 
-
+/**
+ * HTTP event listener to post /order if an event gets ordered
+ * triggers off 2 emails to the client and the service provider
+ * answers with 200 if ok and 404 otherwise
+ */
 router.post('/order', async (req: Request, res: Response) => {
   try {
     let serviceId: number = req.body.serviceId;
@@ -140,16 +144,18 @@ router.post('/order', async (req: Request, res: Response) => {
     res.status(200);
     res.json('The emails were sent ');
 
-
   } catch (error) {
     res.status(404);
     res.send(error + 'unknown email-address. Please check or sign up.');
     console.log(error);
   }
-
-
 });
-
+/**
+ * HTTP event listener to post /report
+ * gets triggered when a customer thinks a service is inappropriate and
+ * therefor triggers here an email that is sent to the Eventdoo team to have a lok at
+ * 200 if email could be sent ok, 400 otherwise
+ */
 router.post('/report', async (req: Request, res: Response) => {
   let serviceId= req.body.serviceId;
   let userId= req.body.userId;
