@@ -1,9 +1,9 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-button href = "start" color="secondary" style="position: absolute; left: 5px; top: 6px"><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
-    <ion-title style="color: darkgreen; position: absolute; left: 80px; top: 15px"> Your Profile </ion-title>
-    <ion-button color="secondary" style="position: absolute; right: 5px; top: 6px;" href="/start" (click)="authservice.logout()"> Logout </ion-button>
-  </ion-toolbar>
+<ion-header style="height: 85px; background-color: white">
+  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
+  <ion-button size="large" color="light" href = "start" style="position: absolute; right: 110px; top: 10px; border-bottom-color: white; --box-shadow:none" ><ion-back-button defaultHref="/start"> </ion-back-button></ion-button>
+    <ion-button size = "large" color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
+                href="/start" (click)="authservice.logout()"> <ion-icon name="log-out"></ion-icon>
+    </ion-button>
 </ion-header>
 
 <!-- ToDo: Display user infos here-->
@@ -11,7 +11,7 @@
 <!-- ToDo: Let them create their service offers-->
 
 
-<ion-content fullscreen="true">
+<ion-content fullscreen="true" style="position: absolute; top:85px; bottom: 0">
   <ion-grid [hidden]="!httpGetSuccess||isEditing" align-items-center>
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
@@ -84,8 +84,8 @@
     <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
   </div>
 
-  <ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5" color="secondary" [routerLink]="['createService']">Create your service offer</ion-button>
-  <ion-button [hidden]="isEditing" color="secondary" (click)="enableEditing()">Edit Profile</ion-button>
+  <ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5" color="primary" [routerLink]="['createService']">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing" color="primary" (click)="enableEditing()">Edit Profile</ion-button>
   <ion-row></ion-row>
   <ion-note [hidden]="numberOfServices<5">You can only offer 5 services at once</ion-note>
 
@@ -94,7 +94,7 @@
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
   </ion-list>
-  <ion-button (click)="showDeleteProfileConfirm()" style="position: page; right: 20px; bottom: 10px" >Delete My Profile</ion-button>
+  <ion-button (click)="showDeleteProfileConfirm()" color="secondary" style="position: page; right: 20px; bottom: 10px" >Delete My Profile</ion-button>
   <ion-row style="height:100px"></ion-row>
 </ion-content>
 

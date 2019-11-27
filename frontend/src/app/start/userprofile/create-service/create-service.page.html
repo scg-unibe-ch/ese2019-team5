@@ -2,22 +2,20 @@
 <!-- Contains (f.l.t.r.) -->
 <!-- Back button navigating back to UserProfilePage -->
 <!-- Page title -->
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-button href = "start/userprofile" color="secondary" style="position: absolute; left: 5px; top: 6px ">
-      <ion-back-button defaultHref="start/userprofile" style="size: 20px"></ion-back-button>
-    </ion-button>
-    <ion-title style="position: absolute; left: 80px; top: 15px; color: darkgreen"> Create new service</ion-title>
-  </ion-toolbar>
+<ion-header style="height: 85px; background-color: white">
+  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
+  <ion-button size="large" color="light" href = "start/userprofile" style="position: absolute; right: 20px; top: 10px; border-bottom-color: white; --box-shadow:none" >
+    <ion-icon name="arrow-round-back"></ion-icon>
+  </ion-button>
 </ion-header>
 
 <!-- Content -->
 <ion-content>
-
   <!-- Form asking for all important information to create a new Service -->
   <!-- Only displayed if the User is logged in -->
   <div class="container fluid" *ngIf="authService.isLoggedIn()||numberOfServices<=4">
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
+      <ion-title> Create Service</ion-title>
       <ion-title> General Information</ion-title>
 
       <!-- Category: Required for all kind of EventServices -->
@@ -268,3 +266,5 @@
     <p> You already offer the maximum amount of services: {{numberOfServices}}</p>
   </div>
 </ion-content>
+
+<app-info-footer></app-info-footer>
