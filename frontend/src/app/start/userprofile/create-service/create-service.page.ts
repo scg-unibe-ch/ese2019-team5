@@ -244,20 +244,19 @@ export class CreateServicePage implements OnInit {
    */
  previewFiles() {
     // @ts-ignore
-   var file   = document.querySelector('input[type=file]').files[0];
-   var preview = document.querySelector('#preview');
+    var file = document.querySelector('input[type=file]').files[0];
+    var preview = document.querySelector('#preview');
 
-  console.log("old: "+ this.base64);
-   this.base64 = this.getB64String(file).subscribe((output) => {
-     console.log("out: " + output);
-     this.base64 = output;
-     console.log("this2: " + this.base64);
-     var image = new Image();
-     image.height = 100;
-     image.title = file.name;
-     image.src = this.base64;
-     preview.appendChild(image);
-   });
+    console.log("old: " + this.base64);
+    this.getB64String(file).subscribe((output) => {
+      console.log("out: " + output);
+      var image = new Image();
+      image.height = 200;
+      image.width = 300;
+      image.title = file.name;
+      image.src = output;
+      preview.appendChild(image);
+    });
   }
 
   /**
