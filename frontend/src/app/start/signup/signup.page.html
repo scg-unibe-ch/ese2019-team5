@@ -60,17 +60,45 @@
       <div class="form-group">
         <ion-item>
           <ion-label> Street</ion-label>
-          <ion-input formControlName="street" type="text" class="form-control" pattern="(A-Z)(a-z)*"></ion-input>
+          <ion-input formControlName="street" type="text" class="form-control" pattern="[A-Z][a-z]*"></ion-input>
           <ion-label> HouseNr.</ion-label>
           <ion-input formControlName="housenumber" type="text" class="form-control"></ion-input>
         </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <small [class.ion-hide]="street.valid || street.untouched"
+                     style="color: red;"> Street is invalid. </small>
+            </ion-col>
+            <ion-col>
+              <small [class.ion-hide]="housenumber.valid || housenumber.untouched"
+                     style="color: red;"> Housenumber is invalid. </small>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
         <ion-item>
           <ion-label> ZIP</ion-label>
-          <ion-input formControlName="zip" type="text" class="form-control"></ion-input>
+          <ion-input formControlName="zip" type="number" class="form-control"></ion-input>
           <ion-label> City</ion-label>
           <ion-input formControlName="city" type="text" class="form-control"></ion-input>
         </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <small [class.ion-hide]="zip.valid || zip.untouched"
+                     style="color: red;"> Zip is invalid. </small>
+            </ion-col>
+            <ion-col>
+              <small [class.ion-hide]="city.valid || city.untouched"
+                     style="color: red;"> City is invalid. </small>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
+
+
+
 
       <!-- User must enter his/her password here -->
       <!-- Password is stored in the email-propriety of a User-Object -->
@@ -108,7 +136,12 @@
     <p *ngIf="loading"> Submitting data... </p>
     <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
   </div>
+  <div>
+    <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
+  </div>
+
 </ion-content>
-<app-info-footer></app-info-footer>
+
+<!--<app-info-footer></app-info-footer>-->
 
 

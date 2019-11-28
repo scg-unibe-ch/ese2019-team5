@@ -24,6 +24,7 @@ export class SignupPage implements OnInit {
 
   pw: string;
   loading: boolean;
+  error: string;
 
   constructor(
     private alertCtrl: AlertController,
@@ -42,13 +43,14 @@ export class SignupPage implements OnInit {
     zip: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
     city: ['', Validators.required],
     // ToDo: What are safety requirements for passwords? Which characters are allowed?
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: [this.pw, [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]]
   });
 
   // ToDo: Implement initialization
   ngOnInit() {
     this.loading = false;
+    this.pw = '';
   }
 
   /**
@@ -98,33 +100,36 @@ export class SignupPage implements OnInit {
    */
   saveUser() {
     this.loading = true;
-    //prepare body for httpClient-post
-    const pwhash = HashService.hashPassword(this.password.value);
-    console.log(pwhash);
-    const email = this.email.value;
-    const firstname = this.firstname.value;
-    const lastname = this.lastname.value;
-    const street = this.street.value;
-    const housenumber = this.housenumber.value;
-    const zip = this.zip.value;
-    const city = this.city.value;
-    const isVerified = false;
+    if (this.validateInput()) {
+      //prepare body for httpClient-post
+      const pwhash = HashService.hashPassword(this.password.value);
+      console.log(pwhash);
+      const email = this.email.value;
+      const firstname = this.firstname.value;
+      const lastname = this.lastname.value;
+      const street = this.street.value;
+      const housenumber = this.housenumber.value;
+      const zip = this.zip.value;
+      const city = this.city.value;
+      const isVerified = false;
 
-    // post data to the httpClient
-    this.http.post(this.ROOT_URL,
-      {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
-      .subscribe(
-        (success) => {
-          this.loading = false;
-          this.presentSuccessAlert().then(r => {
+      // post data to the httpClient
+      this.http.post(this.ROOT_URL,
+        {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
+        .subscribe(
+          (success) => {
+            this.loading = false;
+            this.presentSuccessAlert().then(r => {
+            });
+          },
+          (error) => {
+            this.loading = false;
+            this.error = error.message;
           });
-        },
-        (error) => {
-          this.loading = false;
-          this.presentFailureAlert(error.message).then(r => {
-          });
-        }
-      );
+    } else {
+      this.loading = false;
+      this.error = 'There is already an account assigned to your email address.'
+    }
   }
 
   /**
@@ -133,7 +138,7 @@ export class SignupPage implements OnInit {
   async presentSuccessAlert() {
     const alert = await this.alertCtrl.create({
       header: 'Successful Registration',
-      message: 'You have registered successfully. We have sent you an email to verify your account. Please confirm your email to gain access to all features',
+      message: 'Registration successful. Please verify your email address.',
       buttons: [{
         text: 'Got it',
         handler: () => {
@@ -153,5 +158,15 @@ export class SignupPage implements OnInit {
       }]
     });
     await alert.present();
+  }
+
+  private validateInput() {
+    return this.email.valid &&
+      this.firstname.valid &&
+      this.lastname.valid &&
+      this.street.valid && this.housenumber.valid &&
+      this.zip.valid && this.city.valid &&
+      this.password.valid && this.confirmation.valid;
+
   }
 }
