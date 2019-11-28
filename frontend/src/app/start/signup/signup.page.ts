@@ -95,8 +95,8 @@ export class SignupPage implements OnInit {
 
 
   /**
-   * Creates a new User-object according to data entered in form
-   * "Valid" is false as User must first be verified
+   * Sends all data entered in the form to backend (if the input is valid {@link validateInput}).
+   * Handles the response from backend.
    */
   saveUser() {
     this.loading = true;
@@ -124,11 +124,11 @@ export class SignupPage implements OnInit {
           },
           (error) => {
             this.loading = false;
-            this.error = error.message;
+            this.error = 'There is already an account assigned to your email address. Please log in or chose another address.';
           });
     } else {
       this.loading = false;
-      this.error = 'There is already an account assigned to your email address.'
+      this.error = 'Some of your input is invalid. Please check again.'
     }
   }
 
@@ -160,6 +160,10 @@ export class SignupPage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * Called when the user tries to sign up.
+   * Ensures all input is valid.
+   */
   private validateInput() {
     return this.email.valid &&
       this.firstname.valid &&
