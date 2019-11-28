@@ -160,19 +160,13 @@ export class CreateServicePage implements OnInit {
       const zip = this.zip.value;
       const city = this.city.value;
       const capacity = 0 + this.capacity.value;
-      console.log(capacity);
       const perimeter = 0 + this.distance.value;
       const availability = JSON.stringify(this.availability.value);
-      console.log(availability);
       const price = 0 + this.price.value;
-      console.log(price);
       const subtype = JSON.stringify(this.setType());
-      console.log(subtype);
       const requirements = this.requirements.value;
-      console.log(requirements);
       const description = this.description.value;
       const image = this.base64;
-      console.log(image);
 
       console.log('Params set. Starting http request');
 

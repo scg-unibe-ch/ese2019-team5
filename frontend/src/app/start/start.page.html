@@ -106,13 +106,16 @@
         </ion-row>
 
         <ion-row>
-          <ion-col>
+          <ion-col size="10">
             <ion-item>
               <ion-input placeholder="Search..." formControlName="text" type="text"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-button color="primary" (click)="search()" style="width: 100px; height: 43px"> <ion-icon color="light" name="search"> </ion-icon> </ion-button>
+          </ion-col>
+          <ion-col>
+            <a href="/start"> reset </a>
           </ion-col>
         </ion-row>
       </ion-grid>
