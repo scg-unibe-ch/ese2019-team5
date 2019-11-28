@@ -64,7 +64,7 @@ export class CreateServicePage implements OnInit {
     price: ['', Validators.required],
     type: ['', Validators.required],
     requirements: [''],
-    description: ['', Validators.maxLength(140)],
+    description: ['', Validators.maxLength(700)],
     picture: ['']
   });
 
@@ -148,13 +148,6 @@ export class CreateServicePage implements OnInit {
    * Handles the result
    */
   createService() {
-    // To see the format of the input. Can be deleted later.
-    console.log(this.category.value + ' | ' + this.title.value);
-    console.log(this.street.value + ' | ' + this.housenumber.value + ' | ' + this.zip.value + ' | ' + this.city.value);
-    console.log(this.distance.value + ' | ' + this.capacity.value);
-    console.log(this.availability.value + ' | ' + this.price.value);
-    console.log(this.type.value);
-    console.log(this.requirements.value + ' | ' + this.description.value);
 
     this.loading = true;
     if (this.validateInput()) {

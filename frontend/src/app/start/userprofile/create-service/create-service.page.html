@@ -16,6 +16,8 @@
   <div class="container fluid" *ngIf="authService.isLoggedIn()||numberOfServices<=4">
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> Create Service</ion-title>
+      <br/>
+      <br/>
       <ion-title> General Information</ion-title>
 
       <!-- Category: Required for all kind of EventServices -->
@@ -24,11 +26,13 @@
           <ion-item>
             <ion-label> Type of service</ion-label>
             <ion-select class="customSelect" placeholder="Select..." formControlName="category">
-              <ion-select-option value="Location"> Event Location</ion-select-option>
-              <ion-select-option value="Gastronomy"> Gastronomy</ion-select-option>
-              <ion-select-option value="Music"> Music</ion-select-option>
-              <ion-select-option value="Entertainment"> Entertainment</ion-select-option>
-              <ion-select-option value="Photographer"> Photography</ion-select-option>
+              <ion-virtual-scroll>
+                <ion-select-option value="Location"> Venue </ion-select-option>
+                <ion-select-option value="Gastronomy"> Gastronomy</ion-select-option>
+                <ion-select-option value="Music"> Music</ion-select-option>
+                <ion-select-option value="Entertainment"> Entertainment</ion-select-option>
+                <ion-select-option value="Photographer"> Photography</ion-select-option>
+              </ion-virtual-scroll>
             </ion-select>
           </ion-item>
         </ion-list>
