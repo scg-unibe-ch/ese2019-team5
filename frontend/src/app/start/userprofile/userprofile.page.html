@@ -84,8 +84,8 @@
     <ion-button  color="secondary" (click)="saveChanges()">Save changes</ion-button>
   </div>
 
-  <ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5" color="primary" [routerLink]="['createService']">Create your service offer</ion-button>
-  <ion-button [hidden]="isEditing" color="primary" (click)="enableEditing()">Edit Profile</ion-button>
+  <ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5"  [routerLink]="['createService']" style="color: white">Create your service offer</ion-button>
+  <ion-button [hidden]="isEditing"  (click)="enableEditing()">Edit Profile</ion-button>
   <ion-row></ion-row>
   <ion-note [hidden]="numberOfServices<5">You can only offer 5 services at once</ion-note>
 
@@ -94,7 +94,7 @@
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
   </ion-list>
-  <ion-button (click)="showDeleteProfileConfirm()" color="secondary" style="position: page; right: 20px; bottom: 10px" >Delete My Profile</ion-button>
+  <ion-button (click)="showDeleteProfileConfirm()" color="danger" style="position: page; right: 20px; bottom: 10px;" >Delete My Profile</ion-button>
   <ion-row style="height:100px"></ion-row>
 </ion-content>
 

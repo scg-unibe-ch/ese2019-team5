@@ -123,6 +123,17 @@ export class EventServiceDetailPage implements OnInit {
     await toast.present();
   }
 
+  private report() {
+    let infos = {
+      serviceId:this.serviceId,
+      userId:this.auth.getUserId()
+    }
+    this.http.post('http://localhost:3000/eventservice/report', infos).subscribe(
+      (data) => {console.log(data)},
+    (error) => {console.log(error)}
+    )
+  }
+
   private getEventServiceJson() {
     this.http.get<EventServiceJson>('http://localhost:3000/eventservice/'+this.serviceId).subscribe(
       (data)=>{
