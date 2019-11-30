@@ -5,7 +5,7 @@ import {EventService} from "../models/eventService.model";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 
-var jwt = require('jsonwebtoken');
+
 
 const router: Router = Router(); // part of express needed
 
@@ -26,7 +26,7 @@ router.get('/', async (req: Request, res: Response) => {
       res.status(200);
     } catch (error) {
       res.status(404);
-      res.send('error in backend' + error.message);
+      res.send('error in backend  at getAllServices' + error.message);
       console.log(error);
     }
 
@@ -83,7 +83,7 @@ console.log(eventServiceFilterArray);
    console.log(serviceAOfFittingRequest.map(e => e.toSimplification()));
   } catch (error) {
     res.status(404);
-    res.send('error in backend ' + error.message);
+    res.send('error in backend at getServiceFilter ' + error.message);
     console.log(error);
 
   }

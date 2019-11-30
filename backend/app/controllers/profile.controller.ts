@@ -54,9 +54,17 @@ router.post('/update', async (req: Request, res: Response) => { //TODO stimmt mu
     res.statusCode = 200;
 
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
+
+    if(error.errorCode==914){
     console.log(error);
-    res.send(error);
-    res.statusCode = 400;
+    res.send(error.message);
+    res.statusCode = 404;}
+    else if (error.errorCode== 911){
+res.status(400).send(error.message);
+
+    }else{
+      res.status(409).send(error.message);
+    }
 
   }
 });
@@ -108,9 +116,15 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.send(userDataAndServices);
     res.status(200);
 
-  } catch (error) { //TODO welche error können auftreten?
-    res.send(error);
-    res.statusCode = 400;
+  } catch (error) {
+
+    //TODO welche error können auftreten?
+    if(error.errorCode==914){
+    res.send('Problem with service filter' + error.message);
+    res.statusCode = 404;
+  }else {
+      res.status(404).send('Problem with getting user from id' + error.message);
+    }
   }
 
 });
@@ -144,7 +158,7 @@ router.delete('/:userId', async (req: Request, res: Response) => {
 
     } catch (error) {
       res.statusCode = 400;//TODO welche Error?
-      res.send(error);
+      res.send(error.message);
     }
   }
 )

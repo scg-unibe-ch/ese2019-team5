@@ -53,6 +53,7 @@ router.post('/add', async (req: Request, res: Response) => {
       res.json('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
       console.log(error);
+
       res.send(error);
       res.statusCode = 400;
 
@@ -83,11 +84,12 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
       await dbService.deleteService(serviceId)
       res.status(200).send('Service was deleted');
     } catch (error) {
-      if (error.message.localeCompare('an error occured while getting the old address id of updated user') == 0) { //TODO abklären genau welcher error
+      res.status(406).send(error.message);
+/*      if (error.message.localeCompare('an error occured while getting the old address id of updated user') == 0) { //TODO abklären genau welcher error
         res.status(406).send('invalid ServiceId');
       } else {
         res.status(400).send('Service could not be deleted'); //TODO wie hier hin kommen
-      }
+      }*/
 
     }
   }
@@ -109,7 +111,7 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
       res.status(200);
     } catch (error) {
       res.status(404);
-      res.send('error in backend' + error.message);//TODO Cyrill weli gnau?
+      res.send('error in backend' + error.message);
       console.log(error);
     }
 

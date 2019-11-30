@@ -34,10 +34,11 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
-    let message: string = error.message;
-    if (message.localeCompare('To login, please verify your email-address') == 0) { //TODO aufräumen .....
-      console.log("error in backend:" + error.message);
-      // res.status(404).send(error.message);
+   /* let message: string = error.message;
+      //     if (message.localeCompare('To login, please verify your email-address') == 0) { //TODO aufräumen .....
+      //       console.log("error in backend:" + error.message);
+      //       // res.status(404).send(error.message);*/
+   if(error.errorCode==931){
       res.status(406);
       res.send('Verification error');
       console.log(error)
@@ -66,10 +67,15 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
     res.json('reset Password sent');
 
   } catch (error) {
-    console.log('this is the error' + error)
+    console.log('this is the error' + error);
+    if(error.errorCode==920){
     res.statusCode = 400;
-    res.send(error);
+    res.send(error.message);
 
+  }else{
+      res.statusCode = 404;
+      res.send(error.message);
+    }
   }
 
 });

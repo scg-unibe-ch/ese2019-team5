@@ -2,7 +2,7 @@ import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Address} from "../models/address.model";
 import {EmailVerificationServices} from '../services/emailVerification.services';
-import {EmailService} from "../services/Email.service";
+
 
 import {DbServices} from '../services/db.services';
 
@@ -41,11 +41,21 @@ router.post('/', async (req: Request, res: Response) => {
     res.json('sign up success');
 
   } catch (error) {
-    console.log(error.message);
+    if (error.errorCode == 926) {
+      console.log(error.message);
+      res.statusCode = 400;
+      res.send(error.message);}}
+/*
+    } else if (error.errorCode == 920){
+      console.log(error.message);
     res.statusCode = 400;
-    res.send(error);
+    res.send(error.message);}
 
-  }
+  else{
+      console.log(error.message);
+    res.statusCode = 400;
+    res.send(error.message);
+  }*/
 });
 
 
