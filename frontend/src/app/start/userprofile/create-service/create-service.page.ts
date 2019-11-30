@@ -64,7 +64,7 @@ export class CreateServicePage implements OnInit {
     price: ['', Validators.required],
     type: ['', Validators.required],
     requirements: [''],
-    description: ['', Validators.maxLength(140)],
+    description: ['', Validators.maxLength(700)],
     picture: ['']
   });
 
@@ -148,13 +148,6 @@ export class CreateServicePage implements OnInit {
    * Handles the result
    */
   createService() {
-    // To see the format of the input. Can be deleted later.
-    console.log(this.category.value + ' | ' + this.title.value);
-    console.log(this.street.value + ' | ' + this.housenumber.value + ' | ' + this.zip.value + ' | ' + this.city.value);
-    console.log(this.distance.value + ' | ' + this.capacity.value);
-    console.log(this.availability.value + ' | ' + this.price.value);
-    console.log(this.type.value);
-    console.log(this.requirements.value + ' | ' + this.description.value);
 
     this.loading = true;
     if (this.validateInput()) {
@@ -167,19 +160,13 @@ export class CreateServicePage implements OnInit {
       const zip = this.zip.value;
       const city = this.city.value;
       const capacity = 0 + this.capacity.value;
-      console.log(capacity);
       const perimeter = 0 + this.distance.value;
       const availability = JSON.stringify(this.availability.value);
-      console.log(availability);
       const price = 0 + this.price.value;
-      console.log(price);
       const subtype = JSON.stringify(this.setType());
-      console.log(subtype);
       const requirements = this.requirements.value;
-      console.log(requirements);
       const description = this.description.value;
       const image = this.base64;
-      console.log(image);
 
       console.log('Params set. Starting http request');
 
@@ -257,20 +244,19 @@ export class CreateServicePage implements OnInit {
    */
  previewFiles() {
     // @ts-ignore
-   var file   = document.querySelector('input[type=file]').files[0];
-   var preview = document.querySelector('#preview');
+    var file = document.querySelector('input[type=file]').files[0];
+    var preview = document.querySelector('#preview');
 
-  console.log("old: "+ this.base64);
-   this.base64 = this.getB64String(file).subscribe((output) => {
-     console.log("out: " + output);
-     this.base64 = output;
-     console.log("this2: " + this.base64);
-     var image = new Image();
-     image.height = 100;
-     image.title = file.name;
-     image.src = this.base64;
-     preview.appendChild(image);
-   });
+    console.log("old: " + this.base64);
+    this.getB64String(file).subscribe((output) => {
+      console.log("out: " + output);
+      var image = new Image();
+      image.height = 200;
+      image.width = 300;
+      image.title = file.name;
+      image.src = output;
+      preview.appendChild(image);
+    });
   }
 
   /**

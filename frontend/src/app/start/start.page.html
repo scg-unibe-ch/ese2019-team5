@@ -19,14 +19,14 @@
 
 <ion-content style="position: absolute; top:85px; bottom: 0">
   <!-- Form to set search params -->
-  <form [formGroup]="searchForm">
+  <form [formGroup]="searchForm" [hidden]="loading">
     <ion-toolbar color="#fafafa" style="position: absolute; top: 5px;">
       <ion-grid>
         <ion-row>
           <ion-col>
               <ion-select class="whiteBR" placeholder="Category" formControlName="category">
                 <ion-select-option value=""> All Categories </ion-select-option>
-                <ion-select-option value="Location"> Location </ion-select-option>
+                <ion-select-option value="Location"> Venue </ion-select-option>
                 <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
                 <ion-select-option value="Music"> Music </ion-select-option>
                 <ion-select-option value="Entertainment"> Entertainment </ion-select-option>
@@ -75,7 +75,7 @@
 
             <ion-col>
               <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday">
-                <ion-select-option value=""> </ion-select-option>
+                <ion-select-option value=""> All days </ion-select-option>
                 <ion-select-option value="Monday"> Monday </ion-select-option>
                 <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
                 <ion-select-option value="Wednesday"> Wednesday </ion-select-option>
@@ -100,19 +100,22 @@
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Number of Persons" formControlName="persons"> </ion-input>
+              <ion-input placeholder="Number of people" formControlName="persons"> </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
 
         <ion-row>
-          <ion-col>
+          <ion-col size="10">
             <ion-item>
               <ion-input placeholder="Search..." formControlName="text" type="text"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-button color="primary" (click)="search()" style="width: 100px; height: 43px"> <ion-icon color="light" name="search"> </ion-icon> </ion-button>
+          </ion-col>
+          <ion-col>
+            <a href="/start"> reset </a>
           </ion-col>
         </ion-row>
       </ion-grid>

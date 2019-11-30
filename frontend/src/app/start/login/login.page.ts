@@ -48,10 +48,9 @@ export class LoginPage implements OnInit {
 
   /**
    * Called when the user presses the login button.
-   * Sends data entered in the form to the AuthService
-   * Handles the "result":
-   * If log in was successful, the user is sent to another url.
-   * If an error occurs, the error message is displayed on the bottom of the page.
+   * Asserts that the user filled in the entire form {@link validateInput}
+   * Sends data entered in the form to the AuthService.
+   * Handles the result.
    */
   logIn() {
     this.error = '';
@@ -59,28 +58,32 @@ export class LoginPage implements OnInit {
     this.isVerified = true;
     this.loading = true;
 
-    this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
-      (success) => {
-        this.loading = false;
-        this.router.navigate([this.returnUrl]).then(r => {
-          this.LogInPopUp().then(r => {
-          });
-        });
-      },
-      (error) => {
-        this.loading = false;
-        console.log("error: " + error.message);
-        if (error.status == 406) {
-          this.isVerified = false;
-        }
-        if (error.status == 404) {
-          this.isValidCombination = false;
-        }
-      });
+    if (this.validateInput()) {
 
+      this.authService.login(this.email, HashService.hashPassword(this.password)).subscribe(
+        (success) => {
+          this.loading = false;
+          this.router.navigate([this.returnUrl]).then(r => {
+            this.LogInPopUp().then(r => {
+            });
+          });
+        },
+        (error) => {
+          this.loading = false;
+          console.log("error: " + error.message);
+          if (error.status == 406) {
+            this.isVerified = false;
+          }
+          if (error.status == 404) {
+            this.isValidCombination = false;
+          }
+        });
+    } else {
+      this.loading = false;
+      this.error = 'Some of your input is invalid. Please check again.'
+    }
   }
 
-  //ToDo: Posting to sendMailAgain does not work properly yet.
   /**
    * Called by the user by pushing the correspondent button
    * Opens a PopUp asking the User to enter his/her email address
@@ -93,7 +96,6 @@ export class LoginPage implements OnInit {
     });
   }
 
-  //ToDo: Does not work yet. Email is not sent.
   /**
    * Called by the user by pushing the correspondent button
    * Opens a PopUp asking the User to enter his/her email address
@@ -106,7 +108,6 @@ export class LoginPage implements OnInit {
     this.emailPopUp(header, url).then(r => {
     });
   }
-
 
   /**
    * Called by sendMailAgain() and resetPassword()
@@ -160,5 +161,13 @@ export class LoginPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  /**
+   * Called when the user tries to log in
+   * Asserts email and password are not empty.
+   */
+  private validateInput(){
+    return this.email && this.password;
   }
 }
