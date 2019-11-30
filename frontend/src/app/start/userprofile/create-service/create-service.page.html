@@ -11,6 +11,7 @@
 
 <!-- Content -->
 <ion-content>
+  <div style="min-height: 100%">
   <!-- Form asking for all important information to create a new Service -->
   <!-- Only displayed if the User is logged in -->
   <div class="container fluid" *ngIf="authService.isLoggedIn()||numberOfServices<=4">
@@ -268,6 +269,10 @@
   <div *ngIf="numberOfServices>=5">
     <p> You already offer the maximum amount of services: {{numberOfServices}}</p>
   </div>
+  </div>
+
 </ion-content>
 
+<ion-footer>
 <app-info-footer></app-info-footer>
+</ion-footer>

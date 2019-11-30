@@ -18,7 +18,8 @@
 </ion-header>
 
 
-<ion-infinite-scroll-content style="position: absolute; top: 85px; left: 10px; right: 10px">
+<ion-content>
+  <div style="min-height: 100%">
   <form #loginForm ="ngForm">
     <div class="form-group">
       <ion-item>
@@ -61,7 +62,7 @@
     <small *ngIf="error" style="color: darkred"> An error occurred: {{error}}.
       later. </small>
   </div>
-
-</ion-infinite-scroll-content>
-<app-info-footer></app-info-footer>
+  </div>
+  <app-info-footer></app-info-footer>
+</ion-content>
 

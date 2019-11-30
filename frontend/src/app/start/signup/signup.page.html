@@ -22,6 +22,7 @@
 <!-- User must enter a e-mail address, name, address and 2 identical passwords -->
 <!-- All information is required to sign up -->
 <ion-content>
+  <div style="min-height: 100%">
   <div class="container-fluid">
     <form [formGroup]="signUpForm">
 
@@ -136,12 +137,12 @@
     <p *ngIf="loading"> Submitting data... </p>
     <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
   </div>
+  </div>
   <div>
     <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
   </div>
 
-</ion-content>
 
 <app-info-footer></app-info-footer>
-
+</ion-content>
 
