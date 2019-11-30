@@ -11,7 +11,8 @@
 <!-- ToDo: Let them create their service offers-->
 
 
-<ion-content fullscreen="true" style="position: absolute; top:85px; bottom: 0">
+<ion-content>
+  <div style="min-height: 100%">
   <ion-grid [hidden]="!httpGetSuccess||isEditing" align-items-center>
     <ion-row>
       <p>Name: {{firstname}} {{lastname}}</p>
@@ -96,7 +97,9 @@
   </ion-list>
   <ion-button (click)="showDeleteProfileConfirm()" color="danger" style="position: page; right: 20px; bottom: 10px;" >Delete My Profile</ion-button>
   <ion-row style="height:100px"></ion-row>
+  </div>
+  <app-info-footer></app-info-footer>
 </ion-content>
 
-<app-info-footer></app-info-footer>
+
 
