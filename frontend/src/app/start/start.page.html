@@ -1,19 +1,19 @@
 <ion-header style="height: 85px; background-color: white">
     <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
     <ion-button size = "large" color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
-                (click)="authService.logout()" [hidden]="authService.isLoggedOut()"> <ion-icon name="log-out"></ion-icon>
+                (click)="authService.logout()" [hidden]="authService.isLoggedOut()"> <ion-icon name="ios-log-out"></ion-icon>
     </ion-button>
-    <ion-button color="light" style="position: absolute; right: 20px; top: 18px; color: black; --box-shadow:none"
+    <ion-button color="light" style="position: absolute; right: 20px; top: 22px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" [routerLink]="['login']">
       Log in
     </ion-button>
-    <ion-button color="light" style="position: absolute; right: 120px; top: 18px; color: black; --box-shadow:none"
+    <ion-button color="light" style="position: absolute; right: 120px; top: 22px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
       Sign Up
     </ion-button>
-    <ion-button size="large" color="light" style="position: absolute; right: 120px; top: 10px; color: black; border-bottom-color: white; --box-shadow:none"
+    <ion-button color="light" style="position: absolute; right: 120px; top: 22px; color: black; border-bottom-color: white; --box-shadow:none"
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
-      <ion-icon name="body"></ion-icon>
+      Your Profile
     </ion-button>
 </ion-header>
 
