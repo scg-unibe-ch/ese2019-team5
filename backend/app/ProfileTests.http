@@ -67,3 +67,15 @@ client.test("user was deleted user exception", function() {
 %}
 
 ###
+PUT http://localhost:3000/profile/addFavorite?userId=113
+Content-Type: application/json
+
+
+> {%
+client.test("added favorite event service", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###

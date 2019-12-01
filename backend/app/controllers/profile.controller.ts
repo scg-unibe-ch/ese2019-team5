@@ -76,7 +76,7 @@ res.status(400).send(error.message);
  */
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
-  console.log(userId);
+
   let user: User;
   try {
     user = await dbService.getUserFromId(userId);
@@ -161,7 +161,26 @@ router.delete('/:userId', async (req: Request, res: Response) => {
       res.send(error.message);
     }
   }
-)
+);
+
+
+router.put('/addFavorite', async (req: Request, res: Response) => {
+ try {
+
+   const userId:number = parseInt(req.params.userId);
+   const serviceId: number = parseInt(req.params.serviceId)
+   // await dbService.addFavorite(userId,serviceId); //TODO CYrill zum implementieren und Error Code anpassen
+   res.status(200).send('added to favorites');
+ }catch (error) {
+
+   console.log(error.message + error.errorCode);
+  // res.status(400).send(error);
+   res.status(400);
+
+
+ }
+
+});
 
 
 export const ProfileController: Router = router;

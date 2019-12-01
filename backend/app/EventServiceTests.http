@@ -195,3 +195,23 @@ client.test("report one eventservice" , function() {
 %}
 
 ###
+PUT http://localhost:3000/eventservice/update
+Content-Type: application/json
+
+{
+  "title":"Somenew title'",
+  "description":"nope",
+  "availability": "Saturday, Sunday",
+  "requirements": "maybe don't know yet",
+  "capacity": 100,
+  "price": 100,
+  "serviceId": 54
+  }
+
+> {%
+client.test("update an event service" , function() {
+  client.assert(response.status === 202, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+
+###

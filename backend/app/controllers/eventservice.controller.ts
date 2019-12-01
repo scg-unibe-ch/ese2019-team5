@@ -7,6 +7,7 @@ import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
+import {parseConnectionUrl} from "nodemailer/lib/shared";
 
 
 const router: Router = Router(); // part of express needed
@@ -64,7 +65,23 @@ router.post('/add', async (req: Request, res: Response) => {
 
 
 router.put('/update', async (req: Request, res: Response) => {
-  // TODO woher wissen welchen Service es betrifft (nehme an Service id wird erhalten. auch die Frage erhalte ich alle Infos
+
+ try {
+   let title: string = req.body.title;
+   let description: string = req.body.description;
+   let availability: string = req.body.availability;
+   let requirements: string = req.body.requirements;
+   let capacity: number = parseInt(req.body.capacity);
+   let price: number = parseInt(req.body.price);
+   let serviceId: number = parseInt(req.body.serviceId);
+//TODO implementieren von Cyrill und welche Error
+   // await dbService.updateEventservice(serviceId, title, description,availability,requirements, capacity,price);
+   res.status(202).send('service updated');
+
+ }catch (error) {
+   res.status(404).status(error);
+
+ }
 
 
 });
