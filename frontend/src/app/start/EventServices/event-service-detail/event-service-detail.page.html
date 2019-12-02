@@ -16,7 +16,7 @@
       <ion-label>Price</ion-label>
       <ion-item>{{price}} CHF {{getPriceFormat()}}</ion-item>
       <ion-label>Available on</ion-label>
-      <ion-item>{{getEveryAvailableDay()}}</ion-item>
+      <ion-item>{{availability}}</ion-item>
       <ion-label>Location</ion-label>
       <ion-item>Within {{perimeter}} km of {{city}}</ion-item>
       <ion-label [hidden]="requirements==''||requirements=='null'">Special requirements</ion-label>

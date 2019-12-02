@@ -174,13 +174,6 @@ export class EventServiceDetailPage implements OnInit {
     return priceFormat;
   };
 
-  getEveryAvailableDay(): string{
-    let x = '';
-    for(let day of this.availability){
-      x += day;
-    }
-    return x;
-  }
 
   redirectStartPage() {
     document.location.href = 'http://localhost:4200/start/';
