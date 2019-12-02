@@ -161,7 +161,7 @@ export class CreateServicePage implements OnInit {
       const city = this.city.value;
       const capacity = 0 + this.capacity.value;
       const perimeter = 0 + this.distance.value;
-      const availability = JSON.stringify(this.availability.value);
+      const availability = this.availability.value.toString();
       const price = 0 + this.price.value;
       const subtype = JSON.stringify(this.setType());
       const requirements = this.requirements.value;

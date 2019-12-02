@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
 import {User} from '../../../../../backend/app/models/user.model';
-import {AlertController} from "@ionic/angular";
+import {AlertController, ToastController} from "@ionic/angular";
 import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 import {HttpClient} from "@angular/common/http";
@@ -36,7 +36,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private httpClient: HttpClient,
     private authService: AuthService,
-    private alertController: AlertController) {
+    private alertController: AlertController,
+    private toastController: ToastController) {
   }
 
   ngOnInit() {
@@ -154,13 +155,11 @@ export class LoginPage implements OnInit {
    * Shows a Pop-Up for a successful login
    */
   async LogInPopUp() {
-    const alert = await this.alertController.create({
-      header: 'Congratulations',
+    const toast = await this.toastController.create({
       message: 'You have successfully logged in!',
-      buttons: ['Okay']
+      duration: 3000,
     });
-
-    await alert.present();
+    await toast.present();
   }
 
   /**
