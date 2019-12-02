@@ -250,6 +250,7 @@ export class CreateServicePage implements OnInit {
     console.log("old: " + this.base64);
     this.getB64String(file).subscribe((output) => {
       console.log("out: " + output);
+      this.base64 = output;
       var image = new Image();
       image.height = 200;
       image.width = 300;
