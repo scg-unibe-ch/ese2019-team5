@@ -170,4 +170,9 @@ export class LoginPage implements OnInit {
   private validateInput(){
     return this.email && this.password;
   }
+
+
+  redirectToStartPage() {
+    document.location.href = 'http://localhost:4200/start/';
+  }
 }

@@ -173,4 +173,8 @@ export class SignupPage implements OnInit {
       this.password.valid && this.confirmation.valid;
 
   }
+
+  redirectToStartPage() {
+    document.location.href = 'http://localhost:4200/start/';
+  }
 }
