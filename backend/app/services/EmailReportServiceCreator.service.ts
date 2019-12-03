@@ -7,9 +7,7 @@ export class EmailReportServiceCreatorService {
       `<p>Event service with id:<ref=${serviceId}> ${serviceId}</ref> has been reported by the user with the id: <ref=${userId}>${userId}</ref></p>` +
       "<p><b><i>Your Eventdoo Team</i></b></p>" +
       "</div>" +
-      "<div align=center style='font-size:10.0pt;font-family:\"Arial\",sans-serif'>" +
-      "<p>In case it wasn't you requesting the password reset, you can simply ignore this email.</p>" +
-      "</div>" +
+
       "</body>";
   }
 }

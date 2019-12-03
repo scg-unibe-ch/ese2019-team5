@@ -7,7 +7,6 @@ import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
-import {parseConnectionUrl} from "nodemailer/lib/shared";
 
 
 const router: Router = Router(); // part of express needed
@@ -15,12 +14,12 @@ const dbService = new DbServices();
 
 /**
  * listens to HTTP events Post with add
- * creates an Address and an EventService from the given requestbody and adds it to the database
- * depending on whether there is a subtype, requirments or image it gets added.
+ * creates an Address and an EventService from the given request body and adds it to the database
+ * depending on whether there is a subtype, requirements or image it gets added.
  * answers with 201 if service got created and saved otherwise with 400
  */
 router.post('/add', async (req: Request, res: Response) => {
-    console.log('got here');
+
     try {
       const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
       const eventService: EventService = EventServiceBuilder.eventService()
@@ -41,20 +40,16 @@ router.post('/add', async (req: Request, res: Response) => {
         eventService.setRequirements(req.body.requirements);
       }
       if (req.body.image !== undefined) {
-      //console.log("image got to backend");
+
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
-     // console.log(req.body.capacity);
 
       await dbService.addEventService(eventService);
-
-      //console.log("ok");
       res.statusCode = 201;
       res.json('Service was created and saved')
     } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
       console.log(error);
-
       res.send(error);
       res.statusCode = 400;
 
@@ -63,7 +58,12 @@ router.post('/add', async (req: Request, res: Response) => {
   }
 )
 
-
+/**
+ * listens to HTTP events Put with update
+ * sends all the data that can change (description, availability,requirements
+ * capacity, price) to the database to update
+ * 202 if everything went well and 404 otherwise
+ */
 router.put('/update', async (req: Request, res: Response) => {
 
  try {
@@ -169,17 +169,18 @@ router.post('/order', async (req: Request, res: Response) => {
     console.log(error);
   }
 });
+
 /**
  * HTTP event listener to post /report
  * gets triggered when a customer thinks a service is inappropriate and
- * therefor triggers here an email that is sent to the Eventdoo team to have a lok at
+ * therefor triggers here an email that is sent to the Eventdoo team to have a look at
  * 200 if email could be sent ok, 400 otherwise
  */
 router.post('/report', async (req: Request, res: Response) => {
   let serviceId= req.body.serviceId;
   let userId= req.body.userId;
  try {
-
+//TODO wann sollte es fehler geben
     EmailReportServiceServices.sendReportMail(serviceId, userId);
     res.statusCode = 200;
     res.json('service got reported to email');

@@ -3,7 +3,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 93,
+  "providerId": 112,
   "category": "Location",
   "title": "Barn",
   "description": "Beautiful barn to rent for all kind of events",
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 > {%
 client.test("Adding eventServices without subtype and requirements", function() {
-  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.status === 201, "Response status is 201");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 > {%
 client.test("Adding eventServices with subtype without requirments", function() {
-  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.status === 201, "Response status is 201");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -72,7 +72,7 @@ Content-Type: application/json
 }
 > {%
 client.test("Adding eventServices with subtype, requirments", function() {
-  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.status === 201, "Response status is 201");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -98,13 +98,13 @@ Content-Type: application/json
 }
 > {%
 client.test("Adding eventServices with requirments", function() {
-  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.status === 201, "Response status is 201");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
 
 ###
-DELETE http://localhost:3000/eventservice/36
+DELETE http://localhost:3000/eventservice/44
 Content-Type: application/json
 
 > {%
@@ -143,7 +143,7 @@ Content-Type: application/json
 
 > {%
 client.test("deleting one service, service could not be deleted", function() {
-  client.assert(response.status === 400, "Response status is 400");
+  client.assert(response.status === 406, "Response status is 406");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -154,15 +154,15 @@ POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId": 44,
-  "customerId": 104,
+  "serviceId": 105,
+  "customerId": 114,
   "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"
 }
 > {%
 client.test("sending email", function() {
-  client.assert(response.status === 200, "Response status is 400");
+  client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -173,7 +173,7 @@ Content-Type: application/json
 
 > {%
 client.test("getting one EventService", function() {
-  client.assert(response.status === 200, "Response status is 400");
+  client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -189,7 +189,23 @@ Content-Type: application/json
 
 > {%
 client.test("report one eventservice" , function() {
-  client.assert(response.status === 200, "Response status is 400");
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST  http://localhost:3000/eventservice/report
+Content-Type: application/json
+
+{
+  "serviceId": 99,
+  "userId": 112
+}
+
+> {%
+client.test("report one eventservice" , function() {
+  client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
@@ -209,7 +225,7 @@ Content-Type: application/json
   }
 
 > {%
-client.test("update an event service" , function() {
+client.test("update an event service no problem" , function() {
   client.assert(response.status === 202, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });

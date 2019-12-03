@@ -69,13 +69,13 @@ export class EmailReportServiceServices extends EmailService {
 // send mail with defined transport object
 
   static getMailOptions(userIdParam: string, serviceIdParam:string): any {
-    console.log('got to mail Options');
+    console.log('got to mail Options in report');
     let userId: number= parseInt(userIdParam);
     let serviceId: number= parseInt(serviceIdParam);
 
     var mailOptions = {
       from: '"Eventdoo" <ESEteam5@gmx.de>',
-      to: 'rorik.yovanny@iiron.us',
+      to: 'ESEteam5@gmx.de',
       subject: 'Reported Service',
       html: EmailReportServiceCreatorService.getEmailReportService(serviceId,userId)
     };

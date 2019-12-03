@@ -16,7 +16,9 @@ const dbService = new DbServices();
  * HTTP event listener to /update
  * creates a user and address adds phonenumber, firmname if given
  * sends the user to DB and answers with 200 if user could be saved
- * otherwise answer is 400
+ * if there was an error with updating the user (400) will be sent
+ * if there was an error while saving the address 404 will be sent
+ * otherwise 409 will be sent
  */
 router.post('/update', async (req: Request, res: Response) => { //TODO stimmt muss admin da hin
   try {
@@ -55,7 +57,7 @@ router.post('/update', async (req: Request, res: Response) => { //TODO stimmt mu
 
   } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
 
-    if(error.errorCode==914){
+    if(error.errorCode==912){
     console.log(error);
     res.send(error.message);
     res.statusCode = 404;}
@@ -72,7 +74,7 @@ res.status(400).send(error.message);
 /**
  * HTTP event listener, listens to get /:id
  * gets an user profile form DB and all services, that this user has
- * and sends it to the front with 200 if everything went ok and 400 otherwise
+ * and sends it to the front with 200 if everything went ok and 404 otherwise
  */
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
@@ -130,26 +132,26 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 });
 
-/**
- * HTTP event listener, listens to get /changepassword
- * //TODO gibts noch gar nit oder
- */
-router.put('/changepassword', async (req: Request, res: Response) => {
-  try { //TODO bekomme ich neues und altes Passwort nach hinten geschickt, sende sie an DB diese ändert sie und Löse noch eine Mail aus?
-    const userId = Number(req.params.id);
-    let user: User = await dbService.getUserFromId(userId);
-
-    res.send('Password has changed');
-    res.statusCode = 202;
-  } catch (error) {
-    res.statusCode = 400;
-    res.send(error);
-  }
-});
+// /**
+//  * HTTP event listener, listens to get /changepassword
+//  * //TODO gibts noch gar nit oder
+//  */
+// router.put('/changepassword', async (req: Request, res: Response) => {
+//   try { //TODO bekomme ich neues und altes Passwort nach hinten geschickt, sende sie an DB diese ändert sie und Löse noch eine Mail aus?
+//     const userId = Number(req.params.id);
+//     let user: User = await dbService.getUserFromId(userId);
+//
+//     res.send('Password has changed');
+//     res.statusCode = 202;
+//   } catch (error) {
+//     res.statusCode = 400;
+//     res.send(error);
+//   }
+// });
 /**
  * HTTP event listener, listens to delete /:userId
  * gives the database the userId so it gets deleted and
- * returns ok if deletion worked and 400 otherwise
+ * returns ok(200) if deletion worked and 400 otherwise
  */
 router.delete('/:userId', async (req: Request, res: Response) => {
     try {
@@ -158,13 +160,17 @@ router.delete('/:userId', async (req: Request, res: Response) => {
       res.status(200).json('User was deleted');
 
     } catch (error) {
-      res.statusCode = 400;//TODO welche Error?
+      res.statusCode = 400;
       res.send(error.message);
     }
   }
 );
 
-
+/**
+ * HTTP event listener, listens to put to /addFavourite
+ * adds an event service to the user by letting the
+ * DB know, sends ok (200) if favourite was added otherwise sends 400
+ */
 router.put('/addFavourite', async (req: Request, res: Response) => {
  try {
 
@@ -180,6 +186,12 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
  }
 });
 
+/**
+ * HTTP event listener to get /favourite/:id
+ * gets all the favourite event services of a user and sends
+ * the array to the front
+ * @returns ok (200) if everything went well otherwise 400
+ */
 router.get('/favourite/:id',async (req: Request, res: Response) => {
   try {
     let userId: number= parseInt(req.params.id);
