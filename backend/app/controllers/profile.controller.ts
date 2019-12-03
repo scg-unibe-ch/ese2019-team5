@@ -113,6 +113,7 @@ router.get('/:id', async (req: Request, res: Response) => {
       'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification())),
       'size': size
     };
+
     res.send(userDataAndServices);
     res.status(200);
 
@@ -164,23 +165,31 @@ router.delete('/:userId', async (req: Request, res: Response) => {
 );
 
 
-router.put('/addFavorite', async (req: Request, res: Response) => {
+router.put('/addFavourite', async (req: Request, res: Response) => {
  try {
 
    const userId:number = parseInt(req.params.userId);
    const serviceId: number = parseInt(req.params.serviceId)
    // await dbService.addFavorite(userId,serviceId); //TODO CYrill zum implementieren und Error Code anpassen
-   res.status(200).send('added to favorites');
+   res.status(200).send('added to favourites');
  }catch (error) {
 
    console.log(error.message + error.errorCode);
   // res.status(400).send(error);
    res.status(400);
-
-
  }
-
 });
 
+router.get('/favourite/:id',async (req: Request, res: Response) => {
+  try {
+    let userId: number= parseInt(req.params.id);
+    //let favouriteContanier: EventServiceContainer = await dbService.getFavourite(userId);
+   // let favouriteArrayOfUser: EventService[] =favouriteContainer.getServices();
+   res.status(200);
+   //res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
+
+  }catch (error) {//TODO welche errors?
+res.status(400).send(error.message);
+  }});
 
 export const ProfileController: Router = router;
