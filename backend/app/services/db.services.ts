@@ -608,6 +608,10 @@ export class DbServices {
     return container;
   }
 
+  private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
+    await client.query('UPDATE users SET favorites = array_append(favorites, $1) WHERE id = $2', [serviceId, userId]);
+  }
+
   private async updateServiceDB (service: EventService, client: Client) {
 
   }
