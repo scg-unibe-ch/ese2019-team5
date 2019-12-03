@@ -93,6 +93,7 @@
   <ion-title>My services</ion-title>
   <ion-list>
     <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
+    <ion-item [hidden]="numberOfServices>0">You are not offering any services</ion-item>
   </ion-list>
   <ion-button (click)="showDeleteProfileConfirm()" color="danger" style="position: page; right: 20px; bottom: 10px;" >Delete My Profile</ion-button>
   <ion-row style="height:100px"></ion-row>
