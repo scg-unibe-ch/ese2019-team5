@@ -55,7 +55,7 @@ export class CreateServicePage implements OnInit {
 
   serviceForm = this.formBuilder.group({
     category: ['', Validators.required],
-    title: ['', [Validators.required, Validators.maxLength(30)]],
+    title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
     street: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
     housenumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
@@ -66,7 +66,7 @@ export class CreateServicePage implements OnInit {
     price: ['', Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
     type: ['', Validators.required],
     requirements: [''],
-    description: ['', Validators.maxLength(700)],
+    description: ['', Validators.minLength(3), Validators.maxLength(700)],
     picture: ['', Validators.required]
   });
 
@@ -310,9 +310,9 @@ export class CreateServicePage implements OnInit {
       error += 'Invalid address \n';
     if (this.availability.value == '')
       error += 'Available days missing \n';
-    if (this.price.value == '')
+    if (this.price.invalid)
       error += 'Standard price invalid \n';
-    if (this.description.value == '')
+    if (this.description.invalid)
       error += 'Description invalid';
     if(this.picture.invalid)
       error += 'Picture missing';
