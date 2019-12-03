@@ -212,6 +212,16 @@ export class DbServices {
     }
   }
 
+  public async getFavoritesFromUid(userId: number): Promise<EventServiceContainer> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getFavorites(userId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -324,6 +334,11 @@ export class DbServices {
     }
 
     await client.query('DELETE FROM users WHERE id = $1', [userId]);
+
+    const streamService = client.query('SELECT id FROM service WHERE userid = $1', [userId]);
+    for await (const row of streamService) {
+      this.deleteServiceFromDB(Number(row.get('id')), client);
+    }
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
@@ -561,6 +576,36 @@ export class DbServices {
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
+  }
+
+  private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
+    const stream = client.query('SELECT * From service WHERE IN (SELECT favorites FROM users WHERE id = $1)', [userId]);
+
+    const container = new EventServiceContainer([]);
+
+    for await (const row of stream) {
+      const addressid = row.get('addressid');
+      const address = await this.getAddressFromAId(Number(addressid), client);
+
+      let serviceBuilder = new EventServiceBuilder();
+      container.addService(
+        serviceBuilder.setServiceId(Number(row.get('id')))
+          .setProviderId(Number(row.get('userid')))
+          .setCategory(String(row.get('category')))
+          .setTitle(String(row.get('title')))
+          .setDescription(String(row.get('description')))
+          .setAddress(address)
+          .setPerimeter(Number(row.get('radius')))
+          .setAvailability(String(row.get('availability')))
+          .setRequirments(String(row.get('requirements')))
+          .setSubtype(String(row.get('subtype')))
+          .setCapacity(Number(row.get('capacity')))
+          .setPrice(Number(row.get('price')))
+          .setImage(String(row.get('image')))
+          .build()
+      );
+    }
+    return container;
   }
 
   private async updateServiceDB (service: EventService, client: Client) {
