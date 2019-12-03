@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
 import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
-import jwt, {TokenExpiredError} from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 import {EmailForgotPWServices} from "../services/emailForgotPW.services";
 
@@ -12,9 +12,9 @@ const router: Router = Router();
 
 /**
  * listens to HTTP Client POST events when user sign up
- * returns error if password or email is incorrect or
- * if user is not verified yet (email address)
- * sends ok if request was ok
+ * returns error if password or email is incorrect(404) or
+ * if user is not verified yet (email address) (406)
+ * sends ok (200) if request was ok
  */
 router.post('/', async (req: Request, res: Response) => {
   const email = req.body.email;
@@ -34,10 +34,6 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
-   /* let message: string = error.message;
-      //     if (message.localeCompare('To login, please verify your email-address') == 0) { //TODO aufräumen .....
-      //       console.log("error in backend:" + error.message);
-      //       // res.status(404).send(error.message);*/
    if(error.errorCode==931){
       res.status(406);
       res.send('Verification error');
@@ -52,17 +48,16 @@ router.post('/', async (req: Request, res: Response) => {
 
 /**
  * listens to HTTP Client POST events when user forgot Password
- * returns error if error occured because mail is not known
- * sends 'reset Passwort sent' if request was ok
+ * returns error if error occurred because mail is not known (404)
+ * or if another error occurred in the database (400)
+ * sends 'reset Passwort sent' if request was ok (201)
  */
 router.post('/forgotPassword', async (req: Request, res: Response) => {
   const email = req.body.email;
-  console.log('got to forgot password');
+
   try {
     let user: User = await dbService.getUserFromEmail(email);
     await EmailForgotPWServices.sendMailToUser(user);
-
-
     res.statusCode = 201;
     res.json('reset Password sent');
 

@@ -1,18 +1,14 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Address} from "../models/address.model";
-import {EmailVerificationServices} from '../services/emailVerification.services';
-
-
+import {EmailVerificationServices} from '../services/emailVerification.services'
+import * as fs from 'fs';
+import {UserBuilder} from "../models/userBuilder.model";
 import {DbServices} from '../services/db.services';
 
 var jwt = require('jsonwebtoken');
-import * as fs from 'fs';
-import {UserBuilder} from "../models/userBuilder.model";
-import {consoleTestResultHandler} from "tslint/lib/test";
 
-
-const router: Router = Router(); // part of express needed
+const router: Router = Router();
 
 // keys for jwt token
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
@@ -22,7 +18,9 @@ const dbService = new DbServices();
 
 
 /**
- * reacts on HTTP Client POST events by sending Mail to new user and adding the user to DB
+ * reacts on HTTP Client POST /signup events by sending Mail to new user and adding the user to DB
+ * returns 201 (created) if signup worked and 400 otherwise
+ *
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
@@ -42,21 +40,13 @@ router.post('/', async (req: Request, res: Response) => {
     res.json('sign up success');
 
   } catch (error) {
-    if (error.errorCode == 926) {
+    if (error.errorCode == 926) {//TODO andere errors?
       console.log(error.message);
       res.statusCode = 400;
-      res.send(error.message);}}
-/*
-    } else if (error.errorCode == 920){
-      console.log(error.message);
-    res.statusCode = 400;
-    res.send(error.message);}
+      res.send(error.message);
+    }
+  }
 
-  else{
-      console.log(error.message);
-    res.statusCode = 400;
-    res.send(error.message);
-  }*/
 });
 
 
@@ -66,10 +56,9 @@ router.post('/', async (req: Request, res: Response) => {
  * @param res answer to client that verifiyng token worked and therefore user is no verified or error
  */
 const verifyToken = async (req: Request, res: Response) => {
-  console.log('got here to verify sign up');
+
   try {
     const tokenUrl = req.url;
-    console.log(tokenUrl);
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     const verifyOptions = {
       issuer: 'Eventdoo',
@@ -89,13 +78,10 @@ const verifyToken = async (req: Request, res: Response) => {
   } catch (error) {
     if (error.name === 'TokenExpiredError') { //TODO evt error object
       res.status(401).send('Access token expired');
-      console.log(401)
     } else {
       res.status(406);
       res.send('invalid Token' + error);
-      console.log(406 + error);
-
-    }
+     }
   }
 
 };
@@ -116,7 +102,6 @@ router.post('/sendMailAgain', async (req: Request, res: Response) => {
       await EmailVerificationServices.sendMailToUser(userWithoutMail);
       res.status(200);
       res.json('The email was sent again please also check your spam folder. Thank you');
-
     } catch (error) {
       res.status(404);
       res.send(error + 'unknown email-address. Please check or sign up.');
