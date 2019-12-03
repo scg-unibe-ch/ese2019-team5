@@ -1,3 +1,4 @@
+/*
 
 import chai from 'chai';
 import chaiHttp from "chai-http";
@@ -9,7 +10,7 @@ let signUpController = require('./controllers/signup.controller');
 let user = require('./models/user.model');
 
 
-/*
+/!*
 /!*var should = require('should');
 var request = require('request');
 var expect = require('chai').expect;
@@ -57,7 +58,7 @@ describe('Post Event for Signup',function () {
 
   });
 
-});*/
+});*!/
 
 
 
@@ -92,3 +93,4 @@ describe( 'POST Event for Signup',() => {
   });
 });
 
+*/
