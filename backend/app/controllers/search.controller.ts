@@ -6,14 +6,17 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 
 
-
 const router: Router = Router(); // part of express needed
 
 
 // create new DBService
 const dbService = new DbServices();
 
-
+/**
+ * HTTP event listener to get /search
+ * retrieves the services from the backend and sends it to the frontend
+ * @return 200 (ok) if everything went well otherwise 404 (not found)
+ */
 router.get('/', async (req: Request, res: Response) => {
 
 
@@ -21,8 +24,6 @@ router.get('/', async (req: Request, res: Response) => {
       let allServicesContainer: EventServiceContainer = await dbService.getAllServices();
       let EventServicesArray: EventService [] = allServicesContainer.getServices();
       res.send(EventServicesArray.map(e => e.toSimplification()));
-     // § console.log(EventServicesArray.map(e=>e.toSimplification()));
-
       res.status(200);
     } catch (error) {
       res.status(404);
@@ -33,58 +34,49 @@ router.get('/', async (req: Request, res: Response) => {
   }
 );
 
-
-
-
+/**
+ * HTTP event listener to /filter/all possible filters
+ * asks DB with a EventServiceFilter Array containing all the used parameters
+ * @return 200 (ok) and the results from the db or 404 (not found)
+ */
 router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availability?', async (req: Request, res: Response) => {
   try {
-
-    let textSearch= req.query.text;
+    let textSearch = req.query.text;
     let category: string = req.query.category;
-    let subtype:string= req.query.subtype;
+    let subtype: string = req.query.subtype;
     let city: string = req.query.city;
-    let price:number= req.query.price;
-    let capacity:number= req.query.capacity;
-    let availability:string= req.query.availability;
-    console.log('got here');
-    console.log('textSearch'+ textSearch);
-
-
-    let eventServiceFilterArray:EventServiceFilter[]= [];
-    if( textSearch!==undefined){
+    let price: number = req.query.price;
+    let capacity: number = req.query.capacity;
+    let availability: string = req.query.availability;
+    let eventServiceFilterArray: EventServiceFilter[] = [];
+    if (textSearch !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.textSearch, textSearch))
     }
-    if( category!==undefined){
+    if (category !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.category, category))
     }
-    if( subtype!==undefined){
+    if (subtype !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.subtype, subtype))
     }
-    if( city!==undefined){
+    if (city !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
-      console.log('got here city');
     }
-    if(price!==undefined){
+    if (price !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.price, price))
     }
-    if(capacity!== undefined){
+    if (capacity !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.capacity, capacity))
     }
-    if (availability!== undefined){
+    if (availability !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.availability, availability))
     }
+    let servicesFittingRequest: EventServiceContainer = await dbService.getServiceFilter(eventServiceFilterArray);
 
-console.log(eventServiceFilterArray);
- let servicesFittingRequest: EventServiceContainer = await dbService.getServiceFilter(eventServiceFilterArray);
- console.log('ServiceCFittingREquest'+ servicesFittingRequest);
-   let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
+    let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
     res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
-
-   console.log(serviceAOfFittingRequest.map(e => e.toSimplification()));
   } catch (error) {
     res.status(404);
     res.send('error in backend at getServiceFilter ' + error.message);
-    console.log(error);
 
   }
 })

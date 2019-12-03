@@ -34,10 +34,6 @@ router.post('/', async (req: Request, res: Response) => {
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
-   /* let message: string = error.message;
-      //     if (message.localeCompare('To login, please verify your email-address') == 0) { //TODO aufräumen .....
-      //       console.log("error in backend:" + error.message);
-      //       // res.status(404).send(error.message);*/
    if(error.errorCode==931){
       res.status(406);
       res.send('Verification error');

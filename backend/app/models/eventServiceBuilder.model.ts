@@ -1,7 +1,5 @@
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
-import {Categories} from "../categories";
-
 
 const mockAddress: Address = new Address('', 0, 1234, '');
 
@@ -109,7 +107,9 @@ export class EventServiceBuilder {
     return this;
   }
 
-
+  /**
+   * builds an Eventservice with all the given parameters
+   */
   public build(): EventService {
     let eventService: EventService = new EventService(this._serviceId, this._providerId, this._category, this._title, this._description, this._address, this._perimeter, this._availability, this._requirments, this._subtype, this._capacity, this._price, this._image);
     return eventService;

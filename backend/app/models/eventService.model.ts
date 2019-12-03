@@ -1,11 +1,10 @@
 import {Address} from "./address.model";
-import {User} from "./user.model";
-import {EventServiceBuilder} from "./eventServiceBuilder.model";
-import {Categories} from "../categories";
 
 
-
-//TODO hier noch Foto hinzufügen und wahrscheinlich Builder Pattern brauchen evt noch Service Id für Cyrill zu erstellen
+/**
+ * eventService class constructs an eventService but using the
+ * Builder pattern
+ */
 export class EventService {
   private serviceId: number;
   private _providerId:number;

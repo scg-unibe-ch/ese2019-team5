@@ -143,9 +143,9 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
 router.post('/order', async (req: Request, res: Response) => {
   try {
     let serviceId: number = req.body.serviceId;
-    let customerId: number = req.body.customerId; //TODO wie definieret haben wollen?
+    let customerId: number = req.body.customerId;
     let message: string = req.body.message;
-    let date: string = req.body.date; //TODO String version?
+    let date: string = req.body.date;
     let time: string = req.body.time;
     let orderedEventServiceContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
     let orderedEventServiceArray: EventService[] = orderedEventServiceContainer.getServices();

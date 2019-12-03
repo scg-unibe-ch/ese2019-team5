@@ -1,10 +1,6 @@
 import {Address} from "./address.model";
-//import {UserBuilder} from "./userBuilder.model"
-//import assert from "assert";
-import {UserBuilder} from "./userBuilder.model";
-import {last} from "rxjs/operators";
 
-//TODO unsicher mit addresse, isFirm und phonenumber.... Wie soll das mit dem FOto gehen.....
+
 export class User {
   private _id: number;
 
@@ -15,7 +11,7 @@ export class User {
   private _address: Address;
   private _isVerified: boolean;
   private _isAdmin: boolean;
-  private _isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie?
+  private _isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie? weg und was ist mit admin
   private _phoneNumber: string;
   private _firmname:string ;
   private _favourite:number[];//TODO stimmt?
@@ -170,6 +166,7 @@ export class User {
   }
 
 
+/*
 
   public toJSONObject(): object {
     const userJ =  {
@@ -183,6 +180,7 @@ export class User {
 
     return userJ;
   }
+*/
 
 
 }
