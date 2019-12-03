@@ -222,6 +222,15 @@ export class DbServices {
     }
   }
 
+  public async addFavoriteToUser(userId: number, serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.addUserFavoirte(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -246,7 +255,15 @@ export class DbServices {
     //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.getFirstname(), user.getLastname(), user.getEmail(), user.getPwHash(), user.getIsVerified(), addressId, user.getIsFirm()]);
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm, favorites) Values ($1,$2,$3,$4,$5,$6,$7,$8) Returning id As id',[
+      user.getFirstname(),
+      user.getLastname(),
+      user.getEmail(),
+      user.getPwHash(),
+      user.getIsVerified(),
+      addressId,
+      user.getIsFirm(),
+      user.getFavourite()]);
 
     var id = -1;
     for await (const row of stream){
@@ -255,7 +272,6 @@ export class DbServices {
     }
     if(id == -1) {
       throw new DBServiceError("There was an unknown  Error while saving your account in the database",920);
-      throw Error('An error occured while creating the DB entry');
     }
 
     return id;
@@ -303,6 +319,7 @@ export class DbServices {
 
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
+
         user = new UserBuilder()
           .setId(Number(row.get('id')))
           .setFirstname(String(row.get('prename')))
@@ -314,6 +331,7 @@ export class DbServices {
           .setIsFirm(Boolean(row.get('isfirm')))
           .setPhonenumber(String(row.get('phonenumber')))
           .setFirmname(String(row.get('firmname')))
+          .setFavourite(<Array<number>>row.get('favorites'))
           .build();
 
         return user;
@@ -579,7 +597,7 @@ export class DbServices {
   }
 
   private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
-    const stream = client.query('SELECT * From service WHERE IN (SELECT favorites FROM users WHERE id = $1)', [userId]);
+    const stream = client.query("SELECT * From service WHERE ARRAY[id] <@ (SELECT favorites FROM users WHERE id = $1)", [userId]);
 
     const container = new EventServiceContainer([]);
 
