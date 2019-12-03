@@ -20,7 +20,8 @@ export class EventServiceDetailPage implements OnInit {
     private http: HttpClient,
     private formBuilder: FormBuilder,
     private toast: ToastController,
-    private auth: AuthService
+    private auth: AuthService,
+    private toastController: ToastController,
   ) { }
 
   orderInfoForm = this.formBuilder.group({
@@ -28,6 +29,18 @@ export class EventServiceDetailPage implements OnInit {
     messageInput: ['', [Validators.required]],
     timeInput: ['', [Validators.required]],
   });
+
+  updateInfoForm = this.formBuilder.group({
+    updateTitle: ['', [Validators.required, Validators.minLength(3)]],
+    updateDescription: ['', [Validators.required, Validators.minLength(3)]],
+    updatePrice: ['', Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
+    updateAvailability: ['', [Validators.required]],
+    updatePerimiter: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    updateCity: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
+    updateRequirements: [''],
+    updateCapacity: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+  });
+
 
   get dateInput(){
     return this.orderInfoForm.get('dateInput');
@@ -41,10 +54,42 @@ export class EventServiceDetailPage implements OnInit {
     return this.orderInfoForm.get('timeInput');
   }
 
+  get updateTitle(){
+    return this.updateInfoForm.get('updateTitle');
+  }
+
+  get updateDescription(){
+    return this.updateInfoForm.get('updateDescription');
+  }
+
+  get updatePrice(){
+    return this.updateInfoForm.get('updatePrice');
+  }
+
+  get updateAvailability(){
+    return this.updateInfoForm.get('updateAvailability');
+  }
+
+  get updatePerimiter(){
+    return this.updateInfoForm.get('updatePerimiter');
+  }
+
+  get updateCity(){
+    return this.updateInfoForm.get('updateCity');
+  }
+
+  get updateRequirements(){
+    return this.updateInfoForm.get('updateRequirements');
+  }
+
+  get updateCapacity(){
+    return this.updateInfoForm.get('updateCapacity');
+  }
 
 
   private serviceId: string;
   private isInputing: boolean = false;
+  private isEditing: boolean = false;
 
   private category:string;
   private title:string;
@@ -56,10 +101,12 @@ export class EventServiceDetailPage implements OnInit {
   private perimeter:string;
   private availability:string;
   private requirements:string;
+  private reqDisplay: string;
   private subtype:string;
   private capacity:string;
   private price:string;
   private image:string;
+  private providerId: string;
 
 
   ngOnInit() {
@@ -80,6 +127,16 @@ export class EventServiceDetailPage implements OnInit {
 
   showOfferInput() {
     this.isInputing = true;
+  }
+
+  showUpdateInput() {
+    if(this.requirements=='null') this.reqDisplay = '';
+    else this.reqDisplay = this.requirements;
+    this.isEditing = true;
+  }
+
+  stopEditing() {
+    this.isEditing = false;
   }
 
   async sendOffer() {
@@ -151,8 +208,7 @@ export class EventServiceDetailPage implements OnInit {
         this.capacity = (data.capacity=='1000000')? 'no limit': data.capacity;
         this.subtype = data.subtype;
         this.price = data.price;
-        console.log(data.image);
-        console.log(this.description);
+        this.providerId = data.providerId;
       },
       (error)=>{
         console.log(error);
@@ -177,5 +233,71 @@ export class EventServiceDetailPage implements OnInit {
 
   redirectStartPage() {
     document.location.href = 'http://localhost:4200/start/';
+  }
+
+  tryToUpdate() {
+    if(this.validateUpdateInput()){
+      this.sendUpdate();
+    }
+  }
+
+
+  private sendUpdate() {
+    this.http.put('http://localhost:3000/eventservice/update', {
+      title: this.updateTitle.value,
+      description: this.updateDescription.value,
+      availability: this.updateAvailability.value.toString(),
+      requirements: this.updateRequirements.value,
+      capacity: this.updateCapacity.value,
+      price: this.updatePrice.value,
+      serviceId: this.serviceId,
+      perimiter: this.updatePerimiter.value,
+      city: this.updateCity.value
+    }).subscribe(
+      ()=>{
+        this.isEditing = false;
+        this.showToast("Updated Infos");
+        setTimeout(()=> {location.reload()},4000);
+      },
+      (error)=>{
+        console.log(error);
+        this.showToast("An Error occured: " + error);
+      }
+    )
+  }
+
+  private validateUpdateInput() {
+    let error: string='';
+    if (this.updateTitle.invalid)
+      error += 'Title not valid \n';
+    if (this.updateCity.invalid)
+      error += 'Invalid city name \n';
+    if (this.updateAvailability.value == '')
+      error += 'Available days missing \n';
+    if (this.updatePrice.invalid)
+      error += 'Standard price invalid \n';
+    if (this.updateDescription.invalid)
+      error += 'Description invalid';
+    if(this.updatePerimiter.invalid)
+      error += 'Invalid Radius';
+    if (error.length>=1) {
+      this.showToast(error);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Displays the given message to the user in form of a toast
+   * @param message what is being shown to the user
+   */
+  async showToast(message: string) {
+    let toast = await this.toastController.create({
+      message: message,
+      duration: 5000,
+    });
+    console.log(message);
+    await toast.present();
   }
 }

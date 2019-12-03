@@ -1,24 +1,32 @@
 <ion-grid>
   <ion-row>
     <ion-col *ngFor="let event of services" size-md="4">
-      <ion-card  color="light" padding="2" style="min-width:250px; box-shadow: none !important;" >
-        <ion-img [src]="event.image"  style="height:75%; cursor:pointer;" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
+      <ion-card  color="light" padding="2" style="box-shadow: none !important; cursor:pointer;" (click)="redirectToDetailPage(event.serviceId)" >
+        <ion-img *ngIf="event.image" [src]="event.image" style="height: 200px; width: 350px;"></ion-img>
         <ion-card-header>
           <ion-row>
-            <ion-col>
-              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5">{{event.price}} CHF </ion-card-subtitle>
+            <ion-col size-md="10">
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.category == 'Location'"> About {{event.price}} CHF </ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.category == 'Gastronomy'"> About {{event.price}} CHF per Person </ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.category == 'Music' || event.category == 'Entertainment' || event.category == 'Photography'"> About {{event.price}} CHF per hour </ion-card-subtitle>
             </ion-col>
             <ion-col>
               <ion-icon class="ion-float-right" name="{{getIconName(event.category)}}"></ion-icon>
             </ion-col>
           </ion-row>
-
           <ion-row>
             <ion-col>
-              <ion-card-title (click)="redirectToDetailPage(event.serviceId)" style="cursor:pointer">{{event.title}}</ion-card-title>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter == '0'"> {{event.city}}  </ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter != '0' && event.perimeter != '1000000'"> within {{event.perimeter}} km of{{event.city}}  </ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter == '1000000'"> throughout Switzerland </ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size-md="10">
+              <ion-card-title style="cursor:pointer">{{event.title}}</ion-card-title>
             </ion-col>
             <ion-col>
-              <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark" (click)="deleteConfirmation(event.serviceId)">
+              <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark">
                 <ion-icon name="trash"></ion-icon>
               </ion-button>
             </ion-col>
