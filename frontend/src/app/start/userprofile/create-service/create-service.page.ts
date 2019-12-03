@@ -57,7 +57,7 @@ export class CreateServicePage implements OnInit {
     category: ['', Validators.required],
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
     street: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
-    housenumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+    housenumber: ['', [Validators.required, Validators.pattern('[0-9]*[a-z]?')]],
     zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
     city: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
     distance: ['0', Validators.required],

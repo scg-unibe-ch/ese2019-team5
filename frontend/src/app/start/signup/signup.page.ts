@@ -36,13 +36,12 @@ export class SignupPage implements OnInit {
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    firstname: ['', [Validators.required]],
-    lastname: ['', [Validators.required]],
-    street: ['', Validators.required],
-    housenumber: ['', Validators.required],
-    zip: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
-    city: ['', Validators.required],
-    // ToDo: What are safety requirements for passwords? Which characters are allowed?
+    firstname: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
+    lastname: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
+    street: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
+    housenumber: ['', [Validators.required, Validators.pattern("[0-9]*[a-z]?")]],
+    zip: ['', [Validators.required, Validators.pattern("[0-9]{4}")]],
+    city: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
     password: [this.pw, [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]]
   });
