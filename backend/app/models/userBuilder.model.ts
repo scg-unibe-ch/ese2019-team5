@@ -92,7 +92,7 @@ export class UserBuilder {
   }
 
   public build(): User {
-    let user: User = new User(this._id,this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm,this._firmname,this._phonenumber,this._isAdmin);//this._id);
+    let user: User = new User(this._id,this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm,this._firmname,this._phonenumber,this._isAdmin, this._favourite);//this._id);
     return user;
   }
 
