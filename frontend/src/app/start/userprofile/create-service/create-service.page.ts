@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {AlertController} from "@ionic/angular";
+import {AlertController, ToastController} from "@ionic/angular";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 
@@ -27,6 +27,7 @@ export class CreateServicePage implements OnInit {
   loading: boolean;
   error: string;
   numberOfServices: number = 0;
+  private maxServices: number = 5;
 
 
 
@@ -36,7 +37,8 @@ export class CreateServicePage implements OnInit {
     private http: HttpClient,
     private alertController: AlertController,
     private router: Router,
-    private camera: Camera
+    private camera: Camera,
+    private toastController: ToastController
   ) {
   }
 
@@ -54,19 +56,20 @@ export class CreateServicePage implements OnInit {
   serviceForm = this.formBuilder.group({
     category: ['', Validators.required],
     title: ['', [Validators.required, Validators.maxLength(30)]],
-    street: ['', Validators.required],
-    housenumber: ['', [Validators.required, Validators.pattern('[1-9]*')]],
+    street: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
+    housenumber: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
-    city: ['', Validators.required],
+    city: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
     distance: ['0', Validators.required],
     capacity: ['1000000', Validators.required],
     availability: ['', Validators.required],
-    price: ['', Validators.required],
+    price: ['', Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
     type: ['', Validators.required],
     requirements: [''],
     description: ['', Validators.maxLength(700)],
-    picture: ['']
+    picture: ['', Validators.required]
   });
+
 
   get category() {
     return this.serviceForm.get('category');
@@ -143,6 +146,17 @@ export class CreateServicePage implements OnInit {
   }*/
 
   /**
+   * Tries to create service. Checks to see if all fields are valid.
+   * If somethings not right, validateInput will show the user a message what is wrong
+   */
+  tryToCreateService() {
+    if (this.validateInput()) {
+      this.createService();
+    }
+  }
+
+
+  /**
    * Called by the user by pushing the correspondent button
    * Sets the body-params and makes a http-request to the backend
    * Handles the result
@@ -150,7 +164,7 @@ export class CreateServicePage implements OnInit {
   createService() {
 
     this.loading = true;
-    if (this.validateInput()) {
+
       console.log('Input is valid');
       const providerId = this.authService.getUserId();
       const category = this.category.value;
@@ -188,7 +202,7 @@ export class CreateServicePage implements OnInit {
         });
 
 
-    }
+
   }
 
   /**
@@ -283,25 +297,29 @@ export class CreateServicePage implements OnInit {
 
 
   /**
-   * Called by {@link createService()}
-   * Validates the most important inputs
+   * Called by {@link tryToCreateService}
+   * Validates the most important inputs and shows user feedback what is incorrect.
    */
   private validateInput() {
+    let error: string='';
     if (this.category.value == '')
-      this.error += 'Category missing \n';
+      error += 'Category missing \n';
     if (this.title.invalid)
-      this.error += 'Title missing \n';
+      error += 'Title not valid \n';
     if (this.street.invalid || this.housenumber.invalid || this.zip.invalid || this.city.invalid)
-      this.error += 'Invalid address \n';
+      error += 'Invalid address \n';
     if (this.availability.value == '')
-      this.error += 'Available days missing \n';
+      error += 'Available days missing \n';
     if (this.price.value == '')
-      this.error += 'Standard price missing \n';
+      error += 'Standard price invalid \n';
     if (this.description.value == '')
-      this.error += 'Description missing';
+      error += 'Description invalid';
+    if(this.picture.invalid)
+      error += 'Picture missing';
 
-    if (this.error) {
+    if (error.length>=1) {
       this.loading = false;
+      this.showToast(error);
       return false;
     } else {
       return true;
@@ -310,6 +328,19 @@ export class CreateServicePage implements OnInit {
 
   redirectToStartPage() {
     document.location.href = 'http://localhost:4200/start/';
+  }
+
+  /**
+   * Displays the given message to the user in form of a toast
+   * @param message what is being shown to the user
+   */
+  async showToast(message: string) {
+    let toast = await this.toastController.create({
+      message: message,
+      duration: 5000,
+    });
+    console.log(message);
+    await toast.present();
   }
 }
 
