@@ -131,5 +131,7 @@ export class StartPage implements OnInit {
   }
 
 
-
+  refreshPage() {
+    location.reload();
+  }
 }

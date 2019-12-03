@@ -74,7 +74,7 @@ router.put('/update', async (req: Request, res: Response) => {
    let capacity: number = parseInt(req.body.capacity);
    let price: number = parseInt(req.body.price);
    let serviceId: number = parseInt(req.body.serviceId);
-//TODO implementieren von Cyrill und welche Error
+///TODO implementieren von Cyrill und welche Error
    // await dbService.updateEventservice(serviceId, title, description,availability,requirements, capacity,price);
    res.status(202).send('service updated');
 

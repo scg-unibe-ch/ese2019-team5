@@ -3,7 +3,7 @@
 <!-- Back button navigating back to UserProfilePage -->
 <!-- Page title -->
 <ion-header style="height: 85px; background-color: white">
-  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
+  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px; cursor:pointer" (click)="redirectToStartPage()"></ion-img>
   <ion-button size="large" color="light" href = "start/userprofile" style="position: absolute; right: 20px; top: 10px; border-bottom-color: white; --box-shadow:none" >
     <ion-icon name="arrow-round-back"></ion-icon>
   </ion-button>
@@ -14,7 +14,7 @@
   <div style="min-height: 100%">
   <!-- Form asking for all important information to create a new Service -->
   <!-- Only displayed if the User is logged in -->
-  <div class="container fluid" *ngIf="authService.isLoggedIn()||numberOfServices<=4">
+  <div class="container fluid" [hidden]="!authService.isLoggedIn()||numberOfServices>=maxServices">
     <form [formGroup]="serviceForm" style="position: absolute; top: 10px; left: 5px; right: 5px" *ngIf="!loading">
       <ion-title> Create Service</ion-title>
       <br/>
@@ -62,7 +62,7 @@
           </ion-item>
           <ion-item>
             <ion-label> ZIP</ion-label>
-            <ion-input class="form-control" type="number" formControlName="zip"></ion-input>
+            <ion-input class="form-control" type="number" formControlName="zip" maxlength="4"></ion-input>
             <ion-label> City</ion-label>
             <ion-input class="form-control" type="text" formControlName="city"></ion-input>
           </ion-item>
@@ -199,7 +199,7 @@
           </ion-item>
           <ion-item>
             <ion-label> Description (max. 700 characters)</ion-label>
-            <ion-input type="text" formControlName="description"></ion-input>
+            <ion-input type="text" formControlName="description" ></ion-input>
           </ion-item>
         </div>
         <br/>
@@ -245,7 +245,7 @@
 
 
         <!-- Button to submit the form -->
-        <ion-button color="secondary" (click)="createService()"> Create Service </ion-button>
+        <ion-button color="secondary" (click)="tryToCreateService()"> Create Service </ion-button>
       </div>
     </form>
 
@@ -266,9 +266,13 @@
       services.
     </p>
   </div>
-  <div *ngIf="numberOfServices>=5">
-    <p> You already offer the maximum amount of services: {{numberOfServices}}</p>
-  </div>
+
+    <!-- Displayed when a user already owns 5 services -->
+    <div *ngIf="numberOfServices>=maxServices">
+      <p> You already offer the maximum amount of services: {{numberOfServices}}</p>
+    </div>
+
+
   </div>
 
 </ion-content>
