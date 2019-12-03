@@ -16,7 +16,7 @@ export class UserBuilder {
   private _firmname = '';
   private _phonenumber: string;
   private _isAdmin = false;
-  private _favourite: []//TODO
+  private _favourite: number[]//TODO
 
 
   constructor() {
@@ -88,6 +88,11 @@ export class UserBuilder {
 
   public setIsAdmin(isAdmin:boolean):UserBuilder{
     this._isAdmin= isAdmin;
+    return this;
+  }
+
+  public setFavourite(favourite:number[]):UserBuilder{
+    this._favourite= favourite;
     return this;
   }
 
