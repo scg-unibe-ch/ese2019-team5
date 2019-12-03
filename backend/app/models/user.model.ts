@@ -18,9 +18,10 @@ export class User {
   private _isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie?
   private _phoneNumber: string;
   private _firmname:string ;
+  private _favourite:any;//TODO stimmt?
 
 
-  constructor(id:number,firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean, address: Address, isFirm: boolean, firmname: string, phoneNumber:string, isAdmin:boolean) {
+  constructor(id:number,firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean, address: Address, isFirm: boolean, firmname: string, phoneNumber:string, isAdmin:boolean, favourite:any) {
    this._id= id;
     this._firstname = firstname;
     this._lastname = lastname;
@@ -32,6 +33,7 @@ export class User {
     this._firmname=firmname;
     this._phoneNumber= phoneNumber;
     this._isAdmin= isAdmin;
+    this._favourite= favourite;//TODO unsicher
   }
 
   public setFirstname(firstname: string) {
@@ -142,6 +144,16 @@ export class User {
     return this._isAdmin;
 
   }
+
+  public setFavourite(favourite:any) {//TODO unsicher
+    this._favourite = favourite;
+    return this;
+  }
+
+  public getFavourite(){//TODO unsicher
+   return  this._favourite;
+  }
+
 
   /**
    * returns the user element as string //TODO hier addresse auch hin??

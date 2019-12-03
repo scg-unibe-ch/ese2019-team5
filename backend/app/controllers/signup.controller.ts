@@ -9,6 +9,7 @@ import {DbServices} from '../services/db.services';
 var jwt = require('jsonwebtoken');
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
+import {consoleTestResultHandler} from "tslint/lib/test";
 
 
 const router: Router = Router(); // part of express needed
@@ -68,7 +69,7 @@ const verifyToken = async (req: Request, res: Response) => {
   console.log('got here to verify sign up');
   try {
     const tokenUrl = req.url;
-    console.log(tokenUrl)
+    console.log(tokenUrl);
     const token = tokenUrl.substring(tokenUrl.lastIndexOf('/') + 1);
     const verifyOptions = {
       issuer: 'Eventdoo',
@@ -80,7 +81,9 @@ const verifyToken = async (req: Request, res: Response) => {
 
 
     let decoded = jwt.verify(token, publicKey, verifyOptions);
+
     await dbService.makeUserVerified(decoded.email);
+
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {

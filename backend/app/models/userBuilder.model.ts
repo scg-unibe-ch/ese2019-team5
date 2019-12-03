@@ -16,6 +16,7 @@ export class UserBuilder {
   private _firmname = '';
   private _phonenumber: string;
   private _isAdmin = false;
+  private _favourite: []//TODO
 
 
   constructor() {
@@ -29,6 +30,7 @@ export class UserBuilder {
     this._firmname= '';
     this._phonenumber='';
     this._isAdmin= false;
+    this._favourite=[]; //TODO
   }
 
   public static user(): UserBuilder {
