@@ -174,4 +174,8 @@ export class EventServiceDetailPage implements OnInit {
     return priceFormat;
   };
 
+
+  redirectStartPage() {
+    document.location.href = 'http://localhost:4200/start/';
+  }
 }

@@ -208,4 +208,8 @@ export class UserprofilePage implements OnInit {
     document.location.href = 'http://localhost:4200/start/';
   }
 
+  redirectStartPage() {
+    document.location.href = 'http://localhost:4200/start/';
+  }
+
 }
