@@ -7,9 +7,11 @@
   <div style="margin-left: 480px; width: 400px">
     <br>
   <ion-title style="color: black; position: center; text-align: center; top: 25px; left: 50px">{{title}}</ion-title>
-  <div [hidden]="serviceId==null">
+  <div [hidden]="serviceId==null||isEditing">
     <ion-img [src]="image" style="height:30vmax"></ion-img>
+
     <ion-grid>
+      <ion-row ><ion-col style="text-align: right"><ion-icon [hidden]="providerId!=auth.getUserId()" name="create" style="cursor:pointer" (click)="showUpdateInput()"></ion-icon></ion-col></ion-row>
       <ion-label>Description</ion-label>
       <ion-item>{{description}}</ion-item>
       <ion-label>Price</ion-label>
@@ -25,30 +27,48 @@
     </ion-grid>
   </div>
 
-    <ion-title style="color: black; position: center; text-align: center; top: 25px; left: 50px">{{title}}</ion-title>
-    <div [hidden]="serviceId==null">
-      <ion-img [src]="'data:image/jpeg;base64,'+image" style="height:30vmax"></ion-img>
-      <ion-grid>
-        <ion-label>Description</ion-label>
-        <ion-item>{{description}}</ion-item>
-        <ion-label>Price</ion-label>
-        <ion-item>{{price}} CHF {{getPriceFormat()}}</ion-item>
-        <ion-label>Available on</ion-label>
-        <ion-item>{{availability}}</ion-item>
-        <ion-label>Location</ion-label>
-        <ion-item>Within {{perimeter}} km of {{city}}</ion-item>
-        <ion-label [hidden]="requirements==''||requirements=='null'">Special requirements</ion-label>
-        <ion-item [hidden]="requirements==''||requirements=='null'">{{requirements}}</ion-item>
-        <ion-label>Max. number of people</ion-label>
-        <ion-item>{{capacity}}</ion-item>
-      </ion-grid>
-    </div>
 
 
-    <ion-button [hidden]="isInputing" (click)="showOfferInput()" style=" width: 400px">Get Offer</ion-button>
+    <ion-button [hidden]="isInputing||isEditing" (click)="showOfferInput()" style=" width: 400px">Get Offer</ion-button>
     <ion-button color = "light" style="--box-shadow: none" (click)="report()">
       <ion-icon name="alert"></ion-icon>
     </ion-button>
+
+    <div [hidden]="!isEditing">
+      <div class="container-fluid">
+        <form [formGroup]="updateInfoForm">
+
+          <ion-grid>
+            <ion-label>Title</ion-label>
+            <ion-input formControlName="updateTitle" value="{{title}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>Description</ion-label>
+            <ion-input formControlName="updateDescription" value="{{description}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>Price</ion-label>
+            <ion-input formControlName="updatePrice" type="number" value="{{price}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>Available on</ion-label>
+            <ion-select multiple="true" class="customSelect" formControlName="updateAvailability" placeholder="Select..." style="background-color: #fafafa">
+              <ion-select-option value="Monday"> Monday</ion-select-option>
+              <ion-select-option value="Tuesday"> Tuesday</ion-select-option>
+              <ion-select-option value="Wednesday"> Wednesday</ion-select-option>
+              <ion-select-option value="Thursday"> Thursday</ion-select-option>
+              <ion-select-option value="Friday"> Friday</ion-select-option>
+              <ion-select-option value="Saturday"> Saturday</ion-select-option>
+              <ion-select-option value="Sunday"> Sunday</ion-select-option>
+            </ion-select>
+            <ion-label>Radius (km)</ion-label>
+            <ion-input formControlName="updatePerimiter" type="number" value="{{perimeter}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>City</ion-label>
+            <ion-input formControlName="updateCity" value="{{city}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>Special requirements</ion-label>
+            <ion-input formControlName="updateRequirements" value="{{reqDisplay}}" style="background-color: #fafafa"></ion-input>
+            <ion-label>Max. number of people</ion-label>
+            <ion-input formControlName="updateCapacity" value="{{capacity}}" style="background-color: #fafafa"></ion-input>
+          </ion-grid>
+          <ion-button color="secondary" (click)="tryToUpdate()">Update Service</ion-button>
+          <ion-button color="secondary" (click)="stopEditing()">Cancel</ion-button>
+        </form>
+      </div>
+    </div>
 
     <div [hidden]="!isInputing">
 
