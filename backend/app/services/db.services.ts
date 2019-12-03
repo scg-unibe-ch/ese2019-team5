@@ -12,6 +12,8 @@ import {DBServiceError} from "../models/DBService.error";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
+import {ServiceUpdateType} from "../models/serviceUpdate.enum";
+import {ServiceUpdate} from "../models/serviceUpdate.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -227,6 +229,16 @@ export class DbServices {
     await localClient.connect();
     try {
       await this.addUserFavoirte(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async updateServiceWithArray(serviceId: number, updateArray: ServiceUpdate[]) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.updateServiceDB(serviceId,updateArray,localClient);
     } finally {
       await localClient.end();
     }
@@ -630,13 +642,27 @@ export class DbServices {
     await client.query('UPDATE users SET favorites = array_append(favorites, $1) WHERE id = $2', [serviceId, userId]);
   }
 
-  private async updateServiceDB (service: EventService, client: Client) {
+  private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {
+    let query = "UPDATE service SET ";
+    let qArray = [];
+    let qCount = 1;
 
+    for (const update of updateArray) {
+
+      query = query + update.getUpdateType() + " = $" + qCount;
+      qArray.push(update.getNewValue());
+      qCount++;
+      if(qCount != updateArray.length+1){
+        query = query + ","
+      }
+      query = query + " "
+    }
+
+    query = query + "Where id = $" + qCount;
+    qArray.push(serviceId);
+
+    await client.query(query,qArray);
   }
-
-
-
-
 
 
     //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////

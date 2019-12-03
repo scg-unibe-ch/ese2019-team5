@@ -9,6 +9,8 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
+import {ServiceUpdate} from "../models/serviceUpdate.model";
+import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 
 
 const router: Router = Router();
@@ -152,6 +154,20 @@ router.get("/getFavorite/:id", async(req: Request, res: Response) => {
     const services = await dbService.getFavoritesFromUid(Number(req.params.id));
     res.statusCode = 200;
     res.send(services);
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("failed");
+  }
+
+});
+
+router.get("/updateService/:id", async(req: Request, res: Response) => {
+  try {
+    const updateArray = [new ServiceUpdate(ServiceUpdateType.title, "Cat"), new ServiceUpdate(ServiceUpdateType.description, "Nice fluffy cat.")];
+    await dbService.updateServiceWithArray(Number(req.params.id),updateArray);
+    res.statusCode = 200;
+    res.send("ok");
   } catch (e) {
     console.log(e);
     res.statusCode = 400;
