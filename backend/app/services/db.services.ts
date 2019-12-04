@@ -265,15 +265,14 @@ export class DbServices {
     //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm, favorites) Values ($1,$2,$3,$4,$5,$6,$7,$8) Returning id As id',[
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[
       user.getFirstname(),
       user.getLastname(),
       user.getEmail(),
       user.getPwHash(),
       user.getIsVerified(),
       addressId,
-      user.getIsFirm(),
-      user.getFavourite()]);
+      user.getIsFirm()]);
 
     var id = -1;
     for await (const row of stream){
@@ -624,7 +623,7 @@ export class DbServices {
   }
 
   private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
-    const stream = client.query("SELECT * From service WHERE ARRAY[id] <@ (SELECT favorites FROM users WHERE id = $1)", [userId]);
+    const stream = client.query("SELECT * From service WHERE id IN (Select serviceid From favorites Where userid = $1)", [userId]);
 
     const container = new EventServiceContainer([]);
 
@@ -654,7 +653,7 @@ export class DbServices {
   }
 
   private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
-    await client.query('UPDATE users SET favorites = array_append(favorites, $1) WHERE id = $2', [serviceId, userId]);
+    await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
   }
 
   private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {

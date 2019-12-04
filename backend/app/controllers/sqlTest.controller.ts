@@ -42,7 +42,7 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   try {
     user = await dbService.getUserFromEmail(mail);
     res.statusCode = 200;
-    res.send(user.toNameString());
+    res.send(user);
   } catch (e) {
     console.log(e);
     res.statusCode = 404;
