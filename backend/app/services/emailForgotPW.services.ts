@@ -60,7 +60,7 @@ export class EmailForgotPWServices extends EmailService {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-  //  const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
+
     var emailToken = jwt.sign(payload, privateKey, signOptions);
     const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;
     return emailUrl;

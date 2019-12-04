@@ -2,8 +2,6 @@ import {EmailService} from "./Email.service";
 import {EmailReportServiceCreatorService} from "./EmailReportServiceCreator.service";
 
 
-
-
 export class EmailReportServiceServices extends EmailService {
 
   /**
