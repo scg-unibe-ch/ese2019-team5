@@ -1,14 +1,28 @@
 import {User} from "../models/user.model";
 import nodemailer from "nodemailer";
 
+/**
+ * parent class for sending mails
+ */
 
 export class EmailService {
 
-
+  /**
+   * gets all the individual mail options takes email and emailURL as options
+   * should be overwritten in the children class
+   * @param email of the receiver
+   * @param emailURL if the email has an link in it
+   * @return the mailOption as a variable
+   */
   static getMailOptions(email: string, emailURL: string): any {
     return '';
   }
 
+  /**
+   * creates jwt token and returns it
+   * @param payload of the token
+   * @param email
+   */
   static makeToken(payload: any, email: string): string {
     return '';
   }

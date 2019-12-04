@@ -42,31 +42,6 @@ export class EmailForgotPWServices extends EmailService {
     super.sendMailToUser(user);
   }
 
-  /**
-   * sends a email using nodemailer to a new sign up user
-   * @param user that just signed up
-   * is called in SignUp controller POST Event listener
-   */
-  /* static async sendMailToUser(user: User) {
-     let payload = {
-       name: user.getFirstname(),
-       surname: user.getLastname(),
-       email: user.getEmail(),
-     }
-     var transporter = nodemailer.createTransport({
-       host: 'mail.gmx.net',
-       port: 465,
-       secure: true,
-       auth: {
-         user: 'ESEteam5@gmx.de',
-         pass: 'WecandoIt19'
-       },
-       tls: { // because we are not on that host currently.... just those 2 lines
-         ciphers: 'SSLv3',
-         rejectUnauthorized: false
-       }
-     });
-     const emailURL = makeToken(payload, user.getEmail());*/
 
 // send mail with defined transport object
 
