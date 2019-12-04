@@ -16,7 +16,7 @@ export class UserBuilder {
   private _firmname = '';
   private _phonenumber: string;
   private _isAdmin = false;
-  private _favourite: number[]//TODO
+  private _favourite: number[];//TODO
 
 
   constructor() {

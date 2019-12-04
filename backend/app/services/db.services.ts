@@ -30,12 +30,13 @@ export class DbServices {
 
     const config = {
       'user' : 'cyrill',
+      //'user' : 'postgres',
       'host' : '34.65.95.137',
       //'host' : 'localhost',
       'password' : 'eseTeam5_2019!',
+      //'password' : 'root',
       'port' : 5432,
       'database' : 'eventdoo',
-      'query_timeout': 5000000
     };
     return new Client(config);
   }
@@ -320,27 +321,16 @@ export class DbServices {
       qArray.push(id);
     }
 
-    console.log(query);
-    console.log(qArray);
-    console.log(client.closed);
-    const stream = await client.query(query,qArray);
-    console.log("queried");
+    const stream = client.query(query,qArray);
 
-    console.log(stream);
 
-    console.log("streamd");
-
-    for (const row of stream) {
-      console.log("hello");
+    for await (const row of stream) {
       if (stream.rows == null) {
-        console.log("stream null");
         throw new DBServiceError("No user with this email address found in the database.",924);
       } else if (stream.rows.length !== 1) {
-        console.log("stream to large");
         throw new DBServiceError("This email address isnt unique.",925);
       } else {
 
-        console.log("hello");
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
 
@@ -355,13 +345,24 @@ export class DbServices {
           .setIsFirm(Boolean(row.get('isfirm')))
           .setPhonenumber(String(row.get('phonenumber')))
           .setFirmname(String(row.get('firmname')))
-          .setFavourite(<Array<number>>row.get('favorites'))
+          .setFavourite(await this.getFavoritesIdOfUser(Number(row.get('id')), client))
           .build();
 
         return user;
       }
     }
     throw new DBServiceError("No user with this email address found in the database.",924);
+  }
+
+  private async getFavoritesIdOfUser(userId: number, client: Client): Promise<number[]> {
+    const stream = client.query("SELECT serviceid FROM favorites WHERE userid = $1", [userId]);
+    const serviceIdArray = [];
+
+    for await (const row of stream) {
+      serviceIdArray.push(Number(row.get('serviceid')));
+    }
+
+    return serviceIdArray;
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
@@ -571,7 +572,8 @@ export class DbServices {
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
-      const address = await this.getAddressFromAId(Number(addressid), client);
+      //const address = await this.getAddressFromAId(Number(addressid), client);
+      const address = new Address("abc",12,12,"abc");
       const serviceId = Number(row.get('id'));
 
       //const imageString = fileHandler.getPictureFromServiceId(serviceId);
@@ -704,11 +706,17 @@ export class DbServices {
   }
 
 
-    // for testing only... returns all the users with given lastname
+    // for testing only...
   private async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
-        const stream = client.query('SELECT * From users Where email = $1', [name]);
+        console.log(client.transactionStatus);
+
+        console.log(name);
+
+        const stream = client.query('SELECT * From users Where prename = $1', [name]);
+
+        console.log(await stream);
 
         for await (const row of stream) {
 
@@ -740,6 +748,24 @@ export class DbServices {
       // tslint:disable-next-line:max-line-length
 
         return sqlResult;
+    }
+
+    public async test(name: string) {
+      const config = {
+        'user' : 'cyrill',
+        'host' : 'localhost',
+        //'host' : 'localhost',
+        'password' : 'eseTeam5_2019!',
+        'port' : 5432,
+        'database' : 'eventdoo',
+      };
+      const client = new Client(config);
+
+      await client.connect();
+
+      console.log(client.closed);
+      const stream = await client.query('SELECT * From users Where name = $1', [name]);
+      console.log(stream);
     }
 
 
