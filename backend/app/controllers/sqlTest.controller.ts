@@ -9,6 +9,8 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
+import {ServiceUpdate} from "../models/serviceUpdate.model";
+import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 
 
 const router: Router = Router();
@@ -46,56 +48,6 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
     res.send(e);
   }
 });
-
-
-
-
-/*
-router.get('/testEmail/:mail', async(req: Request, res: Response) => {
-  const mail = req.params.mail;
-  try {
-    const state = await dbService.checkIfMailIsUnique(mail);
-    console.log(state);
-    if(state){
-      res.statusCode = 200;
-      res.send("true");
-    } else{
-      res.statusCode = 200;
-      res.send("false");
-    }
-  }catch (e) {
-    res.statusCode = 404;
-    res.send(e.msg);
-  }
-});
-
-router.get('/createUser/:z', async(req: Request, res: Response) => {
-  const user = new User('Simon', 'Guyer','simon.guyer@gmail.com','pwGuyer',false);
-  try {
-    var id = await dbService.createUserInDB(user);
-    res.statusCode = 404;
-    res.send('ok' + String(id));
-  }catch (e) {
-    console.log(e);
-    res.statusCode = 200;
-    res.send('nope');
-  }
-});
-
- */
-/*
-router.get('/trySignUp/:z', async(req: Request, res: Response) => {
-  const user = new User('Simon', 'Guyer','simon.guyer@gmail.com','pwGuyer',false);
-  try {
-    var id = await dbService.signUp(user);
-    res.statusCode = 200;
-    res.send('ok' + String(id));
-  }catch (e) {
-    console.log(e);
-    res.statusCode = 200;
-    res.send(e.msg);
-  }
-});*/
 
 router.get('/tryMakeUserVerified/:z', async(req: Request, res: Response) => {
 
@@ -183,5 +135,46 @@ router.get("/testImage/:id", async(req: Request, res: Response) => {
   res.statusCode = 200;
   res.send(handler.test(100));
 });
+
+router.get("/addFavorite/:id", async(req: Request, res: Response) => {
+  try {
+    await dbService.addFavoriteToUser(116,Number(req.params.id));
+    res.statusCode = 200;
+    res.send("added");
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("failed");
+  }
+
+});
+
+router.get("/getFavorite/:id", async(req: Request, res: Response) => {
+  try {
+    const services = await dbService.getFavoritesFromUid(Number(req.params.id));
+    res.statusCode = 200;
+    res.send(services);
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("failed");
+  }
+
+});
+
+router.get("/updateService/:id", async(req: Request, res: Response) => {
+  try {
+    const updateArray = [new ServiceUpdate(ServiceUpdateType.title, "Cat"), new ServiceUpdate(ServiceUpdateType.description, "Nice fluffy cat.")];
+    await dbService.updateServiceWithArray(Number(req.params.id),updateArray);
+    res.statusCode = 200;
+    res.send("ok");
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("failed");
+  }
+
+});
+
 
 export const SqlTestController: Router = router;

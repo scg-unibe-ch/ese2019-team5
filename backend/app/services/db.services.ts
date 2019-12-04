@@ -12,6 +12,8 @@ import {DBServiceError} from "../models/DBService.error";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
+import {ServiceUpdateType} from "../models/serviceUpdate.enum";
+import {ServiceUpdate} from "../models/serviceUpdate.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -212,6 +214,35 @@ export class DbServices {
     }
   }
 
+  public async getFavoritesFromUid(userId: number): Promise<EventServiceContainer> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getFavorites(userId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async addFavoriteToUser(userId: number, serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.addUserFavoirte(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async updateServiceWithArray(serviceId: number, updateArray: ServiceUpdate[]) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.updateServiceDB(serviceId,updateArray,localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
 
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -236,7 +267,15 @@ export class DbServices {
     //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[user.getFirstname(), user.getLastname(), user.getEmail(), user.getPwHash(), user.getIsVerified(), addressId, user.getIsFirm()]);
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm, favorites) Values ($1,$2,$3,$4,$5,$6,$7,$8) Returning id As id',[
+      user.getFirstname(),
+      user.getLastname(),
+      user.getEmail(),
+      user.getPwHash(),
+      user.getIsVerified(),
+      addressId,
+      user.getIsFirm(),
+      user.getFavourite()]);
 
     var id = -1;
     for await (const row of stream){
@@ -245,7 +284,6 @@ export class DbServices {
     }
     if(id == -1) {
       throw new DBServiceError("There was an unknown  Error while saving your account in the database",920);
-      throw Error('An error occured while creating the DB entry');
     }
 
     return id;
@@ -293,6 +331,7 @@ export class DbServices {
 
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
+
         user = new UserBuilder()
           .setId(Number(row.get('id')))
           .setFirstname(String(row.get('prename')))
@@ -304,6 +343,7 @@ export class DbServices {
           .setIsFirm(Boolean(row.get('isfirm')))
           .setPhonenumber(String(row.get('phonenumber')))
           .setFirmname(String(row.get('firmname')))
+          .setFavourite(<Array<number>>row.get('favorites'))
           .build();
 
         return user;
@@ -324,6 +364,11 @@ export class DbServices {
     }
 
     await client.query('DELETE FROM users WHERE id = $1', [userId]);
+
+    const streamService = client.query('SELECT id FROM service WHERE userid = $1', [userId]);
+    for await (const row of streamService) {
+      this.deleteServiceFromDB(Number(row.get('id')), client);
+    }
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
@@ -563,13 +608,61 @@ export class DbServices {
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
   }
 
-  private async updateServiceDB (service: EventService, client: Client) {
+  private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
+    const stream = client.query("SELECT * From service WHERE ARRAY[id] <@ (SELECT favorites FROM users WHERE id = $1)", [userId]);
 
+    const container = new EventServiceContainer([]);
+
+    for await (const row of stream) {
+      const addressid = row.get('addressid');
+      const address = await this.getAddressFromAId(Number(addressid), client);
+
+      let serviceBuilder = new EventServiceBuilder();
+      container.addService(
+        serviceBuilder.setServiceId(Number(row.get('id')))
+          .setProviderId(Number(row.get('userid')))
+          .setCategory(String(row.get('category')))
+          .setTitle(String(row.get('title')))
+          .setDescription(String(row.get('description')))
+          .setAddress(address)
+          .setPerimeter(Number(row.get('radius')))
+          .setAvailability(String(row.get('availability')))
+          .setRequirments(String(row.get('requirements')))
+          .setSubtype(String(row.get('subtype')))
+          .setCapacity(Number(row.get('capacity')))
+          .setPrice(Number(row.get('price')))
+          .setImage(String(row.get('image')))
+          .build()
+      );
+    }
+    return container;
   }
 
+  private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
+    await client.query('UPDATE users SET favorites = array_append(favorites, $1) WHERE id = $2', [serviceId, userId]);
+  }
 
+  private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {
+    let query = "UPDATE service SET ";
+    let qArray = [];
+    let qCount = 1;
 
+    for (const update of updateArray) {
 
+      query = query + update.getUpdateType() + " = $" + qCount;
+      qArray.push(update.getNewValue());
+      qCount++;
+      if(qCount != updateArray.length+1){
+        query = query + ","
+      }
+      query = query + " "
+    }
+
+    query = query + "Where id = $" + qCount;
+    qArray.push(serviceId);
+
+    await client.query(query,qArray);
+  }
 
 
     //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////
