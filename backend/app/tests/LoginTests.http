@@ -3,7 +3,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-  "email": "kiai.lenard@iiron.us",
+  "email": "will123459@gmail.com",
   "pwhash": -1425372064
 }
 > {%
@@ -49,7 +49,7 @@ POST http://localhost:3000/login/forgotPassword
 Content-Type: application/json
 
 {
-  "email": "gillian.cathomas@gmx.ch"
+  "email": "will123459@gmail.com"
 }
 
 > {%

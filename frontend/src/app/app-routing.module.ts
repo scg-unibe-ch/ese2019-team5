@@ -8,6 +8,7 @@ import {UserprofilePage} from "./start/userprofile/userprofile.page";
 import {UpdatePasswordPage} from "./start/login/update-password/update-password.page";
 import {CreateServicePage} from "./start/userprofile/create-service/create-service.page";
 import {AboutEventdooPage} from "./start/about-eventdoo/about-eventdoo.page";
+import {FavoritesPage} from "./start/favorites/favorites.page";
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'start', children: [
       {path: '', component: StartPage},
       {path: 'about-eventdoo', component: AboutEventdooPage},
+      {path: 'favorites', component: FavoritesPage},
       {
         path: 'login', children: [
           {path: '', component: LoginPage},
@@ -41,6 +43,8 @@ const routes: Routes = [
       }]
   },
   { path: 'about-eventdoo', loadChildren: './start/about-eventdoo/about-eventdoo.module#AboutEventdooPageModule' },
+  { path: 'favorites', loadChildren: './start/favorites/favorites.module#FavoritesPageModule' },
+
 
 
 ];

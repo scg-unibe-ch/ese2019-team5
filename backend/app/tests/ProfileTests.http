@@ -3,7 +3,7 @@ POST http://localhost:3000/profile/update
 Content-Type: application/json
 
 {
-  "id": 95,
+  "id":4,
   "firstname": "My new firstname",
   "lastname": "Meier",
   "email": "kiai.lenard@iiron.us",
@@ -45,7 +45,7 @@ client.test("getting user information for profile, user does not exist", functio
 %}
 
 ###
-DELETE http://localhost:3000/profile/103
+DELETE http://localhost:3000/profile/4
 Content-Type: application/json
 
 > {%
@@ -78,7 +78,7 @@ client.test("user was deleted no exception", function() {
 %}
 
 ###
-PUT http://localhost:3000/profile/addFavorite?userId=113
+PUT http://localhost:3000/profile/addFavorite?userId=4
 Content-Type: application/json
 
 

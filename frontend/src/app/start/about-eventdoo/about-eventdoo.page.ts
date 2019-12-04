@@ -12,4 +12,8 @@ export class AboutEventdooPage implements OnInit {
   ngOnInit() {
   }
 
+  redirectStartPage() {
+    document.location.href = 'http://localhost:4200/start/';
+  }
+
 }

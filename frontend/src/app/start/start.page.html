@@ -11,9 +11,13 @@
                 [hidden]="authService.isLoggedIn()" [routerLink]="['signup']">
       Sign Up
     </ion-button>
-    <ion-button color="light" style="position: absolute; right: 120px; top: 22px; color: black; border-bottom-color: white; --box-shadow:none"
+    <ion-button color="light" style="position: absolute; right: 230px; top: 22px; color: black; border-bottom-color: white; --box-shadow:none"
                 [hidden]="authService.isLoggedOut()" [routerLink]="['userprofile']">
       Your Profile
+    </ion-button>
+    <ion-button color="light" style="position: absolute; right: 100px; top: 22px; color: black; border-bottom-color: white; --box-shadow:none"
+                [hidden]="authService.isLoggedOut()" [routerLink]="['favorites']">
+      Favorites
     </ion-button>
 </ion-header>
 

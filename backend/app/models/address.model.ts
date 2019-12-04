@@ -23,6 +23,11 @@ export class Address {
     this.zip = zip;
     this.city = city;
   }
+
+  /**
+   * sets the id of an address
+   * @param id of the address
+   */
   setId(id: number){
     this.id = id;
   }
