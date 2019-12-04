@@ -35,8 +35,8 @@ export class DbServices {
       'password' : 'eseTeam5_2019!',
       'port' : 5432,
       'database' : 'eventdoo',
+      'query_timeout': 5000000
     };
-  //console.log(config);
     return new Client(config);
   }
 
@@ -62,8 +62,6 @@ export class DbServices {
   public async getUserFromEmail(email: string): Promise<User> {
 
       const localClient = this.getClient();
-
-
       await localClient.connect();
       try{
         return await this.getUserFromDB(email, null, localClient);
@@ -76,7 +74,6 @@ export class DbServices {
 
 
     const localClient = this.getClient();
-
     await localClient.connect();
     try{
       return await this.getUserFromDB(null, id, localClient);
@@ -312,23 +309,38 @@ export class DbServices {
 
   private async getUserFromDB(email: string | null, id: number | null, client: Client): Promise<User> {
     let user: User;
-    let stream: ResultIterator;
-
+    let query: string;
+    const qArray = [];
 
     if(id == null) {
-      stream = client.query('SELECT * From users Where email = $1', [email]);
+      query = "SELECT * FROM users WHERE email = $1";
+      qArray.push(email);
     }else {
-      stream = client.query('SELECT * From users Where id = $1', [id]);
+      query = "SELECT * FROM users WHERE id = $1";
+      qArray.push(id);
     }
 
+    console.log(query);
+    console.log(qArray);
+    console.log(client.closed);
+    const stream = await client.query(query,qArray);
+    console.log("queried");
 
-    for await(const row of stream) {
+    console.log(stream);
+
+    console.log("streamd");
+
+    for (const row of stream) {
+      console.log("hello");
       if (stream.rows == null) {
+        console.log("stream null");
         throw new DBServiceError("No user with this email address found in the database.",924);
       } else if (stream.rows.length !== 1) {
+        console.log("stream to large");
         throw new DBServiceError("This email address isnt unique.",925);
       } else {
 
+        console.log("hello");
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
 
@@ -353,6 +365,7 @@ export class DbServices {
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
+    console.log("delete User dbService");
     const stream = client.query('SELECT addressid FROM users WHERE id=$1',[userId]);
     let oldAddressId = -1;
     for await (const row of stream){
@@ -692,7 +705,7 @@ export class DbServices {
 
 
     // for testing only... returns all the users with given lastname
-    async testSql(name: string, client: Client): Promise<SqlResult> {
+  private async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
         const stream = client.query('SELECT * From users Where email = $1', [name]);

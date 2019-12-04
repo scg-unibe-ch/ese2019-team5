@@ -49,6 +49,20 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/getUserFromId/:id', async (req: Request, res: Response) => {
+  const id = req.params.id;
+  let user: User;
+  try {
+    user = await dbService.getUserFromId(Number(id));
+    res.statusCode = 200;
+    res.send(user.toNameString());
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 404;
+    res.send(e);
+  }
+});
+
 router.get('/tryMakeUserVerified/:z', async(req: Request, res: Response) => {
 
   try {
@@ -168,6 +182,19 @@ router.get("/updateService/:id", async(req: Request, res: Response) => {
     await dbService.updateServiceWithArray(Number(req.params.id),updateArray);
     res.statusCode = 200;
     res.send("ok");
+  } catch (e) {
+    console.log(e);
+    res.statusCode = 400;
+    res.send("failed");
+  }
+
+});
+
+router.get("/tryLogin/:id", async(req: Request, res: Response) => {
+  try {
+    const result = await dbService.tryLogin("testkonto1264@hotmail.com","1216985755");
+    res.statusCode = 200;
+    res.send(result.user);
   } catch (e) {
     console.log(e);
     res.statusCode = 400;
