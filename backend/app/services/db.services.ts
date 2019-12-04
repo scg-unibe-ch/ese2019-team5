@@ -242,6 +242,16 @@ export class DbServices {
     }
   }
 
+  public async updateServiceParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.updateServieDBParams (serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
@@ -676,6 +686,18 @@ export class DbServices {
     qArray.push(serviceId);
 
     await client.query(query,qArray);
+  }
+
+  private async updateServieDBParams (serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client){
+    await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
+      title,
+      description,
+      price,
+      availability,
+      radius,
+      requirements,
+      capacity,
+      serviceId]);
   }
 
 
