@@ -6,29 +6,7 @@ import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
 import {EmailService} from "./Email.service";
 
 const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
-const emailService = new EmailForgotPWCreatorService();
-let token: string;
 
-/**
- * creates a jwt token for the email using payload and email
- * @param payload that will be part of the jwt token
- * @param email needed vor subject and audience
- * @return emailURL that will be sent to user by sendMailToNewUser Method
- * is called from sendMailToNewUser
-/* *!/
-function makeToken(payload: any, email: string): string {
-  var signOptions = {
-    issuer: 'Eventdoo',
-    subject: email,
-    audience: email,
-    expiresIn: '24h',
-    algorithm: 'RS256'
-  };
-  var emailToken = jwt.sign(payload, privateKey, signOptions);
-  const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;
-  token = emailToken;
-  return emailUrl;
-}*/
 
 /**
  * creates an jwt token that is is part of url which is send to user by using {nodemailer}
@@ -37,14 +15,22 @@ function makeToken(payload: any, email: string): string {
 
 export class EmailForgotPWServices extends EmailService {
 
-
+  /**
+   * sends reset Password mail to the user
+   * by calling the parent method
+   * @param user to which the email should be sent
+   */
   public static async sendMailToUser(user: User) {
     super.sendMailToUser(user);
   }
 
 
 // send mail with defined transport object
-
+  /**
+   * gets the mail options and overrides the parent's class method
+   * @param email to whom the mail is sent
+   * @param emailURL URL that needs to be included in the email.
+   */
   static getMailOptions(email: string, emailURL: string): any {
     console.log('got to mail Options');
     var mailOptions = {
@@ -55,6 +41,16 @@ export class EmailForgotPWServices extends EmailService {
     };
     return mailOptions;
   }
+
+
+/**
+ * overrides the parent's method
+ * creates a jwt token for the email using payload and email
+ * @param payload that will be part of the jwt token
+ * @param email needed vor subject and audience
+ * @return emailURL that will be sent to user by sendMailToUser Method
+ * is called from sendMailToUser
+ */
 
   static makeToken(payload: any, email: string): string {
     var signOptions = {
@@ -70,18 +66,6 @@ export class EmailForgotPWServices extends EmailService {
     return emailUrl;
   }
 
-  /*transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Email sent' + info.response);
-    }
-  });
-
-}catch (e) {
-  console.log(e);
-}
-}*/
 
 }
 

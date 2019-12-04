@@ -1,3 +1,9 @@
+/**
+ * email text for a user that has just signed up
+ * asking him to verify his email address
+ */
+
+
 export class EmailForSignUpCreatorService{
   static getEmailSignUpText(token: string): string {
     return "<body>" +

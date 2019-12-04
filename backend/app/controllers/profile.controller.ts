@@ -197,8 +197,7 @@ router.get('/favourite/:id',async (req: Request, res: Response) => {
     let userId: number= parseInt(req.params.id);
     let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
     let favouriteArrayOfUser: EventService[] =favouriteContainer.getServices();
- //  res.status(200);
-   res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
+    res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
 
   }catch (error) {//TODO welche errors?
 res.status(400).send(error.message);

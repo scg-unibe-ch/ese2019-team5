@@ -11,7 +11,7 @@ import {ServiceUpdate} from "../models/serviceUpdate.model";
 import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 
 
-const router: Router = Router(); // part of express needed
+const router: Router = Router();
 const dbService = new DbServices();
 
 /**
