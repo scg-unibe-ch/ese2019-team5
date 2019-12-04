@@ -51,6 +51,10 @@ export class EventServiceCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Presents the user an alert to check if he really wants to delete his service. If so the event will be deleted.
+   * @param eventId ID of event to be deleted
+   */
   async deleteConfirmation(eventId: string) {
     const alert = await this.alert.create({
       header: 'Confirm Delete',
@@ -76,6 +80,10 @@ export class EventServiceCardComponent implements OnInit {
     await alert.present();
   }
 
+  /**
+   * Sends a delete http request to backend that will subsequently delete an eventservice from the database.
+   * @param eventId ID of the event that will be deleted
+   */
   async deleteEventService(eventId: string){
       await this.http.delete('http://localhost:3000/eventservice/'+eventId)
         .subscribe(

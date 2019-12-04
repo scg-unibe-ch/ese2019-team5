@@ -4,6 +4,7 @@ import {Observable, throwError} from 'rxjs';
 import * as moment from 'moment';
 import * as jwt from 'jsonwebtoken';
 import {User} from '../../../../backend/app/models/user.model';
+import {ToastController} from "@ionic/angular";
 
 var jwtDecode = require('jwt-decode');
 
@@ -12,7 +13,10 @@ export class AuthService {
   //publicKey = fs.readFileSync('../backend/app/EventServices/public.key', 'utf8');
   private user: Observable<User>;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private toastController: ToastController
+  ) {}
 
   /**
    * Called by {@link LoginPage}
@@ -48,6 +52,8 @@ export class AuthService {
   logout() {
     // remove user from local storage to log out
     localStorage.removeItem('ed_token');
+    document.location.href = 'http://localhost:4200/start/';
+    this.showLogoutToast();
   }
 
 
@@ -116,5 +122,17 @@ export class AuthService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
+  }
+
+
+  /**
+   * Presents the user a message that confirms him logging out.
+   */
+  private async showLogoutToast() {
+    let toast = await this.toastController.create({
+      message: 'Successfully logged out',
+      duration: 3000
+    });
+    await toast.present();
   }
 }

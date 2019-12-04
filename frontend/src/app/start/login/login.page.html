@@ -45,7 +45,7 @@
   <!-- Handling common errors after trying to log in -->
   <div>
     <small [class.ion-hide]="isValidCombination" style="color: darkred"> Invalid email address or password. </small>
-    <ion-text style="cursor:pointer; font-size: 14px; color:blue" (click)="resetPassword()"> Forgot password
+    <ion-text color="primary" style="cursor:pointer; font-size: 14px;" (click)="resetPassword()"> Forgot password
     </ion-text>
     <small [class.ion-hide]="isVerified || mailSent" style="color: darkred"> Email address is not verified yet. Please
       check your emails. </small>

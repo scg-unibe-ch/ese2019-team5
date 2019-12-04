@@ -326,6 +326,9 @@ export class CreateServicePage implements OnInit {
     }
   }
 
+  /**
+   * Navigates user to start page
+   */
   redirectToStartPage() {
     document.location.href = 'http://localhost:4200/start/';
   }
