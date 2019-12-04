@@ -30,6 +30,10 @@ ion-header::after {
   background-image: none;
 }
 
+ion-content{
+  font-family: Calibri;
+}
+
 .alert-radio-group::-webkit-scrollbar,
 .alert-checkbox-group::-webkit-scrollbar {
   width: 1em;
