@@ -176,13 +176,13 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
 
    const userId:number = parseInt(req.params.userId);
    const serviceId: number = parseInt(req.params.serviceId)
-   // await dbService.addFavorite(userId,serviceId); //TODO CYrill zum implementieren und Error Code anpassen
+    await dbService.addFavoriteToUser(userId,serviceId); //TODO CYrill zum implementieren und Error Code anpassen
    res.status(200).send('added to favourites');
  }catch (error) {
 
    console.log(error.message + error.errorCode);
-  // res.status(400).send(error);
-   res.status(400);
+  res.status(400).send(error);
+  // res.status(400);
  }
 });
 
@@ -195,10 +195,9 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
 router.get('/favourite/:id',async (req: Request, res: Response) => {
   try {
     let userId: number= parseInt(req.params.id);
-    //let favouriteContanier: EventServiceContainer = await dbService.getFavourite(userId);
-   // let favouriteArrayOfUser: EventService[] =favouriteContainer.getServices();
-   res.status(200);
-   //res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
+    let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
+    let favouriteArrayOfUser: EventService[] =favouriteContainer.getServices();
+    res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
 
   }catch (error) {//TODO welche errors?
 res.status(400).send(error.message);

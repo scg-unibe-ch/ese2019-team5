@@ -7,9 +7,11 @@ import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
+import {ServiceUpdate} from "../models/serviceUpdate.model";
+import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 
 
-const router: Router = Router(); // part of express needed
+const router: Router = Router();
 const dbService = new DbServices();
 
 /**
@@ -67,15 +69,22 @@ router.post('/add', async (req: Request, res: Response) => {
 router.put('/update', async (req: Request, res: Response) => {
 
  try {
+  const updateArray:ServiceUpdate[]= []
    let title: string = req.body.title;
+  updateArray.push(new ServiceUpdate( ServiceUpdateType.title,title));
    let description: string = req.body.description;
+   updateArray.push(new ServiceUpdate( ServiceUpdateType.description,description));
    let availability: string = req.body.availability;
+   updateArray.push(new ServiceUpdate( ServiceUpdateType.availability, availability));
    let requirements: string = req.body.requirements;
+   updateArray.push(new ServiceUpdate( ServiceUpdateType.requirements,requirements));
    let capacity: number = parseInt(req.body.capacity);
+   updateArray.push(new ServiceUpdate( ServiceUpdateType.capacity,capacity));
    let price: number = parseInt(req.body.price);
+   updateArray.push(new ServiceUpdate( ServiceUpdateType.price,price));
    let serviceId: number = parseInt(req.body.serviceId);
-///TODO implementieren von Cyrill und welche Error
-   // await dbService.updateEventservice(serviceId, title, description,availability,requirements, capacity,price);
+///TODO Cyrill und welche Error
+    await dbService.updateServiceWithArray(serviceId, updateArray);
    res.status(202).send('service updated');
 
  }catch (error) {

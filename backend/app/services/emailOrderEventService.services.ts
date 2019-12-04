@@ -1,26 +1,27 @@
-
 import nodemailer from 'nodemailer';
 import {EmailOrderEventServiceCreatorService} from "./emailOrderEventServiceCreator.service";
-//TODO interface or abstract class because code is used more than once
 
 const emailService = new EmailOrderEventServiceCreatorService();
 
 
-
-
 /**
- * creates an jwt token that is is part of url which is send to user by using {nodemailer}
- * User needs to verify email by clicking on URL to login
+ * sends an email to the service provider and the customer, asking the provider to contact the
+ * customer within 2 workdays.
  */
 
 export class EmailOrderEventService {
 
+
   /**
-   * sends a email using nodemailer to a new sign up user
-   * @param user that just signed up
-   * is called in SignUp controller POST Event listener
+   *  sends an email using nodemailer to the service provider
+   * @param providerEmail the email of the service provider
+   * @param customerEmail the email of the customer requesting the service so the provider can contact him
+   * @param serviceTitle which service has been requesting
+   * @param date on which date the service is requested
+   * @param time around what time the service is requested
+   * @param message for the provider so the customer can ask for special requests.
    */
-  static async sendMailToProvider(providerEmail: string,customerEmail: string,serviceTitle: string,date: string, time:string, message:string) {
+  static async sendMailToProvider(providerEmail: string, customerEmail: string, serviceTitle: string, date: string, time: string, message: string) {
 
     var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
@@ -30,21 +31,19 @@ export class EmailOrderEventService {
         user: 'ESEteam5@gmx.de',
         pass: 'WecandoIt19'
       },
-      tls: { // because we are not on that host currently.... just those 2 lines
+      tls: {
         ciphers: 'SSLv3',
         rejectUnauthorized: false
       }
     });
-
-// send mail with defined transport object
-    try{
+    try {
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: providerEmail,
         subject: 'Your Event just got ordered',
-        html: emailService.getEmailOrderEventService(customerEmail,serviceTitle,date,time,message)
+        html: emailService.getEmailOrderEventService(customerEmail, serviceTitle, date, time, message)
       };
-  console.log('got before transporter');
+
       transporter.sendMail(mailOptions, function (err, info) {
         if (err) {
           console.log(err);
@@ -53,12 +52,21 @@ export class EmailOrderEventService {
         }
       });
 
-    }catch (e) {
+    } catch (e) {
       console.log(e);
     }
   }
 
-  static async sendMailToCustomer(providerName: string,customerEmail: string,serviceTitle: string,date: string, time:string, message:string)  {
+  /**
+   * sends an email using nodemailer to the customer
+   * @param providerName the name of the service provider so the customer knows from whom an email to expect
+   * @param customerEmail the email of the customer requesting the service
+   * @param serviceTitle which service has been requested
+   * @param date on which date the service is requested
+   * @param time around what time the service is requested
+   * @param message for the provider so the customer can ask for special requests.
+   */
+  static async sendMailToCustomer(providerName: string, customerEmail: string, serviceTitle: string, date: string, time: string, message: string) {
 
 
     var transporter = nodemailer.createTransport({
@@ -69,21 +77,21 @@ export class EmailOrderEventService {
         user: 'ESEteam5@gmx.de',
         pass: 'WecandoIt19'
       },
-      tls: { // because we are not on that host currently.... just those 2 lines
+      tls: {
         ciphers: 'SSLv3',
         rejectUnauthorized: false
       }
     });
 
 // send mail with defined transport object
-    try{
+    try {
       //if(time == ''){ //TODO wie genau machen mit time and message?
 
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: customerEmail,
         subject: 'Your Eventdoo Order Confirmation',
-        html:emailService.getEmailOrderConfirmation(providerName,serviceTitle,date,time,message)
+        html: emailService.getEmailOrderConfirmation(providerName, serviceTitle, date, time, message)
       };
 
       transporter.sendMail(mailOptions, function (err, info) {
@@ -94,7 +102,7 @@ export class EmailOrderEventService {
         }
       });
 
-    }catch (e) {
+    } catch (e) {
       console.log(e);
     }
   }

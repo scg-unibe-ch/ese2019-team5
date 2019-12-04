@@ -1,3 +1,9 @@
+/**
+ * email text for a user that forgot his password asking him to
+ * use the link in order to reset his password
+ */
+
+
 export class EmailForgotPWCreatorService {
   static getEmailForgotPWText(token: string): string {
     return "<body>" +
