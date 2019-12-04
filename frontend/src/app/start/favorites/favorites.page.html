@@ -1,0 +1,15 @@
+<ion-header style="height: 85px; background-color: white">
+  <ion-img src="assets/logo.png"
+           style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px; cursor:pointer;" (click)="redirectStartPage()"></ion-img>
+</ion-header>
+
+<ion-content>
+  <!-- Loading animation while services are loaded from database-->
+  <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
+  <div style="margin-left: 15%; margin-right: 15%">
+    <event-service-card [services]="services" style="position: absolute; top: 200px; bottom: 200px; padding-bottom: 100px;"> </event-service-card>
+
+  </div>
+
+</ion-content>
