@@ -232,6 +232,16 @@ export class DbServices {
     }
   }
 
+  public async removeFavoriteFromUser(userId: number, serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.removeUserFavorite(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   public async updateServiceWithArray(serviceId: number, updateArray: ServiceUpdate[]) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -374,6 +384,10 @@ export class DbServices {
     return serviceIdArray;
   }
 
+  private async deleteFavoritesOfUser(userId: number, client: Client) {
+    await client.query("Delte From favorites Where userid = $1", [userId]);
+  }
+
   private async deleteUserFromDB(userId: number, client: Client) {
     console.log("delete User dbService");
     const stream = client.query('SELECT addressid FROM users WHERE id=$1',[userId]);
@@ -394,6 +408,7 @@ export class DbServices {
     }
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
+    await this.deleteFavoritesOfUser(userId, client);
   }
 
   private async resetPasswordDB(email: string, newPW: string, client: Client) {
@@ -630,6 +645,11 @@ export class DbServices {
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
+    await this.deleteServiceFromFavorites(serviceId,client);
+  }
+
+  private async deleteServiceFromFavorites (serviceId: number, client: Client) {
+    await client.query('Delete From favorites Where serviceid = $1', [serviceId]);
   }
 
   private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
@@ -664,6 +684,10 @@ export class DbServices {
 
   private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
     await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
+  }
+
+  private async removeUserFavorite (userId: number, serviceId: number, client: Client) {
+    await client.query('Delete From favorites Where userid = $1 AND serviceid = $2', [userId, serviceId]);
   }
 
   private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {
