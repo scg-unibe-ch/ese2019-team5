@@ -47,6 +47,7 @@
             <ion-label> Title</ion-label>
             <ion-input class="form-control" type="text" formControlName="title"></ion-input>
           </ion-item>
+          <small style="color: red" *ngIf="title.touched && title.invalid"> valid title required </small>
         </div>
         <br/>
 
@@ -64,6 +65,11 @@
             <ion-label> City</ion-label>
             <ion-input class="form-control" type="text" formControlName="city"></ion-input>
           </ion-item>
+          <small *ngIf="(street.touched && street.invalid) ||
+          (housenumber.touched && housenumber.invalid) ||
+          (zip.touched && zip.invalid) ||
+          (city.touched && city.invalid)" style="color: red">
+            Valid address required </small>
         </div>
         <br/>
 
@@ -118,6 +124,7 @@
               <ion-select-option value="Sunday"> Sunday</ion-select-option>
             </ion-select>
           </ion-item>
+          <small *ngIf="availability.touched && availability.invalid" style="color: red"> Available days required </small>
         </div>
         <br/>
 
@@ -130,6 +137,7 @@
             </ion-label>
             <ion-input class="formControl" type="number" formControlName="price"></ion-input>
           </ion-item>
+          <small *ngIf="price.touched && price.invalid" style="color: red"> Standard price required </small>
         </div>
         <br/>
         <br/>
@@ -192,48 +200,19 @@
         <!-- Specification for all categories: Requirements and Description -->
         <div>
           <ion-item>
-            <ion-label> Special Requirements</ion-label>
-            <ion-input type="text" formControlName="requirements"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label> Description (max. 700 characters)</ion-label>
+            <ion-label> Description (700 chars) </ion-label>
             <ion-input type="text" formControlName="description" ></ion-input>
+          </ion-item>
+          <small *ngIf="description.touched && description.invalid" style="color: red"> Description required</small>
+          <ion-item>
+            <ion-label> Special Requirements </ion-label>
+            <ion-input type="text" formControlName="requirements"></ion-input>
           </ion-item>
         </div>
         <br/>
         <br/>
 
         <ion-title> Upload a picture</ion-title>
-        <!-- Optimization for Apps -->
-        <!--
-        <div>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <div></div>
-              </ion-col>
-              <ion-col>
-                <div>
-                  <ion-button color="secondary" class="icon-only" (click)="accessCamera()">
-                    <ion-icon name="camera"> Camera</ion-icon>
-                  </ion-button>
-                </div>
-              </ion-col>
-              <ion-col>
-                <div>
-                  <ion-button color="secondary" class="icon-only" (click)="accessGallery()">
-                    <ion-icon name="image"> Gallery</ion-icon>
-                  </ion-button>
-                </div>
-              </ion-col>
-              <ion-col>
-                <div></div>
-              </ion-col>
-            </ion-row>
-            <ion-img [src]="image" *ngIf="image"></ion-img>
-          </ion-grid>
-        </div>
-        -->
         <ion-item>
           <ion-input type="file" accept="image/*" formControlName="picture" id="pic" (change)="previewFiles()"> </ion-input>
         </ion-item>

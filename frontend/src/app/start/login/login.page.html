@@ -51,7 +51,7 @@
       check your emails. </small>
     <ion-button color="secondary" [class.ion-hide]="isVerified || mailSent" (click)="sendMailAgain()"> Send mail again
     </ion-button>
-    <small *ngIf="mailSent"> Please check your emails. </small>
+    <small *ngIf="mailSent"> The verification email has been sent. Please check also your spam folder. </small>
   </div>
 
   <!-- Handling errors -->
@@ -60,6 +60,7 @@
       later. </small>
   </div>
   </div>
+
   <app-info-footer></app-info-footer>
 </ion-content>
 

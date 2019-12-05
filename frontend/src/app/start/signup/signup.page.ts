@@ -43,7 +43,8 @@ export class SignupPage implements OnInit {
     zip: ['', [Validators.required, Validators.pattern("[0-9]{4}")]],
     city: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
     password: [this.pw, [Validators.required, Validators.minLength(6)]],
-    confirmation: ['', [Validators.required, Validators.pattern]]
+    confirmation: ['', [Validators.required, Validators.pattern]],
+    accept: ['false', Validators.requiredTrue]
   });
 
   // ToDo: Implement initialization
@@ -90,7 +91,9 @@ export class SignupPage implements OnInit {
   get confirmation() {
     return this.signUpForm.get('confirmation');
   }
-
+  get accept() {
+    return this.signUpForm.get('accept');
+  }
 
 
   /**
@@ -169,7 +172,8 @@ export class SignupPage implements OnInit {
       this.lastname.valid &&
       this.street.valid && this.housenumber.valid &&
       this.zip.valid && this.city.valid &&
-      this.password.value == this.confirmation.value;
+      this.password.value == this.confirmation.value &&
+      this.accept.valid;
 
   }
 
