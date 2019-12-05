@@ -13,6 +13,7 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {ServiceUpdate} from "../models/serviceUpdate.model";
 import {ServiceRequest} from "../models/serviceRequest.model";
+import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -156,7 +157,7 @@ export class DbServices {
     }
   }
 
-  public async getServiceFilter(filter: EventServiceFilter[]) {
+  public async getServiceFilter(filter: EventServiceFilter[]): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
     try {
@@ -166,7 +167,7 @@ export class DbServices {
     }
   }
 
-  public async getServiceFromId(serviceId: number) {
+  public async getServiceFromId(serviceId: number): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
     try {
@@ -250,7 +251,7 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try {
-      await this.updateServieDBParams(serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
+      await this.updateServiceDBParams(serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
     } finally {
       await localClient.end();
     }
@@ -266,7 +267,7 @@ export class DbServices {
     }
   }
 
-  public async getRequetsForUser (userId: number): Promise<ServiceRequest[]> {
+  public async getRequestsForUser (userId: number): Promise<ServiceRequest[]> {
     const localClient = this.getClient();
     await localClient.connect();
     try {
@@ -716,7 +717,7 @@ export class DbServices {
     await client.query(query, qArray);
   }
 
-  private async updateServieDBParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client) {
+  private async updateServiceDBParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client) {
     await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
       title,
       description,
@@ -730,10 +731,10 @@ export class DbServices {
 
   private async addRequestToDB(request: ServiceRequest, client: Client) {
     await client.query("Insert Into requests(clientid, serviceid, date, message) Values ($1,$2,$3,$4)", [
-      request.clientId,
-      request.providerId,
-      request.date,
-      request.messages
+      request.getCustomerId(),
+      request.getProviderId(),
+      request.getDate(),
+      request.getMessage()
     ]);
   }
 
@@ -741,19 +742,22 @@ export class DbServices {
     const stream = client.query("Select * From requests Where clientid=$1",[userId]);
     const requestArray = [];
     for await (const row of stream) {
-      let serviceId = Number(row.get('serviceid'));
-      let date = String(row.get('date'));
-      let msg = String(row.get('message'));
-      const serviceStream = client.query("Select userid, category, title From service Where id = $1 ", [serviceId]);
+      const request = new ServiceRequestBuilder();
+
+      request.setServiceId(Number(row.get('serviceid')));
+      request.setDate(String(row.get('date')));
+      request.setMessage(String(row.get('message')));
+
+      const serviceStream = client.query("Select userid, category, title From service Where id = $1 ", [Number(row.get('serviceid'))]);
       const service = await serviceStream.first();
 
       if (service == undefined) {
         throw new DBServiceError("There is an request with an non existing service.",954);
       } else {
-        let providerId = Number(service.get('userid'));
-        let category = String(service.get('category'));
-        let title = String(service.get('title'));
-        requestArray.push(new ServiceRequest(userId, serviceId, title, providerId, date, msg, category));
+        request.setProviderId(Number(service.get('userid')));
+        request.setCategory(String(service.get('category')));
+        request.setServiceTitle(String(service.get('title')));
+        requestArray.push(request.build());
       }
     }
     return requestArray;
