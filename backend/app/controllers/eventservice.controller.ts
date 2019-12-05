@@ -178,7 +178,7 @@ router.post('/order', async (req: Request, res: Response) => {
       .build();
     await EmailOrderEventService.sendMailToProvider(providerEmail, customerEmail, serviceTitle, date, time, message);
     await EmailOrderEventService.sendMailToCustomer(providerName, customerEmail, serviceTitle, date, time, message);
-    // await dbService.addRequestedService(serviceRequest);
+    await dbService.addRequestedService(serviceRequest);
     res.status(200);
     res.json('The emails were sent ');
 
