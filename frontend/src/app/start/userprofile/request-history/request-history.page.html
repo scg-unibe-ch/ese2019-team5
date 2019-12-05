@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> RequestHistory </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br/>
+  <ion-title> History of Requested Services </ion-title>
+  <br/>
+  <br/>
+  <small *ngIf="empty"> You have not requested any services yet. </small>
+
+  <!-- A table showing all EventServices the user ever requested -->
+  <!-- The table shows the date of the planned event the service was requested for, the icon of the service's category,
+   the service's title and the message, the user sent to the provider -->
+  <!-- The user can click on the item to get to the DetailPage of a service -->
+  <div *ngIf="!empty">
+    <!-- Table header -->
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-md="2">
+            <h6> Date </h6>
+          </ion-col>
+          <ion-col size-md="1">
+            <h6> Cat. </h6>
+          </ion-col>
+          <ion-col size-md="3">
+            <h6> Title </h6>
+          </ion-col>
+          <ion-col size-md="5">
+            <h6> Message </h6>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <!-- List of EventServices -->
+    <ion-list *ngFor="let request of requests">
+      <ion-item (click)="navigateToDetailPage('' + request.serviceId)">
+        <ion-grid>
+          <ion-row>
+            <ion-col size-md="2">
+              <p style="color: darkgrey; font-style: italic;"> {{request.date}}</p>
+            </ion-col>
+            <ion-col size-md="1">
+              <ion-icon name="{{getIcon(request.category)}}"> </ion-icon>
+            </ion-col>
+            <ion-col size-md="3">
+              <h6> {{request.serviceTitle}}</h6>
+            </ion-col>
+            <ion-col size-md="5">
+              <small style="color: darkgrey"> {{request.messages}} </small>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
