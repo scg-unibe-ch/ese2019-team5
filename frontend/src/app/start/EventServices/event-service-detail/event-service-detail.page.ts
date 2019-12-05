@@ -191,6 +191,8 @@ export class EventServiceDetailPage implements OnInit {
     )
   }
 
+
+
   private addToFavorites(){
     this.http.put('http://localhost:3000/profile/addFavourite/' + this.auth.getUserId() + '/' + this.serviceId, {}).subscribe(
       (data) => {console.log(data)},
@@ -198,6 +200,10 @@ export class EventServiceDetailPage implements OnInit {
     )
   }
 
+  /**
+   * Calls backend to receive all necessary details about the event that the site is about and stores it in
+   * local variables.
+   */
   private getEventServiceJson() {
     this.http.get<EventServiceJson>('http://localhost:3000/eventservice/'+this.serviceId).subscribe(
       (data)=>{
@@ -223,6 +229,9 @@ export class EventServiceDetailPage implements OnInit {
     );
   }
 
+  /**
+   * Returns an appropriate string, that is suitable for the type of price according to event category
+   */
   private getPriceFormat():string {
     let priceFormat:string;
     switch(this.category){
@@ -242,13 +251,18 @@ export class EventServiceDetailPage implements OnInit {
     document.location.href = 'http://localhost:4200/start/';
   }
 
+  /**
+   * Checks if all the Input is valid and then sends it all to backend
+   */
   tryToUpdate() {
     if(this.validateUpdateInput()){
       this.sendUpdate();
     }
   }
 
-
+  /**
+   * Sends all the information that was entered in the updateForm to the backend via http put request.
+   */
   private sendUpdate() {
     this.http.put('http://localhost:3000/eventservice/update', {
       title: this.updateTitle.value,
@@ -273,6 +287,10 @@ export class EventServiceDetailPage implements OnInit {
     )
   }
 
+  /**
+   * Checks if all fields of the updateForm are valid according to the validators. Then displays a toast to the user
+   * stating what field we're not happy with.
+   */
   private validateUpdateInput() {
     let error: string='';
     if (this.updateTitle.invalid)

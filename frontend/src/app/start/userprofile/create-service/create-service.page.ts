@@ -56,17 +56,17 @@ export class CreateServicePage implements OnInit {
   serviceForm = this.formBuilder.group({
     category: ['', Validators.required],
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-    street: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
+    street: ['', [Validators.required, Validators.pattern('[a-zA-Z,\s]+')]],
     housenumber: ['', [Validators.required, Validators.pattern('[0-9]*[a-z]?')]],
     zip: ['', [Validators.required, Validators.pattern('[0-9]*'), Validators.maxLength(4), Validators.minLength(4)]],
-    city: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
+    city: ['', [Validators.required, Validators.pattern('[a-zA-Z,\s]+')]],
     distance: ['0', Validators.required],
     capacity: ['1000000', Validators.required],
     availability: ['', Validators.required],
-    price: ['', Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
+    price: ['', [Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')]],
     type: ['', Validators.required],
     requirements: [''],
-    description: ['', Validators.minLength(3), Validators.maxLength(700)],
+    description: ['', [Validators.minLength(3), Validators.maxLength(700)]],
     picture: ['', Validators.required]
   });
 
@@ -326,6 +326,9 @@ export class CreateServicePage implements OnInit {
     }
   }
 
+  /**
+   * Navigates user to start page
+   */
   redirectToStartPage() {
     document.location.href = 'http://localhost:4200/start/';
   }
