@@ -1,8 +1,7 @@
-import express, {Request, Response} from 'express';
-//import bodyParser from 'body-parser';
+import express from 'express';
+
 import exphbs from 'express-handlebars';
 
-// import all the controllers. If you add a new controller, make sure to import it here as well.
 import {Sequelize} from 'sequelize-typescript';
 import {
   SignupController,
@@ -54,7 +53,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-//app.use('/welcome', WelcomeController);
+
 app.use('/signup', SignupController);
 app.use('/sqlTest', SqlTestController);
 app.use('/login', LoginController);
@@ -64,9 +63,7 @@ app.use('/search',SearchController);
 
 
 sequelize.sync().then(() => {
-// start serving the application on the given port
   app.listen(port, () => {
-    // success callback, log something to console as soon as the application has started
     console.log(`Listening at http://localhost:${port}/`);
   });
 });

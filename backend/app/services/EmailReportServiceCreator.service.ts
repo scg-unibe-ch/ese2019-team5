@@ -1,3 +1,8 @@
+/**
+ * email text if an eventservice gets reported including the serviceId that seemed inappropriate
+ * and the userId of the person reporting it.
+ */
+
 export class EmailReportServiceCreatorService {
   static getEmailReportService(serviceId:number, userId:number): string {
     return "<body>" +

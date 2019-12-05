@@ -11,6 +11,7 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
 import {ServiceUpdate} from "../models/serviceUpdate.model";
 import {ServiceUpdateType} from "../models/serviceUpdate.enum";
+import {DBService2} from "../services/dbService2";
 
 
 const router: Router = Router();
@@ -25,9 +26,9 @@ router.get('/:name', async (req: Request, res: Response) => {
   const name = req.params.name;
   let sql: SqlResult;
   try {
-    sql = await dbService.getSqlResult(name);
+    await dbService.test(name);
     res.statusCode = 200;
-    res.send('Welcome to Express ' + sql.user[0].toNameString());
+    res.send('Ok');
   } catch (e) {
     console.log(e);
     res.statusCode = 404;
@@ -41,7 +42,7 @@ router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   try {
     user = await dbService.getUserFromEmail(mail);
     res.statusCode = 200;
-    res.send(user.toNameString());
+    res.send(user);
   } catch (e) {
     console.log(e);
     res.statusCode = 404;
@@ -202,6 +203,19 @@ router.get("/tryLogin/:id", async(req: Request, res: Response) => {
   }
 
 });
+
+router.get("/testDB/test/:12", async(req: Request, res: Response) => {
+  try {
+    const db = new DBService2();
+    db.test();
+    res.statusCode = 200;
+    res.send("abc");
+  } catch (e) {
+    console.log(e);
+    console.log(e.stackTrace);
+  }
+});
+
 
 
 export const SqlTestController: Router = router;

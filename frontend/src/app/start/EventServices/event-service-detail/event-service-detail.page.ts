@@ -192,6 +192,14 @@ export class EventServiceDetailPage implements OnInit {
   }
 
 
+
+  private addToFavorites(){
+    this.http.put('http://localhost:3000/profile/addFavourite/' + this.auth.getUserId() + '/' + this.serviceId, {}).subscribe(
+      (data) => {console.log(data)},
+      (error) => {console.log(error)}
+    )
+  }
+
   /**
    * Calls backend to receive all necessary details about the event that the site is about and stores it in
    * local variables.

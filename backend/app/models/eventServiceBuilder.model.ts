@@ -1,3 +1,6 @@
+/**
+ * creates a builder for an event service
+ */
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
 
@@ -108,7 +111,8 @@ export class EventServiceBuilder {
   }
 
   /**
-   * builds an Eventservice with all the given parameters
+   * builds an event service with all the given parameters
+   * @return newly created event service
    */
   public build(): EventService {
     let eventService: EventService = new EventService(this._serviceId, this._providerId, this._category, this._title, this._description, this._address, this._perimeter, this._availability, this._requirments, this._subtype, this._capacity, this._price, this._image);

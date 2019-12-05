@@ -12,6 +12,7 @@ export class EmailForSignUpCreatorService{
       "<p>We are pleased to welcome you as a new Eventdoo user.</p>"+
     "<p>In Order to use all our services, we kindly ask you to verify your email-address.</p>"+
     "<a href=" + token + ">verify email</a>"+
+      "<p>If you are having trouble opening the link, try right click and open in new tab.</p>"+
       "<p>Have fun planning your event or finding new oppurtunities to offer your services</p>"+
     "<p><b><i>Your Eventdoo Team</i></b></p>"+
     "</div>"+

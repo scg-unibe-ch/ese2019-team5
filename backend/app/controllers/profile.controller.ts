@@ -192,7 +192,7 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
  * the array to the front
  * @returns ok (200) if everything went well otherwise 400
  */
-router.get('/favourite/:id',async (req: Request, res: Response) => {
+router.get('/favourite/:id/:serviceid',async (req: Request, res: Response) => {
   try {
     let userId: number= parseInt(req.params.id);
     let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);

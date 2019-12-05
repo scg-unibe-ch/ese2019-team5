@@ -30,12 +30,13 @@ export class DbServices {
 
     const config = {
       'user' : 'cyrill',
+      //'user' : 'postgres',
       'host' : '34.65.95.137',
       //'host' : 'localhost',
       'password' : 'eseTeam5_2019!',
+      //'password' : 'root',
       'port' : 5432,
       'database' : 'eventdoo',
-      'query_timeout': 5000000
     };
     return new Client(config);
   }
@@ -231,11 +232,31 @@ export class DbServices {
     }
   }
 
+  public async removeFavoriteFromUser(userId: number, serviceId: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.removeUserFavorite(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   public async updateServiceWithArray(serviceId: number, updateArray: ServiceUpdate[]) {
     const localClient = this.getClient();
     await localClient.connect();
     try {
       await this.updateServiceDB(serviceId,updateArray,localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async updateServiceParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.updateServieDBParams (serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
     } finally {
       await localClient.end();
     }
@@ -264,15 +285,14 @@ export class DbServices {
     //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm, favorites) Values ($1,$2,$3,$4,$5,$6,$7,$8) Returning id As id',[
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[
       user.getFirstname(),
       user.getLastname(),
       user.getEmail(),
       user.getPwHash(),
       user.getIsVerified(),
       addressId,
-      user.getIsFirm(),
-      user.getFavourite()]);
+      user.getIsFirm()]);
 
     var id = -1;
     for await (const row of stream){
@@ -320,27 +340,16 @@ export class DbServices {
       qArray.push(id);
     }
 
-    console.log(query);
-    console.log(qArray);
-    console.log(client.closed);
-    const stream = await client.query(query,qArray);
-    console.log("queried");
+    const stream = client.query(query,qArray);
 
-    console.log(stream);
 
-    console.log("streamd");
-
-    for (const row of stream) {
-      console.log("hello");
+    for await (const row of stream) {
       if (stream.rows == null) {
-        console.log("stream null");
         throw new DBServiceError("No user with this email address found in the database.",924);
       } else if (stream.rows.length !== 1) {
-        console.log("stream to large");
         throw new DBServiceError("This email address isnt unique.",925);
       } else {
 
-        console.log("hello");
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
 
@@ -355,13 +364,28 @@ export class DbServices {
           .setIsFirm(Boolean(row.get('isfirm')))
           .setPhonenumber(String(row.get('phonenumber')))
           .setFirmname(String(row.get('firmname')))
-          .setFavourite(<Array<number>>row.get('favorites'))
+          .setFavourite(await this.getFavoritesIdOfUser(Number(row.get('id')), client))
           .build();
 
         return user;
       }
     }
     throw new DBServiceError("No user with this email address found in the database.",924);
+  }
+
+  private async getFavoritesIdOfUser(userId: number, client: Client): Promise<number[]> {
+    const stream = client.query("SELECT serviceid FROM favorites WHERE userid = $1", [userId]);
+    const serviceIdArray = [];
+
+    for await (const row of stream) {
+      serviceIdArray.push(Number(row.get('serviceid')));
+    }
+
+    return serviceIdArray;
+  }
+
+  private async deleteFavoritesOfUser(userId: number, client: Client) {
+    await client.query("Delte From favorites Where userid = $1", [userId]);
   }
 
   private async deleteUserFromDB(userId: number, client: Client) {
@@ -384,6 +408,7 @@ export class DbServices {
     }
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
+    await this.deleteFavoritesOfUser(userId, client);
   }
 
   private async resetPasswordDB(email: string, newPW: string, client: Client) {
@@ -571,7 +596,8 @@ export class DbServices {
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
-      const address = await this.getAddressFromAId(Number(addressid), client);
+      //const address = await this.getAddressFromAId(Number(addressid), client);
+      const address = new Address("abc",12,12,"abc");
       const serviceId = Number(row.get('id'));
 
       //const imageString = fileHandler.getPictureFromServiceId(serviceId);
@@ -619,10 +645,15 @@ export class DbServices {
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
+    await this.deleteServiceFromFavorites(serviceId,client);
+  }
+
+  private async deleteServiceFromFavorites (serviceId: number, client: Client) {
+    await client.query('Delete From favorites Where serviceid = $1', [serviceId]);
   }
 
   private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
-    const stream = client.query("SELECT * From service WHERE ARRAY[id] <@ (SELECT favorites FROM users WHERE id = $1)", [userId]);
+    const stream = client.query("SELECT * From service WHERE id IN (Select serviceid From favorites Where userid = $1)", [userId]);
 
     const container = new EventServiceContainer([]);
 
@@ -652,7 +683,11 @@ export class DbServices {
   }
 
   private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
-    await client.query('UPDATE users SET favorites = array_append(favorites, $1) WHERE id = $2', [serviceId, userId]);
+    await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
+  }
+
+  private async removeUserFavorite (userId: number, serviceId: number, client: Client) {
+    await client.query('Delete From favorites Where userid = $1 AND serviceid = $2', [userId, serviceId]);
   }
 
   private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {
@@ -675,6 +710,18 @@ export class DbServices {
     qArray.push(serviceId);
 
     await client.query(query,qArray);
+  }
+
+  private async updateServieDBParams (serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client){
+    await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
+      title,
+      description,
+      price,
+      availability,
+      radius,
+      requirements,
+      capacity,
+      serviceId]);
   }
 
 
@@ -704,11 +751,17 @@ export class DbServices {
   }
 
 
-    // for testing only... returns all the users with given lastname
+    // for testing only...
   private async testSql(name: string, client: Client): Promise<SqlResult> {
         const sqlResult = new SqlResult();
 
-        const stream = client.query('SELECT * From users Where email = $1', [name]);
+        console.log(client.transactionStatus);
+
+        console.log(name);
+
+        const stream = client.query('SELECT * From users Where prename = $1', [name]);
+
+        console.log(await stream);
 
         for await (const row of stream) {
 
@@ -740,6 +793,24 @@ export class DbServices {
       // tslint:disable-next-line:max-line-length
 
         return sqlResult;
+    }
+
+    public async test(name: string) {
+      const config = {
+        'user' : 'cyrill',
+        'host' : 'localhost',
+        //'host' : 'localhost',
+        'password' : 'eseTeam5_2019!',
+        'port' : 5432,
+        'database' : 'eventdoo',
+      };
+      const client = new Client(config);
+
+      await client.connect();
+
+      console.log(client.closed);
+      const stream = await client.query('SELECT * From users Where name = $1', [name]);
+      console.log(stream);
     }
 
 

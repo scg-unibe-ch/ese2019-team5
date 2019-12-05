@@ -16,7 +16,7 @@
 
 
 <ion-content>
-  <div style="min-height: 100%">
+  <div style="min-height: 100%; margin-left: 30%; margin-right: 30%; background-color: white">
   <form #loginForm ="ngForm">
     <div class="form-group">
       <ion-item>
@@ -34,7 +34,7 @@
     </div>
   </form>
 
-  <ion-button color="primary" [hidden]="loading" (click)="logIn()"> Log In</ion-button>
+  <ion-button color="primary" [hidden]="loading" (click)="logIn()" style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px"> Log In</ion-button>
 
   <!-- User feedback while trying to log in -->
   <div>
@@ -46,6 +46,7 @@
   <div>
     <small [class.ion-hide]="isValidCombination" style="color: darkred"> Invalid email address or password. </small>
     <ion-text color="primary" style="cursor:pointer; font-size: 14px;" (click)="resetPassword()"> Forgot password
+    <ion-text color="primary" style="cursor:pointer; font-size: 14px; padding-left: 15px" (click)="resetPassword()"> Forgot password
     </ion-text>
     <small [class.ion-hide]="isVerified || mailSent" style="color: darkred"> Email address is not verified yet. Please
       check your emails. </small>

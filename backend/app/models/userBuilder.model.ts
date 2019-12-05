@@ -1,6 +1,9 @@
 import {User} from "./user.model";
 import {Address} from "./address.model";
 
+/**
+ * builder for the user so it is easier to add all the parameters instead of having them all seperate in the consturctore
+ */
 const mockAddress: Address = new Address('', 0, 1234, '');
 
 export class UserBuilder {
@@ -16,7 +19,7 @@ export class UserBuilder {
   private _firmname = '';
   private _phonenumber: string;
   private _isAdmin = false;
-  private _favourite: number[]//TODO
+  private _favourite: number[];//TODO
 
 
   constructor() {
@@ -96,6 +99,10 @@ export class UserBuilder {
     return this;
   }
 
+  /**
+   * builds the user with all the given attributes
+   * @returns user, newly created user
+   */
   public build(): User {
     let user: User = new User(this._id,this._firstname, this._lastname, this._email, this._pwhash, this._isVerified, this._address, this._isFirm,this._firmname,this._phonenumber,this._isAdmin, this._favourite);//this._id);
     return user;
