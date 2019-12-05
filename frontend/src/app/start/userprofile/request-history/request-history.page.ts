@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../../AuthService/auth.service";
 import {HttpClient} from "@angular/common/http";
-import {ServiceRquest} from "../../../../../../backend/app/models/serviceRequest.model";
+import {ServiceRequest} from "../../../../../../backend/app/models/serviceRequest.model";
 
 @Component({
   selector: 'app-request-history',
@@ -10,7 +10,7 @@ import {ServiceRquest} from "../../../../../../backend/app/models/serviceRequest
 })
 export class RequestHistoryPage implements OnInit {
   userId: string;
-  requests: ServiceRquest[];
+  requests: ServiceRequest[];
   empty: boolean;
 
   constructor(private authService: AuthService,
