@@ -17,7 +17,7 @@
           <ion-row>
             <ion-col>
               <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter == '0'"> {{event.city}}  </ion-card-subtitle>
-              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter != '0' && event.perimeter != '1000000'"> within {{event.perimeter}} km of{{event.city}}  </ion-card-subtitle>
+              <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter != '0' && event.perimeter != '1000000'"> within {{event.perimeter}} km of {{event.city}}  </ion-card-subtitle>
               <ion-card-subtitle class="ion-float-left" style="color: #a5a2a5" *ngIf="event.perimeter == '1000000'"> throughout Switzerland </ion-card-subtitle>
             </ion-col>
           </ion-row>
