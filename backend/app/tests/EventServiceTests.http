@@ -154,8 +154,8 @@ POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId": 105,
-  "customerId": 114,
+  "serviceId": 4,
+  "customerId": 5,
   "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"

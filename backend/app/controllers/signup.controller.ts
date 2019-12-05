@@ -36,8 +36,22 @@ router.post('/', async (req: Request, res: Response) => {
         algorithm: 'RS256',}
         let decoded = jwt.verify(pw, publicKey, verifyOptions);
 
+  let payload = {
+   /* pw: pwHash
+    name: user.getFirstname(),
+    surname: user.getLastname(),
+    email: user.getEmail(),*/
+  }
 
 
+   /* let signOptions = {
+      issuer: 'Eventdoo',
+      subject: email,
+      audience: email,
+
+      algorithm: 'RS256'
+    };*/
+    //var emailToken = jwt.sign(payload, privateKey, signOptions);
 
 
 
