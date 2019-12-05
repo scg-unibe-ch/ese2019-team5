@@ -12,6 +12,7 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {ServiceUpdate} from "../models/serviceUpdate.model";
+import {ServiceRequest} from "../models/serviceRequest.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -19,31 +20,31 @@ const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 export class DbServices {
 
   /**
- * returns an Client to connect to our database
- */
+   * returns an Client to connect to our database
+   */
   private getClient(): Client {
 
     const config = {
-      'user' : 'cyrill',
+      'user': 'cyrill',
       //'user' : 'postgres',
-      'host' : '34.65.95.137',
+      'host': '34.65.95.137',
       //'host' : 'localhost',
-      'password' : 'eseTeam5_2019!',
+      'password': 'eseTeam5_2019!',
       //'password' : 'root',
-      'port' : 5432,
-      'database' : 'eventdoo',
+      'port': 5432,
+      'database': 'eventdoo',
     };
     return new Client(config);
   }
 
-  public async addEventService(service: EventService){
+  public async addEventService(service: EventService) {
 
     const localClient = this.getClient();
     await localClient.connect();
 
-    try{
+    try {
       const serviceId = await this.addServiceToDB(service, localClient);
-    } finally{
+    } finally {
       await localClient.end()
     }
 
@@ -55,13 +56,13 @@ export class DbServices {
    */
   public async getUserFromEmail(email: string): Promise<User> {
 
-      const localClient = this.getClient();
-      await localClient.connect();
-      try{
-        return await this.getUserFromDB(email, null, localClient);
-      } finally {
-        await localClient.end();
-      }
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getUserFromDB(email, null, localClient);
+    } finally {
+      await localClient.end();
+    }
   }
 
   public async getUserFromId(id: number): Promise<User> {
@@ -69,7 +70,7 @@ export class DbServices {
 
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.getUserFromDB(null, id, localClient);
     } finally {
       await localClient.end();
@@ -88,12 +89,12 @@ export class DbServices {
     user = await this.getUserFromEmail(email);
     if (this.checkIfPasswordCorrect(user, password)) {
       if (this.isUserVerified(user)) {
-        return new LoginResult(user,this.generateJWT(email, user.getId()));
+        return new LoginResult(user, this.generateJWT(email, user.getId()));
       } else {
-        throw new DBServiceError("To login, please verify your email-address.",931);
+        throw new DBServiceError("To login, please verify your email-address.", 931);
       }
     } else {
-      throw new DBServiceError("Invalid email-address or password.",934);
+      throw new DBServiceError("Invalid email-address or password.", 934);
     }
   }
 
@@ -102,44 +103,44 @@ export class DbServices {
    * then the method to enter the entry in the database is called
    * @param user as User object.
    */
-  public async signUp(user: User): Promise<number>{
-      const localClient = this.getClient();
-      await localClient.connect();
-      var id = -1;
-      try {
-        if(await this.checkIfMailIsUniqueDB(user.getEmail(), localClient)){
-          id = Number(await this.creatUserInDB(user, localClient));
-          user.setId(id);
-        } else {
-          throw new DBServiceError("The email address you enterd is already used with an other account.",926);
-        }
-      } finally {
-        await localClient.end();
+  public async signUp(user: User): Promise<number> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    var id = -1;
+    try {
+      if (await this.checkIfMailIsUniqueDB(user.getEmail(), localClient)) {
+        id = Number(await this.creatUserInDB(user, localClient));
+        user.setId(id);
+      } else {
+        throw new DBServiceError("The email address you enterd is already used with an other account.", 926);
       }
-      return id;
+    } finally {
+      await localClient.end();
     }
+    return id;
+  }
 
   /**
    * searches the user via email in the database and then calls the method makeUserVerifiedDB which sets the isverified
    * in the database to true
    * @param email
    */
-  public async makeUserVerified(email: string){
-      const localClient = this.getClient();
-      await localClient.connect();
-      try {
-        const user = await this.getUserFromDB(email,null, localClient);
-        await this.makeUserVerifiedDB(user, localClient);
-      } finally {
-        await localClient.end();
-      }
-  }
-
-  public async updateUser(user: User){
+  public async makeUserVerified(email: string) {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
-      await this.updateUserDB(user,localClient);
+    try {
+      const user = await this.getUserFromDB(email, null, localClient);
+      await this.makeUserVerifiedDB(user, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async updateUser(user: User) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.updateUserDB(user, localClient);
     } finally {
       await localClient.end();
     }
@@ -148,17 +149,17 @@ export class DbServices {
   public async getAllServices(): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
-      return await this.getServiceFromDB([],localClient);
+    try {
+      return await this.getServiceFromDB([], localClient);
     } finally {
       await localClient.end();
     }
   }
 
-  public async getServiceFilter(filter: EventServiceFilter[]){
+  public async getServiceFilter(filter: EventServiceFilter[]) {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.getServiceFromDB(filter, localClient);
     } finally {
       await localClient.end();
@@ -175,20 +176,20 @@ export class DbServices {
     }
   }
 
-  public async deleteUser(userId: number){
+  public async deleteUser(userId: number) {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.deleteUserFromDB(userId, localClient);
     } finally {
       await localClient.end();
     }
   }
 
-  public async deleteService(serviceId: number){
+  public async deleteService(serviceId: number) {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.deleteServiceFromDB(serviceId, localClient);
     } finally {
       await localClient.end();
@@ -198,7 +199,7 @@ export class DbServices {
   public async resetPassword(email: string, newPW: string) {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.resetPasswordDB(email, newPW, localClient);
     } finally {
       await localClient.end();
@@ -239,7 +240,7 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try {
-      await this.updateServiceDB(serviceId,updateArray,localClient);
+      await this.updateServiceDB(serviceId, updateArray, localClient);
     } finally {
       await localClient.end();
     }
@@ -249,7 +250,27 @@ export class DbServices {
     const localClient = this.getClient();
     await localClient.connect();
     try {
-      await this.updateServieDBParams (serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
+      await this.updateServieDBParams(serviceId, title, description, price, availability, radius, requirements, capacity, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async addRequestedService (request: ServiceRequest) {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      await this.addRequestToDB(request, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
+  public async getRequetsForUser (userId: number): Promise<ServiceRequest[]> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.getRequestsFromUserDB(userId, localClient);
     } finally {
       await localClient.end();
     }
@@ -258,13 +279,12 @@ export class DbServices {
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
-
   /**
    * sets the isverified of an user in the database to true
    * @param user as UserObject
    * @param client to use to connect to the database
    */
-  private async makeUserVerifiedDB(user: User, client: Client){
+  private async makeUserVerifiedDB(user: User, client: Client) {
     await client.query('Update users Set isverified=true Where id = $1', [user.getId()])
   }
 
@@ -273,10 +293,10 @@ export class DbServices {
    * @param user as User Object
    * @param client to use to connect to the database
    */
-  private async creatUserInDB(user: User, client: Client): Promise<number>{
+  private async creatUserInDB(user: User, client: Client): Promise<number> {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
-    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[
+    const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id', [
       user.getFirstname(),
       user.getLastname(),
       user.getEmail(),
@@ -286,33 +306,33 @@ export class DbServices {
       user.getIsFirm()]);
 
     var id = -1;
-    for await (const row of stream){
+    for await (const row of stream) {
       id = Number(row.get('id'));
 
     }
-    if(id == -1) {
-      throw new DBServiceError("There was an unknown  Error while saving your account in the database",920);
+    if (id == -1) {
+      throw new DBServiceError("There was an unknown  Error while saving your account in the database", 920);
     }
 
     return id;
   }
 
-  private async updateUserDB(user: User, client: Client){
+  private async updateUserDB(user: User, client: Client) {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
 
-    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[user.getId()]);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1', [user.getId()]);
     let oldAddressId = -1;
-    for await (const row of stream){
+    for await (const row of stream) {
       oldAddressId = Number(row.get('addressid'));
 
     }
 
     if (oldAddressId == -1) {
-      throw new DBServiceError("There was an Error while updating your user.",911);
+      throw new DBServiceError("There was an Error while updating your user.", 911);
     }
 
-    await client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6 WHERE id=$7',[user.getFirstname(), user.getLastname(),addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname(), user.getId()]);
+    await client.query('UPDATE users SET prename=$1, lastname=$2, addressid=$3, isfirm=$4, phonenumber=$5, firmname=$6 WHERE id=$7', [user.getFirstname(), user.getLastname(), addressId, user.getIsFirm(), user.getPhoneNumber(), user.getFirmname(), user.getId()]);
 
     this.searchForAddressUsageAndDelete(oldAddressId, client);
 
@@ -323,22 +343,22 @@ export class DbServices {
     let query: string;
     const qArray = [];
 
-    if(id == null) {
+    if (id == null) {
       query = "SELECT * FROM users WHERE email = $1";
       qArray.push(email);
-    }else {
+    } else {
       query = "SELECT * FROM users WHERE id = $1";
       qArray.push(id);
     }
 
-    const stream = client.query(query,qArray);
+    const stream = client.query(query, qArray);
 
 
     for await (const row of stream) {
       if (stream.rows == null) {
-        throw new DBServiceError("No user with this email address found in the database.",924);
+        throw new DBServiceError("No user with this email address found in the database.", 924);
       } else if (stream.rows.length !== 1) {
-        throw new DBServiceError("This email address isnt unique.",925);
+        throw new DBServiceError("This email address isnt unique.", 925);
       } else {
 
         const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
@@ -361,7 +381,7 @@ export class DbServices {
         return user;
       }
     }
-    throw new DBServiceError("No user with this email address found in the database.",924);
+    throw new DBServiceError("No user with this email address found in the database.", 924);
   }
 
   private async getFavoritesIdOfUser(userId: number, client: Client): Promise<number[]> {
@@ -381,14 +401,14 @@ export class DbServices {
 
   private async deleteUserFromDB(userId: number, client: Client) {
     console.log("delete User dbService");
-    const stream = client.query('SELECT addressid FROM users WHERE id=$1',[userId]);
+    const stream = client.query('SELECT addressid FROM users WHERE id=$1', [userId]);
     let oldAddressId = -1;
-    for await (const row of stream){
+    for await (const row of stream) {
       oldAddressId = Number(row.get('addressid'));
     }
 
     if (oldAddressId == -1) {
-      throw new DBServiceError("There was an Error while deleting your user.",911);
+      throw new DBServiceError("There was an Error while deleting your user.", 911);
     }
 
     await client.query('DELETE FROM users WHERE id = $1', [userId]);
@@ -408,16 +428,15 @@ export class DbServices {
   }
 
 
-
   /**
    * takes an email address and checks if an user is allready using this address
    * @param email-address of new User
    */
-  private async checkIfMailIsUniqueDB(email: string, client: Client) : Promise<boolean>{
+  private async checkIfMailIsUniqueDB(email: string, client: Client): Promise<boolean> {
     const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
     var counter = 0;
-    for await(const row of stream){
-      counter ++;
+    for await(const row of stream) {
+      counter++;
     }
     return (counter == 0);
   }
@@ -455,59 +474,56 @@ export class DbServices {
    * @param user
    */
   private isUserVerified(user: User): boolean {
-        return user.getIsVerified();
+    return user.getIsVerified();
   }
 
 
-
-  private async getAddressFromAId(addressId: number, client: Client): Promise<Address>{
+  private async getAddressFromAId(addressId: number, client: Client): Promise<Address> {
     let address: Address;
     const stream = client.query('Select id, street, number, zip, city From address Where id = $1', [addressId]);
-    for await(const row of stream){
-      if (stream.rows == null){
+    for await(const row of stream) {
+      if (stream.rows == null) {
         throw new Error('no address with this id found');
       } else {
-        address = new Address(String(row.get('street')),Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
+        address = new Address(String(row.get('street')), Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
         address.setId(addressId);
         return address;
       }
     }
-    throw new DBServiceError("No address with this id found.",914);
+    throw new DBServiceError("No address with this id found.", 914);
   }
 
-  private async checkIfAddressExistsAndCreate(street: string, number:number, zip: number, city: string, client: Client): Promise<Number> {
-    var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4',[street, number, zip, city]);
-
-    for await (const row of stream){
-      return Number(row.get('id'));
-    }
-
-    stream = client.query('Insert into address(street, number, zip, city) Values ($1,$2,$3,$4) Returning id As id',[street, number, zip, city]);
+  private async checkIfAddressExistsAndCreate(street: string, number: number, zip: number, city: string, client: Client): Promise<Number> {
+    var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4', [street, number, zip, city]);
 
     for await (const row of stream) {
       return Number(row.get('id'));
     }
 
-    throw new DBServiceError("There was an Error while saving the address.",912);
+    stream = client.query('Insert into address(street, number, zip, city) Values ($1,$2,$3,$4) Returning id As id', [street, number, zip, city]);
+
+    for await (const row of stream) {
+      return Number(row.get('id'));
+    }
+
+    throw new DBServiceError("There was an Error while saving the address.", 912);
   }
 
-  private async searchForAddressUsageAndDelete(addressId: number, client: Client){
-    const stream = await client.query('Select users.id FROM users WHERE addressid=$1 UNION SELECT service.id FROM service WHERE addressid=$1',[addressId]);
-    if (stream.rows.length == 0){
+  private async searchForAddressUsageAndDelete(addressId: number, client: Client) {
+    const stream = await client.query('Select users.id FROM users WHERE addressid=$1 UNION SELECT service.id FROM service WHERE addressid=$1', [addressId]);
+    if (stream.rows.length == 0) {
       await client.query('Delete From address Where id = $1', [addressId])
     }
   }
 
 
-
-
-  private async addServiceToDB(service: EventService, client: Client): Promise<number>{
+  private async addServiceToDB(service: EventService, client: Client): Promise<number> {
 
     const address = service.getAddress();
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price, image) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) Returning id',[
+    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price, image) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) Returning id', [
       service.getProviderId(),
       service.getCategory(),
       service.getTitle(),
@@ -527,11 +543,11 @@ export class DbServices {
       return Number(row.get('id'));
     }
 
-    throw new DBServiceError("There was an unknown Error while creating your service. Please try again later.",900);
+    throw new DBServiceError("There was an unknown Error while creating your service. Please try again later.", 900);
   }
 
 
-  private async getServiceFromDB(filterArray: EventServiceFilter[], client: Client) : Promise<EventServiceContainer>{
+  private async getServiceFromDB(filterArray: EventServiceFilter[], client: Client): Promise<EventServiceContainer> {
     const container = new EventServiceContainer([]);
 
     let query = 'SELECT * FROM service';
@@ -539,7 +555,7 @@ export class DbServices {
     let qCount = 1;
 
     let flag = false;
-    for(const filter of filterArray) {
+    for (const filter of filterArray) {
       if (flag) {
         query = query + " AND ";
       } else {
@@ -565,7 +581,7 @@ export class DbServices {
         query = query + filter.getType() + " <= $" + qCount;
         qArray.push(filter.getValue());
         qCount++;
-      }  else if (filter.getType() == FilterCategories.subtype)  {
+      } else if (filter.getType() == FilterCategories.subtype) {
         query = query + "Lower(subtype) LIKE Lower('%" + filter.getValue() + "%')"
       } else {
         query = query + filter.getType() + " = $" + qCount;
@@ -581,7 +597,7 @@ export class DbServices {
     console.log(query);
     console.log(qArray);
 
-    const stream = client.query(query,qArray);
+    const stream = client.query(query, qArray);
 
     //const fileHandler = new FileHandlerService();
 
@@ -594,10 +610,7 @@ export class DbServices {
       //const imageString = fileHandler.getPictureFromServiceId(serviceId);
 
 
-
-
       let serviceBuilder = new EventServiceBuilder();
-
 
 
       container.addService(
@@ -621,10 +634,10 @@ export class DbServices {
     return container;
   }
 
-  private async deleteServiceFromDB (serviceId: number, client: Client) {
-    const stream = client.query('SELECT addressid FROM service WHERE id=$1',[serviceId]);
+  private async deleteServiceFromDB(serviceId: number, client: Client) {
+    const stream = client.query('SELECT addressid FROM service WHERE id=$1', [serviceId]);
     let oldAddressId = -1;
-    for await (const row of stream){
+    for await (const row of stream) {
       oldAddressId = Number(row.get('addressid'));
 
     }
@@ -636,10 +649,10 @@ export class DbServices {
     await client.query('DELETE FROM service WHERE id = $1', [serviceId]);
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
-    await this.deleteServiceFromFavorites(serviceId,client);
+    await this.deleteServiceFromFavorites(serviceId, client);
   }
 
-  private async deleteServiceFromFavorites (serviceId: number, client: Client) {
+  private async deleteServiceFromFavorites(serviceId: number, client: Client) {
     await client.query('Delete From favorites Where serviceid = $1', [serviceId]);
   }
 
@@ -673,15 +686,15 @@ export class DbServices {
     return container;
   }
 
-  private async addUserFavoirte (userId: number, serviceId: number, client: Client) {
+  private async addUserFavoirte(userId: number, serviceId: number, client: Client) {
     await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
   }
 
-  private async removeUserFavorite (userId: number, serviceId: number, client: Client) {
+  private async removeUserFavorite(userId: number, serviceId: number, client: Client) {
     await client.query('Delete From favorites Where userid = $1 AND serviceid = $2', [userId, serviceId]);
   }
 
-  private async updateServiceDB (serviceId: number, updateArray: ServiceUpdate[], client: Client) {
+  private async updateServiceDB(serviceId: number, updateArray: ServiceUpdate[], client: Client) {
     let query = "UPDATE service SET ";
     let qArray = [];
     let qCount = 1;
@@ -691,7 +704,7 @@ export class DbServices {
       query = query + update.getUpdateType() + " = $" + qCount;
       qArray.push(update.getNewValue());
       qCount++;
-      if(qCount != updateArray.length+1){
+      if (qCount != updateArray.length + 1) {
         query = query + ","
       }
       query = query + " "
@@ -700,10 +713,10 @@ export class DbServices {
     query = query + "Where id = $" + qCount;
     qArray.push(serviceId);
 
-    await client.query(query,qArray);
+    await client.query(query, qArray);
   }
 
-  private async updateServieDBParams (serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client){
+  private async updateServieDBParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client) {
     await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
       title,
       description,
@@ -715,15 +728,47 @@ export class DbServices {
       serviceId]);
   }
 
+  private async addRequestToDB(request: ServiceRequest, client: Client) {
+    await client.query("Insert Into requests(clientid, serviceid, date, message) Values ($1,$2,$3,$4)", [
+      request.clientId,
+      request.providerId,
+      request.date,
+      request.messages
+    ]);
+  }
 
-    //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////
+  private async getRequestsFromUserDB (userId: number, client: Client): Promise<ServiceRequest[]> {
+    const stream = client.query("Select * From requests Where clientid=$1",[userId]);
+    const requestArray = [];
+    for await (const row of stream) {
+      let serviceId = Number(row.get('serviceid'));
+      let date = String(row.get('date'));
+      let msg = String(row.get('message'));
+      const serviceStream = client.query("Select userid, category, title From service Where id = $1 ", [serviceId]);
+      const service = await serviceStream.first();
+
+      if (service == undefined) {
+        throw new DBServiceError("There is an request with an non existing service.",954);
+      } else {
+        let providerId = Number(service.get('userid'));
+        let category = String(service.get('category'));
+        let title = String(service.get('title'));
+        requestArray.push(new ServiceRequest(userId, serviceId, title, providerId, date, msg, category));
+      }
+    }
+    return requestArray;
+  }
+
+
+  //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////
+
 
   // test function
-  public async testAddress(street: string, number:number, zip: number, city: string): Promise<Number> {
+  public async testAddress(street: string, number: number, zip: number, city: string): Promise<Number> {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
-      const id = await this.checkIfAddressExistsAndCreate(street,number,zip,city, localClient);
+    try {
+      const id = await this.checkIfAddressExistsAndCreate(street, number, zip, city, localClient);
       return id;
     } finally {
       await localClient.end();
@@ -734,7 +779,7 @@ export class DbServices {
   public async getSqlResult(name: string): Promise<SqlResult> {
     const localClient = this.getClient();
     await localClient.connect();
-    try{
+    try {
       return await this.testSql(name, localClient);
     } finally {
       await localClient.end();
@@ -742,69 +787,66 @@ export class DbServices {
   }
 
 
-    // for testing only...
+  // for testing only...
   private async testSql(name: string, client: Client): Promise<SqlResult> {
-        const sqlResult = new SqlResult();
+    const sqlResult = new SqlResult();
 
-        console.log(client.transactionStatus);
+    console.log(client.transactionStatus);
 
-        console.log(name);
+    console.log(name);
 
-        const stream = client.query('SELECT * From users Where prename = $1', [name]);
+    const stream = client.query('SELECT * From users Where prename = $1', [name]);
 
-        console.log(await stream);
+    console.log(await stream);
 
-        for await (const row of stream) {
+    for await (const row of stream) {
 
-            if (stream.rows == null) {
-                throw new Error('no result found in database');
-            }
-            // tslint:disable-next-line:max-line-length
-            const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
+      if (stream.rows == null) {
+        throw new Error('no result found in database');
+      }
+      // tslint:disable-next-line:max-line-length
+      const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
 
-            const user = new UserBuilder()
-              .setId(Number(row.get('id')))
-              .setFirstname(String(row.get('prename')))
-              .setLastname(String(row.get('lastname')))
-              .setEmail(String(row.get('email')))
-              .setPwhash(String(row.get('password')))
-              .setIsVerified(Boolean(row.get('isverified')))
-              .setAddress(address)
-              .setIsFirm(Boolean(row.get('isfirm')))
-              .setPhonenumber(String(row.get('phonenumber')))
-              .setFirmname(String(row.get('firmname')))
-              .build();
+      const user = new UserBuilder()
+        .setId(Number(row.get('id')))
+        .setFirstname(String(row.get('prename')))
+        .setLastname(String(row.get('lastname')))
+        .setEmail(String(row.get('email')))
+        .setPwhash(String(row.get('password')))
+        .setIsVerified(Boolean(row.get('isverified')))
+        .setAddress(address)
+        .setIsFirm(Boolean(row.get('isfirm')))
+        .setPhonenumber(String(row.get('phonenumber')))
+        .setFirmname(String(row.get('firmname')))
+        .build();
 
-
-
-            // tslint:disable-next-line:max-line-length
-            sqlResult.addUser(user);
-        }
 
       // tslint:disable-next-line:max-line-length
-
-        return sqlResult;
+      sqlResult.addUser(user);
     }
 
-    public async test(name: string) {
-      const config = {
-        'user' : 'cyrill',
-        'host' : 'localhost',
-        //'host' : 'localhost',
-        'password' : 'eseTeam5_2019!',
-        'port' : 5432,
-        'database' : 'eventdoo',
-      };
-      const client = new Client(config);
+    // tslint:disable-next-line:max-line-length
 
-      await client.connect();
+    return sqlResult;
+  }
 
-      console.log(client.closed);
-      const stream = await client.query('SELECT * From users Where name = $1', [name]);
-      console.log(stream);
-    }
+  public async test(name: string) {
+    const config = {
+      'user': 'cyrill',
+      'host': 'localhost',
+      //'host' : 'localhost',
+      'password': 'eseTeam5_2019!',
+      'port': 5432,
+      'database': 'eventdoo',
+    };
+    const client = new Client(config);
 
+    await client.connect();
 
+    console.log(client.closed);
+    const stream = await client.query('SELECT * From users Where name = $1', [name]);
+    console.log(stream);
+  }
 
 
 }
