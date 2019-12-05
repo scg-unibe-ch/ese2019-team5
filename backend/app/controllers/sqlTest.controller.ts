@@ -1,16 +1,12 @@
 // this is a test file to test the database connection and the functions of db.service.ts while developing
 
 import {Request, Response, Router} from 'express';
-import {SqlResult} from '../models/sqlresult.model';
 import {DbServices} from '../services/db.services';
 import {User} from '../models/user.model';
-import {FileHandlerService} from "../services/fileHandler.service";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
-import {ServiceUpdate} from "../models/serviceUpdate.model";
-import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 
 
 const router: Router = Router();
@@ -23,7 +19,6 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.get('/:name', async (req: Request, res: Response) => {
   const name = req.params.name;
-  let sql: SqlResult;
   try {
     await dbService.test(name);
     res.statusCode = 200;
@@ -74,13 +69,6 @@ router.get('/tryMakeUserVerified/:z', async(req: Request, res: Response) => {
     res.statusCode = 200;
     res.send(e.msg);
   }
-});
-
-router.get("/testID/:z", async(req: Request, res: Response) => {
-  const fileHander = new FileHandlerService();
-  fileHander.test(4);
-  res.statusCode = 200;
-  res.send("abc");
 });
 
 router.get("/tryService/:z", async(req: Request, res: Response) => {
@@ -143,12 +131,6 @@ router.get("/getServiceFromId/:id", async(req: Request, res: Response) => {
   res.send(await dbService.getServiceFromId(Number(req.params.id)));
 });
 
-router.get("/testImage/:id", async(req: Request, res: Response) => {
-  const handler = new FileHandlerService();
-
-  res.statusCode = 200;
-  res.send(handler.test(100));
-});
 
 router.get("/addFavorite/:id", async(req: Request, res: Response) => {
   try {
@@ -168,20 +150,6 @@ router.get("/getFavorite/:id", async(req: Request, res: Response) => {
     const services = await dbService.getFavoritesFromUid(Number(req.params.id));
     res.statusCode = 200;
     res.send(services);
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 400;
-    res.send("failed");
-  }
-
-});
-
-router.get("/updateService/:id", async(req: Request, res: Response) => {
-  try {
-    const updateArray = [new ServiceUpdate(ServiceUpdateType.title, "Cat"), new ServiceUpdate(ServiceUpdateType.description, "Nice fluffy cat.")];
-    await dbService.updateServiceWithArray(Number(req.params.id),updateArray);
-    res.statusCode = 200;
-    res.send("ok");
   } catch (e) {
     console.log(e);
     res.statusCode = 400;
