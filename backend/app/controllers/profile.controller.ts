@@ -208,7 +208,7 @@ res.status(400).send(error.message);
 router.get('/requestedServices/:customerId',async (req: Request, res: Response) => {
   try{
     let customerId: number= parseInt(req.params.customerId);
-    let requestedServicesArray: ServiceRequest[]= dbService.getServiceRequests(customerId);
+    let requestedServicesArray: ServiceRequest[]= await dbService.getRequestsForUser(customerId);
    // res.status(200).send(requestedServicesArray.map(e => e.toSimplification())),;
     res.status(200);
     }
