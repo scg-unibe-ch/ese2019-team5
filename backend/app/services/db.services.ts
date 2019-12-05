@@ -596,8 +596,8 @@ export class DbServices {
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
-      //const address = await this.getAddressFromAId(Number(addressid), client);
-      const address = new Address("abc",12,12,"abc");
+      const address = await this.getAddressFromAId(Number(addressid), client);
+      //const address = new Address("abc",12,12,"abc");
       const serviceId = Number(row.get('id'));
 
       //const imageString = fileHandler.getPictureFromServiceId(serviceId);
