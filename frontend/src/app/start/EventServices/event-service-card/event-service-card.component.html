@@ -26,7 +26,7 @@
               <ion-card-title style="cursor:pointer" (click)="redirectToDetailPage(event.serviceId)">{{event.title}}</ion-card-title>
             </ion-col>
             <ion-col>
-              <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" (click)="deleteConfirmation(event.eventId)" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark">
+              <ion-button [hidden]="auth.isLoggedOut() || auth.getUserId()!=event.providerId" (click)="deleteConfirmation(event.serviceId)" fill=clear style="position: absolute; right: 3px; top: 3px" color="dark">
                 <ion-icon name="trash"></ion-icon>
               </ion-button>
             </ion-col>
