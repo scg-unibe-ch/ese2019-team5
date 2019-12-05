@@ -1,3 +1,4 @@
+/*
 export enum Categories {
   music = "Music",
   location = "Location",
@@ -7,3 +8,4 @@ export enum Categories {
   none="none",
 
 }
+*/

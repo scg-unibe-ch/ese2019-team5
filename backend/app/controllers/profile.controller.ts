@@ -7,6 +7,7 @@ import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {EventService} from "../models/eventService.model";
+import {ServiceRequest} from "../models/serviceRequest.model";
 
 const router: Router = Router();
 const dbService = new DbServices();
@@ -202,5 +203,19 @@ router.get('/favourite/:id/:serviceid',async (req: Request, res: Response) => {
   }catch (error) {//TODO welche errors?
 res.status(400).send(error.message);
   }});
+
+
+router.get('/requestedServices/:customerId',async (req: Request, res: Response) => {
+  try{
+    let customerId: number= parseInt(req.params.customerId);
+  // let requestedServicesArray: ServiceRequest[]= dbService.getServiceRequests(customerId);
+   // res.status(200).send(requestedServicesArray);
+    res.status(200);
+    }
+catch (error) {
+    res.status(404).send(error.message);
+}
+
+})
 
 export const ProfileController: Router = router;

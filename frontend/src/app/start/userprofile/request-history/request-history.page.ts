@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../../AuthService/auth.service";
 import {HttpClient} from "@angular/common/http";
-import {ServiceRquest} from "../../../../../../backend/app/models/serviceRquest.model";
+import {ServiceRquest} from "../../../../../../backend/app/models/serviceRequest.model";
 
 @Component({
   selector: 'app-request-history',

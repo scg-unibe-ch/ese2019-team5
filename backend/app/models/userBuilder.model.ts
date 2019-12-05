@@ -33,7 +33,7 @@ export class UserBuilder {
     this._firmname= '';
     this._phonenumber='';
     this._isAdmin= false;
-    this._favourite=[]; //TODO
+    this._favourite=[];
   }
 
   public static user(): UserBuilder {

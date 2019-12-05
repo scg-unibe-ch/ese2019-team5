@@ -7,8 +7,9 @@ import {User} from "../models/user.model";
 import {EmailOrderEventService} from "../services/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
-import {ServiceUpdate} from "../models/serviceUpdate.model";
-import {ServiceUpdateType} from "../models/serviceUpdate.enum";
+import {ServiceRequest} from "../models/serviceRequest.model";
+
+
 
 
 const router: Router = Router();
@@ -69,7 +70,7 @@ router.post('/add', async (req: Request, res: Response) => {
 router.put('/update', async (req: Request, res: Response) => {
 
  try {
-  const updateArray:ServiceUpdate[]= []
+
    let title: string = req.body.title;
    let description: string = req.body.description;
 
@@ -166,9 +167,10 @@ router.post('/order', async (req: Request, res: Response) => {
     let providerName = provider.getFirstname()+ ' ' + provider.getLastname();
     const customer: User = await dbService.getUserFromId(customerId);
     let customerEmail: string = customer.getEmail();
-
+    let serviceRequest: ServiceRequest= new ServiceRequest(customerId,serviceId,serviceTitle,providerId,date,message)
     await EmailOrderEventService.sendMailToProvider(providerEmail, customerEmail, serviceTitle, date, time, message);
     await EmailOrderEventService.sendMailToCustomer(providerName, customerEmail, serviceTitle, date, time, message);
+   // await dbService.addRequestedService(serviceRequest);
     res.status(200);
     res.json('The emails were sent ');
 

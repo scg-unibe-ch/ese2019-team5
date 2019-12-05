@@ -39,13 +39,12 @@ router.post('/', async (req: Request, res: Response) => {
     res.statusCode = 201;
     res.json('sign up success');
 
-  } catch (error) {
-    if (error.errorCode == 926) {//TODO andere errors?
+  } catch (error) {//TODO andere errors?
       console.log(error.message);
       res.statusCode = 400;
       res.send(error.message);
 
-    }
+
   }
 
 });

@@ -166,21 +166,7 @@ export class User {
   }
 
 
-/*
 
-  public toJSONObject(): object {
-    const userJ =  {
-      'firstname': this._firstname,
-      'lastname': this._lastname,
-      'email': this._email,
-      'street': this._address.street,
-      'housenumber': String(this._address.housenumber),
-      'zip': String(this._address.zip),
-      'city': this._address.city};
-
-    return userJ;
-  }
-*/
 
 
 }
