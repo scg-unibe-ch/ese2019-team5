@@ -61,7 +61,7 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     if (city !== undefined) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.city, city))
     }
-    if (price !== undefined) {
+    if (price !== undefined && !isNaN(price) ) {
       eventServiceFilterArray.push(new EventServiceFilter(FilterCategories.price, price))
     }
     if (capacity !== undefined) {

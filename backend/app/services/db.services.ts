@@ -24,12 +24,12 @@ export class DbServices {
   private getClient(): Client {
 
     const config = {
-      'user': 'cyrill',
-      //'user' : 'postgres',
-      'host': '34.65.95.137',
-      //'host' : 'localhost',
-      'password': 'eseTeam5_2019!',
-      //'password' : 'root',
+      //'user': 'cyrill',
+      'user' : 'postgres',
+      //'host': '34.65.95.137',
+      'host' : 'localhost',
+      //'password': 'eseTeam5_2019!',
+      'password' : 'root',
       'port': 5432,
       'database': 'eventdoo',
     };
@@ -558,10 +558,7 @@ export class DbServices {
       } else if (filter.getType() == FilterCategories.availability) {
         query = query + "Lower(availability) LIKE Lower('%" + filter.getValue() + "%')"
       } else if (filter.getType() == FilterCategories.city) {
-        //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
-        query = query + "addressid IN (Select id From address Where city = LIKE Lower('%$" + qCount + "%'))";
-        qArray.push(filter.getValue());
-        qCount++;
+        query = query + "addressid IN (Select id From address Where Lower(city) LIKE Lower('%" + filter.getValue() + "%'))";
       } else if (filter.getType() == FilterCategories.capacity) {
         query = query + filter.getType() + " >= $" + qCount;
         qArray.push(filter.getValue());
@@ -620,6 +617,7 @@ export class DbServices {
       );
 
     }
+    container.reverse();
     return container;
   }
 
