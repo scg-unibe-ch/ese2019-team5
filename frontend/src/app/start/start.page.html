@@ -84,7 +84,7 @@
           </ion-col>
 
             <ion-col>
-              <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday" (ionChange)="search()">
+              <ion-select class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()">
                 <ion-select-option value=""> All days </ion-select-option>
                 <ion-select-option value="Monday"> Monday </ion-select-option>
                 <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
@@ -110,7 +110,7 @@
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Number of people" formControlName="persons" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Number of people" type="number" formControlName="persons" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -125,7 +125,7 @@
             <ion-button color="primary" (click)="search()" style="width: 100px; height: 43px"> <ion-icon color="light" name="search"> </ion-icon> </ion-button>
           </ion-col>
           <ion-col>
-            <a href="/start"> reset </a>
+            <a href="/start"> reset all filters </a>
           </ion-col>
         </ion-row>
       </ion-grid>

@@ -43,7 +43,8 @@ export class SignupPage implements OnInit {
     zip: ['', [Validators.required, Validators.pattern("[0-9]{4}")]],
     city: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
     password: [this.pw, [Validators.required, Validators.minLength(6)]],
-    confirmation: ['', [Validators.required, Validators.pattern]]
+    confirmation: ['', [Validators.required, Validators.pattern]],
+    accept: ['false', Validators.requiredTrue]
   });
 
   // ToDo: Implement initialization
