@@ -24,12 +24,12 @@ export class DbServices {
   private getClient(): Client {
 
     const config = {
-      //'user': 'cyrill',
-      'user' : 'postgres',
-      //'host': '34.65.95.137',
-      'host' : 'localhost',
-      //'password': 'eseTeam5_2019!',
-      'password' : 'root',
+      'user': 'cyrill',
+      //'user' : 'postgres',
+      'host': '34.65.95.137',
+      //'host' : 'localhost',
+      'password': 'eseTeam5_2019!',
+      //'password' : 'root',
       'port': 5432,
       'database': 'eventdoo',
     };
