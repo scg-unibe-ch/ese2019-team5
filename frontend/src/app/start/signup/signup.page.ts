@@ -91,7 +91,9 @@ export class SignupPage implements OnInit {
   get confirmation() {
     return this.signUpForm.get('confirmation');
   }
-
+  get accept() {
+    return this.signUpForm.get('accept');
+  }
 
 
   /**
@@ -170,7 +172,8 @@ export class SignupPage implements OnInit {
       this.lastname.valid &&
       this.street.valid && this.housenumber.valid &&
       this.zip.valid && this.city.valid &&
-      this.password.value == this.confirmation.value;
+      this.password.value == this.confirmation.value &&
+      this.accept.valid;
 
   }
 
