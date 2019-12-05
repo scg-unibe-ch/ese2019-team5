@@ -27,15 +27,14 @@
   </ion-button>
   <div style="min-height: 100%">
 
-    <!-- Loading animation while services are loaded from database-->
-    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
   <!-- Form to set search params -->
-  <form [formGroup]="searchForm" [hidden]="loading">
+  <form [formGroup]="searchForm">
     <ion-toolbar color="#fafafa" style="position: absolute; top: 5px;">
       <ion-grid>
         <ion-row>
           <ion-col>
-              <ion-select class="whiteBR" placeholder="Category" formControlName="category">
+              <ion-select class="whiteBR" placeholder="Category" formControlName="category" (ionChange)="search()">
                 <ion-select-option value=""> All Categories </ion-select-option>
                 <ion-select-option value="Location"> Venue </ion-select-option>
                 <ion-select-option value="Gastronomy"> Gastronomy </ion-select-option>
@@ -47,7 +46,7 @@
 
           <ion-col>
               <ion-select *ngIf="category.value == 'Gastronomy' || category.value == 'Music' || category.value == 'Entertainment' "
-                          class="whiteBR" placeholder="Subtype" formControlName="subtype">
+                          class="whiteBR" placeholder="Subtype" formControlName="subtype" (ionChange)="search()">
                 <ion-select-option value=""> All Types </ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="american"> American</ion-select-option>
                 <ion-select-option *ngIf="category.value == 'Gastronomy'" value="asian"> Asian</ion-select-option>
@@ -85,7 +84,7 @@
           </ion-col>
 
             <ion-col>
-              <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday">
+              <ion-select class="whiteBR" placeholder="Day..." formControlName="weekday" (ionChange)="search()">
                 <ion-select-option value=""> All days </ion-select-option>
                 <ion-select-option value="Monday"> Monday </ion-select-option>
                 <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
@@ -101,17 +100,17 @@
         <ion-row>
           <ion-col >
             <ion-item>
-              <ion-input placeholder="City" formControlName="city" type="text" (keyup.enter)="search()"> </ion-input>
+              <ion-input placeholder="City" formControlName="city" type="text" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (keyup.enter)="search()"> </ion-input>
+              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Number of people" formControlName="persons" (keyup.enter)="search()"> </ion-input>
+              <ion-input placeholder="Number of people" formControlName="persons" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -119,7 +118,7 @@
         <ion-row>
           <ion-col size="10">
             <ion-item>
-              <ion-input placeholder="Search..." formControlName="text" type="text" (keyup.enter)="search()"> </ion-input>
+              <ion-input placeholder="Search..." formControlName="text" type="text" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>

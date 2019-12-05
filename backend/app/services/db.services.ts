@@ -5,21 +5,16 @@ import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
 import {Address} from "../models/address.model";
 import {EventService} from "../models/eventService.model";
-import {FileHandlerService} from "./fileHandler.service";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {DBServiceError} from "../models/DBService.error";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
-import {ServiceUpdateType} from "../models/serviceUpdate.enum";
 import {ServiceUpdate} from "../models/serviceUpdate.model";
 
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
-const clientKey = fs.readFileSync('./app/services/client-key.pem').toString();
-const clientCert = fs.readFileSync('./app/services/client-cert.pem').toString();
-const serverCA = fs.readFileSync('./app/services/server-ca.pem').toString();
 
 export class DbServices {
 
@@ -42,14 +37,12 @@ export class DbServices {
   }
 
   public async addEventService(service: EventService){
-    //const fileHandler = new FileHandlerService();
 
     const localClient = this.getClient();
     await localClient.connect();
 
     try{
       const serviceId = await this.addServiceToDB(service, localClient);
-      //fileHandler.safeServicePictures(service.getImage(),serviceId);
     } finally{
       await localClient.end()
     }
@@ -281,8 +274,6 @@ export class DbServices {
    * @param client to use to connect to the database
    */
   private async creatUserInDB(user: User, client: Client): Promise<number>{
-
-    //const addressId = await this.checkIfAddressExistsAndCreate(user.address.street, user.address.housenumber, user.address.zip, user.address.city, client);
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
     const stream = client.query('Insert into users(prename, lastname, email, password, isverified, addressid, isfirm) Values ($1,$2,$3,$4,$5,$6,$7) Returning id As id',[
@@ -596,8 +587,8 @@ export class DbServices {
 
     for await (const row of stream) {
       const addressid = row.get('addressid');
-      //const address = await this.getAddressFromAId(Number(addressid), client);
-      const address = new Address("abc",12,12,"abc");
+      const address = await this.getAddressFromAId(Number(addressid), client);
+      //const address = new Address("abc",12,12,"abc");
       const serviceId = Number(row.get('id'));
 
       //const imageString = fileHandler.getPictureFromServiceId(serviceId);
