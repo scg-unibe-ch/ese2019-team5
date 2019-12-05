@@ -5,6 +5,7 @@ import {EmailVerificationServices} from '../services/emailVerification.services'
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
 import {DbServices} from '../services/db.services';
+import {error} from "ts-postgres/dist/src/logging";
 
 var jwt = require('jsonwebtoken');
 
@@ -24,11 +25,33 @@ const dbService = new DbServices();
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
+  //TODO consturction site
+ let pw= req.body.pwhash;
+
+
+      const verifyOptions = {
+        issuer: 'Eventdoo',
+        subject: req.body.email,
+        audience: req.body.email,
+        algorithm: 'RS256',}
+        let decoded = jwt.verify(pw, publicKey, verifyOptions);
+
+
+
+
+
+
+
+
+
+
+
+
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
     .setEmail(req.body.email)
-    .setPwhash(req.body.pwhash)
+    .setPwhash(req.body.pwhash)//decoded
     .setIsVerified(false)
     .setAddress(address)
     .build();
