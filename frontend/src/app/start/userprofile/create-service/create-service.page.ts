@@ -64,9 +64,9 @@ export class CreateServicePage implements OnInit {
     capacity: ['1000000', Validators.required],
     availability: ['', Validators.required],
     price: ['', [Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')]],
-    type: ['', Validators.required],
+    type: [''],
     requirements: [''],
-    description: ['', [Validators.minLength(3), Validators.maxLength(700)]],
+    description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(700)]],
     picture: ['', Validators.required]
   });
 
