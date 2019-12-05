@@ -1,5 +1,4 @@
 import {Client, DatabaseError, ResultIterator} from 'ts-postgres';
-import {SqlResult} from '../models/sqlresult.model';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
@@ -7,11 +6,10 @@ import {Address} from "../models/address.model";
 import {EventService} from "../models/eventService.model";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
-import {DBServiceError} from "../models/DBService.error";
+import {DBServiceError} from "../errors/DBService.error";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
-import {ServiceUpdate} from "../models/serviceUpdate.model";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 
@@ -232,16 +230,6 @@ export class DbServices {
     await localClient.connect();
     try {
       await this.removeUserFavorite(userId, serviceId, localClient);
-    } finally {
-      await localClient.end();
-    }
-  }
-
-  public async updateServiceWithArray(serviceId: number, updateArray: ServiceUpdate[]) {
-    const localClient = this.getClient();
-    await localClient.connect();
-    try {
-      await this.updateServiceDB(serviceId, updateArray, localClient);
     } finally {
       await localClient.end();
     }
@@ -571,7 +559,7 @@ export class DbServices {
         query = query + "Lower(availability) LIKE Lower('%" + filter.getValue() + "%')"
       } else if (filter.getType() == FilterCategories.city) {
         //SELECT * From service WHERE addressid IN (Select id From address Where city = 'Bern')
-        query = query + "addressid IN (Select id From address Where city = $" + qCount + ")";
+        query = query + "addressid IN (Select id From address Where city = LIKE Lower('%$" + qCount + "%'))";
         qArray.push(filter.getValue());
         qCount++;
       } else if (filter.getType() == FilterCategories.capacity) {
@@ -695,28 +683,6 @@ export class DbServices {
     await client.query('Delete From favorites Where userid = $1 AND serviceid = $2', [userId, serviceId]);
   }
 
-  private async updateServiceDB(serviceId: number, updateArray: ServiceUpdate[], client: Client) {
-    let query = "UPDATE service SET ";
-    let qArray = [];
-    let qCount = 1;
-
-    for (const update of updateArray) {
-
-      query = query + update.getUpdateType() + " = $" + qCount;
-      qArray.push(update.getNewValue());
-      qCount++;
-      if (qCount != updateArray.length + 1) {
-        query = query + ","
-      }
-      query = query + " "
-    }
-
-    query = query + "Where id = $" + qCount;
-    qArray.push(serviceId);
-
-    await client.query(query, qArray);
-  }
-
   private async updateServiceDBParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client) {
     await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
       title,
@@ -777,61 +743,6 @@ export class DbServices {
     } finally {
       await localClient.end();
     }
-  }
-
-  // This function is only for testing purpose
-  public async getSqlResult(name: string): Promise<SqlResult> {
-    const localClient = this.getClient();
-    await localClient.connect();
-    try {
-      return await this.testSql(name, localClient);
-    } finally {
-      await localClient.end();
-    }
-  }
-
-
-  // for testing only...
-  private async testSql(name: string, client: Client): Promise<SqlResult> {
-    const sqlResult = new SqlResult();
-
-    console.log(client.transactionStatus);
-
-    console.log(name);
-
-    const stream = client.query('SELECT * From users Where prename = $1', [name]);
-
-    console.log(await stream);
-
-    for await (const row of stream) {
-
-      if (stream.rows == null) {
-        throw new Error('no result found in database');
-      }
-      // tslint:disable-next-line:max-line-length
-      const address = await this.getAddressFromAId(Number(row.get('addressid')), client);
-
-      const user = new UserBuilder()
-        .setId(Number(row.get('id')))
-        .setFirstname(String(row.get('prename')))
-        .setLastname(String(row.get('lastname')))
-        .setEmail(String(row.get('email')))
-        .setPwhash(String(row.get('password')))
-        .setIsVerified(Boolean(row.get('isverified')))
-        .setAddress(address)
-        .setIsFirm(Boolean(row.get('isfirm')))
-        .setPhonenumber(String(row.get('phonenumber')))
-        .setFirmname(String(row.get('firmname')))
-        .build();
-
-
-      // tslint:disable-next-line:max-line-length
-      sqlResult.addUser(user);
-    }
-
-    // tslint:disable-next-line:max-line-length
-
-    return sqlResult;
   }
 
   public async test(name: string) {
