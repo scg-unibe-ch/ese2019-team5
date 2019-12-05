@@ -169,7 +169,7 @@ export class SignupPage implements OnInit {
       this.lastname.valid &&
       this.street.valid && this.housenumber.valid &&
       this.zip.valid && this.city.valid &&
-      this.password.valid && this.confirmation.valid;
+      this.password.value == this.confirmation.value;
 
   }
 
