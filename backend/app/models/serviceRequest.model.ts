@@ -21,6 +21,7 @@ export class ServiceRequest {
 
   public setCustomerId(customerId: number) {
     this.customerId = customerId;
+    return this;
   }
 
   public getCustomerId(): number {
@@ -29,6 +30,7 @@ export class ServiceRequest {
 
   public setServiceId(serviceId: number) {
     this.serviceId = serviceId;
+    return this;
   }
 
   public getServiceId(): number {
@@ -88,11 +90,13 @@ export class ServiceRequest {
 
   public toSimplification(): any {
     return {
-      'customerId': this.getCustomerId();
+      'customerId': this.getCustomerId(),
       'serviceId': this.getServiceId(),
+      'serviceTitle': this.getServiceTitle(),
+      'category': this.getCategory(),
       'providerId': this.getProviderId(),
-      'title': this.getServiceTitle(),
-
+      'date': this.getDate(),
+      'message': this.getMessage()
     }
   }
 }

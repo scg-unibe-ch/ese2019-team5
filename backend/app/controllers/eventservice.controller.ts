@@ -8,8 +8,7 @@ import {EmailOrderEventService} from "../services/emailOrderEventService.service
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailReportService.services";
 import {ServiceRequest} from "../models/serviceRequest.model";
-
-
+import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 
 
 const router: Router = Router();
@@ -69,29 +68,29 @@ router.post('/add', async (req: Request, res: Response) => {
  */
 router.put('/update', async (req: Request, res: Response) => {
 
- try {
+  try {
 
-   let title: string = req.body.title;
-   let description: string = req.body.description;
+    let title: string = req.body.title;
+    let description: string = req.body.description;
 
-   let availability: string = req.body.availability;
+    let availability: string = req.body.availability;
 
-   let requirements: string = req.body.requirements;
+    let requirements: string = req.body.requirements;
 
-   let capacity: number = parseInt(req.body.capacity);
-   let perimeter:number=parseInt(req.body.perimeter);
+    let capacity: number = parseInt(req.body.capacity);
+    let perimeter: number = parseInt(req.body.perimeter);
 
-   let price: number = parseInt(req.body.price);
+    let price: number = parseInt(req.body.price);
 
-   let serviceId: number = parseInt(req.body.serviceId);
+    let serviceId: number = parseInt(req.body.serviceId);
 ///TODO Cyrill und welche Error
-    await dbService.updateServiceParams(serviceId, title,description, price, availability,perimeter,requirements,capacity);
-   res.status(202).send('service updated');
+    await dbService.updateServiceParams(serviceId, title, description, price, availability, perimeter, requirements, capacity);
+    res.status(202).send('service updated');
 
- }catch (error) {
-   res.status(404).status(error);
+  } catch (error) {
+    res.status(404).status(error);
 
- }
+  }
 
 
 });
@@ -112,11 +111,11 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
       res.status(200).send('Service was deleted');
     } catch (error) {
       res.status(406).send(error.message);
-/*      if (error.message.localeCompare('an error occured while getting the old address id of updated user') == 0) { //TODO abklären genau welcher error
-        res.status(406).send('invalid ServiceId');
-      } else {
-        res.status(400).send('Service could not be deleted'); //TODO wie hier hin kommen
-      }*/
+      /*      if (error.message.localeCompare('an error occured while getting the old address id of updated user') == 0) { //TODO abklären genau welcher error
+              res.status(406).send('invalid ServiceId');
+            } else {
+              res.status(400).send('Service could not be deleted'); //TODO wie hier hin kommen
+            }*/
 
     }
   }
@@ -130,8 +129,8 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
  */
 router.get('/:serviceid', async (req: Request, res: Response) => {
 
-  try {
-     let serviceId: number = Number(req.params.serviceid);
+    try {
+      let serviceId: number = Number(req.params.serviceid);
       let servicesContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
       let eventServicesArray: EventService[] = servicesContainer.getServices();
       res.send(eventServicesArray[0].toSimplification());
@@ -162,15 +161,24 @@ router.post('/order', async (req: Request, res: Response) => {
     let orderedEventService: EventService = orderedEventServiceArray[0];
     let providerId = orderedEventService.getProviderId();
     let serviceTitle: string = orderedEventService.getTitle();
+    let category: string = orderedEventService.getCategory();
     const provider: User = await dbService.getUserFromId(providerId);
     let providerEmail = provider.getEmail();
-    let providerName = provider.getFirstname()+ ' ' + provider.getLastname();
+    let providerName = provider.getFirstname() + ' ' + provider.getLastname();
     const customer: User = await dbService.getUserFromId(customerId);
     let customerEmail: string = customer.getEmail();
-    let serviceRequest: ServiceRequest= new ServiceRequest(customerId,serviceId,serviceTitle,providerId,date,message)
+    let serviceRequest: ServiceRequest = ServiceRequestBuilder.serviceRequest()
+      .setCustomerId(customerId)
+      .setServiceId(serviceId)
+      .setServiceTitle(serviceTitle)
+      .setCategory(category)
+      .setProviderId(providerId)
+      .setDate(date)
+      .setMessage(message)
+      .build();
     await EmailOrderEventService.sendMailToProvider(providerEmail, customerEmail, serviceTitle, date, time, message);
     await EmailOrderEventService.sendMailToCustomer(providerName, customerEmail, serviceTitle, date, time, message);
-   // await dbService.addRequestedService(serviceRequest);
+    // await dbService.addRequestedService(serviceRequest);
     res.status(200);
     res.json('The emails were sent ');
 
@@ -188,9 +196,9 @@ router.post('/order', async (req: Request, res: Response) => {
  * 200 if email could be sent ok, 400 otherwise
  */
 router.post('/report', async (req: Request, res: Response) => {
-  let serviceId= req.body.serviceId;
-  let userId= req.body.userId;
- try {
+  let serviceId = req.body.serviceId;
+  let userId = req.body.userId;
+  try {
 //TODO wann sollte es fehler geben
     EmailReportServiceServices.sendReportMail(serviceId, userId);
     res.statusCode = 200;
@@ -200,7 +208,7 @@ router.post('/report', async (req: Request, res: Response) => {
     console.log(error.message);
     res.statusCode = 400;
     res.send(error);
-}
+  }
 });
 
 
