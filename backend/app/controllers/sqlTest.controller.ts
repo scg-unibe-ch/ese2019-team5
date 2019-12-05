@@ -11,7 +11,6 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
 import {ServiceUpdate} from "../models/serviceUpdate.model";
 import {ServiceUpdateType} from "../models/serviceUpdate.enum";
-import {DBService2} from "../services/dbService2";
 
 
 const router: Router = Router();
@@ -56,7 +55,7 @@ router.get('/getUserFromId/:id', async (req: Request, res: Response) => {
   try {
     user = await dbService.getUserFromId(Number(id));
     res.statusCode = 200;
-    res.send(user.toNameString());
+    res.send(user.getFirstname() + user.getLastname());
   } catch (e) {
     console.log(e);
     res.statusCode = 404;
@@ -202,18 +201,6 @@ router.get("/tryLogin/:id", async(req: Request, res: Response) => {
     res.send("failed");
   }
 
-});
-
-router.get("/testDB/test/:12", async(req: Request, res: Response) => {
-  try {
-    const db = new DBService2();
-    db.test();
-    res.statusCode = 200;
-    res.send("abc");
-  } catch (e) {
-    console.log(e);
-    console.log(e.stackTrace);
-  }
 });
 
 
