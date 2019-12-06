@@ -78,7 +78,7 @@ client.test("user was deleted no exception", function() {
 %}
 
 ###
-PUT http://localhost:3000/profile/addFavorite?userId=4
+PUT http://localhost:3000/profile/addFavorite?userId=5
 Content-Type: application/json
 
 
@@ -90,7 +90,7 @@ client.test("added favorite event service", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/requestedServices/:customerId?customerId=5
+GET http://localhost:3000/profile/requestedServices/5
 Content-Type: application/json
 
 > {%

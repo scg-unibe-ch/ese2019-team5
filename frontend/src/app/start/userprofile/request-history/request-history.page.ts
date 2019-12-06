@@ -19,7 +19,7 @@ export class RequestHistoryPage implements OnInit {
   ngOnInit() {
     this.empty = false;
     this.userId = this.authService.getUserId();
-    this.http.get('http:/localhost/profile/requestedServices/' + this.userId).subscribe(
+    this.http.get('http://localhost:3000/profile/requestedServices/' + this.userId).subscribe(
       (data) => { this.requests = <ServiceRequest[]>data;
       if (this.requests.length == 0)
         this.empty = true;},
