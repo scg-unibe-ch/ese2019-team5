@@ -43,6 +43,7 @@ export class UpdatePasswordPage implements OnInit {
         this.httpClient.post('http://localhost:3000/login/resetPassword', {password, token}).subscribe(
           () => {
             this.setPassword = true;
+            this.error = '';
             this.loading = false;
           },
           (error) => {
