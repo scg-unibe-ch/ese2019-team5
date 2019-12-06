@@ -36,7 +36,7 @@ export class UpdatePasswordPage implements OnInit {
 
   setNewPassword() {
     if (this.password.length >= 6) {
-      if (this.password.match(this.confirmation)) {
+      if (this.password == this.confirmation) {
         this.loading = true;
         const password = HashService.hashPassword(this.password);
         const token = this.token;
