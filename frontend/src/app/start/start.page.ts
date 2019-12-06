@@ -6,6 +6,7 @@ import {HttpClient} from "@angular/common/http";
 
 
 
+
 @Component({
   selector: 'app-start',
   templateUrl: './start.page.html',

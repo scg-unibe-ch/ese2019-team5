@@ -1,17 +1,5 @@
-<ion-header style="height: 85px; background-color: white">
-  <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px;"></ion-img>
-    <ion-button color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
-                [hidden]="authService.isLoggedOut()" (click)="authService.logout()">
-      <ion-icon name="ios-log-out"></ion-icon>
-      </ion-button>
-    <ion-button color="light" style="position: absolute; right: 20px; top: 18px; color: black; --box-shadow:none"
-                [hidden]="authService.isLoggedIn()" href="start/login">
-      Log in
-      </ion-button>
-    <ion-button color="light" style="position: absolute; right: 120px; top: 18px; color: black; --box-shadow:none"
-                [hidden]="authService.isLoggedIn()" href="start/signup">
-      Sign Up
-      </ion-button>
+<ion-header>
+  <app-header></app-header>
 </ion-header>
 
 <ion-content>

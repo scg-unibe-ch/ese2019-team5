@@ -199,13 +199,14 @@ export class UserprofilePage implements OnInit {
   }
 
   private async deleteUserProfile(userId: number) {
+    console.log("delete Profile");
     await this.http.delete('http://localhost:3000/profile/'+userId)
       .subscribe(
         (res)=> {console.log('delete success')},
         (error)=>{ console.log(error)}
       );
     this.authservice.logout();
-    document.location.href = 'http://localhost:4200/start/';
+    //document.location.href = 'http://localhost:4200/start/';
   }
 
   redirectStartPage() {

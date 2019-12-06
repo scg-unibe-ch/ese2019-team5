@@ -6,6 +6,7 @@ import {AlertController, ToastController} from "@ionic/angular";
 import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 import {HttpClient} from "@angular/common/http";
+import {Events} from "@ionic/angular";
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,8 @@ export class LoginPage implements OnInit {
     private httpClient: HttpClient,
     private authService: AuthService,
     private alertController: AlertController,
-    private toastController: ToastController) {
+    private toastController: ToastController,
+    public events: Events) {
   }
 
   ngOnInit() {
@@ -160,6 +162,7 @@ export class LoginPage implements OnInit {
       duration: 3000,
     });
     await toast.present();
+    this.events.publish('user:login');
   }
 
   /**
