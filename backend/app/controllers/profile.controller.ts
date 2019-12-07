@@ -8,7 +8,6 @@ import {FilterCategories} from "../models/filterCategories.enum";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {EventService} from "../models/eventService.model";
 import {ServiceRequest} from "../models/serviceRequest.model";
-import {consoleTestResultHandler} from "tslint/lib/test";
 
 const router: Router = Router();
 const dbService = new DbServices();
@@ -22,7 +21,7 @@ const dbService = new DbServices();
  * if there was an error while saving the address 404 will be sent
  * otherwise 409 will be sent
  */
-router.post('/update', async (req: Request, res: Response) => { //TODO stimmt muss admin da hin
+router.post('/update', async (req: Request, res: Response) => {
   try {
     let userOnlyPW: User = await dbService.getUserFromId(req.body.id);
     const pwHash = userOnlyPW.getPwHash();
@@ -57,16 +56,16 @@ router.post('/update', async (req: Request, res: Response) => { //TODO stimmt mu
     res.json('Profile updated');
     res.statusCode = 200;
 
-  } catch (error) { //TODO welche error können auftreten? error occured while getting the old id of updated user// address not found and error while inserting
+  } catch (error) {
 
-    if(error.errorCode==912){
-    console.log(error);
-    res.send(error.message);
-    res.statusCode = 404;}
-    else if (error.errorCode== 911){
-res.status(400).send(error.message);
+    if (error.errorCode == 912) {
+      console.log(error);
+      res.send(error.message);
+      res.statusCode = 404;
+    } else if (error.errorCode == 911) {
+      res.status(400).send(error.message);
 
-    }else{
+    } else {
       res.status(409).send(error.message);
     }
 
@@ -84,7 +83,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   let user: User;
   try {
     user = await dbService.getUserFromId(userId);
-    //TODO hier user daten und EventServices anfragen wie EventServices von hinten erhalten als Array oder als viele container?  Cyrill
+
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
@@ -123,33 +122,14 @@ router.get('/:id', async (req: Request, res: Response) => {
 
   } catch (error) {
 
-    //TODO welche error können auftreten?
-    if(error.errorCode==914){
-    res.send('Problem with service filter' + error.message);
-    res.statusCode = 404;
-  }else {
-      res.status(404).send('Problem with getting user from id' + error.message);
-    }
+
+
+      res.status(404).send( error.message);
+
   }
 
 });
 
-// /**
-//  * HTTP event listener, listens to get /changepassword
-//  * //TODO gibts noch gar nit oder
-//  */
-// router.put('/changepassword', async (req: Request, res: Response) => {
-//   try { //TODO bekomme ich neues und altes Passwort nach hinten geschickt, sende sie an DB diese ändert sie und Löse noch eine Mail aus?
-//     const userId = Number(req.params.id);
-//     let user: User = await dbService.getUserFromId(userId);
-//
-//     res.send('Password has changed');
-//     res.statusCode = 202;
-//   } catch (error) {
-//     res.statusCode = 400;
-//     res.send(error);
-//   }
-// });
 /**
  * HTTP event listener, listens to delete /:userId
  * gives the database the userId so it gets deleted and
@@ -174,18 +154,18 @@ router.delete('/:userId', async (req: Request, res: Response) => {
  * DB know, sends ok (200) if favourite was added otherwise sends 400
  */
 router.put('/addFavourite', async (req: Request, res: Response) => {
- try {
+  try {
 
-   const userId:number = parseInt(req.params.userId);
-   const serviceId: number = parseInt(req.params.serviceId)
-    await dbService.addFavoriteToUser(userId,serviceId); //TODO CYrill zum implementieren und Error Code anpassen
-   res.status(200).send('added to favourites');
- }catch (error) {
+    const userId: number = parseInt(req.params.userId);
+    const serviceId: number = parseInt(req.params.serviceId)
+    await dbService.addFavoriteToUser(userId, serviceId); //TODO CYrill zum implementieren und Error Code anpassen
+    res.status(200).send('added to favourites');
+  } catch (error) {
 
-   console.log(error.message + error.errorCode);
-  res.status(400).send(error);
-  // res.status(400);
- }
+    console.log(error.message + error.errorCode);
+    res.status(400).send(error);
+
+  }
 });
 
 /**
@@ -194,34 +174,34 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
  * the array to the front
  * @returns ok (200) if everything went well otherwise 400
  */
-router.get('/favourite/:id/:serviceid',async (req: Request, res: Response) => {
+router.get('/favourite/:id/:serviceid', async (req: Request, res: Response) => {
   try {
-    let userId: number= parseInt(req.params.id);
+    let userId: number = parseInt(req.params.id);
     let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
-    let favouriteArrayOfUser: EventService[] =favouriteContainer.getServices();
+    let favouriteArrayOfUser: EventService[] = favouriteContainer.getServices();
     res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
 
-  }catch (error) {//TODO welche errors?
-res.status(400).send(error.message);
-  }});
+  } catch (error) {//TODO welche errors?
+    res.status(400).send(error.message);
+  }
+});
 
 
-router.get('/requestedServices/:userId',async (req: Request, res: Response) => {
-  try{
-   // console.log(req.params.userId);
+router.get('/requestedServices/:userId', async (req: Request, res: Response) => {
+  try {
+    // console.log(req.params.userId);
 
-    let customerId: number= Number(req.params.userId);
+    let customerId: number = Number(req.params.userId);
     console.log(customerId);
-  //  console.log(req.query.userId);
-    let requestedServicesArray: ServiceRequest[]= await dbService.getRequestsForUser(customerId);
+    //  console.log(req.query.userId);
+    let requestedServicesArray: ServiceRequest[] = await dbService.getRequestsForUser(customerId);
     console.log(await dbService.getRequestsForUser(customerId));
-    console.log (requestedServicesArray.map(e => e.toSimplification()));
+    console.log(requestedServicesArray.map(e => e.toSimplification()));
     res.status(200).send(requestedServicesArray.map(e => e.toSimplification()));
 
-    }
-catch (error) {
+  } catch (error) {
     res.status(404).send(error.message);
-}
+  }
 
 })
 

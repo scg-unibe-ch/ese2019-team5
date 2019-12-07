@@ -85,8 +85,6 @@ export class EmailOrderEventService {
 
 // send mail with defined transport object
     try {
-      //if(time == ''){ //TODO wie genau machen mit time and message?
-
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',
         to: customerEmail,

@@ -50,7 +50,7 @@ router.post('/add', async (req: Request, res: Response) => {
       await dbService.addEventService(eventService);
       res.statusCode = 201;
       res.json('Service was created and saved')
-    } catch (error) { //TODO welche error können auftreten? unkown error occurred while creating dB entry of the service
+    } catch (error) {
       console.log(error);
       res.send(error);
       res.statusCode = 400;
@@ -111,13 +111,7 @@ router.delete('/:serviceId', async (req: Request, res: Response) => {
       res.status(200).send('Service was deleted');
     } catch (error) {
       res.status(406).send(error.message);
-      /*      if (error.message.localeCompare('an error occured while getting the old address id of updated user') == 0) { //TODO abklären genau welcher error
-              res.status(406).send('invalid ServiceId');
-            } else {
-              res.status(400).send('Service could not be deleted'); //TODO wie hier hin kommen
-            }*/
-
-    }
+     }
   }
 )
 
@@ -200,7 +194,7 @@ router.post('/report', async (req: Request, res: Response) => {
   let serviceId = req.body.serviceId;
   let userId = req.body.userId;
   try {
-//TODO wann sollte es fehler geben
+
     EmailReportServiceServices.sendReportMail(serviceId, userId);
     res.statusCode = 200;
     res.json('service got reported to email');

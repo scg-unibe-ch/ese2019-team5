@@ -11,10 +11,10 @@ export class User {
   private _address: Address;
   private _isVerified: boolean;
   private _isAdmin: boolean;
-  private _isFirm = false; //TODO wie anders lösen?? mit Name oder sonst wie? weg und was ist mit admin
+  private _isFirm = false;
   private _phoneNumber: string;
   private _firmname:string ;
-  private _favourite:number[];//TODO stimmt?
+  private _favourite:number[];
 
 
   constructor(id:number,firstname: string, lastname: string, email: string, pwhash: string, isVerified: boolean, address: Address, isFirm: boolean, firmname: string, phoneNumber:string, isAdmin:boolean, favourite:number[]) {
@@ -29,7 +29,7 @@ export class User {
     this._firmname=firmname;
     this._phoneNumber= phoneNumber;
     this._isAdmin= isAdmin;
-    this._favourite= favourite;//TODO unsicher
+    this._favourite= favourite;
   }
 
   public setFirstname(firstname: string) {
@@ -141,12 +141,12 @@ export class User {
 
   }
 
-  public setFavourite(favourite:number[]) {//TODO unsicher
+  public setFavourite(favourite:number[]) {
     this._favourite = favourite;
     return this;
   }
 
-  public getFavourite():number[]{//TODO unsicher
+  public getFavourite():number[]{
    return  this._favourite;
   }
 

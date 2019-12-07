@@ -30,7 +30,7 @@ router.post('/', async (req: Request, res: Response) => {
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
     .setEmail(req.body.email)
-    .setPwhash(req.body.pwhash)//decoded
+    .setPwhash(req.body.pwhash)
     .setIsVerified(false)
     .setAddress(address)
     .build();
@@ -80,7 +80,7 @@ const verifyToken = async (req: Request, res: Response) => {
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {
 
-    if (error.name === 'TokenExpiredError') { //TODO evt error object
+    if (error.name === 'TokenExpiredError') {
       res.status(401).send('Access token expired');
     } else {
       res.status(406);
