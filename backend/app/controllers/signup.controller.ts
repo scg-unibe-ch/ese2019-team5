@@ -26,6 +26,7 @@ const dbService = new DbServices();
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
   //TODO consturction site
+/*
  let pw= req.body.pwhash;
 
 
@@ -37,26 +38,23 @@ router.post('/', async (req: Request, res: Response) => {
         let decoded = jwt.verify(pw, publicKey, verifyOptions);
 
   let payload = {
-   /* pw: pwHash
+   /!* pw: pwHash
     name: user.getFirstname(),
     surname: user.getLastname(),
-    email: user.getEmail(),*/
+    email: user.getEmail(),*!/
   }
 
 
-   /* let signOptions = {
+   /!* let signOptions = {
       issuer: 'Eventdoo',
       subject: email,
       audience: email,
 
       algorithm: 'RS256'
-    };*/
+    };*!/
     //var emailToken = jwt.sign(payload, privateKey, signOptions);
 
-
-
-
-
+*/
 
 
 
