@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Address} from "../models/address.model";
-import {EmailVerificationServices} from '../services/emailVerification.services'
+import {EmailVerificationServices} from '../services/emailServices/emailVerification.services'
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
 import {DbServices} from '../services/db.services';

@@ -4,9 +4,9 @@ import {EventService} from "../models/eventService.model";
 import {EventServiceBuilder} from "../models/eventServiceBuilder.model";
 import {DbServices} from "../services/db.services";
 import {User} from "../models/user.model";
-import {EmailOrderEventService} from "../services/emailOrderEventService.services";
+import {EmailOrderEventService} from "../services/emailServices/emailOrderEventService.services";
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
-import {EmailReportServiceServices} from "../services/emailReportService.services";
+import {EmailReportServiceServices} from "../services/emailServices/emailReportService.services";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 

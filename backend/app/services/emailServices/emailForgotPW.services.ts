@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {User} from '../models/user.model';
+import {User} from '../../models/user.model';
 import * as jwt from 'jsonwebtoken';
 
 import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";

@@ -3,7 +3,7 @@ import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
 import jwt from 'jsonwebtoken';
 import * as fs from 'fs';
-import {EmailForgotPWServices} from "../services/emailForgotPW.services";
+import {EmailForgotPWServices} from "../services/emailServices/emailForgotPW.services";
 
 
 const dbService = new DbServices();
