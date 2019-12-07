@@ -127,6 +127,7 @@ export class SignupPage implements OnInit {
           (error) => {
             this.loading = false;
             this.error = 'There is already an account assigned to your email address. Please log in or chose another address.';
+         console.log(error)
           });
     } else {
       this.loading = false;

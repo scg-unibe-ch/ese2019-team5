@@ -14,7 +14,10 @@ export class HashService {
    */
   static hashPassword(plainTextPw: string){
 
-    return plainTextPw.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+    let pwHash= plainTextPw.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+    var Hashes= require('jshashes');
+    let newPWHash= new Hashes.SHA1().b64(pwHash);
+    return newPWHash;
   }
 
 

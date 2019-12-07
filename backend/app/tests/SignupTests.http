@@ -15,7 +15,7 @@ Content-Type: application/json
   "firstname": "Example",
   "lastname": "Miller",
   "email": "will123459@gmail.com",
-  "pwhash": -1425372064,
+  "pwhash": "2jmj7l5rSw0yVb/vlWAYkK/YBwk=",
   "zip": 3031,
   "street": "Herestreet",
   "housenumber": 11,

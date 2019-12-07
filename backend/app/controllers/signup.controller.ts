@@ -25,39 +25,6 @@ const dbService = new DbServices();
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
-  //TODO consturction site
-/*
- let pw= req.body.pwhash;
-
-
-      const verifyOptions = {
-        issuer: 'Eventdoo',
-        subject: req.body.email,
-        audience: req.body.email,
-        algorithm: 'RS256',}
-        let decoded = jwt.verify(pw, publicKey, verifyOptions);
-
-  let payload = {
-   /!* pw: pwHash
-    name: user.getFirstname(),
-    surname: user.getLastname(),
-    email: user.getEmail(),*!/
-  }
-
-
-   /!* let signOptions = {
-      issuer: 'Eventdoo',
-      subject: email,
-      audience: email,
-
-      algorithm: 'RS256'
-    };*!/
-    //var emailToken = jwt.sign(payload, privateKey, signOptions);
-
-*/
-
-
-
 
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
@@ -75,10 +42,11 @@ router.post('/', async (req: Request, res: Response) => {
     res.json('sign up success');
 
   } catch (error) {//TODO andere errors?
-      console.log(error.message);
-      res.statusCode = 400;
-      res.send(error.message);
+    console.log(error);
+    console.log(error.message);
 
+    res.status(400).send(error.message);
+    console.log(res.statusCode);
 
   }
 
@@ -111,12 +79,13 @@ const verifyToken = async (req: Request, res: Response) => {
     res.status(200);
     res.send('Thank you for verifying your email-address you can now login.');
   } catch (error) {
+
     if (error.name === 'TokenExpiredError') { //TODO evt error object
       res.status(401).send('Access token expired');
     } else {
       res.status(406);
       res.send('invalid Token' + error);
-     }
+    }
   }
 
 };
