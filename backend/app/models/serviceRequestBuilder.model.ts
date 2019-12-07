@@ -29,6 +29,10 @@ export class ServiceRequestBuilder {
     this._message= '';
      }
 
+  /**
+   * creates a new ServiceRequestBuilder
+   * @return new ServiceRequestBuilder
+   */
   public static serviceRequest(): ServiceRequestBuilder{
     return new ServiceRequestBuilder();
   }

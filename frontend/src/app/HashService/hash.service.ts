@@ -16,7 +16,7 @@ export class HashService {
 
     let pwHash= plainTextPw.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
     var Hashes= require('jshashes');
-    let newPWHash= new Hashes.SHA1().b64(pwHash);
+    let newPWHash= new Hashes.SHA256().b64(pwHash);
     return newPWHash;
   }
 

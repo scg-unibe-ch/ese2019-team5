@@ -36,6 +36,10 @@ export class UserBuilder {
     this._favourite=[];
   }
 
+  /**
+   * creates a new UserBuilder
+   * @return new UserBuilder
+   */
   public static user(): UserBuilder {
     return new UserBuilder();
   }

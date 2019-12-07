@@ -41,6 +41,10 @@ export class EventServiceBuilder {
 
   }
 
+  /**
+   * creates a new EventServiceBuilder
+   * @return new EventServiceBuilder
+   */
   public static eventService(): EventServiceBuilder {
     return new EventServiceBuilder();
   }
