@@ -12,7 +12,7 @@ export class EmailForgotPWCreatorService {
       "<p>Have you requested a password reset? </p>" +
       "<p>If so perfect! Just click the link below to reset your password.</p>" +
       "<p> For security reasons the link will only be valid for 24h </p> " +
-      "<a href=" + token + "  >reset password</a>" +
+      "<a href='" + token + "' target='_blank'  >reset password</a>" +
       "<p>Have fun planning your event or finding new opportunities to offer your services</p>" +
       "<p><b><i>Your Eventdoo Team</i></b></p>" +
       "</div>" +

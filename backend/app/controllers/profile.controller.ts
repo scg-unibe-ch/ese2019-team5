@@ -8,6 +8,7 @@ import {FilterCategories} from "../models/filterCategories.enum";
 import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {EventService} from "../models/eventService.model";
 import {ServiceRequest} from "../models/serviceRequest.model";
+import {consoleTestResultHandler} from "tslint/lib/test";
 
 const router: Router = Router();
 const dbService = new DbServices();
@@ -205,10 +206,15 @@ res.status(400).send(error.message);
   }});
 
 
-router.get('/requestedServices/:customerId',async (req: Request, res: Response) => {
+router.get('/requestedServices/:userId',async (req: Request, res: Response) => {
   try{
-    let customerId: number= parseInt(req.params.customerId);
+   // console.log(req.params.userId);
+
+    let customerId: number= Number(req.params.userId);
+    console.log(customerId);
+  //  console.log(req.query.userId);
     let requestedServicesArray: ServiceRequest[]= await dbService.getRequestsForUser(customerId);
+    console.log(await dbService.getRequestsForUser(customerId));
     console.log (requestedServicesArray.map(e => e.toSimplification()));
     res.status(200).send(requestedServicesArray.map(e => e.toSimplification()));
 
