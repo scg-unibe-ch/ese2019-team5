@@ -39,6 +39,7 @@ app.set( 'view engine', 'handlebars');
 //app.use(bodyParser({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb'}));
 app.use(bodyParser.json({limit:'50mb'}));
+///app.use(bodyParser());
 
 
 var port = 3000;
