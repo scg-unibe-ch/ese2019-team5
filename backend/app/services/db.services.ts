@@ -888,7 +888,12 @@ export class DbServices {
 
     const service = await client.query("Select id From service Where id = $1",[serviceId]);
     if (service.rows.length == 0) {
+      throw new DBServiceError("The service you wanted to add to your favorites doesn't exist.",952)
+    }
 
+    const user = await client.query("Select id From users Where id = $1",[userId]);
+    if (user.rows.length == 0) {
+      throw new DBServiceError("There seams to be a problem with your user-account please contact us.",952)
     }
 
     await client.query('Insert Into favorites Values ($1, $2)', [userId, serviceId]);
