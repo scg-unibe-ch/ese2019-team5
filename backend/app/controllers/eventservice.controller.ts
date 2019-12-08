@@ -85,7 +85,7 @@ router.put('/update', async (req: Request, res: Response) => {
     let serviceId: number = parseInt(req.body.serviceId);
 ///TODO Cyrill und welche Error
     await dbService.updateServiceParams(serviceId, title, description, price, availability, perimeter, requirements, capacity);
-    res.status(202).send('service updated');
+    res.status(202).json('service updated');
 
   } catch (error) {
     res.status(404).status(error);
@@ -153,12 +153,14 @@ router.post('/order', async (req: Request, res: Response) => {
     let orderedEventServiceContainer: EventServiceContainer = await dbService.getServiceFromId(serviceId);
     let orderedEventServiceArray: EventService[] = orderedEventServiceContainer.getServices();
     let orderedEventService: EventService = orderedEventServiceArray[0];
-    let providerId = orderedEventService.getProviderId();
     let serviceTitle: string = orderedEventService.getTitle();
     let category: string = orderedEventService.getCategory();
+
+    let providerId = orderedEventService.getProviderId();
     const provider: User = await dbService.getUserFromId(providerId);
     let providerEmail = provider.getEmail();
     let providerName = provider.getFirstname() + ' ' + provider.getLastname();
+
     const customer: User = await dbService.getUserFromId(customerId);
     let customerEmail: string = customer.getEmail();
     let serviceRequest: ServiceRequest = ServiceRequestBuilder.serviceRequest()
