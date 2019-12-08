@@ -189,7 +189,7 @@ router.delete('/favourite/:id/:serviceId', async (req: Request, res: Response) =
   try {
     let userId: number = parseInt(req.params.id);
     let serviceId: number = parseInt(req.params.serviceId);
-//  await dbService.deleteFavourite(userId,serviceId)//TODO Cyrill
+  await dbService.removeFavoriteFromUser(userId,serviceId);
     res.status(200).json('Favourite got deleted');
   } catch (error) {
     res.status(404).send(error.message);
