@@ -78,23 +78,80 @@ client.test("user was deleted no exception", function() {
 %}
 
 ###
-PUT http://localhost:3000/profile/addFavorite?userId=5
+PUT http://localhost:3000/profile/addFavourite
 Content-Type: application/json
+
+{   "userId":33,
+  "serviceId":8}
 
 
 > {%
 client.test("added favorite event service", function() {
-  client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.status === 201, "Response status is 201");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
 
 ###
+PUT http://localhost:3000/profile/addFavourite
+Content-Type: application/json
+
+{   "userId":33,
+  "serviceId":7}
+
+> {%
+client.test("added favorite event service", function() {
+  client.assert(response.status === 201, "Response status is 201");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+GET http://localhost:3000/profile/favourite/5
+Content-Type: application/json
+
+> {%
+client.test("get favourite of user 5", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+
+GET http://localhost:3000/profile/favourite/1
+Content-Type: application/json
+
+> {%
+client.test("get favourite of user 1 ", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/profile/favourite/7/33
+Content-Type: application/json
+
+> {%
+client.test("delete favourite 7 from user 33 ", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
+DELETE http://localhost:3000/profile/favourite/8/33
+Content-Type: application/json
+
+> {%
+client.test("delete favourite 8 from user 33 ", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+###
 GET http://localhost:3000/profile/requestedServices/5
 Content-Type: application/json
 
 > {%
-client.test("added favorite event service", function() {
+client.test("get requested Services", function() {
   client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
