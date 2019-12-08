@@ -150,15 +150,16 @@ router.delete('/:userId', async (req: Request, res: Response) => {
 /**
  * HTTP event listener, listens to put to /addFavourite
  * adds an event service to the user by letting the
- * DB know, sends ok (200) if favourite was added otherwise sends 400
+ * DB know, sends ok (201) if favourite was added otherwise sends 400
  */
 router.put('/addFavourite', async (req: Request, res: Response) => {
   try {
 
-    const userId: number = parseInt(req.params.userId);
-    const serviceId: number = parseInt(req.params.serviceId)
+    const userId: number = Number(req.body.userId);
+    const serviceId: number = Number(req.body.serviceId)
     await dbService.addFavoriteToUser(userId, serviceId); //TODO CYrill zum implementieren und Error Code anpassen
     res.status(201).send('added to favourites');
+
   } catch (error) {
 
     console.log(error.message + error.errorCode);
