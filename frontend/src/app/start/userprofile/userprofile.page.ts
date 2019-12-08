@@ -59,7 +59,7 @@ export class UserprofilePage implements OnInit {
     housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]*[a-z]?')]],
     zipInput: [this.zip, [Validators.required, Validators.pattern('[0-9]{4}')]],
     cityInput: [this.city, [Validators.required, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
-    phonenumberInput: [this.phonenumber, [Validators.pattern('[0-9]+')]]
+    phonenumberInput: [this.phonenumber, [Validators.pattern('[+]?[0-9\\s]+')]]
   });
 
   get firstnameInput() {
