@@ -5,7 +5,7 @@ import {EmailVerificationServices} from '../services/emailServices/emailVerifica
 import * as fs from 'fs';
 import {UserBuilder} from "../models/userBuilder.model";
 import {DbServices} from '../services/db.services';
-import {error} from "ts-postgres/dist/src/logging";
+
 
 var jwt = require('jsonwebtoken');
 
@@ -20,8 +20,8 @@ const dbService = new DbServices();
 
 /**
  * reacts on HTTP Client POST /signup events by sending Mail to new user and adding the user to DB
- * returns 201 (created) if signup worked and 400 otherwise
- *
+ * returns 201 (created) if signup worked and 400 if email address is already taken
+ * and 409 if there was a problem saving the user to the DB
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
@@ -41,12 +41,13 @@ router.post('/', async (req: Request, res: Response) => {
     res.statusCode = 201;
     res.json('sign up success');
 
-  } catch (error) {//TODO andere errors?
-    console.log(error);
+  } catch (error) {
     console.log(error.message);
-
-    res.status(400).send(error.message);
-    console.log(res.statusCode);
+    if(error.errorCode==926) {
+      res.status(400).send(error.message);
+    }else {
+      res.status(409).send(error.message);
+    }
 
   }
 
