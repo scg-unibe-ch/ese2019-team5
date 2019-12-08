@@ -161,7 +161,7 @@ Content-Type: application/json
   "time": " dadsdfasdfdsaf"
 }
 > {%
-client.test("sending email", function() {
+client.test("sending email 1", function() {
   client.assert(response.status === 200, "Response status is 200");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
