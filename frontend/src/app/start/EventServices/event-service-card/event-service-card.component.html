@@ -1,6 +1,6 @@
 <ion-grid>
   <ion-row>
-    <ion-col *ngFor="let event of services" size-md="4">
+    <ion-col *ngFor="let event of services" size-md="width">
       <ion-card  color="light" padding="2" style="box-shadow: none !important; cursor:pointer;"  >
         <ion-img *ngIf="event.image" [src]="event.image" style="height: 200px; width: 350px;" (click)="redirectToDetailPage(event.serviceId)"></ion-img>
         <ion-card-header>

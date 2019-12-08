@@ -14,6 +14,7 @@ import {Observable, Subject} from "rxjs";
 
 export class EventServiceCardComponent implements OnInit {
   @Input() services: EventService[];
+  @Input() width: any;
 
   constructor(
     private auth: AuthService,

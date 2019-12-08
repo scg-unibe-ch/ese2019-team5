@@ -11,9 +11,13 @@
 
   <div style="min-height: 100%; margin-left: 15%; margin-right: 15%; background-color: white">
 
-    <ion-button slot="fixed"  [hidden]="isEditing" [disabled]="numberOfServices>=5"  [routerLink]="['createService']" shape="round" color="dark" style="position: fixed; height: 50px; width: 50px; bottom: 110px; right: 20%">
-      <ion-text style="font-size: 25pt; font-weight: lighter; color: white;">+</ion-text>
-    </ion-button>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="end" [hidden]="isEditing" style="position: fixed; height: 50px; width: 50px; bottom: 110px; right: 20%">
+      <ion-fab-button [disabled]="numberOfServices>=5" [routerLink]="['createService']" color="dark">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
 
   <ion-row>
 
@@ -94,14 +98,17 @@
 
     </ion-col>
 
-    <ion-col offset="2">
+    <ion-col size-md="6" offset="2">
       <!--ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5"  [routerLink]="['createService']" style="color: white">Create your service offer</ion-button-->
-      <ion-title [hidden]="numberOfServices==0">My services</ion-title>
-      <ion-list style="background-color: white">
-        <event-service-card [services]="eventServiceArrayOfUser"></event-service-card>
-        <ion-item [hidden]="numberOfServices>0">You are not offering any services</ion-item>
-      </ion-list>
+      <ion-title>My services</ion-title>
+
+      <event-service-card [width]="12" [services]="eventServiceArrayOfUser"></event-service-card>
+
+      <ion-item [hidden]="numberOfServices>0">You are not offering any services</ion-item>
+
       <ion-note [hidden]="numberOfServices<5">You can only offer 5 services at once</ion-note>
+
+
     </ion-col>
 
   </ion-row>
