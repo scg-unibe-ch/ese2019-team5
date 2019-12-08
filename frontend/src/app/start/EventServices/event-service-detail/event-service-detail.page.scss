@@ -3,13 +3,13 @@ ion-content{
 }
 
 .bigButtons{
-  height: 120px;
-  width: 120px;
+  height:70px;
+  width: 70px;
 }
 
 .bigIcons{
-  height: 120px;
-  width: 120px;
+  height: 85px;
+  width: 85px;
 }
 
 h1{
@@ -22,3 +22,38 @@ ion-text{
   font-family: Calibri;
   color: #616161;
 }
+
+
+/* Style the button and place it in the middle of the eventImage/image */
+.btn1 {
+  position: absolute;
+  top: 3%;
+  right: 12%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+  --box-shadow: none;
+}
+
+.btn2 {
+  position: absolute;
+  top: 72.5%;
+  right: 13.8%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+  --box-shadow: none;
+}
+.itemForm{
+  border: 1px solid #d0d0d0;
+  border-radius: 7px;
+  margin: 15px;
+}
+
+
+
+

@@ -8,6 +8,7 @@ import {AuthService} from "../../../AuthService/auth.service";
 import {EventServiceJson} from "../../userprofile/EventServiceJson";
 
 import {Observable, Subject, Subscription} from "rxjs";
+import {Platform} from "@ionic/angular";
 
 @Component({
   selector: 'app-event-service-detail',
@@ -15,6 +16,7 @@ import {Observable, Subject, Subscription} from "rxjs";
   styleUrls: ['./event-service-detail.page.scss'],
 })
 export class EventServiceDetailPage implements OnInit {
+  public devWidth = this.platform.width();
 
   private serviceId: string;
   private isInputing: boolean = false;
@@ -48,6 +50,7 @@ export class EventServiceDetailPage implements OnInit {
     private toast: ToastController,
     private auth: AuthService,
     private toastController: ToastController,
+    private platform: Platform
   ) { }
 
   orderInfoForm = this.formBuilder.group({
@@ -137,6 +140,10 @@ export class EventServiceDetailPage implements OnInit {
 
   stopEditing() {
     this.isEditing = false;
+  }
+
+  goHome() {
+    location.replace("/start");
   }
 
   async sendOffer() {
