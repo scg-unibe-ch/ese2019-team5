@@ -16,124 +16,128 @@
 <!-- User must enter a e-mail address, name, address and 2 identical passwords -->
 <!-- All information is required to sign up -->
 <ion-content>
-  <div style="min-height: 100%; margin-left: 30%; margin-right: 30%; background-color: white">
-  <div class="container-fluid" style="background-color: white">
-    <br>
-    <form [formGroup]="signUpForm">
+  <div class="sideBorder">
+    <div class="container-fluid" style="background-color: white">
+      <br>
+      <form [formGroup]="signUpForm">
 
-      <!-- User must enter his/her e-mail address here -->
-      <!-- E-mail-address is stored in the email-propriety of a User-Object -->
-      <div class="form-group" style="background-color: white">
-        <ion-item>
-          <ion-input formControlName="email" type="email" class="form-control" placeholder="E-Mail"></ion-input>
+        <!-- User must enter his/her e-mail address here -->
+        <!-- E-mail-address is stored in the email-propriety of a User-Object -->
+        <div class="form-group" style="background-color: white">
+          <ion-item>
+            <ion-input formControlName="email" type="email" class="form-control" placeholder="E-Mail"></ion-input>
 
-        <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
-        <small [class.ion-hide]="email.untouched || email.valid"
-               style="color: red"> Invalid e-mail-address </small>
-        </ion-item>
-      </div>
-      <!-- User must enter their name -->
-      <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="firstname" type="text" class="form-control" placeholder="First Name"></ion-input>
-          <small [class.ion-hide]="firstname.untouched || firstname.valid"
-                 style="color: red"> Invalid name </small>
-        </ion-item>
-      </div>
-
-      <!-- User must enter their last name -->
-      <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="lastname" type="text" class="form-control" placeholder="Last Name"></ion-input>
-          <small [class.ion-hide]="lastname.untouched || lastname.valid"
-                 style="color: red"> Invalid name </small>
-        </ion-item>
-
-      </div>
-
-      <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="street" type="text" class="form-control" placeholder="Street"></ion-input>
-          <small [class.ion-hide]="street.valid || street.untouched"
-                 style="color: red;"> Street is invalid. </small>
-        </ion-item>
-
-      </div>
-      <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="housenumber" type="text" class="form-control" placeholder="House Nr"></ion-input>
-          <small [class.ion-hide]="housenumber.valid || housenumber.untouched"
-                 style="color: red;"> Housenumber is invalid. </small>
-        </ion-item>
-
-
+            <!-- If the user "touched" this input and the mail-address is invalid, this message is shown  -->
+            <small [class.ion-hide]="email.untouched || email.valid"
+                   style="color: red"> Invalid e-mail-address </small>
+          </ion-item>
+        </div>
+        <!-- User must enter their name -->
         <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="zip" type="number" class="form-control" placeholder="ZIP"></ion-input>
-          <small [class.ion-hide]="zip.valid || zip.untouched"
-          style="color: red;"> Zip is invalid. </small>
-        </ion-item>
-      </div>
+          <ion-item>
+            <ion-input formControlName="firstname" type="text" class="form-control"
+                       placeholder="First Name"></ion-input>
+            <small [class.ion-hide]="firstname.untouched || firstname.valid"
+                   style="color: red"> Invalid name </small>
+          </ion-item>
+        </div>
 
+        <!-- User must enter their last name -->
         <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="city" type="text" class="form-control" placeholder="City"></ion-input>
-          <small [class.ion-hide]="city.valid || city.untouched"
-                 style="color: red;"> City is invalid. </small>
-        </ion-item>
+          <ion-item>
+            <ion-input formControlName="lastname" type="text" class="form-control" placeholder="Last Name"></ion-input>
+            <small [class.ion-hide]="lastname.untouched || lastname.valid"
+                   style="color: red"> Invalid name </small>
+          </ion-item>
 
         </div>
 
-      </div>
+        <div class="form-group">
+          <ion-item>
+            <ion-input formControlName="street" type="text" class="form-control" placeholder="Street"></ion-input>
+            <small [class.ion-hide]="street.valid || street.untouched"
+                   style="color: red;"> Street is invalid. </small>
+          </ion-item>
+
+        </div>
+        <div class="form-group">
+          <ion-item>
+            <ion-input formControlName="housenumber" type="text" class="form-control"
+                       placeholder="House Nr"></ion-input>
+            <small [class.ion-hide]="housenumber.valid || housenumber.untouched"
+                   style="color: red;"> Housenumber is invalid. </small>
+          </ion-item>
 
 
+          <div class="form-group">
+            <ion-item>
+              <ion-input formControlName="zip" type="number" class="form-control" placeholder="ZIP"></ion-input>
+              <small [class.ion-hide]="zip.valid || zip.untouched"
+                     style="color: red;"> Zip is invalid. </small>
+            </ion-item>
+          </div>
+
+          <div class="form-group">
+            <ion-item>
+              <ion-input formControlName="city" type="text" class="form-control" placeholder="City"></ion-input>
+              <small [class.ion-hide]="city.valid || city.untouched"
+                     style="color: red;"> City is invalid. </small>
+            </ion-item>
+
+          </div>
+
+        </div>
 
 
-      <!-- User must enter his/her password here -->
-      <!-- Password is stored in the email-propriety of a User-Object -->
-      <div class= "form-group">
-        <ion-item>
-          <ion-input formControlName="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="pw"></ion-input>
-          <small [class.ion-hide]="password.valid || password.untouched"
-                 style="color: red;"> password of at least 6 characters required </small>
-        </ion-item>
-        <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
-      </div>
+        <!-- User must enter his/her password here -->
+        <!-- Password is stored in the email-propriety of a User-Object -->
+        <div class="form-group">
+          <ion-item>
+            <ion-input formControlName="password" type="password" class="form-control" placeholder="Password"
+                       [(ngModel)]="pw"></ion-input>
+            <small [class.ion-hide]="password.valid || password.untouched"
+                   style="color: red;"> password of at least 6 characters required </small>
+          </ion-item>
+          <!-- If the user "touched" this input and the password is invalid, this message is shown  -->
+        </div>
 
-      <!-- User must confirm his password here -->
-      <!-- This password must match the first one to be valid -->
-      <div class="form-group">
-        <ion-item>
-          <ion-input formControlName="confirmation" type="password" class="form-group" placeholder="Confirm Password" [pattern]="pw"></ion-input>
-          <small [class.ion-hide]="confirmation.valid ||
+        <!-- User must confirm his password here -->
+        <!-- This password must match the first one to be valid -->
+        <div class="form-group">
+          <ion-item>
+            <ion-input formControlName="confirmation" type="password" class="form-group" placeholder="Confirm Password"
+                       [pattern]="pw"></ion-input>
+            <small [class.ion-hide]="confirmation.valid ||
                                   confirmation.untouched ||
                                    password.invalid" style="color: red;"> Passwords must be equal! </small>
-        </ion-item>
-        <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
+          </ion-item>
+          <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
 
-      </div>
-      <div class="form-group">
-          <ion-checkbox formControlName="accept">  </ion-checkbox>
-          <ion-label> I accept the <a href="../about-eventdoo"> User Guidelines </a> </ion-label>
-      </div>
-    </form>
-  </div>
+        </div>
+        <div class="form-group">
+          <ion-checkbox formControlName="accept"></ion-checkbox>
+          <ion-label> I accept the <a href="../about-eventdoo"> User Guidelines </a></ion-label>
+        </div>
+      </form>
+    </div>
 
-  <div>
-    <ion-button color="primary" (click)="saveUser()" style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px"> Sign Up</ion-button>
-  </div>
+    <div>
+      <ion-button color="primary" (click)="saveUser()"
+                  style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px"> Sign Up
+      </ion-button>
+    </div>
 
-  <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->
-  <div>
-    <p *ngIf="loading"> Submitting data... </p>
-    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
-  </div>
+    <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->
+    <div>
+      <p *ngIf="loading"> Submitting data... </p>
+      <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+    </div>
   </div>
   <div>
     <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
   </div>
 
 
-<app-info-footer></app-info-footer>
+  <app-info-footer></app-info-footer>
 </ion-content>
 

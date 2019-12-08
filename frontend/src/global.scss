@@ -49,3 +49,38 @@ ion-content{
   outline: 1px solid slategrey;
 }
 
+@media (min-width: 576px) {
+  .sideBorder {
+    margin-left: 30%;
+    margin-right: 30%;
+    min-height: 100%;
+    background-color: white
+  }
+
+  .littleSideBorder {
+    margin-left: 15%;
+    margin-right: 15%;
+    min-height: 100%;
+    background-color: white
+  }
+
+  .logo {
+    width: 201px;
+    height: 60px;
+    top: 15px;
+  }
+}
+
+@media (max-width: 576px){
+  .logo {
+    width: 120px;
+    top: 25px;
+  }
+}
+
+.logo{
+  position: absolute;
+  left: 15px;
+  cursor: pointer;
+}
+
