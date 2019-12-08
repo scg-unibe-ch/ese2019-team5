@@ -103,6 +103,7 @@ export class SignupPage implements OnInit {
   saveUser() {
     this.loading = true;
     if (this.validateInput()) {
+      console.log('Input valid');
       //prepare body for httpClient-post
       const pwhash = HashService.hashPassword(this.password.value);
       console.log(pwhash);
@@ -116,20 +117,24 @@ export class SignupPage implements OnInit {
       const isVerified = false;
 
       // post data to the httpClient
+      console.log('Starting request');
       this.http.post(this.ROOT_URL,
         {firstname, lastname, email, pwhash, street, housenumber, zip, city, isVerified})
         .subscribe(
           (success) => {
+            console.log('Successful');
             this.loading = false;
             this.presentSuccessAlert().then(r => {
             });
           },
           (error) => {
             this.loading = false;
+            console.log('Bad email');
             this.error = 'There is already an account assigned to your email address. Please log in or chose another address.';
          console.log(error)
           });
     } else {
+      console.log('Invalid input');
       this.loading = false;
       this.error = 'Some of your input is invalid. Please check again.'
     }
