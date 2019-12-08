@@ -34,23 +34,24 @@ export class DbServices {
   private getClient(): Client {
 
     // When this config is active an local database is used.
+    /*
     const config = {
       'user' : 'postgres',
       'host' : 'localhost',
       'password' : 'root',
       'port': 5432,
       'database': 'eventdoo',
-    };
+    };*/
 
     // When this config is active (not commented out) then the database hosted on Google Cloud is used.
-    /*
+
     const config = {
       'user': 'cyrill',
       'host': '34.65.95.137',
       'password': 'eseTeam5_2019!',
       'port': 5432,
       'database': 'eventdoo',
-    };*/
+    };
     return new Client(config);
   }
 
@@ -883,7 +884,7 @@ export class DbServices {
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
    */
   private async addUserFavoirte(userId: number, serviceId: number, client: Client) {
-    await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
+    await client.query('Insert Into favorites Values ($1, $2)', [userId, serviceId]);
   }
 
   /**
