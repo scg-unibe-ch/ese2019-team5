@@ -1,4 +1,9 @@
-// this is a test file to test the database connection and the functions of db.service.ts while developing
+/**
+ * This controller is used for manually testing specific methods of the dbServices in an controlled environment.
+ * It doesn't contribute to the functionality of the app at all, therefore it also doesn't contain any further comments
+ *
+ * @author Cyrill Rohrbach
+ */
 
 import {Request, Response, Router} from 'express';
 import {DbServices} from '../services/db.services';
@@ -15,19 +20,6 @@ router.get('/', async (req: Request, res: Response) => {
 
   res.statusCode = 200;
   res.send('Welcome to SQLTest');
-});
-
-router.get('/:name', async (req: Request, res: Response) => {
-  const name = req.params.name;
-  try {
-    await dbService.test(name);
-    res.statusCode = 200;
-    res.send('Ok');
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 404;
-    res.send('no user with lastname ' + name + ' found in database');
-  }
 });
 
 router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {

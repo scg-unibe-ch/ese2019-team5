@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <div style="min-height: 100%">
+  <div class="sideBorder">
   <p *ngIf="loading"> Trying to verify your email address </p>
   <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
   <h3 *ngIf="verified" padding="20px"> Thank you for verifying your email address. You can <a href="/start/login"> log

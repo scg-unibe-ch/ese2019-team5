@@ -35,9 +35,4 @@ export class FavoritesPage implements OnInit {
 
   }
 
-  redirectStartPage() {
-    document.location.href = 'http://localhost:4200/start/';
-  }
-
-
 }
