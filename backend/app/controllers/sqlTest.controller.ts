@@ -1,4 +1,9 @@
-// this is a test file to test the database connection and the functions of db.service.ts while developing
+/**
+ * This controller is used for manually testing specific methods of the dbServices in an controlled environment.
+ * It doesn't contribute to the functionality of the app at all, therefore it also doesn't contain any further comments
+ *
+ * @author Cyrill Rohrbach
+ */
 
 import {Request, Response, Router} from 'express';
 import {DbServices} from '../services/db.services';

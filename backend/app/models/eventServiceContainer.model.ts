@@ -1,5 +1,10 @@
 import {EventService} from "./eventService.model";
 
+/**
+ * This class is used to store the EventServices after fetching them from the database and constructing them.
+ * Actually it is probably a bit overkill and an array would have been find as well but fist we thought it would be useful,
+ * if we could also store the filter used to get the services from the database.
+ */
 export class EventServiceContainer {
   private services: EventService[];
 
