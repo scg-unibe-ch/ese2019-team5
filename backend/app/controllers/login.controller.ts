@@ -84,7 +84,7 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
  */
 const verifyToken = async (req: Request, res: Response) => {
   try {
-    const token = req.body.token; //req.url
+    const token = req.body.token;
     const newPWhash: string = req.body.password;
     let userEmail: string;
     const notVerified = jwt.decode(token);
@@ -106,21 +106,18 @@ const verifyToken = async (req: Request, res: Response) => {
     };
 
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
-    console.log('gotbefore db');
-    console.log(newPWhash + " " + String(userEmail));
     await dbService.resetPassword(userEmail, newPWhash);
     console.log('got after db');
     res.status(200);
     res.json('Password was successfully changed');
-
   } catch (error) {
-    if (error.name.localeCompare('TokenExpiredError')) {
-      res.status(401).send('Access token expired');
-      console.log(error)
+    if (error.message=='jwt expired') {
+      res.status(401).json('Access token expired');
+      console.log(error);
     } else {
       res.status(406);
       res.send('invalid Token' + error);
-
+      console.log(error);
     }
   }
 

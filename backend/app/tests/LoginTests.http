@@ -110,13 +110,45 @@ POST http://localhost:3000/login/resetPassword
 Content-Type: application/json
 
 {
-"token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibnVsbCIsInN1cm5hbWUiOiJudWxsIiwiZW1haWwiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlhdCI6MTU3MzQwOTkwMCwiZXhwIjoxNTczNDk2MzAwLCJhdWQiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2gifQ.j4LTpuO6EBddWOOU_8uMu5-ZhSybI76n4ZNg-_nkDKMJrSmhFbYWev9LTzBXrNEKQhpSmRry2vqmRmBRSSO3gV4f4M_AsjJGNn_mJoRhfEO7hCu16MUhSs1O1YxumFKv26Kh2wW_gnll0YpXwfRSihhCS33eoF62cyJWGgzjeBE",
-  "password":-1395788608
+  "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibnVsbCIsInN1cm5hbWUiOiJudWxsIiwiZW1haWwiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlhdCI6MTU3MzQwOTkwMCwiZXhwIjoxNTczNDk2MzAwLCJhdWQiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2gifQ.j4LTpuO6EBddWOOU_8uMu5-ZhSybI76n4ZNg-_nkDKMJrSmhFbYWev9LTzBXrNEKQhpSmRry2vqmRmBRSSO3gV4f4M_AsjJGNn_mJoRhfEO7hCu16MUhSs1O1YxumFKv26Kh2wW_gnll0YpXwfRSihhCS33eoF62cyJWGgzjeBE",
+  "password":"7QJFe1xB2WTb0vKmCdY/4bt1KNvlXhq/W1LCSc1zV5c="
 }
 
 > {%
-client.test("Forgot Password, verify no exception", function() {
+client.test("Forgot Password, verify expired", function() {
+  client.assert(response.status === 401, "Response status is 401");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST http://localhost:3000/login/resetPassword
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDYXRoIiwiZW1haWwiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlhdCI6MTU3NTgzOTY4NywiZXhwIjoxNTc1OTI2MDg3LCJhdWQiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2gifQ.Zeax_hV9AnHr9JHFAQYxnvyT6VRhQu8mQnmAwZq46quS8dZiAnGXV0-P8lQU8mlnDlawrQ-gtLfR2B1KXARLtFZWHBfa37bZlFeFNiZjhmnAD3TC0l4lsUVNvw_CQubq50tX6p3vQsOaJV8F1kTTGcuaXCjAZUOAxVyKIVsXUis",
+  "password":"7QJFe1xB2WTb0vKmCdY/4bt1KNvlXhq/W1LCSc1zV5c="
+}
+
+> {%
+client.test("Forgot Password, ok", function() {
   client.assert(response.status === 200, "Response status is 200");
+  client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+POST http://localhost:3000/login/resetPassword
+Content-Type: application/json
+
+{
+  "token": "eeeyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDYXRob21hcyIsImVtYWlsIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpYXQiOjE1NzI5Njg4NzIsImV4cCI6MTU3Mjk3NjA3MiwiYXVkIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpc3MiOiJFdmVudGRvbyIsInN1YiI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIn0.p8xPDYVchsI5yx1cWWkWRP8lXa5oxvLvNGLmLyBrvJkJavZxIpRuuNRGFmLkGdWvqkzQ9Y5Kx2BxZJVS3KuYDIMnAtD4jSoFupK2TXtfdqiz5ZD6pZGN0u9ZxajDEp7vHwrAudmfU2k75YX0cAFPi-qNTOsf5ZKfG_DPl15Nsjk",
+  "password":"7QJFe1xB2WTb0vKmCdY/4bt1KNvlXhq/W1LCSc1zV5c="
+}
+
+> {%
+client.test("Forgot Password, not working invalid token", function() {
+  client.assert(response.status === 406, "Response status is 406");
   client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
