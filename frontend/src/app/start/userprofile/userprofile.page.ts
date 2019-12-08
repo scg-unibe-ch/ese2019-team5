@@ -52,13 +52,13 @@ export class UserprofilePage implements OnInit {
   }
 
   editForm = this.formBuilder.group({
-    firstnameInput: [this.firstname, [Validators.required]],
-    lastnameInput: [this.lastname, Validators.required],
-    firmnameInput: [this.firmname],
-    streetInput: [this.street, Validators.required],
-    housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]+')]],
-    zipInput: [this.zip, [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.pattern('[0-9]+')]],
-    cityInput: [this.city, Validators.required],
+    firstnameInput: [this.firstname, [Validators.required, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
+    lastnameInput: [this.lastname, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
+    firmnameInput: [this.firmname, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')],
+    streetInput: [this.street, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
+    housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]*[a-z]?')]],
+    zipInput: [this.zip, [Validators.required, Validators.pattern('[0-9]{4}')]],
+    cityInput: [this.city, [Validators.required, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
     phonenumberInput: [this.phonenumber, [Validators.pattern('[0-9]+')]]
   });
 
@@ -117,8 +117,6 @@ export class UserprofilePage implements OnInit {
             if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
             if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
             this.eventServiceArrayOfUser = user.eventServiceArrayOfUser;
-            console.log(user.eventServiceArrayOfUser);
-            console.log('this is what I got');
             this.httpGetSuccess = true;
           },
           (error)=> {
@@ -132,8 +130,6 @@ export class UserprofilePage implements OnInit {
       this.httpGetSuccess = false;
       console.log(e);
     }
-    console.log(this.eventServiceArrayOfUser);
-    console.log('this is what I saved');
   }
 
   enableEditing(){
@@ -141,7 +137,6 @@ export class UserprofilePage implements OnInit {
   }
 
   saveChanges(){
-    console.log(this.firstnameInput.value);
     this.firstname = this.firstnameInput.value;
     this.lastname = this.lastnameInput.value;
     this.street = this.streetInput.value;
@@ -151,7 +146,6 @@ export class UserprofilePage implements OnInit {
     this.firmname = this.firmnameInput.value;
     this.phonenumber = this.phonenumberInput.value;
     const isFirm = (this.firmname !=null && this.firmname!='null' && this.firmname!='');
-    console.log('sending update Data to backend'+ this.firstname + this.lastname + this.firmname + this.street + this. housenumber + this.zip + this.city + this.phonenumber);
     this.http.post(this.ROOT_URL+'update', {
       id: this.userId,
       firstname: this.firstname,
@@ -199,7 +193,6 @@ export class UserprofilePage implements OnInit {
   }
 
   private async deleteUserProfile(userId: number) {
-    console.log("delete Profile");
     await this.http.delete('http://localhost:3000/profile/'+userId)
       .subscribe(
         (res)=> {console.log('delete success')},

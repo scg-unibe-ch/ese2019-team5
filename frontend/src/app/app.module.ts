@@ -24,6 +24,7 @@ import {AboutEventdooPage} from "./start/about-eventdoo/about-eventdoo.page";
 import {FavoritesPage} from "./start/favorites/favorites.page";
 import {RequestHistoryPage} from "./start/userprofile/request-history/request-history.page";
 import {HeaderComponent} from "./header/header.component";
+import {EventServiceDetailPage} from "./start/EventServices/event-service-detail/event-service-detail.page";
 
 /* import {File} from '@ionic-native/File/ngx';
 import {WebView} from '@ionic-native/ionic-webview/ngx';
@@ -35,7 +36,7 @@ import {IonicStorageModule} from '@ionic/storage'; */
     declarations: [AppComponent,
         StartPage, SignupPage, ConfirmationPage,
         LoginPage, UpdatePasswordPage,
-        UserprofilePage, CreateServicePage, AboutEventdooPage, EventServiceCardComponent, InfoFooterComponent, FavoritesPage, RequestHistoryPage, HeaderComponent],
+        UserprofilePage, CreateServicePage, AboutEventdooPage, EventServiceCardComponent, InfoFooterComponent, FavoritesPage, RequestHistoryPage, HeaderComponent, EventServiceDetailPage],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule/*, IonicStorageModule.forRoot()*/],
   providers: [

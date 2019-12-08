@@ -10,6 +10,7 @@ import {CreateServicePage} from "./start/userprofile/create-service/create-servi
 import {AboutEventdooPage} from "./start/about-eventdoo/about-eventdoo.page";
 import {FavoritesPage} from "./start/favorites/favorites.page";
 import {RequestHistoryPage} from "./start/userprofile/request-history/request-history.page";
+import {EventServiceDetailPage} from "./start/EventServices/event-service-detail/event-service-detail.page";
 
 
 const routes: Routes = [
@@ -39,9 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'services', children: [
-          {path: ':serviceId',
-            loadChildren: './start/EventServices/event-service-detail/event-service-detail.module#EventServiceDetailPageModule'
-          }]
+          {path: ':serviceId', component: EventServiceDetailPage}]
       }]
   },
   { path: 'about-eventdoo', loadChildren: './start/about-eventdoo/about-eventdoo.module#AboutEventdooPageModule' },

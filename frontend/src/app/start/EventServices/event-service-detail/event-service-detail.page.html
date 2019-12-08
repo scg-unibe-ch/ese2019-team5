@@ -12,7 +12,7 @@
         <br>
           <div [hidden]="serviceId==null||isEditing">
           <ion-img [src]="image" style="height:25vmax"></ion-img>
-            <ion-text style="text-align: center; position: center; left: 50px">Within {{perimeter}} km of {{city}}</ion-text>
+            <ion-text style="text-align: center; position: center; left: 50px">{{displayPerimeter}} {{displayCity}}</ion-text>
             <!--ion-button [hidden]="isInputing||isEditing" (click)="showOfferInput()" style=" width: 400px">Get Offer</--ion-button-->
           </div>
           <div [hidden]="!isEditing">
@@ -27,7 +27,7 @@
                   <ion-label>Price</ion-label>
                   <ion-input formControlName="updatePrice" type="number" value="{{price}}" style="background-color: #fafafa"></ion-input>
                   <ion-label>Available on</ion-label>
-                  <ion-select multiple="true" class="customSelect" formControlName="updateAvailability" placeholder="Select..." style="background-color: #fafafa">
+                  <ion-select multiple="true" class="customSelect" formControlName="updateAvailability" placeholder="Select..." style="background-color: #fafafa" value="{{availability}}">
                     <ion-select-option value="Monday"> Monday</ion-select-option>
                     <ion-select-option value="Tuesday"> Tuesday</ion-select-option>
                     <ion-select-option value="Wednesday"> Wednesday</ion-select-option>
@@ -37,15 +37,13 @@
                     <ion-select-option value="Sunday"> Sunday</ion-select-option>
                   </ion-select>
                   <ion-label>Radius (km)</ion-label>
-                  <ion-input formControlName="updatePerimiter" type="number" value="{{perimeter}}" style="background-color: #fafafa"></ion-input>
-                  <ion-label>City</ion-label>
-                  <ion-input formControlName="updateCity" value="{{city}}" style="background-color: #fafafa"></ion-input>
+                  <ion-input formControlName="updatePerimeter" type="number" value="{{perimeter}}" style="background-color: #fafafa"></ion-input>
                   <ion-label>Special requirements</ion-label>
                   <ion-input formControlName="updateRequirements" value="{{reqDisplay}}" style="background-color: #fafafa"></ion-input>
                   <ion-label>Max. number of people</ion-label>
-                  <ion-input formControlName="updateCapacity" value="{{capacity}}" style="background-color: #fafafa"></ion-input>
+                  <ion-input formControlName="updateCapacity" value="{{capacity}}"  (keyup.enter)="tryToUpdate()" style="background-color: #fafafa"></ion-input>
                 </ion-grid>
-                <ion-button color="secondary" (click)="tryToUpdate()">Update Service</ion-button>
+                <ion-button [disabled]="hasSentOfferInquiry" color="secondary" (click)="tryToUpdate()">Update Service</ion-button>
                 <ion-button color="secondary" (click)="stopEditing()">Cancel</ion-button>
               </form>
             </div>
@@ -59,7 +57,7 @@
                 <br>
                 <ion-item>
                   <ion-label >Message: </ion-label>
-                  <ion-input formControlName="messageInput"></ion-input>
+                  <ion-textarea formControlName="messageInput"></ion-textarea>
                 </ion-item>
               </div>
 
@@ -70,7 +68,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-label >Time: </ion-label>
-                  <ion-input formControlName="timeInput"></ion-input>
+                  <ion-input formControlName="timeInput" (keyup.enter)="sendOffer()"></ion-input>
                 </ion-item>
               </div>
             </form>
@@ -85,11 +83,11 @@
           <ion-button class="bigButtons" size="large" color = "light" style="--box-shadow: none" (click)="addToFavorites()">
             <ion-icon class="bigIcons" name="ios-star-outline"></ion-icon>
           </ion-button>
-          <ion-button (click)="showOfferInput()" class="bigButtons" size="large" color = "light" style="--box-shadow: none">
+          <ion-button [disabled]="hasSentOfferInquiry" (click)="showOfferInput()" class="bigButtons" size="large" color = "light" style="--box-shadow: none">
             <ion-icon class="bigIcons" name="chatboxes"></ion-icon>
           </ion-button>
 
-          <ion-button class="bigButtons" size="large" color = "light" style="--box-shadow: none" (click)="report()">
+          <ion-button [disabled]="hasReported" class="bigButtons" size="large" color = "light" style="--box-shadow: none" (click)="report()">
             <ion-icon class="bigIcons" name="alert"></ion-icon>
           </ion-button>
 

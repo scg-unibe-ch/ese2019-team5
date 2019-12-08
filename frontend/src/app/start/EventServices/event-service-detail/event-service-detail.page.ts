@@ -6,6 +6,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {ToastController} from "@ionic/angular";
 import {AuthService} from "../../../AuthService/auth.service";
 import {EventServiceJson} from "../../userprofile/EventServiceJson";
+
 import {Observable, Subject, Subscription} from "rxjs";
 
 @Component({
@@ -14,6 +15,31 @@ import {Observable, Subject, Subscription} from "rxjs";
   styleUrls: ['./event-service-detail.page.scss'],
 })
 export class EventServiceDetailPage implements OnInit {
+
+  private serviceId: string;
+  private isInputing: boolean = false;
+  private isEditing: boolean = false;
+  private hasReported: boolean = false;
+  private hasSentOfferInquiry: boolean = false;
+
+  private category:string;
+  private title:string;
+  private description:string;
+  private city:string;
+  private displayCity:string;
+  private zip:string;
+  private housenumber:string;
+  private street:string;
+  private perimeter:string;
+  private displayPerimeter:string;
+  private availability:string;
+  private requirements:string;
+  private reqDisplay: string;
+  private subtype:string;
+  private capacity:string;
+  private price:string;
+  private image:string;
+  private providerId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,14 +57,13 @@ export class EventServiceDetailPage implements OnInit {
   });
 
   updateInfoForm = this.formBuilder.group({
-    updateTitle: ['', [Validators.required, Validators.minLength(3)]],
-    updateDescription: ['', [Validators.required, Validators.minLength(3)]],
-    updatePrice: ['', Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
-    updateAvailability: ['', [Validators.required]],
-    updatePerimiter: ['', [Validators.required, Validators.pattern("[0-9]+")]],
-    updateCity: ['', Validators.required, Validators.pattern('[a-zA-Z,\s]+')],
-    updateRequirements: [''],
-    updateCapacity: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    updateTitle: [this.title, [Validators.required, Validators.minLength(3)]],
+    updateDescription: [this.description, [Validators.required, Validators.minLength(3)]],
+    updatePrice: [this.price, Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
+    updateAvailability: [this.availability, [Validators.required, Validators.min(1)]],
+    updatePerimeter: [this.perimeter, [Validators.required, Validators.pattern("[0-9]+")]],
+    updateRequirements: [this.requirements],
+    updateCapacity: [this.capacity, [Validators.required, Validators.pattern("[0-9]+")]],
   });
 
 
@@ -70,12 +95,8 @@ export class EventServiceDetailPage implements OnInit {
     return this.updateInfoForm.get('updateAvailability');
   }
 
-  get updatePerimiter(){
-    return this.updateInfoForm.get('updatePerimiter');
-  }
-
-  get updateCity(){
-    return this.updateInfoForm.get('updateCity');
+  get updatePerimeter(){
+    return this.updateInfoForm.get('updatePerimeter');
   }
 
   get updateRequirements(){
@@ -87,26 +108,7 @@ export class EventServiceDetailPage implements OnInit {
   }
 
 
-  private serviceId: string;
-  private isInputing: boolean = false;
-  private isEditing: boolean = false;
 
-  private category:string;
-  private title:string;
-  private description:string;
-  private city:string;
-  private zip:string;
-  private housenumber:string;
-  private street:string;
-  private perimeter:string;
-  private availability:string;
-  private requirements:string;
-  private reqDisplay: string;
-  private subtype:string;
-  private capacity:string;
-  private price:string;
-  private image:string;
-  private providerId: string;
 
 
   ngOnInit() {
@@ -118,9 +120,7 @@ export class EventServiceDetailPage implements OnInit {
       this.serviceId = paramMap.get('serviceId');
       console.log(this.serviceId);
     });
-    //const params = new HttpParams().set('serviceId', this.serviceId);
    this.getEventServiceJson();
-   //this.loadPhoto()
   }
 
 
@@ -140,6 +140,8 @@ export class EventServiceDetailPage implements OnInit {
   }
 
   async sendOffer() {
+    if(!this.validateOfferInput()) return;
+    this.hasSentOfferInquiry = true;
     const message: string = this.messageInput.value;
     const date: string = this.dateInput.value;
     const time: string = this.timeInput.value;
@@ -150,13 +152,14 @@ export class EventServiceDetailPage implements OnInit {
       serviceId: this.serviceId,
       customerId: this.auth.getUserId(),
     }).subscribe(
-    (res)=>{
+    ()=>{
       console.log('successfully ordered');
       this.presentOrderFeedback(true);
     },
       (error)=>{
       console.log(error);
       this.presentOrderFeedback(false);
+        this.hasSentOfferInquiry = false;
       }
     );
   }
@@ -184,11 +187,13 @@ export class EventServiceDetailPage implements OnInit {
     let infos = {
       serviceId:this.serviceId,
       userId:this.auth.getUserId()
-    }
+    };
     this.http.post('http://localhost:3000/eventservice/report', infos).subscribe(
       (data) => {console.log(data)},
     (error) => {console.log(error)}
-    )
+    );
+    this.showToast("Service reported, it will be reviewed by the administrators");
+    this.hasReported= true;
   }
 
 
@@ -217,10 +222,26 @@ export class EventServiceDetailPage implements OnInit {
         this.zip = data.zip;
         this.housenumber = data.housenumber;
         this.city = data.city;
+        this.displayCity = data.city;
         this.street = data.street;
         this.availability = data.availability;
         this.description = data.description;
         this.requirements = data.requirements;
+       switch(data.perimeter.toString()){
+         case "0": {
+           this.displayPerimeter = 'Within the city of';
+           break;
+         }
+         case "1000000":{
+           this.displayPerimeter = 'Throughout Switzerland';
+           this.displayCity = '';
+           break;
+         }
+         default:{
+           this.displayPerimeter = 'Within ' + data.perimeter + ' km of';
+           break;
+         }
+       }
         this.perimeter = data.perimeter;
         this.image = data.image;
         this.capacity = (data.capacity=='1000000')? 'no limit': data.capacity;
@@ -277,13 +298,12 @@ export class EventServiceDetailPage implements OnInit {
       capacity: this.updateCapacity.value,
       price: this.updatePrice.value,
       serviceId: this.serviceId,
-      perimiter: this.updatePerimiter.value,
-      city: this.updateCity.value
+      perimeter: this.updatePerimeter.value
     }).subscribe(
       ()=>{
         this.isEditing = false;
         this.showToast("Updated Infos");
-        setTimeout(()=> {location.reload()},4000);
+       // setTimeout(()=> {location.reload()},6000);
       },
       (error)=>{
         console.log(error);
@@ -300,15 +320,13 @@ export class EventServiceDetailPage implements OnInit {
     let error: string='';
     if (this.updateTitle.invalid)
       error += 'Title not valid \n';
-    if (this.updateCity.invalid)
-      error += 'Invalid city name \n';
     if (this.updateAvailability.value == '')
       error += 'Available days missing \n';
     if (this.updatePrice.invalid)
       error += 'Standard price invalid \n';
     if (this.updateDescription.invalid)
       error += 'Description invalid';
-    if(this.updatePerimiter.invalid)
+    if(this.updatePerimeter.invalid)
       error += 'Invalid Radius';
     if (error.length>=1) {
       this.showToast(error);
@@ -318,6 +336,16 @@ export class EventServiceDetailPage implements OnInit {
     }
   }
 
+
+  private validateOfferInput():boolean{
+    let error: string = '';
+    if(this.messageInput.invalid || this.timeInput.invalid || this.dateInput.invalid) error+= 'Please fill in all fields';
+    if(error != ''){
+      this.showToast(error);
+      return false;
+    }
+    else return true;
+  }
   /**
    * Displays the given message to the user in form of a toast
    * @param message what is being shown to the user

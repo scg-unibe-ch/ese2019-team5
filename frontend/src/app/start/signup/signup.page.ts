@@ -36,12 +36,12 @@ export class SignupPage implements OnInit {
 
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    firstname: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
-    lastname: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
-    street: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
+    firstname: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
+    lastname: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
+    street: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
     housenumber: ['', [Validators.required, Validators.pattern("[0-9]*[a-z]?")]],
     zip: ['', [Validators.required, Validators.pattern("[0-9]{4}")]],
-    city: ['', [Validators.required, Validators.pattern("[a-zA-Z,\s]{2,}")]],
+    city: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
     password: [this.pw, [Validators.required, Validators.minLength(6)]],
     confirmation: ['', [Validators.required, Validators.pattern]],
     accept: ['false', Validators.requiredTrue]
