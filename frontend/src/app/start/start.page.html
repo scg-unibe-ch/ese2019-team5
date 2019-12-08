@@ -5,11 +5,9 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-button slot="fixed" href="start/userprofile/createService" shape="round" color="dark" style="position: fixed; height: 50px; width: 50px; bottom: 110px; right: 60px">
-   <span title="create service for an event"> <ion-text style="font-size: 25pt; font-weight: lighter; color: white;">+</ion-text>  </span>
+  <ion-button  [hidden]="authService.isLoggedOut()" slot="fixed" href="start/userprofile/createService" shape="round" color="dark" style="position: fixed; height: 50px; width: 50px; bottom: 110px; right: 60px">
+    <span title="create service for an event"> <ion-text style="font-size: 25pt; font-weight: lighter; color: white;">+</ion-text>  </span>
   </ion-button>
-
   <div style="min-height: 100%">
 
 
