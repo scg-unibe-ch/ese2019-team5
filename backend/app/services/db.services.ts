@@ -1,4 +1,4 @@
-import {Client, DatabaseError, ResultIterator} from 'ts-postgres';
+import {Client} from 'ts-postgres';
 import {User} from '../models/user.model';
 import * as fs from 'fs';
 import {LoginResult} from "../models/loginResult.model";
@@ -13,29 +13,53 @@ import {FilterCategories} from "../models/filterCategories.enum";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
+/**
+ * This class is used to connect to the database.
+ * There are the public methods which can be called and then there are the private methods. The public methods establish
+ * and terminate the connection to the database and then pass this connection on to the private methods which then run
+ * the query on the database and create the desired result.
+ */
 export class DbServices {
 
   /**
-   * returns an Client to connect to our database
+   * returns a Client to connect to the database.
+   * By commenting out either one of the configs you can switch between the local database (if installed) and
+   * the database hosted on Google Cloud services.
+   * @returns an {@link Client} to connect to the database
    */
   private getClient(): Client {
 
+    // When this config is active an local database is used.
+    /*
+    const config = {
+      'user' : 'postgres',
+      'host' : 'localhost',
+      'password' : 'root',
+      'port': 5432,
+      'database': 'eventdoo',
+    };*/
+
+    // When this config is active (not commented out) then the database hosted on Google Cloud is used.
+
     const config = {
       'user': 'cyrill',
-      //'user' : 'postgres',
       'host': '34.65.95.137',
-      //'host' : 'localhost',
       'password': 'eseTeam5_2019!',
-      //'password' : 'root',
       'port': 5432,
       'database': 'eventdoo',
     };
     return new Client(config);
   }
 
+  /**
+   * Method to add an new {@link EventService} to the database
+   * @async
+   * @param service the {@link EventService} to add
+   */
   public async addEventService(service: EventService) {
 
     const localClient = this.getClient();
@@ -50,8 +74,9 @@ export class DbServices {
   }
 
   /**
-   * takes an eamil-address and retruns the user with this email from the database
-   * @param email of an user as string
+   * takes an eamil-address and retruns the {@link User} with this email from the database
+   * @async
+   * @param email of an user as {@link string}
    */
   public async getUserFromEmail(email: string): Promise<User> {
 
@@ -64,6 +89,11 @@ export class DbServices {
     }
   }
 
+  /**
+   * Takes an userId and returns the {@link User} with this id
+   * @async
+   * @param id as {@link number}
+   */
   public async getUserFromId(id: number): Promise<User> {
 
 
@@ -78,16 +108,17 @@ export class DbServices {
 
   /**
    * tries to login a user with given email and password. Therefore it takes the email address and searches with
-   * the getUserFromEmail method the corresponding user.
-   * If the login credentials are correct, it returns an LoginResult object wich contains the user as well as the JSON web token
-   * @param email
+   * the {@link getUserFromEmail} method the corresponding user.
+   * If the login credentials are correct, it returns an {@link LoginResult} object which contains the user as well as the JSON web token
+   * @async
+   * @param email of the user trying to log in
    * @param password, hashed password as string as received from the frontend
    */
   public async tryLogin(email: string, password: string): Promise<LoginResult> {
     let user: User;
     user = await this.getUserFromEmail(email);
-    if (this.checkIfPasswordCorrect(user, password)) {
-      if (this.isUserVerified(user)) {
+    if (password == user.getPwHash()) {
+      if (user.getIsVerified()) {
         return new LoginResult(user, this.generateJWT(email, user.getId()));
       } else {
         throw new DBServiceError("To login, please verify your email-address.", 931);
@@ -100,7 +131,9 @@ export class DbServices {
   /**
    * signs up an user in the db. Therefore it checks if the email already exists in the database. If not
    * then the method to enter the entry in the database is called
-   * @param user as User object.
+   * @async
+   * @param user as {@link User} object.
+   * @returns the id of the user as {@link number}
    */
   public async signUp(user: User): Promise<number> {
     const localClient = this.getClient();
@@ -122,7 +155,8 @@ export class DbServices {
   /**
    * searches the user via email in the database and then calls the method makeUserVerifiedDB which sets the isverified
    * in the database to true
-   * @param email
+   * @async
+   * @param email of the user that should get verified as {@link string}
    */
   public async makeUserVerified(email: string) {
     const localClient = this.getClient();
@@ -135,6 +169,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method updates an user. It takes an user Object where all the information is stored in and
+   * overrides the information of this user in the database.
+   * @async
+   * @param user as {@link User}
+   */
   public async updateUser(user: User) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -145,6 +185,11 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method returns all the EventServices from the database in an EventServiceContainer Object.
+   * @async
+   * @returns all EventServices in an {@link EventServiceContainer}
+   */
   public async getAllServices(): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
@@ -155,6 +200,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method searches all the EventServices that fulfill the filter requirements and returns them as EventServiceContainer
+   * @async
+   * @param filter as {@link EventServiceFilter[]} in which all the filters are specified.
+   * @returns the EventServices that correspond to the filters in an {@link EventServiceContainer}
+   */
   public async getServiceFilter(filter: EventServiceFilter[]): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
@@ -165,6 +216,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method returns the EventService with the given Id from the database in an EventServiceContainer.
+   * @async
+   * @param serviceId of the desired {@link EventService} as {@link number}.
+   * @returns the EventService in an {@link EventServiceContainer}.
+   */
   public async getServiceFromId(serviceId: number): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
@@ -175,6 +232,11 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method deletes the user with the given id from the database.
+   * @async
+   * @param userId from the user to be deleted as {@link number}.
+   */
   public async deleteUser(userId: number) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -185,6 +247,11 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method deletes the service with the given id from the database.
+   * @async
+   * @param serviceId from the service to be deleted as {@link number}.
+   */
   public async deleteService(serviceId: number) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -195,6 +262,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method overrides the password of an user with the given new password.
+   * @async
+   * @param email of the user which password should be overridden as {@link string}.
+   * @param newPW the new password as {@link string}.
+   */
   public async resetPassword(email: string, newPW: string) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -205,6 +278,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method returns all the EventServices the user added to his favorites in an EventServiceContainer.
+   * @async
+   * @param userId of which the favorites should be returned.
+   * @returns the EventServices in an EventServiceContainer.
+   */
   public async getFavoritesFromUid(userId: number): Promise<EventServiceContainer> {
     const localClient = this.getClient();
     await localClient.connect();
@@ -215,6 +294,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method adds an {@link EventService} to the favorites of the given user.
+   * @async
+   * @param userId of the user to which the {@link EventService} should be added as {@link number}.
+   * @param serviceId of the EventService as {@link number}.
+   */
   public async addFavoriteToUser(userId: number, serviceId: number) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -225,6 +310,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method removes an {@link EventService} from the favorites of an user.
+   * @async
+   * @param userId of the user as {@link number}.
+   * @param serviceId of the service as {@link number}.
+   */
   public async removeFavoriteFromUser(userId: number, serviceId: number) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -235,6 +326,19 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method updates an EventService in the database. It therefore takes all the Information of an EventService
+   * that can be updated as parameters.
+   * @async
+   * @param serviceId as {@link number}
+   * @param title as {@link string}
+   * @param description as {@link string}
+   * @param price as {@link number}
+   * @param availability as {@link string}
+   * @param radius as {@link number}
+   * @param requirements as {@link string}
+   * @param capacity as {@link number}
+   */
   public async updateServiceParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -245,6 +349,11 @@ export class DbServices {
     }
   }
 
+  /**
+   * This method adds an ServiceRequest to the database.
+   * @async
+   * @param request as an {@link ServiceRequest}.
+   */
   public async addRequestedService (request: ServiceRequest) {
     const localClient = this.getClient();
     await localClient.connect();
@@ -255,6 +364,12 @@ export class DbServices {
     }
   }
 
+  /**
+   * Returns all the ServiceRequests of an user
+   * @async
+   * @param userId as {@link number}
+   * @returns all the ServiceRequests as {@link ServiceRequest} array
+   */
   public async getRequestsForUser (userId: number): Promise<ServiceRequest[]> {
     const localClient = this.getClient();
     await localClient.connect();
@@ -270,8 +385,9 @@ export class DbServices {
 
   /**
    * sets the isverified of an user in the database to true
-   * @param user as UserObject
-   * @param client to use to connect to the database
+   * @async
+   * @param user as {@link User}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
    */
   private async makeUserVerifiedDB(user: User, client: Client) {
     await client.query('Update users Set isverified=true Where id = $1', [user.getId()])
@@ -279,8 +395,10 @@ export class DbServices {
 
   /**
    * inserts a given user to the database
-   * @param user as User Object
-   * @param client to use to connect to the database
+   * @async
+   * @param user as {@link User}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns the id of the newly created user as{@link number}
    */
   private async creatUserInDB(user: User, client: Client): Promise<number> {
 
@@ -306,6 +424,13 @@ export class DbServices {
     return id;
   }
 
+  /**
+   * This method overrides all the information of the given user in the database with the information stored in the
+   * User Object
+   * @async
+   * @param user {@link User}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async updateUserDB(user: User, client: Client) {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(user.getAddress().street, user.getAddress().housenumber, user.getAddress().zip, user.getAddress().city, client));
@@ -327,6 +452,14 @@ export class DbServices {
 
   }
 
+  /**
+   * This Method returns an {@link User} from the database.
+   * It uses the {@link UserBuilder} to create an {@link User}
+   * @async
+   * @param email as {@link string} or null if the user should be searched by his id
+   * @param id as {@link number} or null if the user should be searched by his email
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async getUserFromDB(email: string | null, id: number | null, client: Client): Promise<User> {
     let user: User;
     let query: string;
@@ -373,6 +506,13 @@ export class DbServices {
     throw new DBServiceError("No user with this email address found in the database.", 924);
   }
 
+  /**
+   * This method returns all the EventServices the user marked as favorite.
+   * @async
+   * @param userId {@link number}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns an array with the ServiceIds of the as favorite marked Services
+   */
   private async getFavoritesIdOfUser(userId: number, client: Client): Promise<number[]> {
     const stream = client.query("SELECT serviceid FROM favorites WHERE userid = $1", [userId]);
     const serviceIdArray = [];
@@ -384,12 +524,26 @@ export class DbServices {
     return serviceIdArray;
   }
 
+  /**
+   * This method deletes all the entries in the table favorites in the database where the userid is the given one.
+   * @async
+   * @param userId as {@link number}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async deleteFavoritesOfUser(userId: number, client: Client) {
     await client.query("Delte From favorites Where userid = $1", [userId]);
   }
 
+  /**
+   * This method deletes an user from the database.
+   * First it gets the addressId of the user from the database. Then it deletes the user and all its services from the database.
+   * Lastly it calls the {@link searchForAddressUsageAndDelete} method to delete the address if necessary and the
+   * {@link deleteFavoritesOfUser} to delete all the favorites saved for this user.
+   * @async
+   * @param userId as {@link number}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async deleteUserFromDB(userId: number, client: Client) {
-    console.log("delete User dbService");
     const stream = client.query('SELECT addressid FROM users WHERE id=$1', [userId]);
     let oldAddressId = -1;
     for await (const row of stream) {
@@ -411,15 +565,24 @@ export class DbServices {
     await this.deleteFavoritesOfUser(userId, client);
   }
 
+  /**
+   * This method overrides the password for the user with the given email address.
+   * @async
+   * @param email of the user
+   * @param newPW the new password that should be set.
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async resetPasswordDB(email: string, newPW: string, client: Client) {
     await client.query('UPDATE users SET password = $1 WHERE email = $2', [newPW, email]);
-    console.log("passwort reset");
   }
 
 
   /**
-   * takes an email address and checks if an user is allready using this address
+   * takes an email address and checks if an user is already using this email address
+   * @async
    * @param email-address of new User
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns true if the Mail isn't used already
    */
   private async checkIfMailIsUniqueDB(email: string, client: Client): Promise<boolean> {
     const stream = client.query('SELECT email As email FROM users Where email = $1', [email]);
@@ -434,6 +597,7 @@ export class DbServices {
    * generates an JSON webtoken out of the eamil address and userid
    * @param email
    * @param userId
+   * @returns the token as {@link string}
    */
   private generateJWT(email: string, userId: number): string {
     const payload = {
@@ -450,23 +614,12 @@ export class DbServices {
   }
 
   /**
-   * helper method that compares an given string password with the password stored in the user
-   * @param user
-   * @param password
+   * This method returns the address matching the given addressId from the database.
+   * @async
+   * @param addressId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns the address as {@link Address} Object
    */
-  private checkIfPasswordCorrect(user: User, password: string): boolean {
-    return password == user.getPwHash();
-  }
-
-  /**
-   * helper method that return true if the isVerified attribute of the user is true
-   * @param user
-   */
-  private isUserVerified(user: User): boolean {
-    return user.getIsVerified();
-  }
-
-
   private async getAddressFromAId(addressId: number, client: Client): Promise<Address> {
     let address: Address;
     const stream = client.query('Select id, street, number, zip, city From address Where id = $1', [addressId]);
@@ -482,6 +635,17 @@ export class DbServices {
     throw new DBServiceError("No address with this id found.", 914);
   }
 
+  /**
+   * This method checks if the address is already stored in the database. If yes it returns the id of this address,
+   * if no it creates the address in the database and returns it's id.
+   * @async
+   * @param street as {@link string}
+   * @param number as {@link number}
+   * @param zip as {@link number}
+   * @param city as {@link string}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns the id of the address
+   */
   private async checkIfAddressExistsAndCreate(street: string, number: number, zip: number, city: string, client: Client): Promise<Number> {
     var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4', [street, number, zip, city]);
 
@@ -498,6 +662,12 @@ export class DbServices {
     throw new DBServiceError("There was an Error while saving the address.", 912);
   }
 
+  /**
+   * This method checks an address stored in the database is still used or not. If not it will be deleted.
+   * @async
+   * @param addressId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async searchForAddressUsageAndDelete(addressId: number, client: Client) {
     const stream = await client.query('Select users.id FROM users WHERE addressid=$1 UNION SELECT service.id FROM service WHERE addressid=$1', [addressId]);
     if (stream.rows.length == 0) {
@@ -506,6 +676,13 @@ export class DbServices {
   }
 
 
+  /**
+   * This method adds the given EventService to the database. It returns the id of the newly created service.
+   * @async
+   * @param service as {@link EventService}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns the id as {@link number} of the new EventService
+   */
   private async addServiceToDB(service: EventService, client: Client): Promise<number> {
 
     const address = service.getAddress();
@@ -535,7 +712,15 @@ export class DbServices {
     throw new DBServiceError("There was an unknown Error while creating your service. Please try again later.", 900);
   }
 
-
+  /**
+   * This method all EventServices that match the given filters in an EventServiceContainer.
+   * First the sql query has to be built. Therefore it iterates through the given array of EventServiceFilters and adds them to the query corresponding to their type.
+   * After the query is run on the database all the returned EventServices are built using the {@link EventServiceBuilder} and added to the EventServiceContainer.
+   * @async
+   * @param filterArray an array of {@link EventServiceFilter}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns an {@link EventServiceContainer} with the desired services.
+   */
   private async getServiceFromDB(filterArray: EventServiceFilter[], client: Client): Promise<EventServiceContainer> {
     const container = new EventServiceContainer([]);
 
@@ -544,6 +729,7 @@ export class DbServices {
     let qCount = 1;
 
     let flag = false;
+    // build the query
     for (const filter of filterArray) {
       if (flag) {
         query = query + " AND ";
@@ -580,20 +766,14 @@ export class DbServices {
 
     }
 
-    console.log(query);
-    console.log(qArray);
-
     const stream = client.query(query, qArray);
 
-    //const fileHandler = new FileHandlerService();
 
+    // build and add the EventServices to the EventServiceContainer
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
-      //const address = new Address("abc",12,12,"abc");
       const serviceId = Number(row.get('id'));
-
-      //const imageString = fileHandler.getPictureFromServiceId(serviceId);
 
 
       let serviceBuilder = new EventServiceBuilder();
@@ -621,6 +801,15 @@ export class DbServices {
     return container;
   }
 
+  /**
+   * deletes the EventService from the database.
+   * First the addressId of the EventService gets stored to later use the {@link searchForAddressUsageAndDelete} method.
+   * Then the EventService gets deleted and then lastly the {@link deleteServiceFromFavorites} method is called to delete
+   * the service from the favorites table
+   * @async
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async deleteServiceFromDB(serviceId: number, client: Client) {
     const stream = client.query('SELECT addressid FROM service WHERE id=$1', [serviceId]);
     let oldAddressId = -1;
@@ -639,10 +828,23 @@ export class DbServices {
     await this.deleteServiceFromFavorites(serviceId, client);
   }
 
+  /**
+   * This method deletes all the entries of the favorites table where the serviceId is the given one.
+   * @async
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async deleteServiceFromFavorites(serviceId: number, client: Client) {
     await client.query('Delete From favorites Where serviceid = $1', [serviceId]);
   }
 
+  /**
+   * This method gets all the services the given users marked as favorite from the database and returns them in an EventServiceContainer
+   * @async
+   * @param userId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns all the services in an EventServiceContainer
+   */
   private async getFavorites(userId: number, client: Client): Promise<EventServiceContainer> {
     const stream = client.query("SELECT * From service WHERE id IN (Select serviceid From favorites Where userid = $1)", [userId]);
 
@@ -673,14 +875,42 @@ export class DbServices {
     return container;
   }
 
+  /**
+   * This method adds an userId and serviceId pair to the database table favorite. This way a service can be added to
+   * the users favorites.
+   * @async
+   * @param userId
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async addUserFavoirte(userId: number, serviceId: number, client: Client) {
-    await client.query('Insert Into service Values ($1, $2)', [userId, serviceId]);
+    await client.query('Insert Into favorites Values ($1, $2)', [userId, serviceId]);
   }
 
+  /**
+   * This method removes an user Favorite (deletes an entry in the favorite table of the database).
+   * @async
+   * @param userId
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async removeUserFavorite(userId: number, serviceId: number, client: Client) {
     await client.query('Delete From favorites Where userid = $1 AND serviceid = $2', [userId, serviceId]);
   }
 
+  /**
+   * This method updates an EventService in the database. It therefore overrides all the parameters that can be updated.
+   * @async
+   * @param serviceId as {@link number}
+   * @param title as {@link string}
+   * @param description as {@link string}
+   * @param price as {@link number}
+   * @param availability as {@link string}
+   * @param radius as {@link number}
+   * @param requirements as {@link string}
+   * @param capacity as {@link number}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async updateServiceDBParams(serviceId: number, title: string, description: string, price: number, availability: string, radius: number, requirements: string, capacity: number, client: Client) {
     await client.query("Update service Set title=$1, description=$2, price=$3, availability=$4, radius=$5, requirements=$6, capacity=$7 Where id = $8", [
       title,
@@ -693,6 +923,12 @@ export class DbServices {
       serviceId]);
   }
 
+  /**
+   * This method adds an ServiceRequest to the database.
+   * @async
+   * @param request as {@link ServiceRequest}
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
   private async addRequestToDB(request: ServiceRequest, client: Client) {
     await client.query("Insert Into requests(clientid, serviceid, date, message) Values ($1,$2,$3,$4)", [
       request.getCustomerId(),
@@ -702,6 +938,13 @@ export class DbServices {
     ]);
   }
 
+  /**
+   * This method returns all the ServiceRequests of an user in an array.
+   * @async
+   * @param userId of the user which requests should be returned
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns all the ServiceRequests of this user in an array
+   */
   private async getRequestsFromUserDB (userId: number, client: Client): Promise<ServiceRequest[]> {
     const stream = client.query("Select * From requests Where clientid=$1",[userId]);
     const requestArray = [];
@@ -726,42 +969,6 @@ export class DbServices {
     }
     return requestArray;
   }
-
-
-  //////////////////////////Testing//////////////////////////////////////////////////////////////////////////////////////
-
-
-  // test function
-  public async testAddress(street: string, number: number, zip: number, city: string): Promise<Number> {
-    const localClient = this.getClient();
-    await localClient.connect();
-    try {
-      const id = await this.checkIfAddressExistsAndCreate(street, number, zip, city, localClient);
-      return id;
-    } finally {
-      await localClient.end();
-    }
-  }
-
-  public async test(name: string) {
-    const config = {
-      'user': 'cyrill',
-      'host': 'localhost',
-      //'host' : 'localhost',
-      'password': 'eseTeam5_2019!',
-      'port': 5432,
-      'database': 'eventdoo',
-    };
-    const client = new Client(config);
-
-    await client.connect();
-
-    console.log(client.closed);
-    const stream = await client.query('SELECT * From users Where name = $1', [name]);
-    console.log(stream);
-  }
-
-
 }
 
 

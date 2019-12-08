@@ -17,19 +17,6 @@ router.get('/', async (req: Request, res: Response) => {
   res.send('Welcome to SQLTest');
 });
 
-router.get('/:name', async (req: Request, res: Response) => {
-  const name = req.params.name;
-  try {
-    await dbService.test(name);
-    res.statusCode = 200;
-    res.send('Ok');
-  } catch (e) {
-    console.log(e);
-    res.statusCode = 404;
-    res.send('no user with lastname ' + name + ' found in database');
-  }
-});
-
 router.get('/getUserFromMail/:mail', async (req: Request, res: Response) => {
   const mail = req.params.mail;
   let user: User;
