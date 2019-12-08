@@ -166,7 +166,23 @@ client.test("sending email 1", function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
+###
+POST http://localhost:3000/eventservice/order
+Content-Type: application/json
 
+{
+  "serviceId": 7,
+  "customerId": 33,
+  "message": "cake",
+  "date": "12.2.2",
+  "time": " 25.00"
+}
+> {%
+client.test("sending email 2", function() {
+ client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
 ###
 GET http://localhost:3000/eventservice/46
 Content-Type: application/json

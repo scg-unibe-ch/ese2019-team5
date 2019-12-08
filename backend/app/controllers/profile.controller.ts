@@ -150,7 +150,8 @@ router.delete('/:userId', async (req: Request, res: Response) => {
 /**
  * HTTP event listener, listens to put to /addFavourite
  * adds an event service to the user by letting the
- * DB know, sends ok (201) if favourite was added otherwise sends 400
+ * DB know, sends ok (201) if favourite was added and 404 if the service does not exist
+ * and 400 otherwise
  */
 router.put('/addFavourite', async (req: Request, res: Response) => {
   try {
@@ -158,15 +159,17 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
     const userId: number = Number(req.body.userId);
     const serviceId: number = Number(req.body.serviceId)
     await dbService.addFavoriteToUser(userId, serviceId); //TODO CYrill zum implementieren und Error Code anpassen
-    res.status(201).send('added to favourites');
+    res.status(201).json('added to favourites');
 
   } catch (error) {
 
-    console.log(error.message + error.errorCode);
-    res.status(400).send(error);
-
+    if (error.errorCode == 952) {
+      res.status(404).send(error.message);
+    } else {
+      res.status(400).send(error.message);
+    }
   }
-});
+  });
 
 /**
  * HTTP event listener to get /favourite/:id
@@ -193,7 +196,7 @@ router.delete('/favourite/:id/:serviceId', async (req: Request, res: Response) =
   await dbService.removeFavoriteFromUser(userId,serviceId);
     res.status(200).json('Favourite got deleted');
   } catch (error) {
-    res.status(404).send(error.message);
+    res.status(404).send(error.message);//TODO welche fehler
   }
 });
 
