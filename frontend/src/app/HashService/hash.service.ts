@@ -7,11 +7,11 @@ export class HashService {
 
   constructor() { }
 
-  /**
-   * Hashes a given plain text password with function copied from https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-   * Probably not the safest option but suffices for first attempt
-   * @param plainTextPw
-   */
+    /**
+     * hash function using @jshashes and SHA 256
+     * used to hash password
+     * @param plainTextPw
+     */
   static hashPassword(plainTextPw: string){
 
     var Hashes= require('jshashes');

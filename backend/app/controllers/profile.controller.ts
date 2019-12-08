@@ -123,8 +123,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   } catch (error) {
 
 
-
-      res.status(404).send( error.message);
+    res.status(404).send(error.message);
 
   }
 
@@ -159,7 +158,7 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId);
     const serviceId: number = parseInt(req.params.serviceId)
     await dbService.addFavoriteToUser(userId, serviceId); //TODO CYrill zum implementieren und Error Code anpassen
-    res.status(200).send('added to favourites');
+    res.status(201).send('added to favourites');
   } catch (error) {
 
     console.log(error.message + error.errorCode);
@@ -174,15 +173,26 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
  * the array to the front
  * @returns ok (200) if everything went well otherwise 400
  */
-router.get('/favourite/:id/:serviceid', async (req: Request, res: Response) => {
+router.get('/favourite/:id', async (req: Request, res: Response) => {
   try {
     let userId: number = parseInt(req.params.id);
     let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
     let favouriteArrayOfUser: EventService[] = favouriteContainer.getServices();
-    res.send(favouriteArrayOfUser.map(e => e.toSimplification()));
+    res.status(200).send(favouriteArrayOfUser.map(e => e.toSimplification()));
 
   } catch (error) {//TODO welche errors?
     res.status(400).send(error.message);
+  }
+});
+
+router.delete('/favourite/:id/:serviceId', async (req: Request, res: Response) => {
+  try {
+    let userId: number = parseInt(req.params.id);
+    let serviceId: number = parseInt(req.params.serviceId);
+//  await dbService.deleteFavourite(userId,serviceId)//TODO Cyrill
+    res.status(200).json('Favourite got deleted');
+  } catch (error) {
+    res.status(404).send(error.message);
   }
 });
 
