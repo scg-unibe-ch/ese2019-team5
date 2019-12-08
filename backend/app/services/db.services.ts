@@ -878,12 +878,19 @@ export class DbServices {
   /**
    * This method adds an userId and serviceId pair to the database table favorite. This way a service can be added to
    * the users favorites.
+   * First it checks if the user as well as the service really exist.
    * @async
    * @param userId
    * @param serviceId
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
    */
   private async addUserFavoirte(userId: number, serviceId: number, client: Client) {
+
+    const service = await client.query("Select id From service Where id = $1",[serviceId]);
+    if (service.rows.length == 0) {
+
+    }
+
     await client.query('Insert Into favorites Values ($1, $2)', [userId, serviceId]);
   }
 
@@ -932,7 +939,7 @@ export class DbServices {
   private async addRequestToDB(request: ServiceRequest, client: Client) {
     await client.query("Insert Into requests(clientid, serviceid, date, message) Values ($1,$2,$3,$4)", [
       request.getCustomerId(),
-      request.getProviderId(),
+      request.getServiceId(),
       request.getDate(),
       request.getMessage()
     ]);
