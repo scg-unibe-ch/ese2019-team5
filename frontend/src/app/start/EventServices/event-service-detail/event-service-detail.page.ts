@@ -6,6 +6,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {ToastController} from "@ionic/angular";
 import {AuthService} from "../../../AuthService/auth.service";
 import {EventServiceJson} from "../../userprofile/EventServiceJson";
+import {format} from 'date-fns';
 
 import {Observable, Subject, Subscription} from "rxjs";
 import {Platform} from "@ionic/angular";
@@ -150,7 +151,8 @@ export class EventServiceDetailPage implements OnInit {
     if(!this.validateOfferInput()) return;
     this.hasSentOfferInquiry = true;
     const message: string = this.messageInput.value;
-    const date: string = this.dateInput.value;
+    const date: string = format(new Date(this.dateInput.value), "dd.MM.yyyy");
+    console.log(date);
     const time: string = this.timeInput.value;
     await this.http.post('http://localhost:3000/eventservice/order', {
       message: message,
