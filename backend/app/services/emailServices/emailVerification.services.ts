@@ -1,3 +1,7 @@
+/**
+ * This class sends the email a newly sign up user an email, so the user
+ * can verify his email address. This class extends {@link EmailService}
+ */
 import * as fs from 'fs';
 import {User} from '../../models/user.model';
 import {EmailForSignUpCreatorService} from "./emailForSignUpCreator.service";
@@ -10,7 +14,7 @@ const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 export class EmailVerificationServices extends EmailService {
 
   /**
-   * sends Mail to user by calling the parent's method (using nodemailer)
+   * sends Mail to user by calling the parent's method {@link nodemailer}
    * @param user to which the email should be sent
    */
   public static async sendMailToUser(user: User) {

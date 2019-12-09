@@ -1,20 +1,17 @@
-###
-# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
-# paste cURL into the file and request will be converted to HTTP Request format.
-#
-# Following HTTP Request Live Templates are available:
-# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
-# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
-# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
+//This class tests the HTTP Client and therefore the method in the event service controller
+//Please be aware since the DB is constantly changing the service and provider Id  might not work and
+// therefore cause failing tests
+// also be aware that jwt tokens are propably expired since they only last 24 hours
 //geht nur mit neuer addresse
+###
 POST http://localhost:3000/signup
 Content-Type: application/json
 
 {
   "firstname": "Example",
   "lastname": "Miller",
-  "email": "rayshawn.abdalla@iiron.us",
+  "email": "will123459@gmail.com",
   "pwhash": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
   "zip": 3031,
   "street": "Herestreet",
@@ -88,7 +85,6 @@ client.test("Send mail again error, no user found ", function() {
 %}
 
 ###
-//TODO confirmation token tests fehlen... aber zuerst bug fixen
 GET http://localhost:3000/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDQSIsImVtYWlsIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpYXQiOjE1NzMzODI4NzcsImV4cCI6MTU3MzQ2OTI3NywiYXVkIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpc3MiOiJFdmVudGRvbyIsInN1YiI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIn0.VCPikJPvi4am5k3unwoKISBnE--u3m0cpzlskDt7rRYLwXGbA8TGZscepvcm4iQIGAIzROtLAFDow6SswzVfzQ
 Content-Type: application/json
 

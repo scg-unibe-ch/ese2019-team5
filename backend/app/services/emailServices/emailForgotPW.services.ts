@@ -1,6 +1,7 @@
 /**
  *  This class creates an jwt token {@link jwt} that is is part of url which is send to user by using {@link nodemailer}
  * User needs to verify email by clicking on URL to login
+ * This class extends the {@link EmailService}
  */
 
 import * as fs from 'fs';

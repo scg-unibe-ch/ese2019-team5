@@ -1,5 +1,5 @@
 /**
- * email text if an eventservice gets reported including the serviceId that seemed inappropriate
+ *This class has the email text if an event service gets reported including the serviceId that seemed inappropriate
  * and the userId of the person reporting it.
  */
 

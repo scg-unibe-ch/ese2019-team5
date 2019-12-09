@@ -1,3 +1,8 @@
+/**
+ * This class sends an email to the Eventdoo team when a user reported an service inappropriate
+ * using {@link nodemailer}
+ */
+
 import {EmailService} from "./Email.service";
 import {EmailReportServiceCreatorService} from "./EmailReportServiceCreator.service";
 

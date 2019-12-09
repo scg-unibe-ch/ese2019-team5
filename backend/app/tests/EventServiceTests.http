@@ -1,9 +1,13 @@
+//This class tests the HTTP Client and therefore the method in the event service controller
+//Please be aware since the DB is constantly changing the service and provider Id  might not work and
+// therefore cause failing tests
+
 ###Funktionierendes erstellen von Eventservices
 POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 112,
+  "providerId": 36,
   "category": "Location",
   "title": "Barn",
   "description": "Beautiful barn to rent for all kind of events",
@@ -16,6 +20,7 @@ Content-Type: application/json
   "city": "FarFarAway",
   "perimeter": "20"
 }
+
 > {%
 client.test("Adding eventServices without subtype and requirements", function() {
   client.assert(response.status === 201, "Response status is 201");
@@ -28,7 +33,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 93,
+  "providerId": 36,
   "category": "Food",
   "title": "Colourful Cupcakes",
   "description": "Looking for colourful cupcakes, I can make them all in all the colours you want.",
@@ -42,6 +47,7 @@ Content-Type: application/json
   "perimeter": "100",
   "subtype": "Sweets & Desserts"
 }
+
 > {%
 client.test("Adding eventServices with subtype without requirments", function() {
   client.assert(response.status === 201, "Response status is 201");
@@ -55,7 +61,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 94,
+  "providerId": 36,
   "category": "Food",
   "title": "Black Cupcakes",
   "description": "Looking for black cupcakes? I will bake them.",
@@ -82,7 +88,7 @@ POST http://localhost:3000/eventservice/add
 Content-Type: application/json
 
 {
-  "providerId": 95,
+  "providerId": 30,
   "category": "Music",
   "title": "The perfect piano musician",
   "description": "I will give your event the perfect atmosphere",
@@ -104,7 +110,7 @@ client.test("Adding eventServices with requirments", function() {
 %}
 
 ###
-DELETE http://localhost:3000/eventservice/44
+DELETE http://localhost:3000/eventservice/22
 Content-Type: application/json
 
 > {%
@@ -116,7 +122,7 @@ client.test("deleting one service, normal", function() {
 
 ###
 
-DELETE http://localhost:3000/eventservice/12
+DELETE http://localhost:3000/eventservice/20
 Content-Type: application/json
 
 > {%
@@ -127,7 +133,7 @@ client.test("deleting one service, user does not exist", function() {
 %}
 
 ###
-DELETE http://localhost:3000/eventservice/26
+DELETE http://localhost:3000/eventservice/20
 Content-Type: application/json
 
 > {%
@@ -154,8 +160,8 @@ POST http://localhost:3000/eventservice/order
 Content-Type: application/json
 
 {
-  "serviceId": 4,
-  "customerId": 5,
+  "serviceId": 15,
+  "customerId": 35,
   "message": "dsadf",
   "date": "someDate",
   "time": " dadsdfasdfdsaf"
@@ -184,7 +190,7 @@ client.test("sending email 2", function() {
 });
 %}
 ###
-GET http://localhost:3000/eventservice/46
+GET http://localhost:3000/eventservice/15
 Content-Type: application/json
 
 > {%
@@ -237,7 +243,7 @@ Content-Type: application/json
   "requirements": "maybe don't know yet",
   "capacity": 100,
   "price": 100,
-  "serviceId": 54
+  "serviceId": 24
   }
 
 > {%
