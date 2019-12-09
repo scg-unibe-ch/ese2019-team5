@@ -1,5 +1,3 @@
-
-
 <ion-header>
   <app-header></app-header>
 </ion-header>
@@ -9,9 +7,8 @@
     <span title="Create service for an event"> <ion-text style="font-size: 25pt; font-weight: lighter; color: white;">+</ion-text>  </span>
   </ion-button>
   <div style="min-height: 100%">
-
-
-  <!-- Form to set search params -->
+    <!-- Form to set search parameters -->
+    <!-- EventServices can be filtered by category and subtype, availability, city, price, capacity, and simple text search--->
   <form [formGroup]="searchForm">
     <ion-toolbar color="#fafafa" style="position: absolute; top: 5px;">
       <ion-grid>
@@ -106,12 +103,11 @@
     </ion-toolbar>
   </form>
 
-  <!-- Display Event Services matching the params -->
+  <!-- Display Event Services matching the parameters set by the user -->
     <event-service-card [width]="4" [services]="services" style="position: absolute; top: 200px; bottom: 200px; padding-bottom: 100px;"> </event-service-card>
-
-
   </div>
 </ion-content>
+
 <ion-footer>
   <app-info-footer></app-info-footer>
 </ion-footer>
