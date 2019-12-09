@@ -48,7 +48,7 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     let subtype: string = req.query.subtype;
     let city: string = req.query.city;
     let price: number = req.query.price;
-    let capacity: number = req.query.capacity;
+    let capacity: number = req.query.people;
     let availability: string = req.query.availability;
     let eventServiceFilterArray: EventServiceFilter[] = [];
     if (textSearch !== undefined) {

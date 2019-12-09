@@ -46,7 +46,7 @@
     </ion-text>
     <small [class.ion-hide]="isVerified || mailSent" style="color: darkred"> Email address is not verified yet. Please
       check your emails. </small>
-    <ion-button color="secondary" [class.ion-hide]="isVerified || mailSent" (click)="sendMailAgain()"> Send mail again
+    <ion-button color="primary" [class.ion-hide]="isVerified || mailSent" (click)="sendMailAgain()"style="width: 100%; height: 30px; padding-left: 12px; padding-right: 300px; font-size: 16px"> Send mail again
     </ion-button>
     <small *ngIf="mailSent"> We sent you an email with instructions. Please check also your spam folder. </small>
   </div>
