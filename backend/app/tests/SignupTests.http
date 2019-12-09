@@ -57,7 +57,6 @@ Content-Type: application/json
 
 {
   "email": "will123459@gmail.com"
-
 }
 
 > {%
@@ -74,7 +73,6 @@ Content-Type: application/json
 
 {
   "email": "will123459dd@gmail.com"
-
 }
 
 > {%
@@ -85,13 +83,11 @@ client.test("Send mail again error, no user found ", function() {
 %}
 
 ###
-GET http://localhost:3000/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2lsbGlhbiIsInN1cm5hbWUiOiJDQSIsImVtYWlsIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpYXQiOjE1NzMzODI4NzcsImV4cCI6MTU3MzQ2OTI3NywiYXVkIjoiZ2lsbGlhbi5jYXRob21hc0BnbXguY2giLCJpc3MiOiJFdmVudGRvbyIsInN1YiI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIn0.VCPikJPvi4am5k3unwoKISBnE--u3m0cpzlskDt7rRYLwXGbA8TGZscepvcm4iQIGAIzROtLAFDow6SswzVfzQ
+GET http://localhost:3000/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiV2lsa2luZyIsInN1cm5hbWUiOiJCcmlhciIsImVtYWlsIjoid2lsa2luLmJyaWFyQGlpcm9uLnVzIiwiaWF0IjoxNTc1ODkwNjQ3LCJleHAiOjE1NzU5NzcwNDcsImF1ZCI6IndpbGtpbi5icmlhckBpaXJvbi51cyIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoid2lsa2luLmJyaWFyQGlpcm9uLnVzIn0.RiRd8t8nK5l4PpJWkm_DBn_uhxEmpdqfcwrVp8wCF0oIUWPJ0TCUJrDw2c2lt_HCHhmBJgr5L1Xi8gCGxr1SoA
 Content-Type: application/json
 
 {
-  "email": "gillian.cathomas@gmx.ch"
-
-
+  "email": "wilkin.briar@iiron.us"
 }
 
 
@@ -109,7 +105,6 @@ Content-Type: application/json
 {
   "email": "gillian.cathomas@gmx.ch",
   "url": "localhost:4200/start/signup/confirmation/deyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQUMiLCJzdXJuYW1lIjoiQ0EiLCJlbWFpbCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaWF0IjoxNTczMzA1OTg0LCJleHAiOjE1NzMzOTIzODQsImF1ZCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCJ9.TVorfgkxC2S736-qXaUSJWI1IqcSE2QVP9eG6EvLldl17SYtwMN7fzI642d_QxNXOPjb4c0aQ58BVRyqtIIgnQ"
-
 }
 
 
@@ -125,9 +120,8 @@ GET http://localhost:3000/signup/confirmation/:token
 Content-Type: application/json
 
 {
-  "email": "gillian.cathomas@gmx.ch",
-  "url": "localhost:4200/start/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQUMiLCJzdXJuYW1lIjoiQ0EiLCJlbWFpbCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaWF0IjoxNTczMzA1OTg0LCJleHAiOjE1NzMzOTIzODQsImF1ZCI6ImdpbGxpYW4uY2F0aG9tYXNAZ214LmNoIiwiaXNzIjoiRXZlbnRkb28iLCJzdWIiOiJnaWxsaWFuLmNhdGhvbWFzQGdteC5jaCJ9.TVorfgkxC2S736-qXaUSJWI1IqcSE2QVP9eG6EvLldl17SYtwMN7fzI642d_QxNXOPjb4c0aQ58BVRyqtIIgnQ"
-
+  "email": "wilkin.briar@iiron.us",
+  "url": "localhost:4200/start/signup/confirmation/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiV2lsa2luZyIsInN1cm5hbWUiOiJCcmlhciIsImVtYWlsIjoid2lsa2luLmJyaWFyQGlpcm9uLnVzIiwiaWF0IjoxNTc1ODkwNjQ3LCJleHAiOjE1NzU5NzcwNDcsImF1ZCI6IndpbGtpbi5icmlhckBpaXJvbi51cyIsImlzcyI6IkV2ZW50ZG9vIiwic3ViIjoid2lsa2luLmJyaWFyQGlpcm9uLnVzIn0.RiRd8t8nK5l4PpJWkm_DBn_uhxEmpdqfcwrVp8wCF0oIUWPJ0TCUJrDw2c2lt_HCHhmBJgr5L1Xi8gCGxr1SoA"
 }
 
 
