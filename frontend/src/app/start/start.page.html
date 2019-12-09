@@ -67,16 +67,7 @@
           </ion-col>
 
             <ion-col>
-              <ion-select class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()">
-                <ion-select-option value=""> All days </ion-select-option>
-                <ion-select-option value="Monday"> Monday </ion-select-option>
-                <ion-select-option value="Tuesday"> Tuesday </ion-select-option>
-                <ion-select-option value="Wednesday"> Wednesday </ion-select-option>
-                <ion-select-option value="Thursday"> Thursday </ion-select-option>
-                <ion-select-option value="Friday"> Friday </ion-select-option>
-                <ion-select-option value="Saturday"> Saturday </ion-select-option>
-                <ion-select-option value="Sunday"> Sunday </ion-select-option>
-              </ion-select>
+              <ion-datetime class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()"  displayFormat="DDDD, DD.MM.YYYY" min="2019-12-18" max="2020-12"> </ion-datetime>
             </ion-col>
         </ion-row>
 

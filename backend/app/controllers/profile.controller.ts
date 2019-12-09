@@ -165,19 +165,18 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
  * HTTP event listener to get /favourite/:id
  * gets all the favourite event services of a user and sends
  * the array to the front
- * @returns ok (200) if everything went well otherwise 400
+ * @returns ok (200) if everything went well
  */
 router.get('/favourite/:id', async (req: Request, res: Response) => {
-  try {
-    let userId: number = parseInt(req.params.id);
-    let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
-    let favouriteArrayOfUser: EventService[] = favouriteContainer.getServices();
-    res.status(200).send(favouriteArrayOfUser.map(e => e.toSimplification()));
 
-  } catch (error) {//TODO welche errors?
-    res.status(400).send(error.message);
-    console.log(error.message);
-  }
+  let userId: number = parseInt(req.params.id);
+  console.log(userId);
+  let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
+  let favouriteArrayOfUser: EventService[] = favouriteContainer.getServices();
+  console.log(favouriteArrayOfUser)
+  res.status(200).send(favouriteArrayOfUser.map(e => e.toSimplification()));
+  console.log(favouriteArrayOfUser.map(e=>e.toSimplification()));
+
 });
 
 /**
@@ -191,10 +190,10 @@ router.delete('/favourite/:id/:serviceId', async (req: Request, res: Response) =
     await dbService.removeFavoriteFromUser(userId, serviceId);
     res.status(200).json('Favourite got deleted');
   } catch (error) {
-    res.status(404).send(error.message);//TODO welche fehler
-    console.log(error);
+    res.status(404).send(error.message);
+    console.log(error.message);
   }
-});
+})
 
 /**
  * gets all the requested event services of a user
@@ -211,6 +210,7 @@ router.get('/requestedServices/:userId', async (req: Request, res: Response) => 
     res.status(404).send(error.message);
     console.log(error);
   }
+
 })
 
 export const ProfileController: Router = router;

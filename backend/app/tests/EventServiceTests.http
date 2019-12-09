@@ -252,24 +252,5 @@ client.test("update an event service no problem" , function() {
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
-###
-PUT http://localhost:3000/eventservice/update
-Content-Type: application/json
 
-{
-  "title":"Somenew title'",
-  "description":"nope",
-  "availability": "Saturday, Sunday",
-  "requirements": "maybe don't know yet",
-  "capacity": 100,
-  "price": 100
-
-}
-
-> {%
-client.test("update an event service" , function() {
-  client.assert(response.status === 404, "Response status is 404");
-    client.assert(response.body.isEmpty !== -1, "Response is not empty")
-});
-%}
 ###

@@ -3,6 +3,7 @@ import {AuthService} from "../AuthService/auth.service";
 import {EventService} from "../../../../backend/app/models/eventService.model";
 import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import {format} from 'date-fns';
 
 
 
@@ -81,6 +82,7 @@ export class StartPage implements OnInit {
    * Updates "services" which leads to an updated page only displaying the matching services
    */
   search() {
+    //console.log(format(this.weekdays.value, "iiii"));
     this.loading = true;
     let url = this.getUrl();
     this.http.get<Array<EventService>>(url).subscribe(
@@ -120,7 +122,7 @@ export class StartPage implements OnInit {
     if (this.persons.value != '')
       result += ('people=' + this.persons.value + '&');
     if (this.weekdays.value != '')
-      result += ('availability=' + this.weekdays.value + '&');
+      result += ('availability=' + format(new Date(this.weekdays.value), "iiii") + '&');
 
     if (result.charAt(result.length - 1) == '&') {
       console.log(result.substr(0, result.length - 1));
