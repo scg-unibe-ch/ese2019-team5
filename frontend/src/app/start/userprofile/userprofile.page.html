@@ -97,7 +97,7 @@
             <p>Phone number: {{phonenumber}}</p>
           </ion-row>
         </ion-grid>
-        <ion-button [hidden]="isEditing" (click)="enableEditing()">Edit Profile</ion-button>
+        <ion-button [hidden]="isEditing || authservice.isLoggedOut()" (click)="enableEditing()">Edit Profile</ion-button>
 
       </ion-col>
 

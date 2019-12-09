@@ -537,8 +537,9 @@ export class DbServices {
   /**
    * This method deletes an user from the database.
    * First it gets the addressId of the user from the database. Then it deletes the user and all its services from the database.
-   * Lastly it calls the {@link searchForAddressUsageAndDelete} method to delete the address if necessary and the
-   * {@link deleteFavoritesOfUser} to delete all the favorites saved for this user.
+   * Lastly it calls the {@link searchForAddressUsageAndDelete} method to delete the address if necessary, the
+   * {@link deleteFavoritesOfUser} to delete all the favorites saved for this user and the {@link deleteUserFromRequests} to delete
+   * all requests of this user..
    * @async
    * @param userId as {@link number}
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
@@ -563,6 +564,7 @@ export class DbServices {
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
     await this.deleteFavoritesOfUser(userId, client);
+    await this.deleteUserFromRequests(userId, client);
   }
 
   /**
@@ -762,6 +764,7 @@ export class DbServices {
         qCount++;
       }
       query = query + ")";
+
       flag = true;
 
     }
@@ -805,7 +808,7 @@ export class DbServices {
    * deletes the EventService from the database.
    * First the addressId of the EventService gets stored to later use the {@link searchForAddressUsageAndDelete} method.
    * Then the EventService gets deleted and then lastly the {@link deleteServiceFromFavorites} method is called to delete
-   * the service from the favorites table
+   * the service from the favorites and requests table
    * @async
    * @param serviceId
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
@@ -826,6 +829,7 @@ export class DbServices {
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
     await this.deleteServiceFromFavorites(serviceId, client);
+    await this.deleteServiceFromRequests(serviceId, client);
   }
 
   /**
@@ -980,6 +984,26 @@ export class DbServices {
       }
     }
     return requestArray;
+  }
+
+  /**
+   * This method removes an Service from the requests table in the database.
+   * @async
+   * @param serviceId of the service you wan't to delete.
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
+  private async deleteServiceFromRequests (serviceId: number, client: Client) {
+    await client.query("Delete From requests Where serviceId = $1", [serviceId]);
+  }
+
+  /**
+   * This method removes an user from the requests table in the database.
+   * @async
+   * @param userId of the user you wan't to delete.
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
+  private async deleteUserFromRequests (userId: number, client: Client) {
+    await client.query("Delete From requests Where clientId = $1", [userId]);
   }
 }
 
