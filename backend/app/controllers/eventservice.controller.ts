@@ -79,7 +79,6 @@ router.put('/update', async (req: Request, res: Response) => {
     let perimeter: number = parseInt(req.body.perimeter);
     let price: number = parseInt(req.body.price);
     let serviceId: number = parseInt(req.body.serviceId);
-///TODO Cyrill und welche Error
     await dbService.updateServiceParams(serviceId, title, description, price, availability, perimeter, requirements, capacity);
     res.status(202).json('service updated');
   } catch (error) {
