@@ -185,7 +185,7 @@ router.get('/favourite/:id/:serviceId', async (req: Request, res: Response) => {
 
   let userId: number = parseInt(req.params.id);
   let serviceId:number= parseInt(req.params.serviceId);
-  let isServiceFavourite= await dbService.isServiceFavourite(userId, serviceId);
+  let isServiceFavourite= await dbService.isServiceFavorite(userId, serviceId);
 
   res.status(200).send(isServiceFavourite);
 
