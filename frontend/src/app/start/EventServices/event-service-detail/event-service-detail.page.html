@@ -4,19 +4,24 @@
   <div class="littleSideBorder">
 
     <div class="eventImage" [hidden]="serviceId==null||isEditing" style="text-align: center; top: 0px">
-      <ion-img [src]="image" style="height:40vmax; object-fit: cover"></ion-img>
+      <ion-img [src]="image" style="height:20vmax; object-fit: cover"></ion-img>
 
       <ion-row>
-        <div style="position: relative; top: 20px; text-align: left; left:25px; font-size: 30px; font-weight: bold">
+        <div style="position: relative; top: 25px; text-align: left; left:25px; font-size: 30px; font-weight: bold">
           <ion-col>
             <ion-text style="font-size: 30px; color: black">{{title}}</ion-text>
           </ion-col>
         </div>
-        <ion-col style="margin-left: 90%; margin-top: -4%">
-          <ion-button class="bigButtons" size="large" color="light" style="--box-shadow: none"
+        <ion-col style="margin-left: 90%; margin-top: -4.8%">
+          <ion-button [hidden]="true" class="bigButtons" size="large" color="light" style="--box-shadow: none"
                       (click)="addToFavorites()">
-            <ion-icon class="bigIcons" name="ios-star-outline"></ion-icon>
+            <ion-img style="height: 85px; width: 85px;" src="/assets/icon_star.png"></ion-img>
           </ion-button>
+          <ion-button class="bigButtons" size="large" color="light" style="--box-shadow: none"
+                      (click)="deleteFromFavorites()">
+            <ion-img style="height: 85px; width: 85px;" src="/assets/icon_star_filled.png"></ion-img>
+          </ion-button>
+
         </ion-col>
       </ion-row>
 
