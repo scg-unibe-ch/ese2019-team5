@@ -1,5 +1,6 @@
 /**
  * creates an address with street, housenumber, zip and city
+ * is used in the {@link user.model}and {@link eventService.model}
  */
 
 export class Address {
