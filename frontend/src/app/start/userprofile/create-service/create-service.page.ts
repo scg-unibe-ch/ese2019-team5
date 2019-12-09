@@ -218,13 +218,13 @@ export class CreateServicePage implements OnInit {
         {
           text: 'Go to start page',
           handler: () => {
-            this.router.navigate(['/start']);
+            this.router.navigate(['/start']).then(()=>location.reload());
           }
         },
         {
           text: 'Go to profile page',
           handler: () => {
-            this.router.navigate(['/start/userprofile']);
+            this.router.navigate(['/start/userprofile']).then(()=>location.reload());
           }
         }]
     });
