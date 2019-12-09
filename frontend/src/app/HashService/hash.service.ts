@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+
+/* For comments */
 import {LoginPage} from "../start/login/login.page";
 import {SignupPage} from "../start/signup/signup.page";
 import {UpdatePasswordPage} from "../start/login/update-password/update-password.page";

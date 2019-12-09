@@ -3,13 +3,15 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../../../../backend/app/models/user.model';
 import {ToastController} from "@ionic/angular";
+/* For comments */
+import {LoginPage} from "../start/login/login.page";
 
 // @ts-ignore
 var jwtDecode = require('jwt-decode');
 
 /**
- * Provides all kind of authentication functions.
- * Especially used by {@link LoginPage} and by {@link HeaderComponent}
+ * Provides all kind of authentication functions to almost all components
+ * Especially used by {@link LoginPage}
  */
 
 @Injectable({ providedIn: 'root' })
@@ -55,7 +57,6 @@ export class AuthService {
     document.location.href = 'http://localhost:4200/start/';
     this.showLogoutToast();
   }
-
 
 
   /**
