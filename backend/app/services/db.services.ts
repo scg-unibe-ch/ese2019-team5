@@ -14,6 +14,7 @@ import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
 
 import jwt from 'jsonwebtoken';
+import {FileHandlerService} from "./fileHandler.service";
 
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
@@ -789,12 +790,13 @@ export class DbServices {
     const stream = client.query(query, qArray);
 
 
+    const fileHandler = new FileHandlerService();
     // build and add the EventServices to the EventServiceContainer
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
       const serviceId = Number(row.get('id'));
-
+      //var img = String(fileHandler.getPictureFromServiceId(serviceId));
 
       let serviceBuilder = new EventServiceBuilder();
 

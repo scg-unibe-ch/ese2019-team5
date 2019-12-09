@@ -12,6 +12,7 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {UserBuilder} from "../models/userBuilder.model";
 import {Address} from "../models/address.model";
+import * as fs from "fs";
 
 
 const router: Router = Router();
@@ -161,6 +162,29 @@ router.get("/tryLogin/:id", async(req: Request, res: Response) => {
     res.send("failed");
   }
 
+});
+
+
+router.get("/tryGetImageType/:id", async(req: Request, res: Response) => {
+  const b64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlUAAAGcC";
+  const type = b64.split(";")[0].split("/")[1];
+
+  console.log(type);
+
+  const file = fs.readFileSync ("../pictures/services/63/63.png", 'base64');
+  console.log(Buffer.from(file).toString('base64'));
+
+  res.statusCode = 200;
+  res.send(type);
+});
+
+router.get("/isFavorite/:id", async(req: Request, res: Response) => {
+  const result = await dbService.isServiceFavorite(1,5);
+
+  console.log(result);
+
+  res.statusCode = 200;
+  res.send(result);
 });
 
 
