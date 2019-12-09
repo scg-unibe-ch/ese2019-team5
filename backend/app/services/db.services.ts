@@ -380,6 +380,23 @@ export class DbServices {
     }
   }
 
+  /**
+   * Checks if a user added a service as his favorites and returns true or false
+   * @async
+   * @param userId
+   * @param serviceId
+   * @returns true if service is favorite
+   */
+  public async isServiceFavorite(userId: number, serviceId: number): Promise<boolean> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.isServiceFavoriteOfUser(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
@@ -1004,6 +1021,19 @@ export class DbServices {
    */
   private async deleteUserFromRequests (userId: number, client: Client) {
     await client.query("Delete From requests Where clientId = $1", [userId]);
+  }
+
+  /**
+   * This method checks if an user added a service to his favorites and returns true or false.
+   * @async
+   * @param userId
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns true if the user added the service to his favorites otherwise false.
+   */
+  private async isServiceFavoriteOfUser (userId: number, serviceId: number, client: Client): Promise<boolean> {
+    const stream = await client.query("Select EXISTS (Select * From favorites Where userid = $1 AND serviceid = $2)", [userId, serviceId]);
+    return Boolean(stream.rows[0][0]);
   }
 }
 
