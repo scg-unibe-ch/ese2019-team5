@@ -12,19 +12,10 @@ import {
 } from './controllers'; // ProfileController
 import {ProfileController} from "./controllers";
 
-/*
-const sequelize =  new Sequelize({
-  database: 'development',
-  dialect: 'sqlite',
-  username: 'root',
-  password: '',
-  storage: 'db.sqlite'
-});*/
-
 
 var bodyParser = require('body-parser');
 
-// cors to make request between differen ports
+// cors to make request between different ports
 const cors = require('cors');
 // create a new express application instance
 const app: express.Application = express();
@@ -36,10 +27,8 @@ app.use(cors());
 app.engine('handlebars', exphbs());
 app.set( 'view engine', 'handlebars');
 
-//app.use(bodyParser({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb'}));
 app.use(bodyParser.json({limit:'50mb'}));
-///app.use(bodyParser());
 
 
 var port = 3000;
@@ -65,11 +54,5 @@ app.use('/search',SearchController);
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/`);
 });
-/*
-sequelize.sync().then(() => {
-  app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/`);
-  });
-});*/
 
 module.exports = app;

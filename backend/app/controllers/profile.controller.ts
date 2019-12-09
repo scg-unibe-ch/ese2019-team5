@@ -148,7 +148,7 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
   try {
 
     const userId: number = Number(req.body.userId);
-    const serviceId: number = Number(req.body.serviceId)
+    const serviceId: number = Number(req.body.serviceId);
     await dbService.addFavoriteToUser(userId, serviceId);
     res.status(201).json('added to favourites');
   } catch (error) {
