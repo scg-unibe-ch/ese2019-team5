@@ -30,7 +30,7 @@
         <ion-text style="padding-left: 10px"> Report</ion-text>
       </ion-button>
       <ion-button class="btn2" color="light" size="small" text-capitalize=“false” (click)="showUpdateInput()">
-        <ion-icon [hidden]="providerId!=auth.getUserId()" name="md-create"
+        <ion-icon [hidden]="providerId!=auth.getUserId() || auth.isLoggedOut()" name="md-create"
                   style="cursor:pointer; padding-right: 10px"></ion-icon>
         <ion-text>Edit</ion-text>
       </ion-button>
