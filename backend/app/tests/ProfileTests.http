@@ -1,12 +1,14 @@
-###Funktionierendes erstellen von Eventservices
+//This class tests the HTTP Client and therefore the method in the login controller
+//Please be aware since the DB is constantly changing the service and provider Id  might not work and
+// therefore cause failing tests
 POST http://localhost:3000/profile/update
 Content-Type: application/json
 
 {
-  "id":4,
+  "id":7,
   "firstname": "My new firstname",
   "lastname": "Meier",
-  "email": "kiai.lenard@iiron.us",
+  "email": "benton.tavon@iiron.us",
   "pwhash": -1425372064,
   "street": "Station",
   "housenumber": 22,
@@ -22,7 +24,7 @@ client.test("updating profile no phone no firm", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/94
+GET http://localhost:3000/profile/7
 Content-Type: application/json
 
 
@@ -34,18 +36,18 @@ client.test("getting user information for profile", function() {
 %}
 
 ###
-GET http://localhost:3000/profile/12
+GET http://localhost:3000/profile/4
 Content-Type: application/json
 
 > {%
 client.test("getting user information for profile, user does not exist", function() {
-  client.assert(response.status === 400, "Response status is 400");
+  client.assert(response.status === 404, "Response status is 404");
     client.assert(response.body.isEmpty !== -1, "Response is not empty")
 });
 %}
 
 ###
-DELETE http://localhost:3000/profile/4
+DELETE http://localhost:3000/profile/17
 Content-Type: application/json
 
 > {%

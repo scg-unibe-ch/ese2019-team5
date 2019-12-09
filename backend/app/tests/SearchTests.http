@@ -1,4 +1,7 @@
-###Funktionierendes erstellen von Eventservices
+//This class tests the HTTP Client and therefore the method in the login controller
+//Please be aware since the DB is constantly changing the service and provider Id  might not work and
+// therefore cause failing tests
+###
 GET http://localhost:3000/search
 Content-Type: application/json
 

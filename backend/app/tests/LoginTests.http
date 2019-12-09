@@ -1,7 +1,7 @@
 //This class tests the HTTP Client and therefore the method in the login controller
 //Please be aware since the DB is constantly changing the service and provider Id  might not work and
 // therefore cause failing tests
-
+// also jwt tokens are probaply expried since the are only valid for 24h for security reasons
 
 ### Login welches funktioniert
 POST http://localhost:3000/login
