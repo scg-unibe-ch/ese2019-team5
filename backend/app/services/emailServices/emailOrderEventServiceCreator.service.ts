@@ -1,7 +1,8 @@
 /**
- * text for the provider email and the customer email when a customer requested an event service
+ * This class has the text for the provider email and the customer email when a customer requested an event service
  */
 export class EmailOrderEventServiceCreatorService {
+
   /**
    * gets the EmailText for the service provider
    * @param customerEmail the email to contact the customer within 2 workdays

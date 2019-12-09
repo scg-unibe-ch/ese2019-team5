@@ -1,5 +1,5 @@
 /**
- * email text for a user that forgot his password asking him to
+ * This class is the email text for a user that forgot his password asking him to
  * use the link in order to reset his password
  */
 

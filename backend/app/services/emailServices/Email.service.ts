@@ -2,7 +2,7 @@ import {User} from "../../models/user.model";
 import nodemailer from "nodemailer";
 
 /**
- * parent class for sending mails
+ * This is the parent class for sending mails
  */
 
 export class EmailService {
@@ -27,6 +27,11 @@ export class EmailService {
     return '';
   }
 
+  /**
+   * gets the transporter that is needed
+   * uses {@link nodemailer}
+   * @return the needed transporter for the email
+   */
   static getTransporter(): any {
     let  transporter = nodemailer.createTransport({
         host: 'mail.gmx.net',
@@ -45,6 +50,11 @@ export class EmailService {
     return transporter;
   }
 
+  /**
+   * sends a mail to a given user
+   * uses {@link nodemailer}
+   * @param user
+   */
   public static async sendMailToUser(user: User) {
 
     let payload = {

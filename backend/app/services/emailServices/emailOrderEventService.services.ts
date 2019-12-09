@@ -1,19 +1,19 @@
+/**
+ * This class sends an email to the service provider and the customer, asking the provider to contact the
+ * customer within 2 workdays.
+ */
+
 import nodemailer from 'nodemailer';
 import {EmailOrderEventServiceCreatorService} from "./emailOrderEventServiceCreator.service";
 
 const emailService = new EmailOrderEventServiceCreatorService();
 
 
-/**
- * sends an email to the service provider and the customer, asking the provider to contact the
- * customer within 2 workdays.
- */
-
 export class EmailOrderEventService {
 
 
   /**
-   *  sends an email using nodemailer to the service provider
+   *  sends an email using {@link nodemailer} to the service provider
    * @param providerEmail the email of the service provider
    * @param customerEmail the email of the customer requesting the service so the provider can contact him
    * @param serviceTitle which service has been requesting
@@ -58,7 +58,7 @@ export class EmailOrderEventService {
   }
 
   /**
-   * sends an email using nodemailer to the customer
+   * sends an email using {@link nodemailer} to the customer
    * @param providerName the name of the service provider so the customer knows from whom an email to expect
    * @param customerEmail the email of the customer requesting the service
    * @param serviceTitle which service has been requested
@@ -67,8 +67,6 @@ export class EmailOrderEventService {
    * @param message for the provider so the customer can ask for special requests.
    */
   static async sendMailToCustomer(providerName: string, customerEmail: string, serviceTitle: string, date: string, time: string, message: string) {
-
-
     var transporter = nodemailer.createTransport({
       host: 'mail.gmx.net',
       port: 465,
@@ -83,7 +81,6 @@ export class EmailOrderEventService {
       }
     });
 
-// send mail with defined transport object
     try {
       var mailOptions = {
         from: '"Eventdoo" <ESEteam5@gmx.de>',

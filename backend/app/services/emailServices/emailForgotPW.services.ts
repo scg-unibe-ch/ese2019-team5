@@ -1,17 +1,16 @@
+/**
+ *  This class creates an jwt token {@link jwt} that is is part of url which is send to user by using {@link nodemailer}
+ * User needs to verify email by clicking on URL to login
+ */
+
 import * as fs from 'fs';
 import {User} from '../../models/user.model';
 import * as jwt from 'jsonwebtoken';
-
 import {EmailForgotPWCreatorService} from "./emailForgotPWCreator.service";
 import {EmailService} from "./Email.service";
 
 const privateKey = fs.readFileSync('./app/services/privateForgotPWKey.key', 'utf8');
 
-
-/**
- * creates an jwt token that is is part of url which is send to user by using {nodemailer}
- * User needs to verify email by clicking on URL to login
- */
 
 export class EmailForgotPWServices extends EmailService {
 
@@ -25,14 +24,12 @@ export class EmailForgotPWServices extends EmailService {
   }
 
 
-// send mail with defined transport object
   /**
    * gets the mail options and overrides the parent's class method
    * @param email to whom the mail is sent
    * @param emailURL URL that needs to be included in the email.
    */
   static getMailOptions(email: string, emailURL: string): any {
-    console.log('got to mail Options');
     var mailOptions = {
       from: '"Eventdoo" <ESEteam5@gmx.de>',
       to: email,
@@ -43,15 +40,15 @@ export class EmailForgotPWServices extends EmailService {
   }
 
 
-/**
- * overrides the parent's method
- * creates a jwt token for the email using payload and email
- * @param payload that will be part of the jwt token
- * @param email needed vor subject and audience
- * @return emailURL that will be sent to user by sendMailToUser Method
- * is called from sendMailToUser
- */
-
+  /**
+   * overrides the parent's method
+   * creates a jwt token for the email using payload and email
+   * @param payload that will be part of the jwt token
+   * @param email needed vor subject and audience
+   * @return emailURL that will be sent to user by sendMailToUser Method
+   * is called from sendMailToUser
+   * @link jwt is used here to create a token
+   */
   static makeToken(payload: any, email: string): string {
     var signOptions = {
       issuer: 'Eventdoo',
@@ -65,7 +62,6 @@ export class EmailForgotPWServices extends EmailService {
     const emailUrl = `http://localhost:4200/start/login/resetPassword/${emailToken}`;
     return emailUrl;
   }
-
 
 }
 

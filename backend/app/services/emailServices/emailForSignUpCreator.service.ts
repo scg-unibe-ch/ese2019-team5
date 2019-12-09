@@ -1,5 +1,5 @@
 /**
- * email text for a user that has just signed up
+ * This class is the email text for a user that has just signed up
  * asking him to verify his email address
  */
 
