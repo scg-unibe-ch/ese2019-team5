@@ -23,7 +23,7 @@ export class FavoritesPage implements OnInit {
     this.userId = this.authservice.getUserId();
     this.loading = true;
     console.log(this.userId);
-    this.http.get<Array<EventService>>('http://localhost:3000/profile/favourite/:' + this.userId)
+    this.http.get<Array<EventService>>('http://localhost:3000/profile/favourite/' + this.userId)
       .subscribe(
         (data)=> {
           this.services = data;
