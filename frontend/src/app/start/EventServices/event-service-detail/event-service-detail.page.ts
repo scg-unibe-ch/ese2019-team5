@@ -35,6 +35,7 @@ export class EventServiceDetailPage implements OnInit {
   private perimeter:string;
   private displayPerimeter:string;
   private availability:string;
+  private displayAvailability: string;
   private requirements:string;
   private reqDisplay: string;
   private subtype:string;
@@ -62,7 +63,7 @@ export class EventServiceDetailPage implements OnInit {
   updateInfoForm = this.formBuilder.group({
     updateTitle: [this.title, [Validators.required, Validators.minLength(3)]],
     updateDescription: [this.description, [Validators.required, Validators.minLength(3)]],
-    updatePrice: [this.price, Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')],
+    updatePrice: [this.price, [Validators.required, Validators.pattern('[0-9]+(([.][0-9]{1,2})?){1}')]],
     updateAvailability: [this.availability, [Validators.required, Validators.min(1)]],
     updatePerimeter: [this.perimeter, [Validators.required, Validators.pattern("[0-9]+")]],
     updateRequirements: [this.requirements],
@@ -121,7 +122,6 @@ export class EventServiceDetailPage implements OnInit {
         return;
       }
       this.serviceId = paramMap.get('serviceId');
-      console.log(this.serviceId);
     });
    this.getEventServiceJson();
   }
@@ -232,11 +232,12 @@ export class EventServiceDetailPage implements OnInit {
         this.displayCity = data.city;
         this.street = data.street;
         this.availability = data.availability;
+        this.displayAvailability = data.availability.split(',').join(' \n');
         this.description = data.description;
         this.requirements = data.requirements;
        switch(data.perimeter.toString()){
          case "0": {
-           this.displayPerimeter = 'Within the city of';
+           this.displayPerimeter = 'In';
            break;
          }
          case "1000000":{
@@ -310,7 +311,7 @@ export class EventServiceDetailPage implements OnInit {
       ()=>{
         this.isEditing = false;
         this.showToast("Updated Infos");
-       // setTimeout(()=> {location.reload()},6000);
+        setTimeout(()=> {location.reload()},6000);
       },
       (error)=>{
         console.log(error);
@@ -332,9 +333,9 @@ export class EventServiceDetailPage implements OnInit {
     if (this.updatePrice.invalid)
       error += 'Standard price invalid \n';
     if (this.updateDescription.invalid)
-      error += 'Description invalid';
+      error += 'Description invalid \n';
     if(this.updatePerimeter.invalid)
-      error += 'Invalid Radius';
+      error += 'Invalid Radius \n';
     if (error.length>=1) {
       this.showToast(error);
       return false;
@@ -362,7 +363,6 @@ export class EventServiceDetailPage implements OnInit {
       message: message,
       duration: 5000,
     });
-    console.log(message);
     await toast.present();
   }
 }

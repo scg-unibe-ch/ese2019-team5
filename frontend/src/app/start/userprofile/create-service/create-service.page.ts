@@ -63,7 +63,7 @@ export class CreateServicePage implements OnInit {
     distance: ['0', Validators.required],
     capacity: ['1000000', Validators.required],
     availability: ['', Validators.required],
-    price: ['', [Validators.required, Validators.pattern('([0-9]+(.[0-9]{2})?){1}')]],
+    price: ['', [Validators.required, Validators.pattern('[0-9]+(([.][0-9]{1,2})?){1}')]],
     type: [''],
     requirements: [''],
     description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(700)]],
@@ -218,13 +218,13 @@ export class CreateServicePage implements OnInit {
         {
           text: 'Go to start page',
           handler: () => {
-            this.router.navigate(['/start']);
+            this.router.navigate(['/start']).then(()=>location.reload());
           }
         },
         {
           text: 'Go to profile page',
           handler: () => {
-            this.router.navigate(['/start/userprofile']);
+            this.router.navigate(['/start/userprofile']).then(()=>location.reload());
           }
         }]
     });
