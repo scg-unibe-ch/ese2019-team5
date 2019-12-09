@@ -120,11 +120,11 @@
             <ion-row>
               <ion-col>
                 <h1>Price</h1>
-                <ion-text>{{price}} CHF {{getPriceFormat()}}</ion-text>
+                <ion-text>{{price| number:'1.2-2'}} CHF {{getPriceFormat()}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Availability</h1>
-                <ion-text>{{availability}}</ion-text>
+                <ion-text>{{displayAvailability}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Capacity</h1>
