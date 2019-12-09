@@ -1,3 +1,8 @@
+/**
+ * This controller is used in connection with everything that has to do with search
+ * including searching for all the events or just a couple of them
+ */
+
 import {Request, Response, Router} from 'express';
 import {DbServices} from '../services/db.services';
 import {EventServiceContainer} from "../models/eventServiceContainer.model";
@@ -6,10 +11,7 @@ import {EventServiceFilter} from "../models/eventServiceFilter.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 
 
-const router: Router = Router(); // part of express needed
-
-
-// create new DBService
+const router: Router = Router();
 const dbService = new DbServices();
 
 /**
@@ -75,6 +77,7 @@ router.get('/filter/:text?/:category?/:subtype?/:city?/:price?/:people?/:availab
     let serviceAOfFittingRequest: EventService[] = servicesFittingRequest.getServices();
     res.status(200).send(serviceAOfFittingRequest.map(e => e.toSimplification()))
   } catch (error) {
+    console.log(error.message);
     res.status(404);
     res.send('error in backend at getServiceFilter ' + error.message);
 

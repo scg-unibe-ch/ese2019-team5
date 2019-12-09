@@ -1,4 +1,7 @@
-
+/**
+ * This controller is used in connection with everything that has to do with event services
+ * including adding, deleting, updating, ordering, retrieving and reporting event services
+ */
 
 import {Request, Response, Router} from "express";
 import {Address} from "../models/address.model";
@@ -11,7 +14,6 @@ import {EventServiceContainer} from "../models/eventServiceContainer.model";
 import {EmailReportServiceServices} from "../services/emailServices/emailReportService.services";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
-
 
 const router: Router = Router();
 const dbService = new DbServices();
@@ -48,7 +50,6 @@ router.post('/add', async (req: Request, res: Response) => {
         let b64string = req.body.image;
         eventService.setImage(b64string);
       }
-
       await dbService.addEventService(eventService);
       res.statusCode = 201;
       res.json('Service was created and saved')
@@ -56,8 +57,6 @@ router.post('/add', async (req: Request, res: Response) => {
       console.log(error);
       res.send(error);
       res.statusCode = 400;
-
-
     }
   }
 )
@@ -74,22 +73,17 @@ router.put('/update', async (req: Request, res: Response) => {
 
     let title: string = req.body.title;
     let description: string = req.body.description;
-
     let availability: string = req.body.availability;
-
     let requirements: string = req.body.requirements;
-
     let capacity: number = parseInt(req.body.capacity);
     let perimeter: number = parseInt(req.body.perimeter);
-
     let price: number = parseInt(req.body.price);
-
     let serviceId: number = parseInt(req.body.serviceId);
 ///TODO Cyrill und welche Error
     await dbService.updateServiceParams(serviceId, title, description, price, availability, perimeter, requirements, capacity);
     res.status(202).json('service updated');
-
   } catch (error) {
+    console.log(error);
     res.status(404).status(error);
 
   }
@@ -101,26 +95,25 @@ router.put('/update', async (req: Request, res: Response) => {
  *  listens to HTTP events Delete with serviceId given in URL
  * deletes a certain Service of a certain provider
  * returns 200 if Service was deleted
- * 406 if User or Service does not exist and 400 otherwise
+ * 406 if User or Service does not exist and 406 otherwise
  */
 router.delete('/:serviceId', async (req: Request, res: Response) => {
     const serviceId: number = Number(req.params.serviceId);
-
-    console.log("serviceId " + serviceId);
 
     try {
       await dbService.deleteService(serviceId)
       res.status(200).send('Service was deleted');
     } catch (error) {
+      console.log(error.message);
       res.status(406).send(error.message);
-     }
+    }
   }
 )
 
 /**
  *   listens to HTTP events get with serviceId given in URL
  *   receives a services container form the DB
- *   extracts the array and sens the first event simplified to the front
+ *   extracts the array and sends the first event simplified to the front
  *   answers with 200 if ok otherwise with 404
  */
 router.get('/:serviceid', async (req: Request, res: Response) => {
@@ -143,6 +136,7 @@ router.get('/:serviceid', async (req: Request, res: Response) => {
 /**
  * HTTP event listener to post /order if an event gets ordered
  * triggers off 2 emails to the client and the service provider
+ * creates a service requests and sends it to the DB
  * answers with 200 if ok and 404 otherwise
  */
 router.post('/order', async (req: Request, res: Response) => {
@@ -177,14 +171,18 @@ router.post('/order', async (req: Request, res: Response) => {
     await EmailOrderEventService.sendMailToProvider(providerEmail, customerEmail, serviceTitle, date, time, message);
     await EmailOrderEventService.sendMailToCustomer(providerName, customerEmail, serviceTitle, date, time, message);
     await dbService.addRequestedService(serviceRequest);
-    console.log (serviceRequest.toSimplification());
     res.status(200);
     res.json('The emails were sent ');
 
   } catch (error) {
-    res.status(404);
-    res.send(error + 'unknown email-address. Please check or sign up.');
     console.log(error);
+    if (error.errorCode == 952) {
+      res.status(404);
+      res.send(error + 'service does not exist');
+    } else {
+      res.status(404);
+      res.send('DB has trouble finding your account' + error.message);
+    }
   }
 });
 

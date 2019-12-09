@@ -1,3 +1,9 @@
+/**
+ * This controller is used in connection with everything that has to do with the userprofile
+ * retrieving, deleting, updating, adding, retrieving and deleting favourites, retrieving requested services
+ */
+
+
 import {Request, Response, Router} from "express";
 import {User} from "../models/user.model";
 import {UserBuilder} from "../models/userBuilder.model";
@@ -39,10 +45,8 @@ router.post('/update', async (req: Request, res: Response) => {
       .setIsFirm(req.body.isFirm)
       .build();
 
-
     if (req.body.phonenumber !== undefined) {
       user.setPhoneNumber(req.body.phonenumber);
-
     }
     if (req.body.firmname !== undefined) {
       user.setFirmname(req.body.firmname);
@@ -50,25 +54,19 @@ router.post('/update', async (req: Request, res: Response) => {
     if (req.body.isAdmin !== undefined) {
       user.setIsAdmin(true);
     }
-
     await dbService.updateUser(user);
-
     res.json('Profile updated');
     res.statusCode = 200;
-
   } catch (error) {
-
+    console.log(error);
     if (error.errorCode == 912) {
-      console.log(error);
       res.send(error.message);
       res.statusCode = 404;
     } else if (error.errorCode == 911) {
       res.status(400).send(error.message);
-
     } else {
       res.status(409).send(error.message);
     }
-
   }
 });
 
@@ -79,11 +77,9 @@ router.post('/update', async (req: Request, res: Response) => {
  */
 router.get('/:id', async (req: Request, res: Response) => {
   const userId = Number(req.params.id);
-
   let user: User;
   try {
     user = await dbService.getUserFromId(userId);
-
     const firstname: string = user.getFirstname();
     const lastname: string = user.getLastname();
     const email: string = user.getEmail();
@@ -116,17 +112,12 @@ router.get('/:id', async (req: Request, res: Response) => {
       'eventServiceArrayOfUser': (eventServiceArrayOfUser.map(e => e.toSimplification())),
       'size': size
     };
-
     res.send(userDataAndServices);
     res.status(200);
-
   } catch (error) {
-
-
     res.status(404).send(error.message);
-
+    console.log(error.message);
   }
-
 });
 
 /**
@@ -139,10 +130,10 @@ router.delete('/:userId', async (req: Request, res: Response) => {
       let userId: number = Number(req.params.userId);
       await dbService.deleteUser(userId);
       res.status(200).json('User was deleted');
-
     } catch (error) {
       res.statusCode = 400;
       res.send(error.message);
+      console.log(error.message);
     }
   }
 );
@@ -158,18 +149,17 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
 
     const userId: number = Number(req.body.userId);
     const serviceId: number = Number(req.body.serviceId)
-    await dbService.addFavoriteToUser(userId, serviceId); //TODO CYrill zum implementieren und Error Code anpassen
+    await dbService.addFavoriteToUser(userId, serviceId);
     res.status(201).json('added to favourites');
-
   } catch (error) {
-
+    console.log(error);
     if (error.errorCode == 952) {
       res.status(404).send(error.message);
     } else {
       res.status(400).send(error.message);
     }
   }
-  });
+});
 
 /**
  * HTTP event listener to get /favourite/:id
@@ -186,37 +176,41 @@ router.get('/favourite/:id', async (req: Request, res: Response) => {
 
   } catch (error) {//TODO welche errors?
     res.status(400).send(error.message);
+    console.log(error.message);
   }
 });
 
+/**
+ * deletes a favourite of a user
+ * @returns 200 if ok and 404 otherwise
+ */
 router.delete('/favourite/:id/:serviceId', async (req: Request, res: Response) => {
   try {
     let userId: number = parseInt(req.params.id);
     let serviceId: number = parseInt(req.params.serviceId);
-  await dbService.removeFavoriteFromUser(userId,serviceId);
+    await dbService.removeFavoriteFromUser(userId, serviceId);
     res.status(200).json('Favourite got deleted');
   } catch (error) {
     res.status(404).send(error.message);//TODO welche fehler
+    console.log(error);
   }
 });
 
-
+/**
+ * gets all the requested event services of a user
+ * @return an array of serviceRequests (requested event services) returns 200 if ok and 404 if
+ * DB could not find the services
+ */
 router.get('/requestedServices/:userId', async (req: Request, res: Response) => {
   try {
-    // console.log(req.params.userId);
-
     let customerId: number = Number(req.params.userId);
-    console.log(customerId);
-    //  console.log(req.query.userId);
     let requestedServicesArray: ServiceRequest[] = await dbService.getRequestsForUser(customerId);
-    console.log(await dbService.getRequestsForUser(customerId));
-    console.log(requestedServicesArray.map(e => e.toSimplification()));
     res.status(200).send(requestedServicesArray.map(e => e.toSimplification()));
 
   } catch (error) {
     res.status(404).send(error.message);
+    console.log(error);
   }
-
 })
 
 export const ProfileController: Router = router;

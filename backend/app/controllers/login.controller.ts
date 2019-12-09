@@ -1,4 +1,10 @@
-import {Router, Request, Response} from 'express';
+/**
+ * This controller is used in connection with everything that has to do with login
+ * including login, forgetPassword and resetting passwords
+ * also uses {@link EmailForgotPWServices}
+ */
+
+import {Request, Response, Router} from 'express';
 import {DbServices} from '../services/db.services'
 import {User} from "../models/user.model";
 import jwt from 'jsonwebtoken';
@@ -8,7 +14,6 @@ import {EmailForgotPWServices} from "../services/emailServices/emailForgotPW.ser
 
 const dbService = new DbServices();
 const router: Router = Router();
-
 
 /**
  * listens to HTTP Client POST events when user sign up
@@ -21,25 +26,22 @@ router.post('/', async (req: Request, res: Response) => {
   const pwhash = req.body.pwhash;
 
   try {
-
     const loginResult = await dbService.tryLogin(email, pwhash);
     const sessionToken = loginResult.token;
     const user = loginResult.user;
-
     const lRes = {
       'user': user,
       'token': sessionToken
     };
-
     res.send(lRes);
     res.statusCode = 200;
   } catch (error) {
-   if(error.errorCode==931){
+    if (error.errorCode == 931) {
       res.status(406);
-      res.send('Verification error');
+      res.json('Verification error');
       console.log(error)
     } else {
-      res.status(404).send('Password error');
+      res.status(404).json('Password error');
       console.log(error);
     }
 
@@ -62,12 +64,12 @@ router.post('/forgotPassword', async (req: Request, res: Response) => {
     res.json('reset Password sent');
 
   } catch (error) {
-    console.log('this is the error' + error);
-    if(error.errorCode==920){
-    res.statusCode = 400;
-    res.send(error.message);
+    console.log(error);
+    if (error.errorCode == 920) {
+      res.statusCode = 400;
+      res.send(error.message);
 
-  }else{
+    } else {
       res.statusCode = 404;
       res.send(error.message);
     }
@@ -88,7 +90,6 @@ const verifyToken = async (req: Request, res: Response) => {
     const newPWhash: string = req.body.password;
     let userEmail: string;
     const notVerified = jwt.decode(token);
-
     if (notVerified === null) {
       userEmail = 'a@b.ch';
     } else {
@@ -107,11 +108,10 @@ const verifyToken = async (req: Request, res: Response) => {
 
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
     await dbService.resetPassword(userEmail, newPWhash);
-    console.log('got after db');
     res.status(200);
     res.json('Password was successfully changed');
   } catch (error) {
-    if (error.message=='jwt expired') {
+    if (error.message == 'jwt expired') {
       res.status(401).json('Access token expired');
       console.log(error);
     } else {
@@ -120,7 +120,6 @@ const verifyToken = async (req: Request, res: Response) => {
       console.log(error);
     }
   }
-
 };
 
 /**

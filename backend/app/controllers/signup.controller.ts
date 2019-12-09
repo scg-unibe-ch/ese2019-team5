@@ -1,4 +1,10 @@
-import {Router, Request, Response} from 'express';
+/**
+ * This controller is used in connection with everything that has to do with signup
+ * including signing up, conforming the email and sending the mail again
+ * also uses {@link EmailVerificationServices}
+ */
+
+import {Request, Response, Router} from 'express';
 import {User} from '../models/user.model';
 import {Address} from "../models/address.model";
 import {EmailVerificationServices} from '../services/emailServices/emailVerification.services'
@@ -8,13 +14,10 @@ import {DbServices} from '../services/db.services';
 
 
 var jwt = require('jsonwebtoken');
-
 const router: Router = Router();
 
 // keys for jwt token
 const publicKey = fs.readFileSync('./app/services/public.key', 'utf8');
-
-// create new DBService
 const dbService = new DbServices();
 
 
@@ -25,7 +28,6 @@ const dbService = new DbServices();
  */
 router.post('/', async (req: Request, res: Response) => {
   const address = new Address(req.body.street, req.body.housenumber, req.body.zip, req.body.city);
-
   const user: User = UserBuilder.user()
     .setFirstname(req.body.firstname)
     .setLastname(req.body.lastname)
@@ -40,24 +42,22 @@ router.post('/', async (req: Request, res: Response) => {
     EmailVerificationServices.sendMailToUser(user);
     res.statusCode = 201;
     res.json('sign up success');
-
   } catch (error) {
     console.log(error.message);
-    if(error.errorCode==926) {
+    if (error.errorCode == 926) {
       res.status(400).send(error.message);
-    }else {
+    } else {
       res.status(409).send(error.message);
     }
-
   }
-
 });
 
 
 /**
  * Method used to verify jwt token
  * @param req from HTTP client
- * @param res answer to client that verifiyng token worked and therefore user is no verified or error
+ * @param res answer to client that verifying token worked and therefore user is now verified
+ * 401 if token is expired or 406 if the token is invalid
  */
 const verifyToken = async (req: Request, res: Response) => {
 
@@ -71,26 +71,25 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-
-
     let decoded = jwt.verify(token, publicKey, verifyOptions);
-
     await dbService.makeUserVerified(decoded.email);
-
     res.status(200);
-    res.send('Thank you for verifying your email-address you can now login.');
+    res.json('Thank you for verifying your email-address you can now login.');
   } catch (error) {
-
-    if (error.name === 'TokenExpiredError') {
+    console.log(error);
+    if (error.message == 'jwt expired') {
       res.status(401).send('Access token expired');
     } else {
       res.status(406);
       res.send('invalid Token' + error);
     }
   }
-
 };
 
+/**
+ * HTTP listener calls verify Token if the user clicked on the link
+ * in his email.
+ */
 router.get('/confirmation/:token', verifyToken);
 
 
