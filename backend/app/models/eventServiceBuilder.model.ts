@@ -1,5 +1,5 @@
 /**
- * creates a builder for an event service
+ * This is the builder class  for an event service
  */
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
@@ -22,7 +22,22 @@ export class EventServiceBuilder {
   private _price: number;
   private _image: string;
 
-
+  /**
+   * constructor for an event service object with default values
+   * @param serviceId of the service for the event
+   * @param providerId userId of the provider
+   * @param category of the service such as Music, Venue, Entertainment, Gastronomy and Photography
+   * @param title of the service
+   * @param description of the service
+   * @param address especially for locations
+   * @param perimeter of the provider willing to drive or deliver to his customers
+   * @param availability of weekdays generally
+   * @param requirements for the location or generally to the customer
+   * @param subtype of the category
+   * @param capacity number of people that can be accustomed/served
+   * @param price of the service
+   * @param image of the service
+   */
   constructor() {
     let availability = '';
     this._serviceId = -1;
@@ -49,66 +64,118 @@ export class EventServiceBuilder {
     return new EventServiceBuilder();
   }
 
+  /**
+   * sets the serviceId
+   * @param serviceId
+   */
   public setServiceId(serviceId: number): EventServiceBuilder {
     this._serviceId = serviceId;
     return this;
   }
 
+  /**
+   * sets the providerId
+   * @param providerId
+   */
   public setProviderId(providerId: number): EventServiceBuilder {
     this._providerId = providerId;
     return this;
   }
 
+  /**
+   * sets the category: Venue, Photography, Entertainment, Music or Gastronomy
+   * @param category
+   */
   public setCategory(category: string): EventServiceBuilder {
     this._category = category;
     return this;
   }
 
+  /**
+   * sets service title
+   * @param title
+   */
   public setTitle(title: string): EventServiceBuilder {
     this._title = title;
     return this;
   }
 
+  /**
+   * sets the description of the service
+   * @param description
+   */
   public setDescription(description: string): EventServiceBuilder {
     this._description = description;
     return this;
   }
 
+  /**
+   * sets the address where the service will take place or from where the provider operates
+   * @param address
+   */
   public setAddress(address: Address): EventServiceBuilder {
     this._address = address;
     return this;
   }
 
+  /**
+   * sets the the perimeter of the provider willing to drive or deliver to his customers
+   * @param perimeter
+   */
   public setPerimeter(perimeter: number): EventServiceBuilder {
     this._perimeter = perimeter;
     return this;
   }
 
+  /**
+   * sets the availability of the provider
+   * @param availiability
+   */
   public setAvailability(availiability: string): EventServiceBuilder {
     this._availability = availiability;
     return this;
   }
 
+  /**
+   * sets the requirement for the customer so the provider can provide his service
+   * @param requirments
+   */
   public setRequirments(requirments: string): EventServiceBuilder {
     this._requirments = requirments;
     return this;
   }
 
+  /**
+   * sets subtype of the category
+   * @param subtype
+   */
   public setSubtype(subtype: string): EventServiceBuilder {
     this._subtype = subtype;
     return this;
   }
 
+  /**
+   * sets the capacity for which the provider is able to deliver/accommodate
+   * @param capacity
+   */
   public setCapacity(capacity: number): EventServiceBuilder {
     this._capacity = capacity;
     return this;
   }
 
+  /**
+   * sets the price of the service
+   * @param price
+   */
   public setPrice(price: number): EventServiceBuilder {
     this._price = price;
     return this;
   }
 
+  /**
+   * sets the image of th service
+   * @param image
+   */
   public setImage(image: string): EventServiceBuilder {
     this._image = image
     return this;

@@ -164,8 +164,8 @@ export class EventService {
   }
 
   /**
-   * sets the avialability of the provider
-   * @param availiability
+   * sets the availability of the provider
+   * @param availability
    */
   public setAvailability(availiability: string) {
     this._availability = availiability;
