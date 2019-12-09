@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<ion-infinite-scroll-content>
+<ion-content>
   <div class="littleSideBorder">
 
     <div class="eventImage" [hidden]="serviceId==null||isEditing" style="text-align: center; top: 0px">
@@ -25,7 +25,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-button [disabled]="hasReported" class="btn1" color="light" size="small" text-capitalize=“false” (click)="report()">
+      <ion-button *ngIf="auth.isLoggedIn()" [disabled]="hasReported" class="btn1" color="light" size="small" text-capitalize=“false” (click)="report()">
         <ion-icon name="alert"></ion-icon>
         <ion-text style="padding-left: 10px"> Report</ion-text>
       </ion-button>
@@ -139,7 +139,7 @@
             </ion-row>
 
           </ion-grid>
-          <ion-button [disabled]="hasSentOfferInquiry" [hidden]="isInputing" (click)="showOfferInput()" size="large" color="primary"
+          <ion-button *ngIf="auth.isLoggedIn()" [disabled]="hasSentOfferInquiry" [hidden]="isInputing" (click)="showOfferInput()" size="large" color="primary"
                       style="--box-shadow: none; width: 100%; margin-top: 120px; margin-bottom: 30px;"> Get Offer
           </ion-button>
 
@@ -174,5 +174,5 @@
       </ion-col>
     </ion-row>
   </div>
-  <app-info-footer></app-info-footer>
-</ion-infinite-scroll-content>
+</ion-content>
+<app-info-footer></app-info-footer>
