@@ -8,11 +8,11 @@
                 (click)="authService.logout()" [hidden]="authService.isLoggedOut() || devWidth < 650"> <ion-icon name="ios-log-out"></ion-icon>
     </ion-button>
     <ion-button color="light" style="position: absolute; right: 20px; top: 22px; color: black; --box-shadow:none"
-                [hidden]="authService.isLoggedIn() || devWidth < 650" [routerLink]="['/start/login']" routerDirection="forward">
+                [hidden]="authService.isLoggedIn() || devWidth < 650" href="start/login">
       Log in
     </ion-button>
     <ion-button color="light" style="position: absolute; right: 120px; top: 22px; color: black; --box-shadow:none"
-                [hidden]="authService.isLoggedIn() || devWidth < 650" [routerLink]="['/start/signup']" routerDirection="forward">
+                [hidden]="authService.isLoggedIn() || devWidth < 650" href="start/signup" routerDirection="forward">
       Sign Up
     </ion-button>
     <ion-button color="light" style="position: absolute; right: 230px; top: 22px; color: black; border-bottom-color: white; --box-shadow:none"

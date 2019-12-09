@@ -1,16 +1,22 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import * as moment from 'moment';
-import * as jwt from 'jsonwebtoken';
+import {Observable} from 'rxjs';
 import {User} from '../../../../backend/app/models/user.model';
 import {ToastController} from "@ionic/angular";
+/* For comments */
+import {LoginPage} from "../start/login/login.page";
 
+// @ts-ignore
 var jwtDecode = require('jwt-decode');
+
+/**
+ * Provides all kind of authentication functions to almost all components
+ * Especially used by {@link LoginPage}
+ */
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  //publicKey = fs.readFileSync('../backend/app/EventServices/public.key', 'utf8');
+
   private user: Observable<User>;
 
   constructor(
@@ -20,7 +26,7 @@ export class AuthService {
 
   /**
    * Called by {@link LoginPage}
-   * Sends a request to the backend
+   * Sends a request to backend which validates the email address and the password entered by the user.
    * If the request was valid, a User object with a JWT-Session-Token is returned and is handled in setSession.
    * Otherwise, an error occurs (handled by LoginPage)
    * @param mail address entered in the login form
@@ -31,22 +37,18 @@ export class AuthService {
     const email = mail;
     const pwhash = password;
 
-    console.log(email + ' | ' + pwhash);
-
-      // Post http request
-    console.log('Try to log in');
+    // Post http request
     this.user = this.httpClient.post<User>('http://localhost:3000/login', {email, pwhash});
     this.user.subscribe(
       (data) => {
         this.setSession(data)
-      }
-      /*(error) => {this.handleError(error)}*/
-    );
+      });
+    // return result
     return this.user;
     }
 
   /**
-   * Called by the logout button on any page
+   * Called by the logout button in the header
    * Deletes all stored authentication data from the local storage
    */
   logout() {
@@ -55,7 +57,6 @@ export class AuthService {
     document.location.href = 'http://localhost:4200/start/';
     this.showLogoutToast();
   }
-
 
 
   /**
@@ -90,40 +91,16 @@ export class AuthService {
   /**
    * Called by method {@link login}
    * Decodes the session token returned by backend
-   * Stores the user's ID Token and it's expiration stamp in the user's local storage
-   * @param authResult
+   * Stores the user's ID Token and in the user's local storage
+   * @param authResult, the result returned by backend when trying to log in
    */
   private setSession(authResult) {
-    console.log('Setting session');
-
     try {
-      console.log(authResult.token);
       localStorage.setItem('ed_token', authResult.token);
-      console.log('Setting session successful');
     } catch (e) {
       console.log(e);
       }
   }
-
-  // Not used yet but might be used later
-  handleError(error) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent){
-      errorMessage = 'Error: $[error.error.message]';
-    } else {
-      errorMessage = 'Error Code: $[error.status] \n' +
-        'Message: $[error.message]';
-    }
-    return throwError(errorMessage);
-  }
-
-  // Not used anymore
-  private getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
-  }
-
 
   /**
    * Presents the user a message that confirms him logging out.

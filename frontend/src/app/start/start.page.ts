@@ -3,7 +3,7 @@ import {AuthService} from "../AuthService/auth.service";
 import {EventService} from "../../../../backend/app/models/eventService.model";
 import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-
+import {format} from 'date-fns';
 
 
 
@@ -12,10 +12,20 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './start.page.html',
   styleUrls: ['./start.page.scss'],
 })
+
+/**
+ * Landing page for all users visiting Eventdoo.
+ *  Displays all EventServices stored in the DB.
+ *  EventServices can be filtered by category and subtype, availability, city, price, capacity and text search.
+ *  Results are loaded dynamically.
+ */
 export class StartPage implements OnInit {
 
-  loading: boolean;
+  // Stores all EventServices or those matching the parameters set by the user.
   services: EventService[];
+
+  // Variables for user feedback
+  loading: boolean;
 
 
   constructor(
@@ -23,6 +33,7 @@ export class StartPage implements OnInit {
     private http: HttpClient,
     private formBuilder: FormBuilder
   ) {}
+
 
   searchForm = this.formBuilder.group({
       category: [''],
@@ -34,7 +45,7 @@ export class StartPage implements OnInit {
       text: ['']
     });
 
-  /* Get-methods searchForm */
+  /* Get-methods for searchForm */
   get category () {
     return this.searchForm.get('category');
   }
@@ -59,8 +70,9 @@ export class StartPage implements OnInit {
 
 
   /**
+   * Called when page is initialized
    * Gets all EventServices from backend
-   * Assigns them to services so they are displayed
+   * Assigns them to services so they are displayed in the UI
    */
  ngOnInit() {
     this.loading = true;
@@ -76,8 +88,8 @@ export class StartPage implements OnInit {
   }
 
   /**
-   * Called by the user by pushing the search button
-   * Posts a get-request to backend asking for all services matching the search params entered by the user
+   * Called when search params are changed or by the user by pushing the search button.
+   * Gets all services matching the search params entered by the user from backend
    * Updates "services" which leads to an updated page only displaying the matching services
    */
   search() {
@@ -85,7 +97,6 @@ export class StartPage implements OnInit {
     let url = this.getUrl();
     this.http.get<Array<EventService>>(url).subscribe(
       (data) => {
-        console.log(data);
         this.services = data;
         this.loading = false;
       },
@@ -98,8 +109,7 @@ export class StartPage implements OnInit {
 
   /**
    * Called by {@link search}
-   * Generates the URL the search request has to be pushed to
-   * and returns it.
+   * Generates the URL according to the search parameters set by the user and returns it.
    */
   private getUrl() {
     let result = 'http://localhost:3000/search/filter/';
@@ -120,13 +130,11 @@ export class StartPage implements OnInit {
     if (this.persons.value != '')
       result += ('people=' + this.persons.value + '&');
     if (this.weekdays.value != '')
-      result += ('availability=' + this.weekdays.value + '&');
+      result += ('availability=' + format(new Date(this.weekdays.value), "iiii") + '&');
 
     if (result.charAt(result.length - 1) == '&') {
-      console.log(result.substr(0, result.length - 1));
       return (result.substr(0, result.length - 1));
     } else {
-      console.log(result);
       return result;
     }
   }

@@ -25,12 +25,12 @@
         </ion-col>
       </ion-row>
 
-      <ion-button [disabled]="hasReported" class="btn1" color="light" size="small" text-capitalize=“false” (click)="report()">
+      <ion-button *ngIf="auth.isLoggedIn()" [disabled]="hasReported" class="btn1" color="light" size="small" text-capitalize=“false” (click)="report()">
         <ion-icon name="alert"></ion-icon>
         <ion-text style="padding-left: 10px"> Report</ion-text>
       </ion-button>
-      <ion-button class="btn2" color="light" size="small" text-capitalize=“false” (click)="showUpdateInput()">
-        <ion-icon [hidden]="providerId!=auth.getUserId()" name="md-create"
+      <ion-button *ngIf="auth.isLoggedIn() && providerId == auth.getUserId()" class="btn2" color="light" size="small" text-capitalize=“false” (click)="showUpdateInput()">
+        <ion-icon  name="md-create"
                   style="cursor:pointer; padding-right: 10px"></ion-icon>
         <ion-text>Edit</ion-text>
       </ion-button>
@@ -120,11 +120,11 @@
             <ion-row>
               <ion-col>
                 <h1>Price</h1>
-                <ion-text>{{price}} CHF {{getPriceFormat()}}</ion-text>
+                <ion-text>{{price| number:'1.2-2'}} CHF {{getPriceFormat()}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Availability</h1>
-                <ion-text>{{availability}}</ion-text>
+                <ion-text>{{displayAvailability}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Capacity</h1>
@@ -139,7 +139,7 @@
             </ion-row>
 
           </ion-grid>
-          <ion-button [disabled]="hasSentOfferInquiry" [hidden]="isInputing" (click)="showOfferInput()" size="large" color="primary"
+          <ion-button *ngIf="auth.isLoggedIn()" [disabled]="hasSentOfferInquiry" [hidden]="isInputing" (click)="showOfferInput()" size="large" color="primary"
                       style="--box-shadow: none; width: 100%; margin-top: 120px; margin-bottom: 30px;"> Get Offer
           </ion-button>
 
@@ -158,7 +158,7 @@
               <div class="container-fluid">
                 <ion-item class="itemForm">
                   <ion-label>Date</ion-label>
-                  <ion-input formControlName="dateInput"></ion-input>
+                  <ion-datetime formControlName="dateInput" displayFormat="DD.MM.YYYY"></ion-datetime>
                 </ion-item>
                 <ion-item class="itemForm">
                   <ion-label>Time</ion-label>
@@ -174,5 +174,5 @@
       </ion-col>
     </ion-row>
   </div>
-  <app-info-footer></app-info-footer>
 </ion-content>
+<app-info-footer></app-info-footer>
