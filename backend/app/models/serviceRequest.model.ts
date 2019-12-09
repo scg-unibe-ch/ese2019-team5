@@ -23,7 +23,7 @@ export class ServiceRequest {
    * @param date when the service is supposed to be
    * @param message for the service provider form the customer
    */
-  constructor(customerId: number, serviceId: number, serviceTitle: string,category: string, providerId: number, date: string, message: string) {
+  constructor(customerId: number, serviceId: number, serviceTitle: string, category: string, providerId: number, date: string, message: string) {
     this.customerId = customerId;
     this.serviceId = serviceId;
     this.serviceTitle = serviceTitle;
@@ -83,7 +83,7 @@ export class ServiceRequest {
 
   /**
    * sets the category of the service
-   * @param title
+   * @param category
    */
   public setCategory(category: string) {
     this.category = category;

@@ -24,19 +24,6 @@ export class EventServiceBuilder {
 
   /**
    * constructor for an event service object with default values
-   * @param serviceId of the service for the event
-   * @param providerId userId of the provider
-   * @param category of the service such as Music, Venue, Entertainment, Gastronomy and Photography
-   * @param title of the service
-   * @param description of the service
-   * @param address especially for locations
-   * @param perimeter of the provider willing to drive or deliver to his customers
-   * @param availability of weekdays generally
-   * @param requirements for the location or generally to the customer
-   * @param subtype of the category
-   * @param capacity number of people that can be accustomed/served
-   * @param price of the service
-   * @param image of the service
    */
   constructor() {
     let availability = '';

@@ -1,5 +1,5 @@
 /**
- * creates a builder for an event service
+ * This class is theb uilder for a service request
  */
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
@@ -18,7 +18,9 @@ export class ServiceRequestBuilder {
   private _message: string;
 
 
-
+  /**
+   * constructor for a service request with default values
+   */
   constructor() {
     this._customerId=-1;
     this._serviceId = -1;
@@ -37,41 +39,68 @@ export class ServiceRequestBuilder {
     return new ServiceRequestBuilder();
   }
 
+  /**
+   * sets customer Id
+   * @param customerId Id of the customer requesting the service
+   */
   public setCustomerId(customerId: number) {
     this._customerId = customerId;
     return this;
   }
 
+  /**
+   * sets the serviceId
+   * @param serviceId
+   */
   public setServiceId(serviceId: number): ServiceRequestBuilder{
     this._serviceId = serviceId;
     return this;
   }
+
+  /**
+   * sets the title of the service
+   * @param title
+   */
   public setServiceTitle(title: string) {
     this._serviceTitle = title;
     return this;
   }
+
+  /**
+   * sets the id of ther service provider
+   * @param providerId
+   */
   public setProviderId(providerId: number): ServiceRequestBuilder {
     this._providerId = providerId;
     return this;
   }
 
+  /**
+   * sets the category of the service
+   * @param category
+   */
   public setCategory(category: string): ServiceRequestBuilder {
     this._category = category;
     return this;
   }
 
+  /**
+   * sets the date, when the service is needed and should take place
+   * @param date
+   */
   public setDate(date: string) {
     this._date = date;
     return this;
   }
 
+  /**
+   * sets the message coming from the customer addressed to th provider
+   * @param message
+   */
   public setMessage(message: string) {
     this._message = message;
     return this;
   }
-
-
-
 
   /**
    * builds a service requests with all the given parameters
