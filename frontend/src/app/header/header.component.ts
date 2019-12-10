@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {Platform} from "@ionic/angular";
 import {AuthService} from "../AuthService/auth.service";
 
+/**
+ * Header for all Pages
+ */
 
 @Component({
   selector: 'app-header',
@@ -10,10 +13,11 @@ import {AuthService} from "../AuthService/auth.service";
 })
 export class HeaderComponent implements OnInit {
   public devWidth = this.platform.width();
+
   constructor(
     private platform: Platform,
     private authService: AuthService,
-    ) {}
+  ) {}
 
   ngOnInit() {}
 
