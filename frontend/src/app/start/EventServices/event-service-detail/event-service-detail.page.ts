@@ -62,6 +62,7 @@ export class EventServiceDetailPage implements OnInit {
   private price:string;
   private image:string;
   private providerId: string;
+  private isFavorite: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -148,6 +149,7 @@ export class EventServiceDetailPage implements OnInit {
       this.serviceId = paramMap.get('serviceId');
     });
     this.getEventServiceJson();
+    this.isFavoriteFunction();
   }
 
 
@@ -254,6 +256,14 @@ export class EventServiceDetailPage implements OnInit {
     this.hasReported= true;
   }
 
+  private deleteFromFavorites() {
+    this.http.delete('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
+      () => {this.showToast("Successfully removed")},
+      (error) => {
+        console.log(error);
+      })
+  }
+
 
   /**
    * Sends a request to backend to add the service to the user's favorite ones
@@ -266,10 +276,21 @@ export class EventServiceDetailPage implements OnInit {
       }
     ).subscribe(
       () => {
+        this.showToast("Added to Favorites")
       },
       (error) => {
-        console.log(error)
+        this.showToast("An error occured: " + error);
       }
+    )
+  }
+
+  private isFavoriteFunction()  {
+
+    this.isFavorite = false;
+    this.http.get<boolean>('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
+      (data) => { this.isFavorite = data},
+      (error) => {console.log(error)},
+      () => {}
     )
   }
 
