@@ -3,7 +3,10 @@ import {AuthService} from "../../AuthService/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 
-//ToDo: Handle expired tokens etc.
+/**
+ * Page the user is sent to to verify his email address
+ *
+ */
 
 @Component({
   selector: 'app-confirmation',
@@ -11,9 +14,12 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./confirmation.page.scss'],
 })
 export class ConfirmationPage implements OnInit {
+
+  // Variables to get the token
   url: string;
   token: string;
 
+  // Variables for user feedback
   loading: boolean;
   verified: boolean;
   error: string;
@@ -24,6 +30,11 @@ export class ConfirmationPage implements OnInit {
     private httpClient: HttpClient) {
   }
 
+  /**
+   * Gets the Token from the activated route URL
+   * Sends it to backend to verify the user's email address.
+   * Handles response
+   */
   ngOnInit() {
     this.verified = false;
     this.loading = true;
