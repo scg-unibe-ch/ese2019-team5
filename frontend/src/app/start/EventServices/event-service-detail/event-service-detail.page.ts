@@ -202,7 +202,7 @@ export class EventServiceDetailPage implements OnInit {
     const message: string = this.messageInput.value;
     const date: string = format(new Date(this.dateInput.value), "dd.MM.yyyy");
     console.log(date);
-    const time: string = this.timeInput.value;
+    const time: string = format(new Date(this.timeInput.value), "HH:mm");
     await this.http.post('http://localhost:3000/eventservice/order', {
       message: message,
       date: date,
