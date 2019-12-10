@@ -12,16 +12,18 @@ import {HashService} from '../../HashService/hash.service';
 })
 
 /**
- * Page SignupPage
- * Asks the user for the minimal required information and "saves" it as a User-Object
- * Only when all information is available and valid, a User can sign up (send his data to the database)
- * Sends data to the Database (to be implemented)
+ * Asks the user for the minimal required information to create an user account.
+ * Validates the input.
+ * Sends the input to backend if valid.
  */
 export class SignupPage implements OnInit {
 
   readonly ROOT_URL = 'http://localhost:3000/signup';
 
+  // Variable for pattern validation
   pw: string;
+
+  // Variables for user feedback
   loading: boolean;
   error: string;
 
@@ -51,7 +53,6 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
     this.loading = false;
-    this.pw = '';
   }
 
   /**
@@ -134,7 +135,7 @@ export class SignupPage implements OnInit {
   }
 
   /**
-   *  A success and failure alert for the ion controller for both responses from the backend
+   *  A success and a failure alert for the ion controller for both responses from the backend
    */
   async presentSuccessAlert() {
     const alert = await this.alertCtrl.create({

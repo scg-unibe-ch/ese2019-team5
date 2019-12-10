@@ -71,6 +71,7 @@ Now the backend is running. Following the steps to get the frontend started as w
     - Role name: choose postgres
     - Change to the Restore options tab and select the as in the picture below:
     <img src="./restoreOptions.png" alt="drawing" width="400"/>
+    
     - Hit the `Restore` button
 
 As soon as this tak has completed sucessfully you can rightclick `Refresh` on Databases and the `eventdoo` database should appear.
