@@ -12,7 +12,6 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
-
 import jwt from 'jsonwebtoken';
 
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
@@ -380,6 +379,23 @@ export class DbServices {
     }
   }
 
+  /**
+   * Checks if a user added a service as his favorites and returns true or false
+   * @async
+   * @param userId
+   * @param serviceId
+   * @returns true if service is favorite
+   */
+  public async isServiceFavorite(userId: number, serviceId: number): Promise<boolean> {
+    const localClient = this.getClient();
+    await localClient.connect();
+    try {
+      return await this.isServiceFavoriteOfUser(userId, serviceId, localClient);
+    } finally {
+      await localClient.end();
+    }
+  }
+
   /////////////////////       from here on down are the private helper methods that connect to the database       \\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
@@ -537,8 +553,9 @@ export class DbServices {
   /**
    * This method deletes an user from the database.
    * First it gets the addressId of the user from the database. Then it deletes the user and all its services from the database.
-   * Lastly it calls the {@link searchForAddressUsageAndDelete} method to delete the address if necessary and the
-   * {@link deleteFavoritesOfUser} to delete all the favorites saved for this user.
+   * Lastly it calls the {@link searchForAddressUsageAndDelete} method to delete the address if necessary, the
+   * {@link deleteFavoritesOfUser} to delete all the favorites saved for this user and the {@link deleteUserFromRequests} to delete
+   * all requests of this user..
    * @async
    * @param userId as {@link number}
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
@@ -563,6 +580,7 @@ export class DbServices {
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
     await this.deleteFavoritesOfUser(userId, client);
+    await this.deleteUserFromRequests(userId, client);
   }
 
   /**
@@ -762,6 +780,7 @@ export class DbServices {
         qCount++;
       }
       query = query + ")";
+
       flag = true;
 
     }
@@ -774,7 +793,6 @@ export class DbServices {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
       const serviceId = Number(row.get('id'));
-
 
       let serviceBuilder = new EventServiceBuilder();
 
@@ -805,7 +823,7 @@ export class DbServices {
    * deletes the EventService from the database.
    * First the addressId of the EventService gets stored to later use the {@link searchForAddressUsageAndDelete} method.
    * Then the EventService gets deleted and then lastly the {@link deleteServiceFromFavorites} method is called to delete
-   * the service from the favorites table
+   * the service from the favorites and requests table
    * @async
    * @param serviceId
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
@@ -826,6 +844,7 @@ export class DbServices {
 
     await this.searchForAddressUsageAndDelete(oldAddressId, client);
     await this.deleteServiceFromFavorites(serviceId, client);
+    await this.deleteServiceFromRequests(serviceId, client);
   }
 
   /**
@@ -967,19 +986,52 @@ export class DbServices {
       request.setDate(String(row.get('date')));
       request.setMessage(String(row.get('message')));
 
-      const serviceStream = client.query("Select userid, category, title From service Where id = $1 ", [Number(row.get('serviceid'))]);
-      const service = await serviceStream.first();
+      const serviceStream = await client.query("Select userid, category, title From service Where id = $1 ", [Number(row.get('serviceid'))]);
+      const service = serviceStream.rows[0];
 
-      if (service == undefined) {
+      if (service == null) {
         throw new DBServiceError("There is an request with an non existing service.",954);
       } else {
-        request.setProviderId(Number(service.get('userid')));
-        request.setCategory(String(service.get('category')));
-        request.setServiceTitle(String(service.get('title')));
+        request.setProviderId(Number(service[0]));
+        request.setCategory(String(service[1]));
+        request.setServiceTitle(String(service[2]));
         requestArray.push(request.build());
       }
     }
     return requestArray;
+  }
+
+  /**
+   * This method removes an Service from the requests table in the database.
+   * @async
+   * @param serviceId of the service you wan't to delete.
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
+  private async deleteServiceFromRequests (serviceId: number, client: Client) {
+    await client.query("Delete From requests Where serviceId = $1", [serviceId]);
+  }
+
+  /**
+   * This method removes an user from the requests table in the database.
+   * @async
+   * @param userId of the user you wan't to delete.
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   */
+  private async deleteUserFromRequests (userId: number, client: Client) {
+    await client.query("Delete From requests Where clientId = $1", [userId]);
+  }
+
+  /**
+   * This method checks if an user added a service to his favorites and returns true or false.
+   * @async
+   * @param userId
+   * @param serviceId
+   * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
+   * @returns true if the user added the service to his favorites otherwise false.
+   */
+  private async isServiceFavoriteOfUser (userId: number, serviceId: number, client: Client): Promise<boolean> {
+    const stream = await client.query("Select EXISTS (Select * From favorites Where userid = $1 AND serviceid = $2)", [userId, serviceId]);
+    return Boolean(stream.rows[0][0]);
   }
 }
 

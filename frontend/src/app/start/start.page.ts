@@ -4,6 +4,7 @@ import {EventService} from "../../../../backend/app/models/eventService.model";
 import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {format} from 'date-fns';
+import * as moment from 'moment';
 
 
 
@@ -26,6 +27,10 @@ export class StartPage implements OnInit {
 
   // Variables for user feedback
   loading: boolean;
+
+  // Variables for datetime pickers
+  today: string;
+  year: string;
 
 
   constructor(
@@ -76,6 +81,9 @@ export class StartPage implements OnInit {
    */
  ngOnInit() {
     this.loading = true;
+    this.today = moment().format("YYYY-MM-DD").toString();
+    this.year = moment().add(1, "year").format("YYYY-MM-DD").toString();
+
     this.http.get<Array<EventService>>('http://localhost:3000/search')
       .subscribe(
         (data)=> {

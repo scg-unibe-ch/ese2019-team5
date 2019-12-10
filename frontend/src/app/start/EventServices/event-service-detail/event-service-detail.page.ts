@@ -7,6 +7,7 @@ import {ToastController} from "@ionic/angular";
 import {AuthService} from "../../../AuthService/auth.service";
 import {EventServiceJson} from "../../userprofile/EventServiceJson";
 import {format} from 'date-fns';
+import * as moment from 'moment';
 
 import {Observable, Subject, Subscription} from "rxjs";
 import {Platform} from "@ionic/angular";
@@ -17,6 +18,8 @@ import {Platform} from "@ionic/angular";
   styleUrls: ['./event-service-detail.page.scss'],
 })
 export class EventServiceDetailPage implements OnInit {
+  private today;
+  private year;
   public devWidth = this.platform.width();
 
   private serviceId: string;
@@ -118,6 +121,7 @@ export class EventServiceDetailPage implements OnInit {
 
 
   ngOnInit() {
+
     this.activatedRoute.paramMap.subscribe(paramMap => {
       if(!paramMap.has('serviceId')){
         //redirect
@@ -131,6 +135,8 @@ export class EventServiceDetailPage implements OnInit {
 
 
   showOfferInput() {
+    this.today = moment().format("YYYY-MM-DD").toString();
+    this.year = moment().add(1, "year").format("YYYY-MM-DD").toString();
     this.isInputing = true;
   }
 
@@ -353,7 +359,9 @@ export class EventServiceDetailPage implements OnInit {
 
   private validateOfferInput():boolean{
     let error: string = '';
-    if(this.messageInput.invalid || this.timeInput.invalid || this.dateInput.invalid) error+= 'Please fill in all fields';
+    if (!this.availability.includes(format(new Date(this.dateInput.value), "iiii")))
+      error += 'This service is not available on a ' + (format(new Date(this.dateInput.value), "iiii"));
+    if (this.messageInput.invalid || this.timeInput.invalid || this.dateInput) error += 'Please fill in all fields';
     if(error != ''){
       this.showToast(error);
       return false;

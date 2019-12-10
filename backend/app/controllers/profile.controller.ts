@@ -148,7 +148,7 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
   try {
 
     const userId: number = Number(req.body.userId);
-    const serviceId: number = Number(req.body.serviceId)
+    const serviceId: number = Number(req.body.serviceId);
     await dbService.addFavoriteToUser(userId, serviceId);
     res.status(201).json('added to favourites');
   } catch (error) {
@@ -170,15 +170,27 @@ router.put('/addFavourite', async (req: Request, res: Response) => {
 router.get('/favourite/:id', async (req: Request, res: Response) => {
 
   let userId: number = parseInt(req.params.id);
-  console.log(userId);
   let favouriteContainer: EventServiceContainer = await dbService.getFavoritesFromUid(userId);
   let favouriteArrayOfUser: EventService[] = favouriteContainer.getServices();
-  console.log(favouriteArrayOfUser)
   res.status(200).send(favouriteArrayOfUser.map(e => e.toSimplification()));
-  console.log(favouriteArrayOfUser.map(e=>e.toSimplification()));
 
 });
+/**
+ * HTTP event listener to get /favourite/:id
+ * gets whether a certain service is a favourite or not
+ * the array to the front
+ * @returns ok (200) if everything went well
+ */ //TODO und testen
+router.get('/favourite/:id/:serviceId', async (req: Request, res: Response) => {
 
+  let userId: number = parseInt(req.params.id);
+  let serviceId:number= parseInt(req.params.serviceId);
+  let isServiceFavourite= await dbService.isServiceFavorite(userId, serviceId);
+
+  res.status(200).send(isServiceFavourite);
+
+
+});
 /**
  * deletes a favourite of a user
  * @returns 200 if ok and 404 otherwise
@@ -205,7 +217,6 @@ router.get('/requestedServices/:userId', async (req: Request, res: Response) => 
     let customerId: number = Number(req.params.userId);
     let requestedServicesArray: ServiceRequest[] = await dbService.getRequestsForUser(customerId);
     res.status(200).send(requestedServicesArray.map(e => e.toSimplification()));
-
   } catch (error) {
     res.status(404).send(error.message);
     console.log(error);
