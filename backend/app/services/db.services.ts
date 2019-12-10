@@ -547,7 +547,7 @@ export class DbServices {
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
    */
   private async deleteFavoritesOfUser(userId: number, client: Client) {
-    await client.query("Delte From favorites Where userid = $1", [userId]);
+    await client.query("Delete From favorites Where userid = $1", [userId]);
   }
 
   /**
