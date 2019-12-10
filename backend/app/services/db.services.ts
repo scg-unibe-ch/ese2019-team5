@@ -12,9 +12,7 @@ import {UserBuilder} from "../models/userBuilder.model";
 import {FilterCategories} from "../models/filterCategories.enum";
 import {ServiceRequest} from "../models/serviceRequest.model";
 import {ServiceRequestBuilder} from "../models/serviceRequestBuilder.model";
-
 import jwt from 'jsonwebtoken';
-import {FileHandlerService} from "./fileHandler.service";
 
 const privateKey = fs.readFileSync('./app/services/private.key', 'utf8');
 
@@ -709,7 +707,7 @@ export class DbServices {
 
     const addressId = Number(await this.checkIfAddressExistsAndCreate(address.street, address.housenumber, address.zip, address.city, client));
 
-    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price, image) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) Returning id', [
+    const stream = client.query('Insert into service(userid, category, title, description, addressid, radius, availability, requirements, subtype, capacity, price) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) Returning id', [
       service.getProviderId(),
       service.getCategory(),
       service.getTitle(),
@@ -790,13 +788,11 @@ export class DbServices {
     const stream = client.query(query, qArray);
 
 
-    const fileHandler = new FileHandlerService();
     // build and add the EventServices to the EventServiceContainer
     for await (const row of stream) {
       const addressid = row.get('addressid');
       const address = await this.getAddressFromAId(Number(addressid), client);
       const serviceId = Number(row.get('id'));
-      //var img = String(fileHandler.getPictureFromServiceId(serviceId));
 
       let serviceBuilder = new EventServiceBuilder();
 
