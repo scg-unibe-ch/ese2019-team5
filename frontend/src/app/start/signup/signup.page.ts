@@ -39,7 +39,7 @@ export class SignupPage implements OnInit {
     firstname: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
     lastname: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
     street: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
-    housenumber: ['', [Validators.required, Validators.pattern("[0-9]*[a-z]?")]],
+    housenumber: ['', [Validators.required, Validators.pattern("[0-9]*[a-zA-Z]?")]],
     zip: ['', [Validators.required, Validators.pattern("[0-9]{4}")]],
     city: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],
     password: [this.pw, [Validators.required, Validators.minLength(6)]],
