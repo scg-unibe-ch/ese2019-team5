@@ -82,7 +82,7 @@ router.get("/testFilter/:z", async(req: Request, res: Response) => {
 });
 
 router.get("/testUpdateUser/:z", async(req: Request, res: Response) => {
-  const address = new Address("Ischlag", 64, 3303, "Jegenstorf");
+  const address = new Address("Ischlag", "64", 3303, "Jegenstorf");
 
   const user = new UserBuilder()
     .setId(88)
