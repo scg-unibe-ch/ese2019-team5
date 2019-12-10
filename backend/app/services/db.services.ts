@@ -986,15 +986,15 @@ export class DbServices {
       request.setDate(String(row.get('date')));
       request.setMessage(String(row.get('message')));
 
-      const serviceStream = client.query("Select userid, category, title From service Where id = $1 ", [Number(row.get('serviceid'))]);
-      const service = await serviceStream.first();
+      const serviceStream = await client.query("Select userid, category, title From service Where id = $1 ", [Number(row.get('serviceid'))]);
+      const service = serviceStream.rows[0];
 
-      if (service == undefined) {
+      if (service == null) {
         throw new DBServiceError("There is an request with an non existing service.",954);
       } else {
-        request.setProviderId(Number(service.get('userid')));
-        request.setCategory(String(service.get('category')));
-        request.setServiceTitle(String(service.get('title')));
+        request.setProviderId(Number(service[0]));
+        request.setCategory(String(service[1]));
+        request.setServiceTitle(String(service[2]));
         requestArray.push(request.build());
       }
     }
