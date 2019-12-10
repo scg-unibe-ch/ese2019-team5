@@ -4,6 +4,7 @@ import {EventService} from "../../../../backend/app/models/eventService.model";
 import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {format} from 'date-fns';
+import * as moment from 'moment';
 
 
 
@@ -26,6 +27,10 @@ export class StartPage implements OnInit {
 
   // Variables for user feedback
   loading: boolean;
+
+  // Variables for datetime pickers
+  today: string;
+  year: string;
 
 
   constructor(
@@ -70,12 +75,14 @@ export class StartPage implements OnInit {
 
 
   /**
-   * Called when page is initialized
    * Gets all EventServices from backend
    * Assigns them to services so they are displayed in the UI
    */
  ngOnInit() {
     this.loading = true;
+    this.today = moment().format("YYYY-MM-DD").toString();
+    this.year = moment().add(1, "year").format("YYYY-MM-DD").toString();
+
     this.http.get<Array<EventService>>('http://localhost:3000/search')
       .subscribe(
         (data)=> {
@@ -88,23 +95,19 @@ export class StartPage implements OnInit {
   }
 
   /**
-   * Called when search params are changed or by the user by pushing the search button.
-   * Gets all services matching the search params entered by the user from backend
+   * Called when search params are changed or the user pushes the search button.
+   * Gets all services matching the search params entered by the user
    * Updates "services" which leads to an updated page only displaying the matching services
    */
   search() {
-    this.loading = true;
     let url = this.getUrl();
     this.http.get<Array<EventService>>(url).subscribe(
       (data) => {
         this.services = data;
-        this.loading = false;
       },
     (err) => {
         console.log(err.message);
-        this.loading = false;
-    }
-    );
+    });
   }
 
   /**

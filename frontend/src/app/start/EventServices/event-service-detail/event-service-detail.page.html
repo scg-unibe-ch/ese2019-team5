@@ -67,7 +67,7 @@
               </ion-item>
               <ion-item class="itemForm">
                 <ion-label style="color: grey; font-style: italic">Price</ion-label>
-                <ion-input formControlName="updatePrice" type="number" value="{{price}}"
+                <ion-input formControlName="updatePrice" type="number" inputmode="decimal" value="{{price}}"
                            style="background-color: #fafafa"></ion-input>
               </ion-item>
               <ion-item class="itemForm">
@@ -120,7 +120,7 @@
             <ion-row>
               <ion-col>
                 <h1>Price</h1>
-                <ion-text>{{price| number:'1.2-2'}} CHF {{getPriceFormat()}}</ion-text>
+                <ion-text>{{price}} CHF {{getPriceFormat()}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Availability</h1>
@@ -128,7 +128,7 @@
               </ion-col>
               <ion-col>
                 <h1>Capacity</h1>
-                <ion-text>{{capacity}} people</ion-text>
+                <ion-text>{{displayCapacity}}</ion-text>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -158,16 +158,20 @@
               <div class="container-fluid">
                 <ion-item class="itemForm">
                   <ion-label>Date</ion-label>
-                  <ion-datetime formControlName="dateInput" displayFormat="DD.MM.YYYY"></ion-datetime>
+                  <ion-datetime formControlName="dateInput" displayFormat="DDDD, DD.MM.YYYY" [min]="today"
+                                [max]="year"></ion-datetime>
                 </ion-item>
                 <ion-item class="itemForm">
                   <ion-label>Time</ion-label>
-                  <ion-input formControlName="timeInput" (keyup.enter)="sendOffer()"></ion-input>
+                  <ion-datetime formControlName="timeInput" (keyup.enter)="sendOffer()"
+                                displayFormat="HH:mm"></ion-datetime>
                 </ion-item>
               </div>
             </form>
 
-            <ion-button (click)="sendOffer()" style="width: 400px">Send Request</ion-button>
+            <ion-button [hidden]="auth.isLoggedOut()" [disabled]="auth.getUserId() == providerId" (click)="sendOffer()"
+                        style="width: 400px"> Send Request
+            </ion-button>
           </div>
         </div>
 

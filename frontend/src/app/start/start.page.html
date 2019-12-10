@@ -64,24 +64,25 @@
           </ion-col>
 
             <ion-col>
-              <ion-datetime class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()"  displayFormat="DDDD, DD.MM.YYYY" min="2019-12-18" max="2020-12"> </ion-datetime>
+              <ion-datetime class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()"
+                            displayFormat="DDDD, DD.MM.YYYY" [min]="today" [max]="year"></ion-datetime>
             </ion-col>
         </ion-row>
 
         <ion-row>
           <ion-col >
             <ion-item>
-              <ion-input placeholder="City" formControlName="city" type="text" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="City" formControlName="city" type="text" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Number of people" type="number" formControlName="persons" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Number of people" type="number" formControlName="persons" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -89,7 +90,7 @@
         <ion-row>
           <ion-col size="10">
             <ion-item>
-              <ion-input placeholder="Search..." formControlName="text" type="text" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Search..." formControlName="text" type="text" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>

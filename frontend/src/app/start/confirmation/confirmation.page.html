@@ -3,13 +3,19 @@
 </ion-header>
 
 <ion-content>
-  <div class="sideBorder">
-  <p *ngIf="loading"> Trying to verify your email address </p>
-  <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
-  <h3 *ngIf="verified" padding="20px"> Thank you for verifying your email address. You can <a href="/start/login"> log
+  <div class="littleSideBorder">
+    <!-- Loading animation -->
+    <p *ngIf="loading"> Trying to verify your email address </p>
+    <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
+    <!-- If verification was successful -->
+    <h3 *ngIf="verified" padding="20px"> Thank you for verifying your email address. You can <a href="/start/login"> log
     in</a> now. </h3>
-  <h3 *ngIf="!verified && !loading"> An unexpected error occurred: {{error}}. </h3>
+    <!-- If an error occurs -->
+    <h3 *ngIf="error"> An unexpected error occurred: {{error}}. </h3>
   </div>
-  <app-info-footer></app-info-footer>
+
 </ion-content>
+
+<app-info-footer></app-info-footer>
 
