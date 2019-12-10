@@ -1,11 +1,12 @@
 
   <ion-header style="height: 85px; background-color: white">
 
-    <ion-menu-button style="position: absolute; right: 100px; top: 20px; color: black;" *ngIf="authService.isLoggedIn() || devWidth <= 650 "> </ion-menu-button>
+    <ion-menu-button style="position: absolute; right: 100px; top: 20px; color: black;" *ngIf="authService.isLoggedIn() "> </ion-menu-button>
+    <ion-menu-button style="position: absolute; right: 20px; top: 20px; color: black;" [hidden]="authService.isLoggedIn() || devWidth > 650 "> </ion-menu-button>
 
     <ion-img src="assets/logo.png" style="height: 60px; width: 201px; position: absolute; left: 15px; top: 15px; cursor:pointer" (click)="goHome()"></ion-img>
     <ion-button size = "large" color="light" style="position: absolute; right: 20px; top: 10px; color: black; --box-shadow:none"
-                (click)="authService.logout()" *ngIf="authService.isLoggedIn() || devWidth < 650"> <ion-icon name="ios-log-out"></ion-icon>
+                (click)="authService.logout()" *ngIf="authService.isLoggedIn()"> <ion-icon name="ios-log-out"></ion-icon>
     </ion-button>
     <ion-button color="light" style="position: absolute; right: 20px; top: 22px; color: black; --box-shadow:none"
                 [hidden]="authService.isLoggedIn() || devWidth < 650" href="start/login">
