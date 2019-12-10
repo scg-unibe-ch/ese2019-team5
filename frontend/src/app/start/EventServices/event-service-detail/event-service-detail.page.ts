@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, DoCheck, OnInit} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute} from "@angular/router";
-import {EventService} from "../../../../../../backend/app/models/eventService.model";
 import {FormBuilder, Validators} from "@angular/forms";
 import {ToastController} from "@ionic/angular";
 import {AuthService} from "../../../AuthService/auth.service";
@@ -9,8 +8,17 @@ import {EventServiceJson} from "../../userprofile/EventServiceJson";
 import {format} from 'date-fns';
 import * as moment from 'moment';
 
-import {Observable, Subject, Subscription} from "rxjs";
 import {Platform} from "@ionic/angular";
+
+/**
+ * Displays all details of an EventService
+ * Provides the following functions:
+ * - request service,
+ * - add service to favorites
+ * - report service to administrators
+ *   (authenticated users only)
+ * - edit service (provider only)
+ */
 
 @Component({
   selector: 'app-event-service-detail',
@@ -18,16 +26,22 @@ import {Platform} from "@ionic/angular";
   styleUrls: ['./event-service-detail.page.scss'],
 })
 export class EventServiceDetailPage implements OnInit {
+
+  // Variables for date pickers
   private today;
   private year;
+
+  // Variable for display settings
   public devWidth = this.platform.width();
 
+  // Variables for service request
   private serviceId: string;
   private isInputing: boolean = false;
   private isEditing: boolean = false;
   private hasReported: boolean = false;
   private hasSentOfferInquiry: boolean = false;
 
+  // Variables to display information
   private category:string;
   private title:string;
   private description:string;
@@ -48,7 +62,6 @@ export class EventServiceDetailPage implements OnInit {
   private price:string;
   private image:string;
   private providerId: string;
-  private isFavorite: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,11 +73,13 @@ export class EventServiceDetailPage implements OnInit {
     private platform: Platform
   ) { }
 
+
   orderInfoForm = this.formBuilder.group({
     dateInput: ['', [Validators.required]],
     messageInput: ['', [Validators.required]],
     timeInput: ['', [Validators.required]],
   });
+
 
   updateInfoForm = this.formBuilder.group({
     updateTitle: [this.title, [Validators.required, Validators.minLength(3)]],
@@ -77,6 +92,7 @@ export class EventServiceDetailPage implements OnInit {
   });
 
 
+  /* Get methods for orderInfoForm */
   get dateInput(){
     return this.orderInfoForm.get('dateInput');
   }
@@ -89,6 +105,7 @@ export class EventServiceDetailPage implements OnInit {
     return this.orderInfoForm.get('timeInput');
   }
 
+  /* Get methods for updateInfoForm */
   get updateTitle(){
     return this.updateInfoForm.get('updateTitle');
   }
@@ -118,10 +135,11 @@ export class EventServiceDetailPage implements OnInit {
   }
 
 
-
-
-
+  /**
+   * Initialize the loading of the correspondent EventService from backend
+   */
   ngOnInit() {
+
     this.activatedRoute.paramMap.subscribe(paramMap => {
       if(!paramMap.has('serviceId')){
         //redirect
@@ -130,23 +148,34 @@ export class EventServiceDetailPage implements OnInit {
       this.serviceId = paramMap.get('serviceId');
     });
     this.getEventServiceJson();
-    this.isFavoriteFunction()
   }
 
 
-
+  /**
+   * Initializes service request
+   * (Activates {@link orderInfoForm})
+   */
   showOfferInput() {
+    // Set params for date pickers
     this.today = moment().format("YYYY-MM-DD").toString();
     this.year = moment().add(1, "year").format("YYYY-MM-DD").toString();
+
     this.isInputing = true;
   }
 
+  /**
+   * Initialize service editing
+   * (Activates {@link updateInfoForm}
+   */
   showUpdateInput() {
     if(this.requirements=='null') this.reqDisplay = '';
     else this.reqDisplay = this.requirements;
     this.isEditing = true;
   }
 
+  /**
+   * Deactivates {@link updateInfoForm}
+   */
   stopEditing() {
     this.isEditing = false;
   }
@@ -155,6 +184,11 @@ export class EventServiceDetailPage implements OnInit {
     location.replace("/start");
   }
 
+
+  /**
+   * Sends offer request to backend to process it
+   * Handles the result by providing user feedback according to it
+   */
   async sendOffer() {
     if(!this.validateOfferInput()) return;
     this.hasSentOfferInquiry = true;
@@ -169,19 +203,23 @@ export class EventServiceDetailPage implements OnInit {
       serviceId: this.serviceId,
       customerId: this.auth.getUserId(),
     }).subscribe(
-    ()=>{
-      console.log('successfully ordered');
-      this.presentOrderFeedback(true);
-    },
+      ()=>{
+        console.log('successfully ordered');
+        this.presentOrderFeedback(true);
+      },
       (error)=>{
-      console.log(error);
-      this.presentOrderFeedback(false);
+        console.log(error);
+        this.presentOrderFeedback(false);
         this.hasSentOfferInquiry = false;
       }
     );
   }
 
 
+  /**
+   * Generates user feedback when submitting a service request
+   * @param success
+   */
   private async presentOrderFeedback(success: boolean) {
     let toast: any;
     if(success){
@@ -190,8 +228,7 @@ export class EventServiceDetailPage implements OnInit {
         message: 'Offer-inquiry sent',
         duration: 3000,
       });
-    }
-    else{
+    } else{
       toast = await this.toast.create({
         message: 'Failed to send inquiry',
         duration: 3000,
@@ -200,6 +237,10 @@ export class EventServiceDetailPage implements OnInit {
     await toast.present();
   }
 
+  /**
+   * Sends report request to backend and handles the result
+   * Displays user feedback
+   */
   private report() {
     let infos = {
       serviceId:this.serviceId,
@@ -207,20 +248,16 @@ export class EventServiceDetailPage implements OnInit {
     };
     this.http.post('http://localhost:3000/eventservice/report', infos).subscribe(
       (data) => {console.log(data)},
-    (error) => {console.log(error)}
+      (error) => {console.log(error)}
     );
     this.showToast("Service reported, it will be reviewed by the administrators");
     this.hasReported= true;
   }
 
-  private deleteFromFavorites() {
-    this.http.delete('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
-      () => {this.showToast("Successfully removed")},
-      (error) => {
-        console.log(error);
-      })
-  }
 
+  /**
+   * Sends a request to backend to add the service to the user's favorite ones
+   */
   private addToFavorites() {
     this.http.put('http://localhost:3000/profile/addFavourite',
       {
@@ -229,22 +266,10 @@ export class EventServiceDetailPage implements OnInit {
       }
     ).subscribe(
       () => {
-        this.showToast("Added to Favorites")
       },
       (error) => {
         console.log(error)
-        this.showToast("An error occured: " + error);
       }
-    )
-  }
-
-  private isFavoriteFunction()  {
-
-    this.isFavorite = false;
-    this.http.get<boolean>('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
-      (data) => { this.isFavorite = data},
-    (error) => {console.log(error)},
-    () => {}
     )
   }
 
@@ -266,21 +291,21 @@ export class EventServiceDetailPage implements OnInit {
         this.displayAvailability = data.availability.split(',').join(' \n');
         this.description = data.description;
         this.requirements = data.requirements;
-       switch(data.perimeter.toString()){
-         case "0": {
-           this.displayPerimeter = 'In';
-           break;
-         }
-         case "1000000":{
-           this.displayPerimeter = 'Throughout Switzerland';
-           this.displayCity = '';
-           break;
-         }
-         default:{
-           this.displayPerimeter = 'Within ' + data.perimeter + ' km of';
-           break;
-         }
-       }
+        switch(data.perimeter.toString()){
+          case "0": {
+            this.displayPerimeter = 'In';
+            break;
+          }
+          case "1000000":{
+            this.displayPerimeter = 'Throughout Switzerland';
+            this.displayCity = '';
+            break;
+          }
+          default:{
+            this.displayPerimeter = 'Within ' + data.perimeter + ' km of';
+            break;
+          }
+        }
         this.perimeter = data.perimeter;
         this.image = data.image;
         this.capacity = data.capacity;
@@ -379,6 +404,9 @@ export class EventServiceDetailPage implements OnInit {
   }
 
 
+  /**
+   * Called by {@link sendOffer} to validate the entered input
+   */
   private validateOfferInput():boolean{
     let error: string = '';
     if (!this.availability.includes(format(new Date(this.dateInput.value), "iiii")))
@@ -387,9 +415,9 @@ export class EventServiceDetailPage implements OnInit {
     if(error != ''){
       this.showToast(error);
       return false;
-    }
-    else return true;
+    } else return true;
   }
+
   /**
    * Displays the given message to the user in form of a toast
    * @param message what is being shown to the user
