@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../../AuthService/auth.service";
 import {HttpClient} from "@angular/common/http";
 import {ServiceRequest} from "../../../../../../backend/app/models/serviceRequest.model";
-import {error} from "util";
 
 /**
  * Displays all services a user has requested so far
