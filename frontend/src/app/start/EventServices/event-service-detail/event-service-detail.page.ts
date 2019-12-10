@@ -41,6 +41,7 @@ export class EventServiceDetailPage implements OnInit {
   private reqDisplay: string;
   private subtype:string;
   private capacity:string;
+  private displayCapacity: string;
   private price:string;
   private image:string;
   private providerId: string;
@@ -64,7 +65,7 @@ export class EventServiceDetailPage implements OnInit {
   updateInfoForm = this.formBuilder.group({
     updateTitle: [this.title, [Validators.required, Validators.minLength(3)]],
     updateDescription: [this.description, [Validators.required, Validators.minLength(3)]],
-    updatePrice: [this.price, [Validators.required, Validators.pattern('[0-9]+(([.][0-9]{1,2})?){1}')]],
+    updatePrice: [this.price, [Validators.required, Validators.pattern('[1-9]?[0-9]*')]],
     updateAvailability: [this.availability, [Validators.required, Validators.min(1)]],
     updatePerimeter: [this.perimeter, [Validators.required, Validators.pattern("[0-9]+")]],
     updateRequirements: [this.requirements],
@@ -254,7 +255,8 @@ export class EventServiceDetailPage implements OnInit {
        }
         this.perimeter = data.perimeter;
         this.image = data.image;
-        this.capacity = (data.capacity=='1000000')? 'no limit': data.capacity;
+        this.capacity = data.capacity;
+        this.displayCapacity = (data.capacity=='1000000')? 'no limit': data.capacity+' people';
         this.subtype = data.subtype;
         this.price = data.price;
         this.providerId = data.providerId;
@@ -298,14 +300,16 @@ export class EventServiceDetailPage implements OnInit {
 
   /**
    * Sends all the information that was entered in the updateForm to the backend via http put request.
+   * if the number exceeds the threshhold of 1000000 the no limit value 1000000 will be saved
    */
   private sendUpdate() {
+    let sendingCapacity: string = (Number(this.updateCapacity.value)>=1000000)? '1000000' :this.updateCapacity.value;
     this.http.put('http://localhost:3000/eventservice/update', {
       title: this.updateTitle.value,
       description: this.updateDescription.value,
       availability: this.updateAvailability.value.toString(),
       requirements: this.updateRequirements.value,
-      capacity: this.updateCapacity.value,
+      capacity: sendingCapacity,
       price: this.updatePrice.value,
       serviceId: this.serviceId,
       perimeter: this.updatePerimeter.value

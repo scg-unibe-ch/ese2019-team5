@@ -71,17 +71,17 @@
         <ion-row>
           <ion-col >
             <ion-item>
-              <ion-input placeholder="City" formControlName="city" type="text" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="City" formControlName="city" type="text" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Price (CHF)" formControlName="price" type="number" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>
             <ion-item>
-              <ion-input placeholder="Number of people" type="number" formControlName="persons" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Number of people" type="number" formControlName="persons" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -89,7 +89,7 @@
         <ion-row>
           <ion-col size="10">
             <ion-item>
-              <ion-input placeholder="Search..." formControlName="text" type="text" (ionChange)="search()"> </ion-input>
+              <ion-input placeholder="Search..." formControlName="text" type="text" (keyup.enter)="search()" (ionChange)="search()"> </ion-input>
             </ion-item>
           </ion-col>
           <ion-col>

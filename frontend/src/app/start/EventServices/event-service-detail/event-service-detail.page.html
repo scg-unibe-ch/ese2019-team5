@@ -67,7 +67,7 @@
               </ion-item>
               <ion-item class="itemForm">
                 <ion-label style="color: grey; font-style: italic">Price</ion-label>
-                <ion-input formControlName="updatePrice" type="number" value="{{price}}"
+                <ion-input formControlName="updatePrice" type="number" inputmode="decimal" value="{{price}}"
                            style="background-color: #fafafa"></ion-input>
               </ion-item>
               <ion-item class="itemForm">
@@ -120,7 +120,7 @@
             <ion-row>
               <ion-col>
                 <h1>Price</h1>
-                <ion-text>{{price| number:'1.2-2'}} CHF {{getPriceFormat()}}</ion-text>
+                <ion-text>{{price}} CHF {{getPriceFormat()}}</ion-text>
               </ion-col>
               <ion-col>
                 <h1>Availability</h1>
@@ -128,7 +128,7 @@
               </ion-col>
               <ion-col>
                 <h1>Capacity</h1>
-                <ion-text>{{capacity}} people</ion-text>
+                <ion-text>{{displayCapacity}}</ion-text>
               </ion-col>
             </ion-row>
             <ion-row>
