@@ -24,7 +24,9 @@
     <ion-row>
 
       <ion-col style="margin-left: 20px">
-        <ion-title>Profile</ion-title>
+        <div style="margin-top: 15px; margin-left: -15px">
+          <ion-title style="font-size: 25px; font-weight: bold">My Profile</ion-title>
+        </div>
         <div [hidden]="!isEditing">
           <form [formGroup]="editForm">
 
@@ -104,7 +106,9 @@
 
       <ion-col offset="2">
         <!--ion-button [hidden]="isEditing" [disabled]="numberOfServices>=5"  [routerLink]="['createService']" style="color: white">Create your service offer</ion-button-->
-        <ion-title [hidden]="numberOfServices==0">My services</ion-title>
+        <div style="text-align: center; margin-top: 15px">
+          <ion-title [hidden]="numberOfServices==0" style="font-size: 25px; font-weight: bold">My services</ion-title>
+        </div>
         <ion-list style="background-color: white">
           <event-service-card [width]="12" [services]="eventServiceArrayOfUser"></event-service-card>
           <ion-item [hidden]="numberOfServices>0">You are not offering any services</ion-item>

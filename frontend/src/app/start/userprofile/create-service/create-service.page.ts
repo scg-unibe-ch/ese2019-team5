@@ -212,8 +212,8 @@ export class CreateServicePage implements OnInit {
    */
   async ConfirmationPopUp() {
     const alert = await this.alertController.create({
-      header: 'Service was Created successfully',
-      message: this.category.value + 'Service: ' + this.title.value + ' has successfully been created. What do you want to do next?',
+      header: 'Service was created successfully',
+      message: this.category.value + ' Service: ' + this.title.value + ' has successfully been created. What do you want to do next?',
       buttons: [
         {
           text: 'Go to start page',

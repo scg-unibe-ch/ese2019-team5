@@ -5,6 +5,7 @@ import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {format} from 'date-fns';
 import * as moment from 'moment';
+import {userJson} from "./userprofile/userJson";
 
 
 
@@ -22,6 +23,9 @@ import * as moment from 'moment';
  */
 export class StartPage implements OnInit {
 
+  readonly ROOT_URL = 'http://localhost:3000/profile/';
+  private userId: number;
+
   // Stores all EventServices or those matching the parameters set by the user.
   services: EventService[];
 
@@ -31,6 +35,11 @@ export class StartPage implements OnInit {
   // Variables for datetime pickers
   today: string;
   year: string;
+
+  //To disable the plus-button, if the user has more than 4 services
+  private numberOfServices: number = 0;
+
+  httpGetSuccess:boolean;
 
 
   constructor(
@@ -92,6 +101,8 @@ export class StartPage implements OnInit {
         });
     this.loading = false;
 
+    this.getUserData();
+
   }
 
   /**
@@ -139,6 +150,27 @@ export class StartPage implements OnInit {
       return (result.substr(0, result.length - 1));
     } else {
       return result;
+    }
+  }
+
+  getUserData(){
+    try {
+      this.userId = this.authService.getUserId();
+      this.http.get<userJson>(this.ROOT_URL + this.userId)
+        .subscribe(
+          (user)=> {
+            this.numberOfServices = user.size;
+          },
+          (error)=> {
+            this.httpGetSuccess = false;
+            console.log(error);
+          });
+
+
+    }
+    catch (e) {
+      this.httpGetSuccess = false;
+      console.log(e);
     }
   }
 
