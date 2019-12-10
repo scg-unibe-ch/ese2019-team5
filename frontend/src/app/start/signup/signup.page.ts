@@ -32,7 +32,9 @@ export class SignupPage implements OnInit {
   }
 
 
-
+  /**
+   * Collects and verifies all necessary information needed to create a user profile
+   */
   signUpForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     firstname: ['', [Validators.required, Validators.pattern("[a-zA-ZäÄöÖüÜ,\\s]{2,}")]],

@@ -3,14 +3,16 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {AlertController, ToastController} from "@ionic/angular";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-
 import {Camera} from "@ionic-native/camera/ngx";
-
 import {AuthService} from "../../../AuthService/auth.service";
 import {Observable, Subject} from "rxjs";
 import {userJson} from "../userJson";
 
-
+/** This page is used by the user to create new event services that he wants to offer.
+ * It collects various information specific to the type of service to then send to the backend where it is
+ * saved in the DB.
+ *
+ */
 
 @Component({
   selector: 'app-create-service',
@@ -42,6 +44,10 @@ export class CreateServicePage implements OnInit {
   ) {
   }
 
+  /**
+   * As the user can only create services if he doesn't already offer the given max. amount, the number of services
+   * that he already offers has to be fetched from the backend on initiation.
+   */
   ngOnInit() {
     this.loading = false;
     this.error = '';
@@ -53,6 +59,9 @@ export class CreateServicePage implements OnInit {
         });
   }
 
+  /**
+   * The form responsible for collecting and verifying all the information about the event service
+   */
   serviceForm = this.formBuilder.group({
     category: ['', Validators.required],
     title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -146,6 +155,7 @@ export class CreateServicePage implements OnInit {
   }*/
 
   /**
+   * Called by the user by pushing the correspondent button.
    * Tries to create service. Checks to see if all fields are valid.
    * If somethings not right, validateInput will show the user a message what is wrong
    */
@@ -157,7 +167,6 @@ export class CreateServicePage implements OnInit {
 
 
   /**
-   * Called by the user by pushing the correspondent button
    * Sets the body-params and makes a http-request to the backend
    * Handles the result
    */
