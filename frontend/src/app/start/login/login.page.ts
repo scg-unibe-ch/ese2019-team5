@@ -23,15 +23,21 @@ import {Events} from "@ionic/angular";
  */
 export class LoginPage implements OnInit {
 
+  // Variables from form
   email: string;
   password: string;
+
   returnUrl = '/start';
-  error = '';
+
+  // Variables for authentication process
   user: Observable<User>;
+
+  // Variables for user feedback
   loading: boolean;
   isVerified: boolean;
   isValidCombination: boolean;
-  mailSent: boolean;
+  mailSent: boolean
+  error = '';
 
   constructor(
     private router: Router,
@@ -100,7 +106,7 @@ export class LoginPage implements OnInit {
   }
 
   /**
-   * Called by the user by pushing the correspondent button
+   * Called by the user by pushing the correspondent href link
    * Opens a PopUp asking the User to enter his/her email address
    * Posts the email address to backend demanding it to send a mail with a link to a page
    * where he/she can change the password.
@@ -113,7 +119,7 @@ export class LoginPage implements OnInit {
   }
 
   /**
-   * Called by sendMailAgain() and resetPassword()
+   * Called by {@link sendMailAgain} and {@link resetPassword}
    * Demands the User to enter his/her email address
    * If the user confirms, data is posted to backend.
    * @param header, the title of the popup
@@ -154,7 +160,7 @@ export class LoginPage implements OnInit {
 
 
   /**
-   * Shows a Pop-Up for a successful login
+   * Shows a toast if login was successful
    */
   async LogInPopUp() {
     const toast = await this.toastController.create({

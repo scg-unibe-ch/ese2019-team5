@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+/**
+ * Footer displayed on all pages
+ */
 @Component({
   selector: 'app-info-footer',
   templateUrl: './info-footer.component.html',
