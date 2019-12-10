@@ -4,17 +4,22 @@
 
 <ion-content>
   <div class="littleSideBorder">
+    <div style="text-align: center; padding-top: 25px; padding-bottom: 25px">
+      <ion-title style="font-size: 30px; font-weight: bold">My Favorites</ion-title>
+    </div>
 
 
     <!-- Loading animation while services are loaded from database-->
     <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
 
-    <div style="margin-left: 15%; margin-right: 15%">
-      <event-service-card [services]="services"
-                          style="position: absolute; top: 200px; bottom: 200px; padding-bottom: 100px;"></event-service-card>
+    <div style="margin-left: 10%">
+      <event-service-card [width]="4" [services]="services"></event-service-card>
 
     </div>
 
   </div>
 
 </ion-content>
+<ion-footer>
+  <app-info-footer></app-info-footer>
+</ion-footer>

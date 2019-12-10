@@ -48,6 +48,7 @@ export class EventServiceDetailPage implements OnInit {
   private price:string;
   private image:string;
   private providerId: string;
+  private isFavorite: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -121,7 +122,6 @@ export class EventServiceDetailPage implements OnInit {
 
 
   ngOnInit() {
-
     this.activatedRoute.paramMap.subscribe(paramMap => {
       if(!paramMap.has('serviceId')){
         //redirect
@@ -129,7 +129,8 @@ export class EventServiceDetailPage implements OnInit {
       }
       this.serviceId = paramMap.get('serviceId');
     });
-   this.getEventServiceJson();
+    this.getEventServiceJson();
+    this.isFavoriteFunction()
   }
 
 
@@ -212,17 +213,38 @@ export class EventServiceDetailPage implements OnInit {
     this.hasReported= true;
   }
 
+  private deleteFromFavorites() {
+    this.http.delete('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
+      () => {this.showToast("Successfully removed")},
+      (error) => {
+        console.log(error);
+      })
+  }
 
-
-  private addToFavorites(){
+  private addToFavorites() {
     this.http.put('http://localhost:3000/profile/addFavourite',
       {
-        userId:this.auth.getUserId(),
-        serviceId:this.serviceId
+        userId: this.auth.getUserId(),
+        serviceId: this.serviceId
       }
     ).subscribe(
-      () => {},
-      (error) => {console.log(error)}
+      () => {
+        this.showToast("Added to Favorites")
+      },
+      (error) => {
+        console.log(error)
+        this.showToast("An error occured: " + error);
+      }
+    )
+  }
+
+  private isFavoriteFunction()  {
+
+    this.isFavorite = false;
+    this.http.get<boolean>('http://localhost:3000/profile/favourite/' + this.auth.getUserId() + '/' + this.serviceId).subscribe(
+      (data) => { this.isFavorite = data},
+    (error) => {console.log(error)},
+    () => {}
     )
   }
 

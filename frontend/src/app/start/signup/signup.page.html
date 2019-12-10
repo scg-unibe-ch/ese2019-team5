@@ -18,7 +18,9 @@
 <ion-content>
   <div class="sideBorder">
     <div class="container-fluid" style="background-color: white">
-      <br>
+      <div style="text-align: center; margin-top: 15px">
+        <ion-title style="font-size: 30px; font-weight: bold">Sign Up</ion-title>
+      </div>
       <form [formGroup]="signUpForm">
 
         <!-- User must enter his/her e-mail address here -->
@@ -114,7 +116,7 @@
           <!-- If the first password is valid, the user "touched" this input and the second password is invalid, this message is shown  -->
 
         </div>
-        <div class="form-group">
+        <div class="form-group"style="margin-left: 18px">
           <ion-checkbox formControlName="accept"></ion-checkbox>
           <ion-label> I accept the <a href="../start/about-eventdoo"> User Guidelines </a></ion-label>
         </div>
@@ -123,7 +125,7 @@
 
     <div>
       <ion-button [disabled]="loading" color="primary" (click)="saveUser()"
-                  style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px"> Sign Up
+                  style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px; margin-bottom: 15px; margin-top: 30px"> Sign Up
       </ion-button>
       <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
     </div>

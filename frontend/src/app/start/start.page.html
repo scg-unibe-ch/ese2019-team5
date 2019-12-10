@@ -3,6 +3,9 @@
 </ion-header>
 
 <ion-content>
+  <!-- Loading animation while services are loaded from database-->
+  <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
+
   <ion-button  [hidden]="authService.isLoggedOut()" slot="fixed" href="start/userprofile/createService" shape="round" color="dark" style="position: fixed; height: 50px; width: 50px; bottom: 110px; right: 60px">
     <span title="Create service for an event"> <ion-text style="font-size: 25pt; font-weight: lighter; color: white;">+</ion-text>  </span>
   </ion-button>
@@ -108,7 +111,6 @@
     <event-service-card [width]="4" [services]="services" style="position: absolute; top: 200px; bottom: 200px; padding-bottom: 100px;"> </event-service-card>
   </div>
 </ion-content>
-
 <ion-footer>
   <app-info-footer></app-info-footer>
 </ion-footer>
