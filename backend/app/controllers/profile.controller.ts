@@ -180,7 +180,7 @@ router.get('/favourite/:id', async (req: Request, res: Response) => {
  * gets whether a certain service is a favourite or not
  * the array to the front
  * @returns ok (200) if everything went well
- */ //TODO und testen
+ */
 router.get('/favourite/:id/:serviceId', async (req: Request, res: Response) => {
 
   let userId: number = parseInt(req.params.id);

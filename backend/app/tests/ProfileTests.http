@@ -160,3 +160,36 @@ client.test("get requested Services", function() {
 %}
 
 ###
+GET http://localhost:3000/profile/favourite/35/15
+Content-Type: application/json
+
+> {%
+client.test("is favourite, true", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/profile/favourite/35/13
+Content-Type: application/json
+
+> {%
+client.test("is favourite, false", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
+GET http://localhost:3000/profile/favourite/36/23
+Content-Type: application/json
+
+> {%
+client.test("is favourite, true", function() {
+  client.assert(response.status === 200, "Response status is 200");
+    client.assert(response.body.isEmpty !== -1, "Response is not empty")
+});
+%}
+
+###
