@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../AuthService/auth.service';
 import {Router} from '@angular/router';
 import {User} from '../../../../../backend/app/models/user.model';
-import {AlertController, ToastController} from "@ionic/angular";
+import {AlertController, ToastController, Platform} from "@ionic/angular";
 import {Observable} from 'rxjs';
 import {HashService} from "../../HashService/hash.service";
 import {HttpClient} from "@angular/common/http";
@@ -36,6 +36,8 @@ export class LoginPage implements OnInit {
   loading: boolean;
   isVerified: boolean;
   isValidCombination: boolean;
+  mailSent: boolean;
+  public devWidth = this.platform.width();
   mailSent: boolean
   error = '';
 
@@ -45,7 +47,8 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController,
     private toastController: ToastController,
-    public events: Events) {
+    public events: Events,
+    public platform: Platform) {
   }
 
   ngOnInit() {

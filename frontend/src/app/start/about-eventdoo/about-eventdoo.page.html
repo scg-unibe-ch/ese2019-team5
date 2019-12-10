@@ -422,7 +422,11 @@
 
   </div>
 
-  <app-info-footer></app-info-footer>
+  <app-info-footer [hidden]="devWidth<=650"></app-info-footer>
 
 </ion-content>
+
+<ion-footer>
+  <app-info-footer [hidden]="devWidth>650"></app-info-footer>
+</ion-footer>
 

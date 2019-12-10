@@ -3,11 +3,14 @@
 </ion-header>
 
 <ion-content>
+  <div class="littleSideBorder">
   <br/>
-  <ion-title> History of Requested Services </ion-title>
-  <br/>
-  <br/>
-  <small *ngIf="empty"> You have not requested any services yet. </small>
+    <div style="text-align: center; margin-top: 15px">
+      <ion-title style="font-size: 22px; font-weight: bold">History of Requested Services</ion-title>
+      <br/>
+      <br/>
+      <small *ngIf="empty"> You have not requested any services yet. </small>
+    </div>
 
   <!-- A table showing all EventServices the user ever requested -->
   <!-- The table shows the date of the planned event the service was requested for, the icon of the service's category,
@@ -55,4 +58,8 @@
       </ion-item>
     </ion-list>
   </div>
+  </div>
 </ion-content>
+<ion-footer>
+  <app-info-footer></app-info-footer>
+</ion-footer>

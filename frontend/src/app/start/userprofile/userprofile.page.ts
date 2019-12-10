@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AlertController} from "@ionic/angular";
+import {AlertController, Platform} from "@ionic/angular";
 import {FormBuilder, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../AuthService/auth.service";
@@ -37,6 +37,8 @@ export class UserprofilePage implements OnInit {
 
   private eventServiceArrayOfUser: EventService[];
 
+  public devWidth = this.platform.width();
+
   httpGetSuccess:boolean;
   isEditing:boolean = false;
 
@@ -46,7 +48,9 @@ export class UserprofilePage implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private authservice:AuthService,
-    private alert: AlertController) { }
+    private alert: AlertController,
+    private platform: Platform) { }
+
 
   /**
    * Before any Information can be displayed it has to be fetched from backend

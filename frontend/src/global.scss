@@ -78,3 +78,15 @@ ion-content{
   cursor: pointer;
 }
 
+@media (max-width: 575px) {
+  .sideBorder {
+    background-color: white;
+    min-height: 100%;
+  }
+
+  .littleSideBorder {
+    background-color: white;
+    min-height: 100%;
+  }
+}
+

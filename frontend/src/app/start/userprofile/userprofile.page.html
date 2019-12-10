@@ -19,93 +19,109 @@
           </ion-fab-button>
         </ion-fab>
 
-        <ion-row>
+    <ion-row>
 
           <!-- Editing form, that is only shown when editing users personal info-->
           <ion-col style="margin-left: 20px">
             <div style="margin-top: 15px; margin-left: -15px">
-              <ion-title style="font-size: 25px; font-weight: bold">My Profile</ion-title>
+              <ion-title style="font-size: 25px; font-weight: bold; margin-left: 17px">My Profile</ion-title>
             </div>
             <div [hidden]="!isEditing">
               <form [formGroup]="editForm">
 
-                <div class="container-fluid">
-                  <ion-item>
-                    <ion-label>First Name:</ion-label>
-                    <ion-input formControlName="firstnameInput" value="{{firstname}}"></ion-input>
-                    <small [class.ion-hide]="firstnameInput.untouched || firstnameInput.valid"
-                           style="color: red"> Can't be empty </small>
-                  </ion-item>
-                </div>
-
-                <div class="container-fluid">
-                  <ion-item>
-                    <ion-label>Last Name:</ion-label>
-                    <ion-input formControlName="lastnameInput" value="{{lastname}}"></ion-input>
-                    <small [class.ion-hide]="lastnameInput.untouched || lastnameInput.valid"
-                           style="color: red"> Can't be empty </small>
-                  </ion-item>
-                </div>
-
-                <div class="container-fluid">
-                  <ion-item>
-                    <ion-label>Firm name:</ion-label>
-                    <ion-input formControlName="firmnameInput" value="{{firmname}}"></ion-input>
-                  </ion-item>
-                </div>
-
-                <div class="container-fluid">
-                  <ion-item>
-                    <ion-label>Street:</ion-label>
-                    <ion-input formControlName="streetInput" value="{{street}}"></ion-input>
-                    <ion-label>Housenumber:</ion-label>
-                    <ion-input formControlName="housenumberInput" value="{{housenumber}}"></ion-input>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Zip:</ion-label>
-                    <ion-input formControlName="zipInput" value="{{zip}}"></ion-input>
-                    <ion-label>City:</ion-label>
-                    <ion-input formControlName="cityInput" value="{{city}}"></ion-input>
-                  </ion-item>
-                </div>
-
-                <div class="container-fluid">
-                  <ion-item>
-                    <ion-label>Phone number:</ion-label>
-                    <ion-input formControlName="phonenumberInput" value="{{phonenumber}}"></ion-input>
-                  </ion-item>
-                </div>
-
-              </form>
-              <!-- Buttons to confirm or cancel the update of personal infos-->
-              <ion-button color="primary" (click)="saveChanges()">Save changes</ion-button>
-              <ion-button (click)="showDeleteProfileConfirm()" color="danger"
-                          style="position: page; right: 20px; bottom: 10px;">Delete My Profile
-              </ion-button>
+            <div class="container-fluid">
+              <ion-item>
+                <ion-label>First Name:</ion-label>
+                <ion-input formControlName="firstnameInput" value="{{firstname}}"></ion-input>
+                <small [class.ion-hide]="firstnameInput.untouched || firstnameInput.valid"
+                       style="color: red"> Can't be empty </small>
+              </ion-item>
             </div>
 
+            <div class="container-fluid">
+              <ion-item>
+                <ion-label>Last Name:</ion-label>
+                <ion-input formControlName="lastnameInput" value="{{lastname}}"></ion-input>
+                <small [class.ion-hide]="lastnameInput.untouched || lastnameInput.valid"
+                       style="color: red"> Can't be empty </small>
+              </ion-item>
+            </div>
+
+            <div class="container-fluid">
+              <ion-item>
+                <ion-label>Firm name:</ion-label>
+                <ion-input formControlName="firmnameInput" value="{{firmname}}"></ion-input>
+              </ion-item>
+            </div>
+
+            <div class="container-fluid">
+              <ion-item>
+                <ion-label>Street:</ion-label>
+                <ion-input formControlName="streetInput" value="{{street}}"></ion-input>
+                <ion-label>Housenumber:</ion-label>
+                <ion-input formControlName="housenumberInput" value="{{housenumber}}"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>Zip:</ion-label>
+                <ion-input formControlName="zipInput" value="{{zip}}"></ion-input>
+                <ion-label>City:</ion-label>
+                <ion-input formControlName="cityInput" value="{{city}}"></ion-input>
+              </ion-item>
+            </div>
+
+            <div class="container-fluid">
+              <ion-item>
+                <ion-label>Phone number:</ion-label>
+                <ion-input formControlName="phonenumberInput" value="{{phonenumber}}"></ion-input>
+              </ion-item>
+            </div>
+
+          </form>
+              <!-- Buttons to confirm or cancel the update of personal infos-->
+              <ion-button color="primary" (click)="saveChanges()">Save changes</ion-button>
+          <ion-button (click)="showDeleteProfileConfirm()" color="danger"
+                      style="position: page; right: 20px; bottom: 10px;">Delete My Profile
+          </ion-button>
+        </div>
             <!-- The users existing infos being displayed-->
             <ion-grid [hidden]="!httpGetSuccess||isEditing" align-items-center>
-              <ion-row>
-                <p>Name: {{firstname}} {{lastname}}</p>
-              </ion-row>
-              <ion-row [hidden]="firmname==''||firmname=='null'">
-                <p>Firm name: {{firmname}}</p>
-              </ion-row>
-              <ion-row>
-                <p>Email: {{email}}</p>
-              </ion-row>
-              <ion-row>
-                <p>Address: {{street}} {{housenumber}} ; {{zip}} {{city}} </p>
-              </ion-row>
-              <ion-row [hidden]="phonenumber==''||phonenumber=='null'">
-                <p>Phone number: {{phonenumber}}</p>
-              </ion-row>
-            </ion-grid>
-            <!-- Button to enable editing users info-->
-            <ion-button [hidden]="isEditing || authservice.isLoggedOut()" (click)="enableEditing()">Edit Profile</ion-button>
 
-          </ion-col>
+          <ion-row>
+            <ion-item>
+              <ion-label style="font-weight: bold">Name:</ion-label>
+                <ion-text style="margin-left: 40px"> {{firstname}} {{lastname}}</ion-text>
+            </ion-item>
+          </ion-row>
+
+          <ion-row [hidden]="firmname==''||firmname=='null'">
+            <ion-label style="font-weight: bold">Firm name:</ion-label>
+              <ion-text style="margin-left: 20px">Firm name: {{firmname}}</ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-label style="font-weight: bold">Email:</ion-label>
+                <ion-text style="margin-left: 40px">{{email}}</ion-text>
+            </ion-item>
+          </ion-row>
+          <ion-row>
+            <ion-item>
+              <ion-label style="font-weight: bold">Address:</ion-label>
+                <ion-text style="margin-left: 20px">{{street}} {{housenumber}} ; {{zip}} {{city}} </ion-text>
+            </ion-item>
+          </ion-row>
+          <ion-row [hidden]="phonenumber==''||phonenumber=='null'">
+            <ion-item>
+              <ion-label>Phone number:</ion-label>
+                <ion-text style="margin-left: 20px">{{phonenumber}}</ion-text>
+            </ion-item>
+          </ion-row>
+        </ion-grid>
+            <!-- Button to enable editing users info-->
+
+            <ion-button [hidden]="isEditing || authservice.isLoggedOut()" (click)="enableEditing()" style="margin-left: 20px">Edit Profile
+        </ion-button>
+
+      </ion-col>
 
           <!-- Presenting the eventservice cards of the event services the user is already offering-->
           <ion-col offset="2">
@@ -119,12 +135,17 @@
          <ion-note [hidden]="numberOfServices<5">You can only offer 5 services at once</ion-note>
        </ion-col>
 
-     </ion-row>
+    </ion-row>
 
-   </div>
+  </div>
 
-   <app-info-footer></app-info-footer>
- </ion-content>
+  <app-info-footer [hidden]="devWidth<=650"></app-info-footer>
+
+</ion-content>
+
+<ion-footer>
+  <app-info-footer [hidden]="devWidth>650"></app-info-footer>
+</ion-footer>
 
 
 

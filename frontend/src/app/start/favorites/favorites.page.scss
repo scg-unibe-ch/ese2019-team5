@@ -1,3 +1,16 @@
 ion-content{
   --ion-background-color:#fafafa;
 }
+
+
+@media (min-width: 576px) {
+  .left-margin{
+    margin-left: 10%;
+  }
+}
+
+@media (max-width: 575px) {
+  .left-margin{
+    margin-left: 3%;
+  }
+}

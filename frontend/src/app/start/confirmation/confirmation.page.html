@@ -9,8 +9,11 @@
     <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
 
     <!-- If verification was successful -->
-    <h3 *ngIf="verified" padding="20px"> Thank you for verifying your email address. You can <a href="/start/login"> log
-    in</a> now. </h3>
+    <div style="text-align: center; padding-top: 30px">
+      <h3 *ngIf="verified" style="font-size: 30px; font-weight: bold"> Thank you for verifying your email address! </h3>
+      <br>
+      <h3>You can <a href="/start/login"> log in</a> now. </h3>
+    </div>
 
     <!-- If an error occurs -->
     <h3 *ngIf="error"> An unexpected error occurred: {{error}}. </h3>

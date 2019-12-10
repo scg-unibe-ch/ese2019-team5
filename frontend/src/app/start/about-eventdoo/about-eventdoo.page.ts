@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Platform} from "@ionic/angular";
 
 /**
  * Page providing all important information about Eventdoo.
@@ -12,10 +13,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutEventdooPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private platform: Platform
+  ) { }
 
   ngOnInit() {
   }
+
+  public devWidth = this.platform.width();
 
   redirectStartPage() {
     document.location.href = 'http://localhost:4200/start/';

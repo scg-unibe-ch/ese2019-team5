@@ -1,5 +1,12 @@
 <!-- Log-In-Form -->
 <!-- Collects data from a (existing) user to authenticate -->
+
+
+<!-- Header contains... (f.l.t.r.) -->
+<!-- 1) Back button to return to StartPage  -->
+<!-- 2) Page title -->
+<!-- 3) Login-Button which doesn't do anything  -->
+<!-- 4) SignUp Button to change to SignupPage -->
 <ion-header>
   <app-header></app-header>
 </ion-header>
@@ -45,7 +52,7 @@
       check your emails. </small>
     <ion-button color="primary" [class.ion-hide]="isVerified || mailSent" (click)="sendMailAgain()"style="width: 500px; height: 25px; padding-left: 12px; padding-right: 300px; font-size: 12px"> Send mail again
     </ion-button>
-    <small *ngIf="mailSent"> We sent you an email with instructions. Please check also your spam folder. </small>
+    <small style="padding-left: 15px" *ngIf="mailSent"> We sent you an email with instructions. Please check also your spam folder. </small>
   </div>
 
   <!-- Handling errors -->
@@ -54,7 +61,11 @@
       later. </small>
   </div>
   </div>
+
+  <app-info-footer [hidden]="devWidth<=650"></app-info-footer>
+
 </ion-content>
 
-<app-info-footer></app-info-footer>
-
+<ion-footer>
+  <app-info-footer [hidden]="devWidth>650"></app-info-footer>
+</ion-footer>
