@@ -47,7 +47,7 @@ export class SignupPage implements OnInit {
     accept: ['false', Validators.requiredTrue]
   });
 
-  // ToDo: Implement initialization
+
   ngOnInit() {
     this.loading = false;
     this.pw = '';
