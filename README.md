@@ -106,6 +106,7 @@ You can find all the documentation to this project in the `docs` folder.
 - The Software Requirements Specification (SRS) can be found [here](./docs/Eventdoo_SRS.pdf) (/docs/Eventdoo_SRS.pdf)
 - You'll find our Backlog and our Sprint Planning [here](./docs/Backlog_and_Sprint_Planning)
 - Our Biweekly Reports can be found [here](./docs/Biweekly_Reports)
+- An UI prototype can be found [here](./docs/UI_prototype)
 - Usability Testing can be found [here](./docs/Usability_Tests/Usability_Tests_and_documentation.pdf).
 Scince the screen recordings of the usability tests are to big to upload to gitHub we uploaded them to an OneDrive folder. [This](https://1drv.ms/u/s!AoTzF0eKgl2li4QyLkhdx9qqvHO0Bg?e=804xpj) is the link to this folder. The folder will similar to the Google database be up and running until end of January 2020. Afterwards the link will not work anymore.   
 
