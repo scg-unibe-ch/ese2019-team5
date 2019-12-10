@@ -64,7 +64,8 @@
           </ion-col>
 
             <ion-col>
-              <ion-datetime class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()"  displayFormat="DDDD, DD.MM.YYYY" min="2019-12-18" max="2020-12"> </ion-datetime>
+              <ion-datetime class="whiteBR" placeholder="select date" formControlName="weekday" (ionChange)="search()"
+                            displayFormat="DDDD, DD.MM.YYYY" [min]="today" [max]="year"></ion-datetime>
             </ion-col>
         </ion-row>
 
