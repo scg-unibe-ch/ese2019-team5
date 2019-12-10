@@ -134,7 +134,8 @@
             <ion-row>
               <ion-col>
                 <h1>Location</h1>
-                <ion-text>{{displayPerimeter}} {{displayCity}}</ion-text>
+                <ion-text [hidden]="category=='Location' ">{{displayPerimeter}} {{displayCity}}</ion-text>
+                <ion-text [hidden]="category!='Location' ">{{street}} {{housenumber}} <br> {{zip}} {{city}}</ion-text>
               </ion-col>
             </ion-row>
 
