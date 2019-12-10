@@ -83,6 +83,7 @@ export class AuthService {
    * Returns the ID of the user who's currently logged in.
    */
   public getUserId() {
+    if(this.isLoggedOut()) return -1;
     const token = localStorage.getItem('ed_token');
     const decoded = jwtDecode(token);
     return decoded.data1;
