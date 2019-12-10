@@ -39,7 +39,7 @@ export class RequestHistoryPage implements OnInit {
         return 'pizza';
       }
       case 'Entertainment': {
-        return 'game-controller-b';
+        return 'film';
       }
       case 'Photography': {
         return 'camera';
