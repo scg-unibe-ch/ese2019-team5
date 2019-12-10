@@ -4,7 +4,7 @@
 import {Address} from "./address.model";
 import {EventService} from "./eventService.model";
 
-const mockAddress: Address = new Address('', 0, 1234, '');
+const mockAddress: Address = new Address('', '', 1234, '');
 
 
 export class EventServiceBuilder {

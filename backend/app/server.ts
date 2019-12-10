@@ -2,14 +2,14 @@ import express from 'express';
 
 import exphbs from 'express-handlebars';
 
-import {Sequelize} from 'sequelize-typescript';
+
 import {
   SignupController,
   SqlTestController,
   LoginController,
   EventserviceController,
   SearchController
-} from './controllers'; // ProfileController
+} from './controllers';
 import {ProfileController} from "./controllers";
 
 

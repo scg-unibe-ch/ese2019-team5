@@ -31,7 +31,7 @@ router.post('/update', async (req: Request, res: Response) => {
   try {
     let userOnlyPW: User = await dbService.getUserFromId(req.body.id);
     const pwHash = userOnlyPW.getPwHash();
-    const housenumber = Number(req.body.housenumber);
+    const housenumber = req.body.housenumber;
     const zip = Number(req.body.zip);
     const address: Address = new Address(req.body.street, housenumber, zip, req.body.city);
     const user: User = UserBuilder.user()
@@ -86,7 +86,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const pwHash: string = user.getPwHash();
     const address = user.getAddress();
     const street: string = address.street;
-    const housenumber: number = address.housenumber;
+    const housenumber: string = address.housenumber;
     const zip: number = address.zip;
     const city: string = address.city;
     const isFirm: boolean = user.getIsFirm();
