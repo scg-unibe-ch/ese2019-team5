@@ -6,7 +6,7 @@
 export class Address {
   id = -1;
   street: string;
-  housenumber: number;
+  housenumber: string;
   zip: number;
   city: string;
 
@@ -18,7 +18,7 @@ export class Address {
    * @param city
    * returs an address object
    */
-  constructor(street: string, housenumber: number, zip: number, city: string){
+  constructor(street: string, housenumber: string, zip: number, city: string){
     this.street = street;
     this.housenumber = housenumber;
     this.zip = zip;

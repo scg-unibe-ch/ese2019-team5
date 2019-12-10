@@ -645,7 +645,7 @@ export class DbServices {
       if (stream.rows == null) {
         throw new Error('no address with this id found');
       } else {
-        address = new Address(String(row.get('street')), Number(row.get('number')), Number(row.get('zip')), String(row.get('city')));
+        address = new Address(String(row.get('street')), String(row.get('number')), Number(row.get('zip')), String(row.get('city')));
         address.setId(addressId);
         return address;
       }
@@ -664,7 +664,7 @@ export class DbServices {
    * @param client to use to connect to the database. The has to be already established and closed is to be closed in the calling method
    * @returns the id of the address
    */
-  private async checkIfAddressExistsAndCreate(street: string, number: number, zip: number, city: string, client: Client): Promise<Number> {
+  private async checkIfAddressExistsAndCreate(street: string, number: string, zip: number, city: string, client: Client): Promise<Number> {
     var stream = client.query('Select id From address Where street = $1 And number = $2 And zip = $3 And city = $4', [street, number, zip, city]);
 
     for await (const row of stream) {

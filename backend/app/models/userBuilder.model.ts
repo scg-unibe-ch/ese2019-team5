@@ -5,7 +5,7 @@ import {Address} from "./address.model";
  * This is the builder class for the user so it is easier to add all the parameters
  * instead of having them all separate in the constructor
  */
-const mockAddress: Address = new Address('', 0, 1234, '');
+const mockAddress: Address = new Address('', '', 1234, '');
 
 export class UserBuilder {
 
