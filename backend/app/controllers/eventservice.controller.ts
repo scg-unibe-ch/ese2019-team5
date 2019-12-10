@@ -70,7 +70,6 @@ router.post('/add', async (req: Request, res: Response) => {
 router.put('/update', async (req: Request, res: Response) => {
 
   try {
-
     let title: string = req.body.title;
     let description: string = req.body.description;
     let availability: string = req.body.availability;
@@ -84,10 +83,7 @@ router.put('/update', async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     res.status(404).status(error);
-
   }
-
-
 });
 
 /**

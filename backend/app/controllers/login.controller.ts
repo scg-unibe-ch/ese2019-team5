@@ -105,7 +105,6 @@ const verifyToken = async (req: Request, res: Response) => {
       expiresIn: '24h',
       algorithm: 'RS256'
     };
-
     let decoded = jwt.verify(token, publicForgotPWKey, verifyOptions);
     await dbService.resetPassword(userEmail, newPWhash);
     res.status(200);
