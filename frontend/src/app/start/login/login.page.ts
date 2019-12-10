@@ -38,7 +38,6 @@ export class LoginPage implements OnInit {
   isValidCombination: boolean;
   mailSent: boolean;
   public devWidth = this.platform.width();
-  mailSent: boolean
   error = '';
 
   constructor(
