@@ -361,7 +361,7 @@ export class EventServiceDetailPage implements OnInit {
     let error: string = '';
     if (!this.availability.includes(format(new Date(this.dateInput.value), "iiii")))
       error += 'This service is not available on a ' + (format(new Date(this.dateInput.value), "iiii"));
-    if (this.messageInput.invalid || this.timeInput.invalid || this.dateInput) error += 'Please fill in all fields';
+    if (this.messageInput.invalid || this.timeInput.invalid || this.dateInput.invalid) error += 'Please fill in all fields';
     if(error != ''){
       this.showToast(error);
       return false;
