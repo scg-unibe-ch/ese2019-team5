@@ -56,7 +56,7 @@ export class UserprofilePage implements OnInit {
     lastnameInput: [this.lastname, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
     firmnameInput: [this.firmname, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')],
     streetInput: [this.street, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
-    housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]*[a-z]?')]],
+    housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[0-9]*[a-zA-Z]?')]],
     zipInput: [this.zip, [Validators.required, Validators.pattern('[0-9]{4}')]],
     cityInput: [this.city, [Validators.required, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
     phonenumberInput: [this.phonenumber, [Validators.pattern('[+]?[0-9\\s]+')]]
