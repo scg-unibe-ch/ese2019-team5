@@ -47,6 +47,7 @@ ion-text{
   cursor: pointer;
   border-radius: 5px;
   --box-shadow: none;
+  z-index: 10;
 }
 .itemForm{
   border: 1px solid #d0d0d0;
