@@ -89,30 +89,32 @@
           <ion-row>
             <ion-item>
               <ion-label style="font-weight: bold">Name:</ion-label>
-                <ion-text style="margin-left: 40px"> {{firstname}} {{lastname}}</ion-text>
+                <ion-text style="margin-left: 85px"> {{firstname}} {{lastname}}</ion-text>
             </ion-item>
           </ion-row>
 
           <ion-row [hidden]="firmname==''||firmname=='null'">
+            <ion-item>
             <ion-label style="font-weight: bold">Firm name:</ion-label>
-              <ion-text style="margin-left: 20px">Firm name: {{firmname}}</ion-text>
+              <ion-text style="margin-left: 45px"> {{firmname}}</ion-text>
+              </ion-item>
           </ion-row>
           <ion-row>
             <ion-item>
               <ion-label style="font-weight: bold">Email:</ion-label>
-                <ion-text style="margin-left: 40px">{{email}}</ion-text>
+                <ion-text style="margin-left: 80px">{{email}}</ion-text>
             </ion-item>
           </ion-row>
           <ion-row>
             <ion-item>
               <ion-label style="font-weight: bold">Address:</ion-label>
-                <ion-text style="margin-left: 20px">{{street}} {{housenumber}} ; {{zip}} {{city}} </ion-text>
+                <ion-text style="margin-left: 60px">{{street}} {{housenumber}} ; {{zip}} {{city}} </ion-text>
             </ion-item>
           </ion-row>
           <ion-row [hidden]="phonenumber==''||phonenumber=='null'">
             <ion-item>
-              <ion-label>Phone number:</ion-label>
-                <ion-text style="margin-left: 20px">{{phonenumber}}</ion-text>
+              <ion-label style="font-weight: bold">Phone number:</ion-label>
+                <ion-text style="margin-left: 15px">{{phonenumber}}</ion-text>
             </ion-item>
           </ion-row>
         </ion-grid>
