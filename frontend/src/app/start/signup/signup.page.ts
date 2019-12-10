@@ -20,7 +20,6 @@ import {HashService} from '../../HashService/hash.service';
 export class SignupPage implements OnInit {
 
   readonly ROOT_URL = 'http://localhost:3000/signup';
-  // const bcrypt = require('bcrypt');
 
   pw: string;
   loading: boolean;
@@ -54,8 +53,7 @@ export class SignupPage implements OnInit {
   }
 
   /**
-   * Get-methods
-   * Used in html-file for displaying error-messages
+   * Get-methods for signUpForm
    */
   get email() {
     return this.signUpForm.get('email');
@@ -63,31 +61,24 @@ export class SignupPage implements OnInit {
   get password() {
     return this.signUpForm.get('password');
   }
-
   get firstname() {
     return this.signUpForm.get('firstname');
   }
-
   get lastname() {
     return this.signUpForm.get('lastname');
   }
-
   get street() {
     return this.signUpForm.get('street');
   }
-
   get housenumber() {
     return this.signUpForm.get('housenumber');
   }
-
   get zip() {
     return this.signUpForm.get('zip');
   }
-
   get city() {
     return this.signUpForm.get('city');
   }
-
   get confirmation() {
     return this.signUpForm.get('confirmation');
   }
