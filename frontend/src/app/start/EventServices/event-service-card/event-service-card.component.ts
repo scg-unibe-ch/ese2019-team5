@@ -41,7 +41,7 @@ export class EventServiceCardComponent implements OnInit {
         return 'pizza';
       }
       case 'Entertainment': {
-        return 'game-controller-b';
+        return 'film';
       }
       case 'Photography': {
         return 'camera';

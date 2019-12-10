@@ -125,6 +125,7 @@
       <ion-button [disabled]="loading" color="primary" (click)="saveUser()"
                   style="width: 100%; height: 50px; padding-left: 12px; padding-right: 15px; font-size: 16px"> Sign Up
       </ion-button>
+      <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
     </div>
 
     <!-- When the user tries to sign up, this message and progress bar are shown until the result was computed-->
@@ -133,9 +134,7 @@
       <ion-progress-bar *ngIf="loading" type="indeterminate" color="tertiary"></ion-progress-bar>
     </div>
   </div>
-  <div>
-    <small *ngIf="error" style="color: red;"> An error occurred: {{error}} </small>
-  </div>
+
 
 
   <app-info-footer></app-info-footer>
