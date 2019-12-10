@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {AlertController} from "@ionic/angular";
 import {FormBuilder, Validators} from "@angular/forms";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {User} from "../../../../../backend/app/models/user.model";
-import {Address} from "../../../../../backend/app/models/address.model";
+import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../AuthService/auth.service";
 import {userJson} from "./userJson";
-import {EventServiceContainer} from "../../../../../backend/app/models/eventServiceContainer.model";
 import {EventService} from "../../../../../backend/app/models/eventService.model";
 
-
+/**
+ * The user profile page displays the personal info of the user accessing it and enables him to change this information.
+ * Furthermore the user will wind an overview of the services he is offering and can delete them or add more.
+ * This class handles the exchange of the relevant information and their modifications.
+ */
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.page.html',
@@ -34,7 +35,7 @@ export class UserprofilePage implements OnInit {
   private phonenumber: string = '';
   private numberOfServices: number = 0;
 
-  private eventServiceArrayOfUser: EventService[]; //= new Array(5);
+  private eventServiceArrayOfUser: EventService[];
 
   httpGetSuccess:boolean;
   isEditing:boolean = false;
@@ -47,14 +48,20 @@ export class UserprofilePage implements OnInit {
     private authservice:AuthService,
     private alert: AlertController) { }
 
+  /**
+   * Before any Information can be displayed it has to be fetched from backend
+   */
   ngOnInit() {
     this.getUserData();
   }
 
+  /**
+   * Form for collecting updated user info and to verify their correctness.
+   */
   editForm = this.formBuilder.group({
     firstnameInput: [this.firstname, [Validators.required, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
     lastnameInput: [this.lastname, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
-    firmnameInput: [this.firmname, Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')],
+    firmnameInput: [this.firmname, Validators.pattern('[a-zA-ZäÄöÖüÜ0-9\\s]{2,}')],
     streetInput: [this.street, [Validators.required,  Validators.pattern('[a-zA-ZäÄöÖüÜ,\\s]{2,}')]],
     housenumberInput: [this.housenumber, [Validators.required, Validators.pattern('[1-9]+[0-9]*[a-zA-Z]?')]],
     zipInput: [this.zip, [Validators.required, Validators.pattern('[0-9]{4}')]],
@@ -100,19 +107,16 @@ export class UserprofilePage implements OnInit {
   getUserData(){
     try {
       this.userId = this.authservice.getUserId();
-     //var userJson: userJson = {firstname: 'not initialized', lastname: 'not initialized', email: 'not initialized', street: 'not initialized', housenumber: 'not initialized', zip: 'not initialized', city: 'not initialized'};
       this.http.get<userJson>(this.ROOT_URL + this.userId)
         .subscribe(
           (user)=> {
-
-            this.firstname = user.firstname; //this.user.getFirstname();
-            this.lastname = user.lastname; //this.user.getLastname();
+            this.firstname = user.firstname;
+            this.lastname = user.lastname;
             this.email = user.email;
-            //let address: Address = this.user.getAddress();
             this.street = user.street;
-            this.housenumber = user.housenumber; //address.housenumber;
-            this.zip = user.zip; //address.zip;
-            this.city = user.city; //address.city;
+            this.housenumber = user.housenumber;
+            this.zip = user.zip;
+            this.city = user.city;
             this.numberOfServices = user.size;
             if(user.firmname!='null' && user.firmname!=null) this.firmname = user.firmname;
             if(user.phonenumber!='null' && user.phonenumber!=null)this.phonenumber = user.phonenumber;
@@ -136,6 +140,9 @@ export class UserprofilePage implements OnInit {
     this.isEditing = true;
   }
 
+  /**
+   * Sends all the information collected by updateform to the backend.
+   */
   saveChanges(){
     this.firstname = this.firstnameInput.value;
     this.lastname = this.lastnameInput.value;
@@ -168,10 +175,12 @@ export class UserprofilePage implements OnInit {
           console.log(error);
         }
       );
-    // this.getUserData();
     this.isEditing = false;
   }
 
+  /**
+   * Pops up an alert to let the user confirm that he intended to delete his profile when clicking the button.
+   */
   async showDeleteProfileConfirm(){
     const alert = await this.alert.create({
       header: 'Confirm Delete',
@@ -192,6 +201,10 @@ export class UserprofilePage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * Orders backend to delete this profile.
+   * @param userId Id of user profile that will be deleted
+   */
   private async deleteUserProfile(userId: number) {
     await this.http.delete('http://localhost:3000/profile/'+userId)
       .subscribe(

@@ -74,14 +74,19 @@ export class EventServiceDetailPage implements OnInit {
     private platform: Platform
   ) { }
 
-
+  /**
+   * Form for collecting the input to send to the provider offering this service.
+   */
   orderInfoForm = this.formBuilder.group({
     dateInput: ['', [Validators.required]],
     messageInput: ['', [Validators.required]],
     timeInput: ['', [Validators.required]],
   });
 
-
+  /**
+   * Form for updating this event service. Should only be used by the service provider.
+   * Responsible for verifying the input
+   */
   updateInfoForm = this.formBuilder.group({
     updateTitle: [this.title, [Validators.required, Validators.minLength(3)]],
     updateDescription: [this.description, [Validators.required, Validators.minLength(3)]],
