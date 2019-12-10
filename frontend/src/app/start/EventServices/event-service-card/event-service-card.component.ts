@@ -1,10 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EventService} from "../../../../../../backend/app/models/eventService.model";
-import {Address} from "../../../../../../backend/app/models/address.model";
 import {AuthService} from "../../../AuthService/auth.service";
 import {AlertController, ToastController} from "@ionic/angular";
 import {HttpClient} from "@angular/common/http";
-import {Observable, Subject} from "rxjs";
+
+/**
+ * Used to Display EventServices on various pages.
+ * Array of Events and a desired size of cards must be passed as an input
+ * Contains also logic to
+ */
 
 @Component({
   selector: 'event-service-card',
@@ -26,6 +30,10 @@ export class EventServiceCardComponent implements OnInit {
 
   ngOnInit() {}
 
+  /**
+   * Returns an icon name according to the category of the event.
+   * @param category
+   */
   getIconName(category:string){
     switch (category){
       case 'Music': {
@@ -94,6 +102,11 @@ export class EventServiceCardComponent implements OnInit {
       location.reload();
   }
 
+  /**
+   * Called when a card is clicked
+   * Redirects the user to the event's detail page
+   * @param serviceId, the ID of the service to be redirected to
+   */
   redirectToDetailPage(serviceId: string) {
     document.location.href = 'http://localhost:4200/start/services/'+serviceId;
   }
