@@ -158,16 +158,20 @@
               <div class="container-fluid">
                 <ion-item class="itemForm">
                   <ion-label>Date</ion-label>
-                  <ion-datetime formControlName="dateInput" displayFormat="DD.MM.YYYY"></ion-datetime>
+                  <ion-datetime formControlName="dateInput" displayFormat="DD.MM.YYYY" [min]="today"
+                                [max]="year"></ion-datetime>
                 </ion-item>
                 <ion-item class="itemForm">
                   <ion-label>Time</ion-label>
-                  <ion-input formControlName="timeInput" (keyup.enter)="sendOffer()"></ion-input>
+                  <ion-datetime formControlName="timeInput" (keyup.enter)="sendOffer()"
+                                displayFormat="HH:mm"></ion-datetime>
                 </ion-item>
               </div>
             </form>
 
-            <ion-button (click)="sendOffer()" style="width: 400px">Send Request</ion-button>
+            <ion-button [hidden]="auth.isLoggedOut()" [disabled]="auth.getUserId() == providerId" (click)="sendOffer()"
+                        style="width: 400px"> Send Request
+            </ion-button>
           </div>
         </div>
 
